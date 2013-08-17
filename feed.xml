@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>wrouesnel_blog</title>
+    <atom:link href="http://localhost:8080/feed.xml" rel="self" type="application/rss+xml"></atom:link>
+    <link>http://localhost:8080</link>
+    <description>negating information entropy</description>
+    <pubDate>Sun, 18  Aug 2013 02:33:00 +1000</pubDate>
+    <generator>Wintersmith - https://github.com/jnordberg/wintersmith</generator>
+    <language>en</language>
+    <item>
+      <title>Wintersmithing</title>
+      <link>http://localhost:8080/articles/Wintersmithing/</link>
+      <pubDate>Sun, 18  Aug 2013 02:33:00 +1000</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/Wintersmithing/</guid>
+      <author></author>
+      <description>&lt;h1&gt;Wintersmith&lt;/h1&gt;
+&lt;p&gt;How to setup and use Wintersmith is covered pretty thoroughly elsewhere on the net, (namely the &lt;a href=&quot;http://wintersmith.io/&quot;&gt;wintersmith homepage&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Instead I&amp;#39;ll cover a few tweaks I had to do to get it running the way I wanted. To avoid being truly confusing, all the paths referenced here are relative to the site you create by running &lt;code&gt;wintersmith new &amp;lt;your site dir here&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;h2&gt;LiveReload plugin&lt;/h2&gt;
+&lt;p&gt;There&amp;#39;s a Wintersmith LiveReload plugin available which makes previewing your site with &lt;code&gt;wintersmith preview&lt;/code&gt; very easy - it&amp;#39;s great for editing or setting up CSS.&lt;/p&gt;
+&lt;p&gt;Installing the LiveReload plugin on Linux Mint (which I run) can be done with &lt;code&gt;sudo npm install -g wintersmith-livereload&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;You need to then add the path to your &lt;code&gt;config.json&lt;/code&gt; file under “plugins” e.g. for this blog:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;{
+  &lt;span class=&quot;string&quot;&gt;&quot;locals&quot;&lt;/span&gt;: {
+    &lt;span class=&quot;string&quot;&gt;&quot;url&quot;&lt;/span&gt;: &lt;span class=&quot;string&quot;&gt;&quot;http://localhost:8080&quot;&lt;/span&gt;,
+    &lt;span class=&quot;string&quot;&gt;&quot;name&quot;&lt;/span&gt;: &lt;span class=&quot;string&quot;&gt;&quot;wrouesnel_blog&quot;&lt;/span&gt;,
+    &lt;span class=&quot;string&quot;&gt;&quot;owner&quot;&lt;/span&gt;: &lt;span class=&quot;string&quot;&gt;&quot;Will Rouesnel&quot;&lt;/span&gt;,
+    &lt;span class=&quot;string&quot;&gt;&quot;description&quot;&lt;/span&gt;: &lt;span class=&quot;string&quot;&gt;&quot;negating information entropy&quot;&lt;/span&gt;
+  },
+  &lt;span class=&quot;string&quot;&gt;&quot;plugins&quot;&lt;/span&gt;: [
+    &lt;span class=&quot;string&quot;&gt;&quot;./plugins/paginator.coffee&quot;&lt;/span&gt;,
+    &lt;span class=&quot;string&quot;&gt;&quot;wintersmith-stylus&quot;&lt;/span&gt;,
+    &lt;span class=&quot;string&quot;&gt;&quot;wintersmith-livereload&quot;&lt;/span&gt;
+  ],
+  &lt;span class=&quot;string&quot;&gt;&quot;require&quot;&lt;/span&gt;: {
+    &lt;span class=&quot;string&quot;&gt;&quot;moment&quot;&lt;/span&gt;: &lt;span class=&quot;string&quot;&gt;&quot;moment&quot;&lt;/span&gt;,
+    &lt;span class=&quot;string&quot;&gt;&quot;_&quot;&lt;/span&gt;: &lt;span class=&quot;string&quot;&gt;&quot;underscore&quot;&lt;/span&gt;,
+    &lt;span class=&quot;string&quot;&gt;&quot;typogr&quot;&lt;/span&gt;: &lt;span class=&quot;string&quot;&gt;&quot;typogr&quot;&lt;/span&gt;
+  },
+  &lt;span class=&quot;string&quot;&gt;&quot;jade&quot;&lt;/span&gt;: {
+    &lt;span class=&quot;string&quot;&gt;&quot;pretty&quot;&lt;/span&gt;: &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;
+  },
+  &lt;span class=&quot;string&quot;&gt;&quot;markdown&quot;&lt;/span&gt;: {
+    &lt;span class=&quot;string&quot;&gt;&quot;smartLists&quot;&lt;/span&gt;: &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;,
+    &lt;span class=&quot;string&quot;&gt;&quot;smartypants&quot;&lt;/span&gt;: &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;
+  },
+  &lt;span class=&quot;string&quot;&gt;&quot;paginator&quot;&lt;/span&gt;: {
+    &lt;span class=&quot;string&quot;&gt;&quot;perPage&quot;&lt;/span&gt;: &lt;span class=&quot;number&quot;&gt;20&lt;/span&gt;
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;You then want to insert the line:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;!{ env.helpers.livereload() }&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;into the &lt;code&gt;templates/layout.jade&lt;/code&gt; file - giving you something like the following at the top of the file&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-jade&quot;&gt;!!! 5
+block vars
+  - var bodyclass = null;
+html(lang=&amp;#39;en&amp;#39;)
+  head
+    block head
+      meta(charset=&amp;#39;utf-8&amp;#39;)
+      meta(http-equiv=&amp;#39;X-UA-Compatible&amp;#39;, content=&amp;#39;IE=edge,chrome=1&amp;#39;)
+      meta(name=&amp;#39;viewport&amp;#39;, content=&amp;#39;width=device-width&amp;#39;)
+      !{ env.helpers.livereload() }
+      script(type=&amp;#39;text/javascript&amp;#39;).&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I also add a script section with &lt;a href=&quot;http://www.google.com/analytics/&quot;&gt;Google Analytics&lt;/a&gt; to layout.jade because I&amp;#39;m vain like that:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-jade&quot;&gt;!!! 5
+block vars
+  - var bodyclass = null;
+html(lang=&amp;#39;en&amp;#39;)
+  head
+    block head
+      meta(charset=&amp;#39;utf-8&amp;#39;)
+      meta(http-equiv=&amp;#39;X-UA-Compatible&amp;#39;, content=&amp;#39;IE=edge,chrome=1&amp;#39;)
+      meta(name=&amp;#39;viewport&amp;#39;, content=&amp;#39;width=device-width&amp;#39;)
+      !{ env.helpers.livereload() }
+      script(type=&amp;#39;text/javascript&amp;#39;).
+        // google analytics
+        (function(i,s,o,g,r,a,m){i[&amp;#39;GoogleAnalyticsObject&amp;#39;]=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,&amp;#39;script&amp;#39;,&amp;#39;//www.google-analytics.com/analytics.js&amp;#39;,&amp;#39;ga&amp;#39;);
+
+        ga(&amp;#39;create&amp;#39;, &amp;#39;UA-43235370-1&amp;#39;, &amp;#39;wrouesnel.github.io&amp;#39;);
+        ga(&amp;#39;send&amp;#39;, &amp;#39;pageview&amp;#39;);&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;The glitch&lt;/strong&gt;: Running &lt;code&gt;wintersmith preview&lt;/code&gt; with these changes you‘ll find it doesn’t work when trying to browse to the main index.html page with something like “env is undefined”. This is &lt;a href=&quot;https://github.com/jnordberg/wintersmith/issues/141&quot;&gt;a glitch in paginator which has been fixed upstream&lt;/a&gt; but not in wintersmith@2.0.5 in npm. &lt;/p&gt;
+&lt;p&gt;To fix it I just copied &lt;a href=&quot;https://github.com/jnordberg/wintersmith/commit/b959b35b9b153fb7ddbaa37533800777473b5a17.diff&quot;&gt;the commit patch&lt;/a&gt; manually into my local copy of &lt;code&gt;plugins/paginator.coffee&lt;/code&gt; : &lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-diff&quot;&gt;diff --git a/examples/blog/plugins/paginator.coffee b/examples/blog/plugins/paginator.coffee
+index b8e9032..19098d5 100644
+&lt;span class=&quot;header&quot;&gt;--- a/examples/blog/plugins/paginator.coffee&lt;/span&gt;
+&lt;span class=&quot;header&quot;&gt;+++ b/examples/blog/plugins/paginator.coffee&lt;/span&gt;
+@@ -43,7 +43,7 @@ module.exports = (env, callback) -&amp;gt;
+         return callback new Error &quot;unknown paginator template '#{ options.template }'&quot;
+
+       # setup the template context
+&lt;span class=&quot;deletion&quot;&gt;-      ctx = {contents, @articles, @prevPage, @nextPage}&lt;/span&gt;
+&lt;span class=&quot;addition&quot;&gt;+      ctx = {env, contents, @articles, @prevPage, @nextPage}&lt;/span&gt;
+
+       # extend the template context with the enviroment locals
+       env.utils.extend ctx, locals&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;Show most recent article in the index&lt;/h2&gt;
+&lt;p&gt;By default Wintersmith shows short summaries of articles on your &lt;code&gt;index.html&lt;/code&gt; page. I can&amp;#39;t decide whether or not I like this behavior yet, but until I do what I wanted was to always have my index show my most recent post.&lt;/p&gt;
+&lt;p&gt;To do this, we take advantage of Jade&amp;#39;s iteration and if/then functionality to modify &lt;code&gt;template/index.jade&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;As of this article my index.jade looks as follows:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-jade&quot;&gt;extends layout
+
+block content
+  include author
+  each article, num in articles
+    if num === 0
+      // First article - render in full
+      article.article.intro
+      header
+        h1.indexfullarticle
+          a(href=article.url)= article.title
+        div.date
+          span= moment(article.date).format(&amp;#39;DD. MMMM YYYY&amp;#39;)
+        p.author
+            mixin author(article.metadata.author)
+      section.content!= typogr(article.html).typogrify()
+    else
+      article.article.intro
+      header
+        h2
+          a(href=article.url)= article.title
+        div.date
+          span= moment(article.date).format(&amp;#39;DD. MMMM YYYY&amp;#39;)
+        p.author
+            mixin author(article.metadata.author)
+      section.content
+        !{ typogr(article.intro).typogrify() }
+        if article.hasMore
+          p.more
+            a(href=article.url) more
+
+block prepend footer
+  div.nav
+    if prevPage
+      a(href=prevPage.url) « Newer
+    else
+      a(href=&amp;#39;/archive.html&amp;#39;) « Archives
+    if nextPage
+      a(href=nextPage.url) Next page »&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;There might be a better way to do this, but for me, for now it works. Basically Jade&amp;#39;s iterators will provide an iteration number if you add a variable name for it (&lt;code&gt;num&lt;/code&gt; in this case) - and the articles are chronological by default. So 0 is always the most recent.&lt;/p&gt;
+&lt;p&gt;From there I just duplicate some code fro &lt;code&gt;template/article.jade&lt;/code&gt; to have it render the full article in &lt;code&gt;section.content&lt;/code&gt; - which is &lt;code&gt;article.html&lt;/code&gt;, rather then just the intro section - which is &lt;code&gt;article.intro&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;An important note here is that the default CSS selectors require some modification to get things to look right. I‘m not sure I’ve nailed it yet, so editing those is an exercise left to the reader (or just a matter of downloading the stylesheet from this site).&lt;/p&gt;
+&lt;h1&gt;Deploy Makefile&lt;/h1&gt;
+&lt;p&gt;This site is hosted on Github pages, but they have no support for Wintersmith - so it&amp;#39;s necessary to manually build the static content and upload that. &lt;code&gt;make&lt;/code&gt; is more then capable of handling this task, and while we‘re at it it’s a decent tool to automate housekeeping - in particular I wanted my article metadata to be automatically tagged with a date if the date field was blank.&lt;/p&gt;
+&lt;h2&gt;Automatic date tagging&lt;/h2&gt;
+&lt;p&gt;After banging my head with awk or sed one-liners (which probably can be done) I came to my senses and wrote a bash script to do this for me.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;&lt;span class=&quot;shebang&quot;&gt;#!/bin/bash&lt;/span&gt;
+
+find contents -name &lt;span class=&quot;string&quot;&gt;'*.md'&lt;/span&gt; | &lt;span class=&quot;keyword&quot;&gt;while&lt;/span&gt; read markdownfile; &lt;span class=&quot;keyword&quot;&gt;do&lt;/span&gt;
+    datemeta=$(cat &lt;span class=&quot;variable&quot;&gt;$markdownfile&lt;/span&gt; | grep -m1 date: )
+    datestamp=$(cat &lt;span class=&quot;variable&quot;&gt;$markdownfile&lt;/span&gt; | grep -m1 date: | cut -d&lt;span class=&quot;string&quot;&gt;' '&lt;/span&gt; -f2)
+
+    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;test_condition&quot;&gt;[ ! -z &lt;span class=&quot;variable&quot;&gt;$datemeta&lt;/span&gt; ]&lt;/span&gt;; &lt;span class=&quot;keyword&quot;&gt;then&lt;/span&gt;
+        &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;test_condition&quot;&gt;[ -z &lt;span class=&quot;string&quot;&gt;&quot;&lt;span class=&quot;variable&quot;&gt;$datestamp&lt;/span&gt;&quot;&lt;/span&gt; ]&lt;/span&gt;; &lt;span class=&quot;keyword&quot;&gt;then&lt;/span&gt;
+            &lt;span class=&quot;comment&quot;&gt;# generate a datestamp entry and replace the field with sed&lt;/span&gt;
+            &lt;span class=&quot;keyword&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&quot;Date stamping unstamped article &lt;span class=&quot;variable&quot;&gt;$markdownfile&lt;/span&gt;&quot;&lt;/span&gt;
+            datestamp=$(date &lt;span class=&quot;string&quot;&gt;'+%Y-%m-%d %H:%M GMT%z'&lt;/span&gt;)
+            sed -i &lt;span class=&quot;string&quot;&gt;&quot;s/date:\ .*/date: &lt;span class=&quot;variable&quot;&gt;$datestamp&lt;/span&gt;/&quot;&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&quot;&lt;span class=&quot;variable&quot;&gt;$markdownfile&lt;/span&gt;&quot;&lt;/span&gt;
+        &lt;span class=&quot;keyword&quot;&gt;fi&lt;/span&gt;
+    &lt;span class=&quot;keyword&quot;&gt;fi&lt;/span&gt;
+&lt;span class=&quot;keyword&quot;&gt;done&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;Git Submodules&lt;/h2&gt;
+&lt;p&gt;Since I use Git to manage the blog, but GitHub Pages uses a git repo to represent the finished blog, it‘s necessary on my local machine to somehow have two repositories - one representing the Wintersmith site in source form, and one representing the GitHub Pages site after it’s rendered.&lt;/p&gt;
+&lt;p&gt;I do this by treating the &lt;code&gt;build/&lt;/code&gt; directory of my Wintersmith site as a Git submodule. Git won&amp;#39;t checkout an empty repo, so you need to create a full repo somewhere and then push it to your normal storage (in my case my private server, but it could be somewhere else on GitHub):&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;$ mkdir build
+$ cd build
+$ git init
+$ git remote add origin ssh://will@myserver/~/wrouesnel.github.io~build.git
+$ touch .gitignore
+$ git add *
+$ git commit
+$ git push master&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;At this point you can delete the build/ directory you just created. It&amp;#39;s not needed any more. Then it can be imported as a submodule to the main Wintersmith repo. We also need to add a remote for pushing output to Github:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;$ cd your_wintersmith_repo
+$ git submodule add ssh://will@myserver/~/wrouesnel.github.io~build.git build
+$ cd build
+$ git remote add github git@github.com:wrouesnel/wrouesnel.github.io.git&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And after all that effort your module is imported and ready to participate in the build process.&lt;/p&gt;
+&lt;h2&gt;Putting the makefile together&lt;/h2&gt;
+&lt;h1&gt;Personal thoughts&lt;/h1&gt;
+&lt;p&gt;I&amp;#39;ve been meaning to blog for sometime to have somewhere to put the things I do or random bits of knowledge I pick up so they might help someone else, but for one reason or another most blogging engines never did it for me.&lt;/p&gt;
+&lt;p&gt;I‘ve never been much of a fan of managed services they lead to sprawling personal “infrastructure” - I’ll be happy when my entire digital life can be backed up by just making a copy of my home directory.&lt;/p&gt;
+&lt;p&gt;So for blogging I‘ve not much cared for the services out there or their focus. I don’t particularly want to manage a heavyweight WordPress or other type of CMS installation on a web-server just for a personal blog, since that requires a lot of careful attention to security, patching, updates and I simply don&amp;#39;t need the features. &lt;/p&gt;
+&lt;p&gt;At the same time services like &lt;a href=&quot;http://localhost:8080/articles/Wintersmithing/www.tumblr.com&quot;&gt;tumblr&lt;/a&gt; never quite seemed &lt;em&gt;for&lt;/em&gt; me - it skirts the line between microblogging and blogging and it‘s relationship with markdown and code didn’t gel for me. A deluge of social networking features is also not what I wanted.&lt;/p&gt;
+&lt;p&gt;With Github pages offering free static site hosting, I initially looked at Jekyll as an SSG for putting something together. But Jekyll is written in Ruby, and at the moment I‘m on a node.js kick so I really wanted something in that direction. Hence Wintersmith - simple, easy to use, and written in something that I’m inclinded to hack-on but with enough features out of the box (code highlighting in particular) to not feel onerous.&lt;/p&gt;
+</description>
+    </item>
+  </channel>
+</rss>
