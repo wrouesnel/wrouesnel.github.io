@@ -197,7 +197,7 @@ draft: date
 # Publish makes a draft, but then pushes to GitHub.
 publish: draft
     cd build; git commit -m &amp;quot;published to github&amp;quot;; \
-    git push github
+    git push github master
 
 .PHONY: date draft publish&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The workflow is that I can call &lt;code&gt;make draft&lt;/code&gt; which builds the site and commits the build to my private repo which just tracks draft sites elsewhere, and then &lt;code&gt;make publish&lt;/code&gt; for when I want things to go live.&lt;/p&gt;
