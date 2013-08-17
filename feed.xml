@@ -154,7 +154,7 @@ find contents -name &lt;span class=&quot;string&quot;&gt;'*.md'&lt;/span&gt; | &
     datemeta=$(cat &lt;span class=&quot;variable&quot;&gt;$markdownfile&lt;/span&gt; | grep -m1 date: )
     datestamp=$(cat &lt;span class=&quot;variable&quot;&gt;$markdownfile&lt;/span&gt; | grep -m1 date: | cut -d&lt;span class=&quot;string&quot;&gt;' '&lt;/span&gt; -f2)
 
-    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;test_condition&quot;&gt;[ ! -z &lt;span class=&quot;variable&quot;&gt;$datemeta&lt;/span&gt; ]&lt;/span&gt;; &lt;span class=&quot;keyword&quot;&gt;then&lt;/span&gt;
+    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;test_condition&quot;&gt;[ ! -z &lt;span class=&quot;string&quot;&gt;&quot;&lt;span class=&quot;variable&quot;&gt;$datemeta&lt;/span&gt;&quot;&lt;/span&gt; ]&lt;/span&gt;; &lt;span class=&quot;keyword&quot;&gt;then&lt;/span&gt;
         &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;test_condition&quot;&gt;[ -z &lt;span class=&quot;string&quot;&gt;&quot;&lt;span class=&quot;variable&quot;&gt;$datestamp&lt;/span&gt;&quot;&lt;/span&gt; ]&lt;/span&gt;; &lt;span class=&quot;keyword&quot;&gt;then&lt;/span&gt;
             &lt;span class=&quot;comment&quot;&gt;# generate a datestamp entry and replace the field with sed&lt;/span&gt;
             &lt;span class=&quot;keyword&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&quot;Date stamping unstamped article &lt;span class=&quot;variable&quot;&gt;$markdownfile&lt;/span&gt;&quot;&lt;/span&gt;
@@ -181,12 +181,34 @@ $ cd build
 $ git remote add github git@github.com:wrouesnel/wrouesnel.github.io.git&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;And after all that effort your module is imported and ready to participate in the build process.&lt;/p&gt;
 &lt;h2&gt;Putting the makefile together&lt;/h2&gt;
+&lt;p&gt;The final makefile looks something like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-make&quot;&gt;# Makefile to deploy the blog
+
+# Search article markdown for &amp;quot;date&amp;quot; metadata that is unset and set it.
+date: 
+    ./add-date-stamps.bsh
+
+# Draft&amp;#39;s are pushed to my private server
+draft: date
+    wintersmith build
+    cd build; git add *; git commit -m &amp;quot;draft&amp;quot; ; \
+    git push origin
+
+# Publish makes a draft, but then pushes to GitHub.
+publish: draft
+    cd build; git commit -m &amp;quot;published to github&amp;quot;; \
+    git push github
+
+.PHONY: date draft publish&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The workflow is that I can call &lt;code&gt;make draft&lt;/code&gt; which builds the site and commits the build to my private repo which just tracks draft sites elsewhere, and then &lt;code&gt;make publish&lt;/code&gt; for when I want things to go live.&lt;/p&gt;
+&lt;p&gt;There are obviously other ways this could work - for example, I could use post-commit hooks on the server to push to Github Pages, but the idea here is that provided I can access the the wintersmith repository, everything else can be rebuilt.&lt;/p&gt;
 &lt;h1&gt;Personal thoughts&lt;/h1&gt;
 &lt;p&gt;I&amp;#39;ve been meaning to blog for sometime to have somewhere to put the things I do or random bits of knowledge I pick up so they might help someone else, but for one reason or another most blogging engines never did it for me.&lt;/p&gt;
 &lt;p&gt;I‘ve never been much of a fan of managed services they lead to sprawling personal “infrastructure” - I’ll be happy when my entire digital life can be backed up by just making a copy of my home directory.&lt;/p&gt;
 &lt;p&gt;So for blogging I‘ve not much cared for the services out there or their focus. I don’t particularly want to manage a heavyweight WordPress or other type of CMS installation on a web-server just for a personal blog, since that requires a lot of careful attention to security, patching, updates and I simply don&amp;#39;t need the features. &lt;/p&gt;
 &lt;p&gt;At the same time services like &lt;a href=&quot;http://localhost:8080/articles/Wintersmithing/www.tumblr.com&quot;&gt;tumblr&lt;/a&gt; never quite seemed &lt;em&gt;for&lt;/em&gt; me - it skirts the line between microblogging and blogging and it‘s relationship with markdown and code didn’t gel for me. A deluge of social networking features is also not what I wanted.&lt;/p&gt;
 &lt;p&gt;With Github pages offering free static site hosting, I initially looked at Jekyll as an SSG for putting something together. But Jekyll is written in Ruby, and at the moment I‘m on a node.js kick so I really wanted something in that direction. Hence Wintersmith - simple, easy to use, and written in something that I’m inclinded to hack-on but with enough features out of the box (code highlighting in particular) to not feel onerous.&lt;/p&gt;
+&lt;p&gt;So far I‘m really liking the static site model - it’s simple, secure and easy to store, manage and keep in a nice neat git repository. Guess I&amp;#39;ll see how it goes.&lt;/p&gt;
 </description>
     </item>
   </channel>

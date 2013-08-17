@@ -171,7 +171,7 @@ find contents -name <span class="string">'*.md'</span> | <span class="keyword">w
     datemeta=$(cat <span class="variable">$markdownfile</span> | grep -m1 date: )
     datestamp=$(cat <span class="variable">$markdownfile</span> | grep -m1 date: | cut -d<span class="string">' '</span> -f2)
 
-    <span class="keyword">if</span> <span class="test_condition">[ ! -z <span class="variable">$datemeta</span> ]</span>; <span class="keyword">then</span>
+    <span class="keyword">if</span> <span class="test_condition">[ ! -z <span class="string">"<span class="variable">$datemeta</span>"</span> ]</span>; <span class="keyword">then</span>
         <span class="keyword">if</span> <span class="test_condition">[ -z <span class="string">"<span class="variable">$datestamp</span>"</span> ]</span>; <span class="keyword">then</span>
             <span class="comment"># generate a datestamp entry and replace the field with sed</span>
             <span class="keyword">echo</span> <span class="string">"Date stamping unstamped article <span class="variable">$markdownfile</span>"</span>
@@ -198,12 +198,34 @@ $ cd build
 $ git remote add github git@github.com:wrouesnel/wrouesnel.github.io.git</code></pre>
 <p>And after all that effort your module is imported and ready to participate in the build&nbsp;process.</p>
 <h2>Putting the makefile&nbsp;together</h2>
+<p>The final makefile looks something like&nbsp;this:</p>
+<pre><code class="lang-make"># Makefile to deploy the blog
+
+# Search article markdown for &quot;date&quot; metadata that is unset and set it.
+date: 
+    ./add-date-stamps.bsh
+
+# Draft&#39;s are pushed to my private server
+draft: date
+    wintersmith build
+    cd build; git add *; git commit -m &quot;draft&quot; ; \
+    git push origin
+
+# Publish makes a draft, but then pushes to GitHub.
+publish: draft
+    cd build; git commit -m &quot;published to github&quot;; \
+    git push github
+
+.PHONY: date draft publish</code></pre>
+<p>The workflow is that I can call <code>make draft</code> which builds the site and commits the build to my private repo which just tracks draft sites elsewhere, and then <code>make publish</code> for when I want things to go&nbsp;live.</p>
+<p>There are obviously other ways this could work - for example, I could use post-commit hooks on the server to push to Github Pages, but the idea here is that provided I can access the the wintersmith repository, everything else can be&nbsp;rebuilt.</p>
 <h1>Personal&nbsp;thoughts</h1>
 <p>I&#39;ve been meaning to blog for sometime to have somewhere to put the things I do or random bits of knowledge I pick up so they might help someone else, but for one reason or another most blogging engines never did it for&nbsp;me.</p>
 <p>I‘ve never been much of a fan of managed services they lead to sprawling personal “infrastructure” - I’ll be happy when my entire digital life can be backed up by just making a copy of my home&nbsp;directory.</p>
 <p>So for blogging I‘ve not much cared for the services out there or their focus. I don’t particularly want to manage a heavyweight WordPress or other type of <span class="caps">CMS</span> installation on a web-server just for a personal blog, since that requires a lot of careful attention to security, patching, updates and I simply don&#39;t need the&nbsp;features. </p>
 <p>At the same time services like <a href="/articles/Wintersmithing/www.tumblr.com">tumblr</a> never quite seemed <em>for</em> me - it skirts the line between microblogging and blogging and it‘s relationship with markdown and code didn’t gel for me. A deluge of social networking features is also not what I&nbsp;wanted.</p>
 <p>With Github pages offering free static site hosting, I initially looked at Jekyll as an <span class="caps">SSG</span> for putting something together. But Jekyll is written in Ruby, and at the moment I‘m on a node.js kick so I really wanted something in that direction. Hence Wintersmith - simple, easy to use, and written in something that I’m inclinded to hack-on but with enough features out of the box (code highlighting in particular) to not feel&nbsp;onerous.</p>
+<p>So far I‘m really liking the static site model - it’s simple, secure and easy to store, manage and keep in a nice neat git repository. Guess I&#39;ll see how it&nbsp;goes.</p>
 </section>
         </article>
       </div>
