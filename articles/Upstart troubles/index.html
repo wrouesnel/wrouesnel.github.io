@@ -14,44 +14,39 @@
       ga('create', 'UA-43235370-1', 'wrouesnel.github.io');
       ga('send', 'pageview');
     </script>
-    <title>wrouesnel_blog
+    <title>Upstart script not recognized - wrouesnel_blog
     </title>
     <link rel="alternate" href="http://localhost:8080/feed.xml" type="application/rss+xml" title="negating information entropy">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic|Anonymous+Pro:400,700,400italic,700italic|Merriweather:400,700,300">
     <link rel="stylesheet" href="/css/main.css">
   </head>
-  <body>
+  <body class="article-detail">
     <header class="header">
       <div class="content-wrap">
-        <div class="logo">
-          <h1><a href="http://localhost:8080">wrouesnel_blog</a></h1>
-          <p class="description">negating information entropy</p>
-        </div>
+        <h1>Upstart script not recognized</h1>
+        <p class="author">Written by <span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
+        </p>
       </div>
     </header>
     <div id="content">
       <div class="content-wrap">
-        <section class="archive">
-          <h2>Archive</h2>
-          <ul>
-            <li style="height: 2.2em" class="year"><span style="line-height: 2.2em" class="year-label">2013</span>
-              <ul>
-                <li style="height: 2.2em" class="month"><span style="line-height: 2.2em" class="month-label">August</span><a href="/articles/Wintersmithing/" style="line-height: 2.2em">Wintersmithing</a>
-                </li>
-              </ul>
-            </li>
-            <li style="height: 2.2em" class="year"><span style="line-height: 2.2em" class="year-label last">1970</span>
-              <ul>
-                <li style="height: 2.2em" class="month"><span style="line-height: 2.2em" class="month-label last">January</span><a href="/articles/Upstart%20troubles/" style="line-height: 2.2em" class="last">Upstart script not recognized</a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </section>
+        <article class="article">
+          <section class="content"><p>I frequently find myself writing upstart scripts which checkout ok, but for some reason don&#39;t get detected by the upstart daemon in the init directory, so when I run <code>start myscript</code> I get <code>unknown job</code> back. Some experimentation seems to indicate that the problem is I used gedit over <span class="caps">GVFS</span> SFTP to author a lot of these&nbsp;scripts.</p>
+<p>For something like <code>myscript.conf</code>, I find the following fixes this&nbsp;problem:</p>
+<pre><code>mv myscript.conf myscript.conf.d
+mv myscript.conf.d myscript.conf</code></pre>
+<p>And then hey presto, the script works&nbsp;perfectly.</p>
+<p>Along the same lines, the <code>init-checkconf</code> utility isn‘t mentioned enough for upstart debugging - my last post shows I clearly didn’t know about it. Using it is&nbsp;simple:</p>
+<pre><code>$ init-checkconf /etc/init/myscript.conf</code></pre>
+<p>Note it needs to be run as a regular user. I&#39;m often logged in as root, so sudo&nbsp;suffices:</p>
+<pre><code>$ sudo -u nobody init-checkconf /etc/init/myscript.conf</code></pre>
+</section>
+        </article>
       </div>
     </div>
     <footer>
       <div class="content-wrap">
+        <div class="nav"><a href="/">« Full blog</a></div>
         <section class="about">
         </section>
         <section class="copy">

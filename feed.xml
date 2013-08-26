@@ -211,5 +211,22 @@ publish: draft
 &lt;p&gt;So far I‘m really liking the static site model - it’s simple, secure and easy to store, manage and keep in a nice neat git repository. Guess I&amp;#39;ll see how it goes.&lt;/p&gt;
 </description>
     </item>
+    <item>
+      <title>Upstart script not recognized</title>
+      <link>http://localhost:8080/articles/Upstart%20troubles/</link>
+      <pubDate>Thu, 01 Jan 1970 10:00:00 +1000</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/Upstart%20troubles/</guid>
+      <author></author>
+      <description>&lt;p&gt;I frequently find myself writing upstart scripts which checkout ok, but for some reason don&amp;#39;t get detected by the upstart daemon in the init directory, so when I run &lt;code&gt;start myscript&lt;/code&gt; I get &lt;code&gt;unknown job&lt;/code&gt; back. Some experimentation seems to indicate that the problem is I used gedit over GVFS SFTP to author a lot of these scripts.&lt;/p&gt;
+&lt;p&gt;For something like &lt;code&gt;myscript.conf&lt;/code&gt;, I find the following fixes this problem:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;mv myscript.conf myscript.conf.d
+mv myscript.conf.d myscript.conf&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And then hey presto, the script works perfectly.&lt;/p&gt;
+&lt;p&gt;Along the same lines, the &lt;code&gt;init-checkconf&lt;/code&gt; utility isn‘t mentioned enough for upstart debugging - my last post shows I clearly didn’t know about it. Using it is simple:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ init-checkconf /etc/init/myscript.conf&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note it needs to be run as a regular user. I&amp;#39;m often logged in as root, so sudo suffices:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo -u nobody init-checkconf /etc/init/myscript.conf&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
   </channel>
 </rss>
