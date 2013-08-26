@@ -14,32 +14,24 @@
       ga('create', 'UA-43235370-1', 'wrouesnel.github.io');
       ga('send', 'pageview');
     </script>
-    <title>wrouesnel_blog
+    <title>Upstart script not recognized - wrouesnel_blog
     </title>
     <link rel="alternate" href="http://localhost:8080/feed.xml" type="application/rss+xml" title="negating information entropy">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic|Anonymous+Pro:400,700,400italic,700italic|Merriweather:400,700,300">
     <link rel="stylesheet" href="/css/main.css">
   </head>
-  <body>
+  <body class="article-detail">
     <header class="header">
       <div class="content-wrap">
-        <div class="logo">
-          <h1><a href="http://localhost:8080">wrouesnel_blog</a></h1>
-          <p class="description">negating information entropy</p>
-        </div>
+        <h1>Upstart script not recognized</h1>
+        <p class="author">Written by <span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
+        </p>
       </div>
     </header>
     <div id="content">
       <div class="content-wrap">
-        <!-- First article - render in full-->
-        <article class="article intro"></article>
-        <header>
-          <h1 class="indexfullarticle"><a href="/articles/Setting%20up%20sshttp/">Upstart script not recognized</a></h1>
-          <div class="date"><span>27. August 2013</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><p>When I was travelling Europe I found some surprisingly restricted wi-fi hotspots in hotels. This was annoying because I use <span class="caps">SSH</span> to upload photos back home from my phone, but having not setup any tunneling helpers I just had to wait till I found a better&nbsp;one.</p>
+        <article class="article">
+          <section class="content"><p>When I was travelling Europe I found some surprisingly restricted wi-fi hotspots in hotels. This was annoying because I use <span class="caps">SSH</span> to upload photos back home from my phone, but having not setup any tunneling helpers I just had to wait till I found a better&nbsp;one.</p>
 <p>There are a number of solutions to <span class="caps">SSH</span> tunneling, but the main thing I wanted to do was implement something which would let me run several fallbacks at once. Enter <a href="https://github.com/stealth/sshttp">sshttp</a>.</p>
 <p>sshttp is related to sslh, in the sense that they are both <span class="caps">SSH</span> connection multiplexers. The idea is that you point a web-browser at port 80, you get a web-page. You point your SSH client, and you get an SSH connection. Naive firewalls let the SSH traffic through without&nbsp;complaint.</p>
 <p>The benefit of sshttp over sslh is that it uses Linux&#39;s <code>IP_TRANSPARENT</code> flag, which means that your <span class="caps">SSH</span> and HTTP logs all show proper source IPs, which is great for auditing and&nbsp;security.</p>
@@ -166,43 +158,12 @@ LOG_PATH=/var/log/sshttp.log</code></pre>
 <p>At the moment with this setup I just have nginx serving 404s back on my sshttp server ports. But the real benefit is, I can turn those into secure proxy&#39;s to use with something like <a href="http://pwet.fr/man/linux/commandes/corkscrew">corkscrew</a> or <a href="http://proxytunnel.sourceforge.net/">proxytunnel</a>.</p>
 <p>Or I can go further - use <a href="http://www.nocrew.org/software/httptunnel.html">httptunnel</a> to tunnel <span class="caps">TCP</span> over GET and POST connections (my actual intent) on the public facing HTTP ports. Or do both - each method has it&#39;s trade-offs, so we can just step down till we find one which&nbsp;works!</p>
 </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/Upstart%20troubles/">Upstart script not recognized</a></h2>
-          <div class="date"><span>26. August 2013</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><p>I frequently find myself writing upstart scripts which checkout ok, but for some reason don&#39;t get detected by the upstart daemon in the init directory, so when I run <code>start myscript</code> I get <code>unknown job</code> back. Some experimentation seems to indicate that the problem is I used gedit over <span class="caps">GVFS</span> SFTP to author a lot of these&nbsp;scripts.</p>
-<p>For something like <code>myscript.conf</code>, I find the following fixes this&nbsp;problem:</p>
-<pre><code>mv myscript.conf myscript.conf.d
-mv myscript.conf.d myscript.conf</code></pre>
-<p>And then hey presto, the script works&nbsp;perfectly.</p>
-<p>Along the same lines, the <code>init-checkconf</code> utility isn‘t mentioned enough for upstart debugging - my last post shows I clearly didn’t know about it. Using it is&nbsp;simple:</p>
-<pre><code>$ init-checkconf /etc/init/myscript.conf</code></pre>
-<p>Note it needs to be run as a regular user. I&#39;m often logged in as root, so sudo&nbsp;suffices:</p>
-<pre><code>$ sudo -u nobody init-checkconf /etc/init/myscript.conf</code></pre>
-
-        </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/Wintersmithing/">Wintersmithing</a></h2>
-          <div class="date"><span>18. August 2013</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><h1>Wintersmith</h1>
-<p>How to setup and use Wintersmith is covered pretty thoroughly elsewhere on the net, (namely the <a href="http://wintersmith.io/">wintersmith homepage</a>.</p>
-<p>Instead I&#39;ll cover a few tweaks I had to do to get it running the way I wanted. To avoid being truly confusing, all the paths referenced here are relative to the site you create by running <code>wintersmith new &lt;your site dir here&gt;</code></p>
-
-          <p class="more"><a href="/articles/Wintersmithing/">more</a></p>
-        </section>
+        </article>
       </div>
     </div>
     <footer>
       <div class="content-wrap">
-        <div class="nav"><a href="/archive.html">« Archives</a>
-        </div>
+        <div class="nav"><a href="/">« Full blog</a></div>
         <section class="about">
         </section>
         <section class="copy">

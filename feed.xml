@@ -5,9 +5,143 @@
     <atom:link href="http://localhost:8080/feed.xml" rel="self" type="application/rss+xml"></atom:link>
     <link>http://localhost:8080</link>
     <description>negating information entropy</description>
-    <pubDate>Mon, 26  Aug 2013 18:49:00 +1000</pubDate>
+    <pubDate>Tue, 27  Aug 2013 00:43:00 +1000</pubDate>
     <generator>Wintersmith - https://github.com/jnordberg/wintersmith</generator>
     <language>en</language>
+    <item>
+      <title>Upstart script not recognized</title>
+      <link>http://localhost:8080/articles/Setting%20up%20sshttp/</link>
+      <pubDate>Tue, 27  Aug 2013 00:43:00 +1000</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/Setting%20up%20sshttp/</guid>
+      <author></author>
+      <description>&lt;p&gt;When I was travelling Europe I found some surprisingly restricted wi-fi hotspots in hotels. This was annoying because I use SSH to upload photos back home from my phone, but having not setup any tunneling helpers I just had to wait till I found a better one.&lt;/p&gt;
+&lt;p&gt;There are a number of solutions to SSH tunneling, but the main thing I wanted to do was implement something which would let me run several fallbacks at once. Enter &lt;a href=&quot;https://github.com/stealth/sshttp&quot;&gt;sshttp&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;sshttp is related to sslh, in the sense that they are both SSH connection multiplexers. The idea is that you point a web-browser at port 80, you get a web-page. You point your SSH client, and you get an SSH connection. Naive firewalls let the SSH traffic through without complaint.&lt;/p&gt;
+&lt;p&gt;The benefit of sshttp over sslh is that it uses Linux&amp;#39;s &lt;code&gt;IP_TRANSPARENT&lt;/code&gt; flag, which means that your SSH and HTTP logs all show proper source IPs, which is great for auditing and security.&lt;/p&gt;
+&lt;p&gt;This is a blog about how I set it up for my specific server case, the instructions I used as a guide were adapted from &lt;a href=&quot;http://blog.stalkr.net/2012/02/sshhttps-multiplexing-with-sshttp.html&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;h2&gt;Components&lt;/h2&gt;
+&lt;p&gt;My home server hosts a number of daemons, but namely a large number of nginx name-based virtual hosts for things on my network. I specifically &lt;em&gt;don&amp;#39;t&lt;/em&gt; want nginx trying to serve most of these pages to the web.&lt;/p&gt;
+&lt;p&gt;The idea is that sshttp is my first firewall punching fallback, and then I can install some sneakier options on the web-side of sshttp (topic for a future blog). I also wanted sshttp to be nicely integrated with upstart in case I wanted to add more daemons/redirects in the future.&lt;/p&gt;
+&lt;h2&gt;Installing sshttp&lt;/h2&gt;
+&lt;p&gt;There&amp;#39;s no deb package available, so installation is from github and then I copy it manually to /usr/local/sbin:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;$ git clone https://github.com/stealth/sshttp
+$ cd sshttp
+$ make
+$ sudo cp sshttpd /usr/local/sbin&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;Upstart Script&lt;/h2&gt;
+&lt;p&gt;I settled on the following upstart script for sshttp (adapted from my favorite nodeJS launching script):&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# sshttpd launcher&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;# note: this at minimum needs an iptables configuration which allows the&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;# outside ports you're requesting through.&lt;/span&gt;
+
+description &lt;span class=&quot;string&quot;&gt;&quot;sshttpd server upstart script&quot;&lt;/span&gt;
+author &lt;span class=&quot;string&quot;&gt;&quot;will rouesnel&quot;&lt;/span&gt;
+
+start on (local-filesystems and net-device-up)
+stop on shutdown
+
+instance &lt;span class=&quot;string&quot;&gt;&quot;sshttpd - &lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt;&quot;&lt;/span&gt;
+expect daemon
+
+&lt;span class=&quot;comment&quot;&gt;#respawn&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;#respawn limit 5 60&lt;/span&gt;
+
+pre-start script
+    &lt;span class=&quot;comment&quot;&gt;# Check script exists&lt;/span&gt;
+    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;test_condition&quot;&gt;[ ! -e /etc/sshttp.d/&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt;.conf ]&lt;/span&gt;; &lt;span class=&quot;keyword&quot;&gt;then&lt;/span&gt;
+        &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; 1
+    &lt;span class=&quot;keyword&quot;&gt;fi&lt;/span&gt;
+    . /etc/sshttp.d/&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt;.conf
+
+    &lt;span class=&quot;comment&quot;&gt;# Clear up any old rules this instance may have left around from an&lt;/span&gt;
+    &lt;span class=&quot;comment&quot;&gt;# unclean shutdown&lt;/span&gt;
+    iptables -t mangle -D OUTPUT -p tcp --sport &lt;span class=&quot;variable&quot;&gt;${SSH_PORT}&lt;/span&gt; -j sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt; || &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;
+    iptables -t mangle -D OUTPUT -p tcp --sport &lt;span class=&quot;variable&quot;&gt;${HTTP_PORT}&lt;/span&gt; -j sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt; || &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;
+    iptables -t mangle -D PREROUTING -p tcp --sport &lt;span class=&quot;variable&quot;&gt;${SSH_PORT}&lt;/span&gt; -m socket -j sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt; || &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;
+    iptables -t mangle -D PREROUTING -p tcp --sport &lt;span class=&quot;variable&quot;&gt;${HTTP_PORT}&lt;/span&gt; -m socket -j sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt; || &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;
+
+    iptables -t mangle -F sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt; || &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;
+    iptables -X sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt; || &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;
+
+    &lt;span class=&quot;comment&quot;&gt;# Add routing rules&lt;/span&gt;
+    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; ! ip rule show | grep -q &lt;span class=&quot;string&quot;&gt;&quot;lookup &lt;span class=&quot;variable&quot;&gt;${TABLE}&lt;/span&gt;&quot;&lt;/span&gt;; &lt;span class=&quot;keyword&quot;&gt;then&lt;/span&gt;
+        ip rule add fwmark &lt;span class=&quot;variable&quot;&gt;${MARK}&lt;/span&gt; lookup &lt;span class=&quot;variable&quot;&gt;${TABLE}&lt;/span&gt;
+    &lt;span class=&quot;keyword&quot;&gt;fi&lt;/span&gt;
+
+    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; ! ip route show table &lt;span class=&quot;variable&quot;&gt;${TABLE}&lt;/span&gt; | grep -q &lt;span class=&quot;string&quot;&gt;&quot;default&quot;&lt;/span&gt;; &lt;span class=&quot;keyword&quot;&gt;then&lt;/span&gt;
+        ip route add local 0.0.0.0/0 dev lo table &lt;span class=&quot;variable&quot;&gt;${TABLE}&lt;/span&gt;
+    &lt;span class=&quot;keyword&quot;&gt;fi&lt;/span&gt;
+
+    &lt;span class=&quot;comment&quot;&gt;# Add iptables mangle rule chain for this instance&lt;/span&gt;
+    iptables -t mangle -N sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt; || &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;
+    iptables -t mangle -A sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt; -j MARK --&lt;span class=&quot;keyword&quot;&gt;set&lt;/span&gt;-mark &lt;span class=&quot;variable&quot;&gt;${MARK}&lt;/span&gt;
+    iptables -t mangle -A sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt; -j ACCEPT
+
+    &lt;span class=&quot;comment&quot;&gt;# Add the output and prerouting rules&lt;/span&gt;
+    iptables -t mangle -A OUTPUT -p tcp --sport &lt;span class=&quot;variable&quot;&gt;${SSH_PORT}&lt;/span&gt; -j sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt;
+    iptables -t mangle -A OUTPUT -p tcp --sport &lt;span class=&quot;variable&quot;&gt;${HTTP_PORT}&lt;/span&gt; -j sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt;
+    iptables -t mangle -A PREROUTING -p tcp --sport &lt;span class=&quot;variable&quot;&gt;${SSH_PORT}&lt;/span&gt; -m socket -j sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt;
+    iptables -t mangle -A PREROUTING -p tcp --sport &lt;span class=&quot;variable&quot;&gt;${HTTP_PORT}&lt;/span&gt; -m socket -j sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt;
+end script
+
+&lt;span class=&quot;comment&quot;&gt;# the daemon&lt;/span&gt;
+script
+    . /etc/sshttp.d/&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt;.conf
+
+    /usr/local/sbin/sshttpd -n 1 -S &lt;span class=&quot;variable&quot;&gt;${SSH_PORT}&lt;/span&gt; -H &lt;span class=&quot;variable&quot;&gt;${HTTP_PORT}&lt;/span&gt; -L&lt;span class=&quot;variable&quot;&gt;${LISTEN_PORT}&lt;/span&gt; -U nobody -R /var/empty &amp;gt;&amp;gt; &lt;span class=&quot;variable&quot;&gt;${LOG_PATH}&lt;/span&gt; 2&amp;gt;&amp;amp;1
+end script
+
+post-stop script
+    . /etc/sshttp.d/&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt;.conf
+
+    &lt;span class=&quot;comment&quot;&gt;# Try and leave a clean environment&lt;/span&gt;
+    iptables -t mangle -D OUTPUT -p tcp --sport &lt;span class=&quot;variable&quot;&gt;${SSH_PORT}&lt;/span&gt; -j sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt; || &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;
+    iptables -t mangle -D OUTPUT -p tcp --sport &lt;span class=&quot;variable&quot;&gt;${HTTP_PORT}&lt;/span&gt; -j sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt; || &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;
+    iptables -t mangle -D PREROUTING -p tcp --sport &lt;span class=&quot;variable&quot;&gt;${SSH_PORT}&lt;/span&gt; -m socket -j sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt; || &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;
+    iptables -t mangle -D PREROUTING -p tcp --sport &lt;span class=&quot;variable&quot;&gt;${HTTP_PORT}&lt;/span&gt; -m socket -j sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt; || &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;
+
+    iptables -t mangle -F sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt; || &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;
+    iptables -X sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt; || &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;
+
+    &lt;span class=&quot;comment&quot;&gt;# Remove routing rules&lt;/span&gt;
+    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; ip rule show | grep -q &lt;span class=&quot;string&quot;&gt;&quot;lookup &lt;span class=&quot;variable&quot;&gt;${TABLE}&lt;/span&gt;&quot;&lt;/span&gt;; &lt;span class=&quot;keyword&quot;&gt;then&lt;/span&gt;
+        ip rule del fwmark &lt;span class=&quot;variable&quot;&gt;${MARK}&lt;/span&gt; lookup &lt;span class=&quot;variable&quot;&gt;${TABLE}&lt;/span&gt;
+    &lt;span class=&quot;keyword&quot;&gt;fi&lt;/span&gt;
+    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; ip route show table &lt;span class=&quot;variable&quot;&gt;${TABLE}&lt;/span&gt; | grep -q &lt;span class=&quot;string&quot;&gt;&quot;default&quot;&lt;/span&gt;; &lt;span class=&quot;keyword&quot;&gt;then&lt;/span&gt;
+        ip route del local 0.0.0.0/0 dev lo table &lt;span class=&quot;variable&quot;&gt;${TABLE}&lt;/span&gt;
+    &lt;span class=&quot;keyword&quot;&gt;fi&lt;/span&gt;
+
+    &lt;span class=&quot;comment&quot;&gt;# Let sysadmin know we went down for some reason.&lt;/span&gt;
+    cat &lt;span class=&quot;variable&quot;&gt;${LOG_PATH}&lt;/span&gt; | mail -s &lt;span class=&quot;string&quot;&gt;&quot;sshttpd - &lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt; process killed.&quot;&lt;/span&gt; root
+end script&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This script nicely sets up and tears down the bits of iptables mangling and routing infrastructure needed for sshttp, and neatly creates chains for different sshttp instances based on configuration files. It&amp;#39;ll only launch a single instance, so launching them all on boot is handled by this &lt;a href=&quot;https://gist.github.com/wrouesnel/6341544&quot;&gt;upstart script&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;To use this script, you need an /etc/sshttp.d directory:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;$ sudo mkdir /etc/sshttp.d&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;and a configuration file like the following, with a &lt;code&gt;*.conf&lt;/code&gt; extension:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;$ cat /etc/sshttp.d/http.conf
+SSH_PORT=22022
+HTTP_PORT=20080
+LISTEN_PORT=20081
+MARK=1
+TABLE=22080
+LOG_PATH=/var/log/sshttp.log&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;LISTEN_PORT&lt;/code&gt; is your sshttp port. It‘s 20081 because we’re going to use iptables to forward port 80 to 20081 (to accomodate nginx - more on this later). &lt;code&gt;SSH_PORT&lt;/code&gt; is an extra SSH port for openssh - so we have both 22 and 22022 open as SSH ports since 22022 can‘t be publically accessible (and we’d like 22 to be publically accessible).&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;HTTP_PORT&lt;/code&gt; is the port your web-server is listening on, for the same reasons as the &lt;code&gt;SSH_PORT&lt;/code&gt;. &lt;code&gt;MARK&lt;/code&gt; is the connection marker the daemon looks for - it has to be unique for each one. &lt;code&gt;TABLE&lt;/code&gt; is the route table used for look ups - I think. This value can be anything - I think.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;LOG_PATH&lt;/code&gt; I currently set to the same value for each host for simplicity - sshttp doesn‘t really log anything too useful (and one of it’s features is that you don‘t need it’s logs anyway).&lt;/p&gt;
+&lt;h2&gt;IP Tables configuration&lt;/h2&gt;
+&lt;p&gt;In addition to the sshttpd upstart scripts, some general &lt;code&gt;iptables&lt;/code&gt; configuration was needed for my specific server.&lt;/p&gt;
+&lt;p&gt;To make configuring nGinx simpler for my local network, IP Tables is set to redirect all traffic coming into the server on the &lt;code&gt;ppp0&lt;/code&gt; interface (my DSL line) on port 80 and 443, to the listen ports specified for sshttpd for each interface (so port 80 goes to port 20081 in the above).&lt;/p&gt;
+&lt;p&gt;This means I can happily keep setting up private internal servers on port 80 on my server withou futzing around with bind IPs, and instead can put anything I want to serve externally onto port 20080 as per the configuration file above.&lt;/p&gt;
+&lt;p&gt;I like &lt;a href=&quot;http://www.fwbuilder.org/&quot;&gt;Firewall Builder&lt;/a&gt; at the moment for my configuration (although I&amp;#39;m thinking a shell script might be better practice in future).&lt;/p&gt;
+&lt;p&gt;The relevant IP tables lines if you were doing it manually would be something like&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;iptables -t nat -A PREROUTING -i ppp0 -p tcp -m tcp -d &amp;lt;your external ip&amp;gt; --dport 80 -j REDIRECT --to-ports 20081&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Configuring iptables like this is covered fantastically elsewhere so I won&amp;#39;t go into it here.&lt;/p&gt;
+&lt;p&gt;But with this redirect, externally port 80 now goes to sshttp, which then redirects it to either SSH or to the specific external application I want to serve over HTTP on port 20080.&lt;/p&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;At the moment with this setup I just have nginx serving 404s back on my sshttp server ports. But the real benefit is, I can turn those into secure proxy&amp;#39;s to use with something like &lt;a href=&quot;http://pwet.fr/man/linux/commandes/corkscrew&quot;&gt;corkscrew&lt;/a&gt; or &lt;a href=&quot;http://proxytunnel.sourceforge.net/&quot;&gt;proxytunnel&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Or I can go further - use &lt;a href=&quot;http://www.nocrew.org/software/httptunnel.html&quot;&gt;httptunnel&lt;/a&gt; to tunnel TCP over GET and POST connections (my actual intent) on the public facing HTTP ports. Or do both - each method has it&amp;#39;s trade-offs, so we can just step down till we find one which works!&lt;/p&gt;
+</description>
+    </item>
     <item>
       <title>Upstart script not recognized</title>
       <link>http://localhost:8080/articles/Upstart%20troubles/</link>
