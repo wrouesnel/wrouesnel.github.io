@@ -14,32 +14,24 @@
       ga('create', 'UA-43235370-1', 'wrouesnel.github.io');
       ga('send', 'pageview');
     </script>
-    <title>wrouesnel_blog
+    <title>A GetMail IDLE daemon script - wrouesnel_blog
     </title>
     <link rel="alternate" href="http://localhost:8080/feed.xml" type="application/rss+xml" title="negating information entropy">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic|Anonymous+Pro:400,700,400italic,700italic|Merriweather:400,700,300">
     <link rel="stylesheet" href="/css/main.css">
   </head>
-  <body>
+  <body class="article-detail">
     <header class="header">
       <div class="content-wrap">
-        <div class="logo">
-          <h1><a href="http://localhost:8080">wrouesnel_blog</a></h1>
-          <p class="description">negating information entropy</p>
-        </div>
+        <h1>A GetMail IDLE daemon script</h1>
+        <p class="author">Written by <span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
+        </p>
       </div>
     </header>
     <div id="content">
       <div class="content-wrap">
-        <!-- First article - render in full-->
-        <article class="article intro"></article>
-        <header>
-          <h1 class="indexfullarticle"><a href="/articles/Getmail%20IDLE%20Client/">A GetMail IDLE daemon script</a></h1>
-          <div class="date"><span>05. October 2013</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><h1>Why</h1>
+        <article class="article">
+          <section class="content"><h1>Why</h1>
 <p>This is a script which took way too long to come together in Python 2.7 using imaplib2 (<code>pip install imaplib2</code>).</p>
 <p>The basic idea is to use the very reliabe GetMail4 (<code>apt-get install getmail4</code>) - which is written in Python - to poll my <span class="caps">IMAP</span> mail accounts when new mail arrives, rather then as I had been doing with a 1 minute cronjob (which is slightly too slow for how we use email these days, and may not be liked by some mail servers - not to mention resource&nbsp;intensive).</p>
 <p>The big benefit here is rapid mail delivery, but the other benefit is that it solves the problem of cron causing overlapping executions of getmail which can lead to blank messages (though not message loss). Other means of solving, such as wrapping cron in a <code>flock</code> call aren‘t great, since if the lockfiles don’t get cleaned up it will just stop working&nbsp;silently.</p>
@@ -74,58 +66,12 @@ optional arguments:
 <p>I‘m pretty pleased with how this turned out since it was a great exercise for me in learning some new things about Python. That said, compared to something like NodeJS, I feel with the write library this would’ve been faster in a language with great eventing support, rather then Python&#39;s weird middle-ground of “not quite parallel” threads. But, I keep coming back to the language, and the demo-code I used <a href="http://blog.timstoop.nl/2009/03/11/python-imap-idle-with-imaplib2/">here</a> was Python so it must be doing something&nbsp;right.</p>
 <p>I‘ll probably keep refining this if I run into problems - though if it doesn’t actually stop working, then I‘ll leave it alone since the whole self-hosted email thing’s biggest downside is when your listener dies and you stop getting email - that‘s the problem I’ve really tried to solve here - <span class="caps">IDLE</span> PUSH email functionality, and highly visible notifications when something is&nbsp;wrong.</p>
 </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/Setting%20up%20sshttp/">Setting up sshttp</a></h2>
-          <div class="date"><span>27. August 2013</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><p>When I was travelling Europe I found some surprisingly restricted wi-fi hotspots in hotels. This was annoying because I use <span class="caps">SSH</span> to upload photos back home from my phone, but having not setup any tunneling helpers I just had to wait till I found a better&nbsp;one.</p>
-<p>There are a number of solutions to <span class="caps">SSH</span> tunneling, but the main thing I wanted to do was implement something which would let me run several fallbacks at once. Enter <a href="https://github.com/stealth/sshttp">sshttp</a>.</p>
-<p>sshttp is related to sslh, in the sense that they are both <span class="caps">SSH</span> connection multiplexers. The idea is that you point a web-browser at port 80, you get a web-page. You point your SSH client, and you get an SSH connection. Naive firewalls let the SSH traffic through without&nbsp;complaint.</p>
-<p>The benefit of sshttp over sslh is that it uses Linux&#39;s <code>IP_TRANSPARENT</code> flag, which means that your <span class="caps">SSH</span> and HTTP logs all show proper source IPs, which is great for auditing and&nbsp;security.</p>
-<p>This is a blog about how I set it up for my specific server case, the instructions I used as a guide were adapted from <a href="http://blog.stalkr.net/2012/02/sshhttps-multiplexing-with-sshttp.html">here</a>.</p>
-
-          <p class="more"><a href="/articles/Setting%20up%20sshttp/">more</a></p>
-        </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/Upstart%20troubles/">Upstart script not recognized</a></h2>
-          <div class="date"><span>26. August 2013</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><p>I frequently find myself writing upstart scripts which checkout ok, but for some reason don&#39;t get detected by the upstart daemon in the init directory, so when I run <code>start myscript</code> I get <code>unknown job</code> back. Some experimentation seems to indicate that the problem is I used gedit over <span class="caps">GVFS</span> SFTP to author a lot of these&nbsp;scripts.</p>
-<p>For something like <code>myscript.conf</code>, I find the following fixes this&nbsp;problem:</p>
-<pre><code>mv myscript.conf myscript.conf.d
-mv myscript.conf.d myscript.conf</code></pre>
-<p>And then hey presto, the script works&nbsp;perfectly.</p>
-<p>Along the same lines, the <code>init-checkconf</code> utility isn‘t mentioned enough for upstart debugging - my last post shows I clearly didn’t know about it. Using it is&nbsp;simple:</p>
-<pre><code>$ init-checkconf /etc/init/myscript.conf</code></pre>
-<p>Note it needs to be run as a regular user. I&#39;m often logged in as root, so sudo&nbsp;suffices:</p>
-<pre><code>$ sudo -u nobody init-checkconf /etc/init/myscript.conf</code></pre>
-
-        </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/Wintersmithing/">Wintersmithing</a></h2>
-          <div class="date"><span>18. August 2013</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><h1>Wintersmith</h1>
-<p>How to setup and use Wintersmith is covered pretty thoroughly elsewhere on the net, (namely the <a href="http://wintersmith.io/">wintersmith homepage</a>.</p>
-<p>Instead I&#39;ll cover a few tweaks I had to do to get it running the way I wanted. To avoid being truly confusing, all the paths referenced here are relative to the site you create by running <code>wintersmith new &lt;your site dir here&gt;</code></p>
-
-          <p class="more"><a href="/articles/Wintersmithing/">more</a></p>
-        </section>
+        </article>
       </div>
     </div>
     <footer>
       <div class="content-wrap">
-        <div class="nav"><a href="/archive.html">« Archives</a>
-        </div>
+        <div class="nav"><a href="/">« Full blog</a></div>
         <section class="about">
         </section>
         <section class="copy">

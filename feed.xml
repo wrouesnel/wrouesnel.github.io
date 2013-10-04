@@ -5,9 +5,51 @@
     <atom:link href="http://localhost:8080/feed.xml" rel="self" type="application/rss+xml"></atom:link>
     <link>http://localhost:8080</link>
     <description>negating information entropy</description>
-    <pubDate>Tue, 27  Aug 2013 00:43:00 +1000</pubDate>
+    <pubDate>Sat, 05 Oct 2013 03:07:00 +1000</pubDate>
     <generator>Wintersmith - https://github.com/jnordberg/wintersmith</generator>
     <language>en</language>
+    <item>
+      <title>A GetMail IDLE daemon script</title>
+      <link>http://localhost:8080/articles/Getmail%20IDLE%20Client/</link>
+      <pubDate>Sat, 05 Oct 2013 03:07:00 +1000</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/Getmail%20IDLE%20Client/</guid>
+      <author></author>
+      <description>&lt;h1&gt;Why&lt;/h1&gt;
+&lt;p&gt;This is a script which took way too long to come together in Python 2.7 using imaplib2 (&lt;code&gt;pip install imaplib2&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;The basic idea is to use the very reliabe GetMail4 (&lt;code&gt;apt-get install getmail4&lt;/code&gt;) - which is written in Python - to poll my IMAP mail accounts when new mail arrives, rather then as I had been doing with a 1 minute cronjob (which is slightly too slow for how we use email these days, and may not be liked by some mail servers - not to mention resource intensive).&lt;/p&gt;
+&lt;p&gt;The big benefit here is rapid mail delivery, but the other benefit is that it solves the problem of cron causing overlapping executions of getmail which can lead to blank messages (though not message loss). Other means of solving, such as wrapping cron in a &lt;code&gt;flock&lt;/code&gt; call aren‘t great, since if the lockfiles don’t get cleaned up it will just stop working silently.&lt;/p&gt;
+&lt;h1&gt;Requirements&lt;/h1&gt;
+&lt;p&gt;Writing a reliable IDLE daemon that won‘t cause us to spend half a day wondering where our email is is not easy. This was an interesting Python project for me, and it’s certainly not pretty or long - but I mostly spent a ton of time trying to think through as many edge cases as I could. In the end, I settled on tying the daemon itself to &lt;code&gt;sendmail&lt;/code&gt; on my system, so at least if it crashes or an upstream server goes offline I&amp;#39;m notified, and I have a decent chance of seeing why, and the use of pid files means I can have cron failsafe re-execute every 5 minutes if it does go down.&lt;/p&gt;
+&lt;h1&gt;The Script&lt;/h1&gt;
+&lt;p&gt;I started with &lt;a href=&quot;http://blog.timstoop.nl/2009/03/11/python-imap-idle-with-imaplib2/&quot;&gt;the example&lt;/a&gt; I found here but ended up modifiying it pretty heavily. That code isn&amp;#39;t a great approach in my opinion since it overwhelms the stack size pretty quickly with multiple accounts - imaplib2 is multithreaded behind the scenes (2 threads per account), so spawning an extra thread to handle each account gives you 3 per account, 6 accounts gives you 18 threads + the overhead of forking and running GetMail in a subprocess.&lt;/p&gt;
+&lt;p&gt;Though when all things are considered, I didn‘t improve things all that much but using a single-overwatch thread to reset the IDLE call on each object is simpler to handle (although I don’t present it that way IMO). But the important thing is it works.&lt;/p&gt;
+&lt;h2&gt;Download&lt;/h2&gt;
+&lt;p&gt;The script is quite long so grab it from the &lt;a href=&quot;https://gist.github.com/wrouesnel/6829044&quot;&gt;Gist&lt;/a&gt;. It has a few dependencies, best installed with &lt;code&gt;pip&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ pip install imaplib2 psutil&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;$./getmail-idler.py -h
+usage: getmail-idler.py [-h] [-r GETMAILRC] [--pid-file PIDFILE] [--verbose]
+                        [--daemonize] [--logfile LOGFILE]
+
+optional arguments:
+  -h, --help            show this help message and &lt;span class=&quot;keyword&quot;&gt;exit&lt;/span&gt;
+  -r GETMAILRC          getmail configuration file to use (can specify more
+                        &lt;span class=&quot;keyword&quot;&gt;then&lt;/span&gt; once)
+  --pid-file PIDFILE, -p PIDFILE
+                        pidfile to use &lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt; process limiting
+  --verbose, -v         &lt;span class=&quot;keyword&quot;&gt;set&lt;/span&gt; output verbosity
+  --daemonize           should process daemonize?
+  --logfile LOGFILE     file to redirect log output too (useful &lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt; daemon
+                        mode)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It uses a comprehensive argparse interface, the most important parameter is &lt;code&gt;-r&lt;/code&gt;. This is exactly like the getmail -r command, and accepts files in the same format - though it doesn&amp;#39;t search the same locations although it will search &lt;code&gt;$HOME/.getmail/&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Currently it only handles IMAPSSL, which you should be using anyway though it should be easy to hack it to fix this I just have no incentive too at the moment.&lt;/p&gt;
+&lt;p&gt;Currently I use this with a cronjob set to every minute or 5 minutes - with verbose logging (&lt;code&gt;-vv&lt;/code&gt;) it won‘t produce output until it forks into a daemon. This means if it crashes (and I’ve tried to make it crash reliably) cron will restart it on the next round, and it&amp;#39;ll email a tracelog (hopefully).&lt;/p&gt;
+&lt;p&gt;My current crontab using this script:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;* * * * * /home/will/bin/getmail-idler.py -r config1.getmailrc -r config2.getmailrc -r config3.getmailrc -r config4.getmailrc -r config5.getmailrc --pid-file /tmp/will-getmail-idler.pid --logfile .getmail-idler.log -vv --daemonize&lt;/code&gt;&lt;/pre&gt;
+&lt;h1&gt;Personal thoughts&lt;/h1&gt;
+&lt;p&gt;I‘m pretty pleased with how this turned out since it was a great exercise for me in learning some new things about Python. That said, compared to something like NodeJS, I feel with the write library this would’ve been faster in a language with great eventing support, rather then Python&amp;#39;s weird middle-ground of “not quite parallel” threads. But, I keep coming back to the language, and the demo-code I used &lt;a href=&quot;http://blog.timstoop.nl/2009/03/11/python-imap-idle-with-imaplib2/&quot;&gt;here&lt;/a&gt; was Python so it must be doing something right.&lt;/p&gt;
+&lt;p&gt;I‘ll probably keep refining this if I run into problems - though if it doesn’t actually stop working, then I‘ll leave it alone since the whole self-hosted email thing’s biggest downside is when your listener dies and you stop getting email - that‘s the problem I’ve really tried to solve here - IDLE PUSH email functionality, and highly visible notifications when something is wrong.&lt;/p&gt;
+</description>
+    </item>
     <item>
       <title>Setting up sshttp</title>
       <link>http://localhost:8080/articles/Setting%20up%20sshttp/</link>
