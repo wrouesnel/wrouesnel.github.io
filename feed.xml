@@ -14,7 +14,11 @@
       <pubDate>Sat, 05 Oct 2013 03:07:00 +1000</pubDate>
       <guid isPermaLink="true">http://localhost:8080/articles/Getmail%20IDLE%20Client/</guid>
       <author></author>
-      <description>&lt;h1&gt;Why&lt;/h1&gt;
+      <description>&lt;h1&gt;Updates&lt;/h1&gt;
+&lt;p&gt;Although the script in this article works, I&amp;#39;m having some problems with it after long-running sessions. The symptom seems to be that imaplib2 just stops processing IDLE session responses - it terminates and recreates them just fine, but no new mail is ever detected and thus getmail is never triggered. With 12 or so hours of usage out of the script, this seems odd as hell and probably like an imaplib2 bug.&lt;/p&gt;
+&lt;p&gt;With the number of sunk hours on this, I‘m tempted to go in 1 of 2 directions: re-tool the script to simply invoke getmail’s IDLE functionality, and basically remove imaplib2 from the equation, or to write my own functions to read IMAP and use the IDLE command.&lt;/p&gt;
+&lt;p&gt;Currently I‘m going with option 3: turn on imaplib’s debugging to max, and see if I can spot the bug - but at the moment I can‘t really recommend this particular approach to anyone since it’s just not reliable enough - though it does somewhat belie the fact that Python really doesn&amp;#39;t have a good IMAP IDLE library.&lt;/p&gt;
+&lt;h1&gt;Why&lt;/h1&gt;
 &lt;p&gt;This is a script which took way too long to come together in Python 2.7 using imaplib2 (&lt;code&gt;pip install imaplib2&lt;/code&gt;).&lt;/p&gt;
 &lt;p&gt;The basic idea is to use the very reliabe GetMail4 (&lt;code&gt;apt-get install getmail4&lt;/code&gt;) - which is written in Python - to poll my IMAP mail accounts when new mail arrives, rather then as I had been doing with a 1 minute cronjob (which is slightly too slow for how we use email these days, and may not be liked by some mail servers - not to mention resource intensive).&lt;/p&gt;
 &lt;p&gt;The big benefit here is rapid mail delivery, but the other benefit is that it solves the problem of cron causing overlapping executions of getmail which can lead to blank messages (though not message loss). Other means of solving, such as wrapping cron in a &lt;code&gt;flock&lt;/code&gt; call aren‘t great, since if the lockfiles don’t get cleaned up it will just stop working silently.&lt;/p&gt;
