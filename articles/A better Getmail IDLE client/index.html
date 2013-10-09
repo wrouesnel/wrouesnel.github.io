@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+    <script type="text/javascript">
+      // google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-43235370-1', 'wrouesnel.github.io');
+      ga('send', 'pageview');
+    </script>
+    <title>A Better Getmail IDLE client - wrouesnel_blog
+    </title>
+    <link rel="alternate" href="http://localhost:8080/feed.xml" type="application/rss+xml" title="negating information entropy">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic|Anonymous+Pro:400,700,400italic,700italic|Merriweather:400,700,300">
+    <link rel="stylesheet" href="/css/main.css">
+  </head>
+  <body class="article-detail">
+    <header class="header">
+      <div class="content-wrap">
+        <h1>A Better Getmail IDLE client</h1>
+        <p class="author">Written by <span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
+        </p>
+      </div>
+    </header>
+    <div id="content">
+      <div class="content-wrap">
+        <article class="article">
+          <section class="content"><h1>Why</h1>
+<p>My previous attempt at a GetMail <span class="caps">IDLE</span> client was a huge disappointment, since imaplib2 seems to be buggy for handling long-running processes. It‘s possible some magic in hard terminating the IMAP session after each IDLE termination is necessary, but it raises the question of why the idle() function in the library doesn’t immediately exit when this happens - to me that implies I could still end up with a zombie daemon that doesn&#39;t retreive any&nbsp;mail.</p>
+<p>Thus a new project - this time based on the Python <code>imapclient</code> library. imapclient uses imaplib behind the scenes, and seems to enjoy a little bit more use then <code>imaplib2</code> so it seemed a good&nbsp;candidate.</p>
+<h1>The&nbsp;script</h1>
+<p>Get it from <a href="https://gist.github.com/wrouesnel/6905023">a Gist here</a> - I‘m currently running it on my server, and naturally I’ll update this article based on how it performs as I&nbsp;go.</p>
+<h1>Design</h1>
+<p>The script implements a Unix daemon, and uses pidfiles to avoid concurrent executions. It&#39;s designed to be stuck in a crontab file to recover from&nbsp;crashes.</p>
+<p>I went purist on this project since I wanted to avoid as many additional frameworks as possible and work mostly with built-in constructs - partly as just an exercise in what can be done. At the end of the day I ended up implementing a somewhat half-baked messaging system to manage all the threads based on&nbsp;Queues.</p>
+<p>The main thread, being the listener for signals, creates a “manager” thread, which in turn spawns all my actual “idler”&nbsp;threads.</p>
+<p>Everything talks with Queue.Queue() objects, and block on the get() method which efficiently uses <span class="caps">CPU</span>. The actual idle() function, being blocking, runs on its own thread and posts “new mail” events back to the idler thread, which then invokes&nbsp;getmail.</p>
+<p>The biggest challenge was making sure exceptions were caught in all the right places - <code>imapclient</code> has no way to cleanly kill off an idle() process, so a shutdown involves causing the idle_check() call to return an&nbsp;exception.</p>
+<p>I kind of hacked this together as I went - the main thing I really targeted was trying to make sure failure modes caused crashes, which is hard to do with Python-threading a lot of the time. A crashed script can be restarted, a zombie script doing nothing looks like it&#39;s correctly&nbsp;alive.</p>
+<h1>Personal&nbsp;thoughts</h1>
+<p>Pure Python is not the best for this sort of thing - an evented <span class="caps">IMAP</span> library would definitely be better but this way I can stick with mostly single file deployment, and I don&#39;t want to write my own IMAP client at the&nbsp;moment.</p>
+<p>Of course <span class="caps">IMAP</span> is a simple enough protocol in most respects, so it&#39;s not like it would be hard but the exercise was still interesting. But if I want a new project with this, I would still like to tackle it in something like&nbsp;Haskell.</p>
+</section>
+        </article>
+      </div>
+    </div>
+    <footer>
+      <div class="content-wrap">
+        <div class="nav"><a href="/">« Full blog</a></div>
+        <section class="about">
+        </section>
+        <section class="copy">
+          <p>&copy; 2013 Will Rouesnel &mdash; powered by&nbsp;<a href="https://github.com/jnordberg/wintersmith">Wintersmith</a>
+          </p>
+        </section>
+      </div>
+    </footer>
+  </body>
+</html>

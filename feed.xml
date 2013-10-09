@@ -5,9 +5,32 @@
     <atom:link href="http://localhost:8080/feed.xml" rel="self" type="application/rss+xml"></atom:link>
     <link>http://localhost:8080</link>
     <description>negating information entropy</description>
-    <pubDate>Sat, 05 Oct 2013 03:07:00 +1000</pubDate>
+    <pubDate>Thu, 10 Oct 2013 04:36:00 +1100</pubDate>
     <generator>Wintersmith - https://github.com/jnordberg/wintersmith</generator>
     <language>en</language>
+    <item>
+      <title>A Better Getmail IDLE client</title>
+      <link>http://localhost:8080/articles/A%20better%20Getmail%20IDLE%20client/</link>
+      <pubDate>Thu, 10 Oct 2013 04:36:00 +1100</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/A%20better%20Getmail%20IDLE%20client/</guid>
+      <author></author>
+      <description>&lt;h1&gt;Why&lt;/h1&gt;
+&lt;p&gt;My previous attempt at a GetMail IDLE client was a huge disappointment, since imaplib2 seems to be buggy for handling long-running processes. It‘s possible some magic in hard terminating the IMAP session after each IDLE termination is necessary, but it raises the question of why the idle() function in the library doesn’t immediately exit when this happens - to me that implies I could still end up with a zombie daemon that doesn&amp;#39;t retreive any mail.&lt;/p&gt;
+&lt;p&gt;Thus a new project - this time based on the Python &lt;code&gt;imapclient&lt;/code&gt; library. imapclient uses imaplib behind the scenes, and seems to enjoy a little bit more use then &lt;code&gt;imaplib2&lt;/code&gt; so it seemed a good candidate.&lt;/p&gt;
+&lt;h1&gt;The script&lt;/h1&gt;
+&lt;p&gt;Get it from &lt;a href=&quot;https://gist.github.com/wrouesnel/6905023&quot;&gt;a Gist here&lt;/a&gt; - I‘m currently running it on my server, and naturally I’ll update this article based on how it performs as I go.&lt;/p&gt;
+&lt;h1&gt;Design&lt;/h1&gt;
+&lt;p&gt;The script implements a Unix daemon, and uses pidfiles to avoid concurrent executions. It&amp;#39;s designed to be stuck in a crontab file to recover from crashes.&lt;/p&gt;
+&lt;p&gt;I went purist on this project since I wanted to avoid as many additional frameworks as possible and work mostly with built-in constructs - partly as just an exercise in what can be done. At the end of the day I ended up implementing a somewhat half-baked messaging system to manage all the threads based on Queues.&lt;/p&gt;
+&lt;p&gt;The main thread, being the listener for signals, creates a “manager” thread, which in turn spawns all my actual “idler” threads.&lt;/p&gt;
+&lt;p&gt;Everything talks with Queue.Queue() objects, and block on the get() method which efficiently uses CPU. The actual idle() function, being blocking, runs on its own thread and posts “new mail” events back to the idler thread, which then invokes getmail.&lt;/p&gt;
+&lt;p&gt;The biggest challenge was making sure exceptions were caught in all the right places - &lt;code&gt;imapclient&lt;/code&gt; has no way to cleanly kill off an idle() process, so a shutdown involves causing the idle_check() call to return an exception.&lt;/p&gt;
+&lt;p&gt;I kind of hacked this together as I went - the main thing I really targeted was trying to make sure failure modes caused crashes, which is hard to do with Python-threading a lot of the time. A crashed script can be restarted, a zombie script doing nothing looks like it&amp;#39;s correctly alive.&lt;/p&gt;
+&lt;h1&gt;Personal thoughts&lt;/h1&gt;
+&lt;p&gt;Pure Python is not the best for this sort of thing - an evented IMAP library would definitely be better but this way I can stick with mostly single file deployment, and I don&amp;#39;t want to write my own IMAP client at the moment.&lt;/p&gt;
+&lt;p&gt;Of course IMAP is a simple enough protocol in most respects, so it&amp;#39;s not like it would be hard but the exercise was still interesting. But if I want a new project with this, I would still like to tackle it in something like Haskell.&lt;/p&gt;
+</description>
+    </item>
     <item>
       <title>A GetMail IDLE daemon script</title>
       <link>http://localhost:8080/articles/Getmail%20IDLE%20Client/</link>
@@ -18,6 +41,10 @@
 &lt;p&gt;Although the script in this article works, I&amp;#39;m having some problems with it after long-running sessions. The symptom seems to be that imaplib2 just stops processing IDLE session responses - it terminates and recreates them just fine, but no new mail is ever detected and thus getmail is never triggered. With 12 or so hours of usage out of the script, this seems odd as hell and probably like an imaplib2 bug.&lt;/p&gt;
 &lt;p&gt;With the amount of sunk time on this, I‘m tempted to go in 1 of 2 directions: re-tool the script to simply invoke getmail’s IDLE functionality, and basically remove imaplib2 from the equation, or to write my own functions to read IMAP and use the IDLE command.&lt;/p&gt;
 &lt;p&gt;Currently I‘m going with option 3: turn on imaplib’s debugging to max, and see if I can spot the bug - but at the moment I can‘t really recommend this particular approach to anyone since it’s just not reliable enough - though it does somewhat belie the fact that Python really doesn&amp;#39;t have a good IMAP IDLE library.&lt;/p&gt;
+&lt;h2&gt;Updates 2&lt;/h2&gt;
+&lt;p&gt;After another long-running session of perfect performance, I‘m once again stuck with a process that claims to start idling successfully, but seems to hang - giving no exceptions or warnings of any kind and only doing so after 8+ hours of perfect functioning. It’s not a NAT issue since this is far short of the 5-day default timeout. &lt;/p&gt;
+&lt;p&gt;At a best guess the problem seems to be that once logged in, imaplib2 leaves the session open but dumbly just listens to the socket - which eventually dies for some reason (re-assigning IPs by my ISP maybe?) but imaplib&amp;#39;s “reader” thread just blocks on polling rather then triggering the callback code (since the notable thing is I can see the poll commands in the log stop, the session timeout detection, but no invocation of the callback).&lt;/p&gt;
+&lt;p&gt;As it stands, I have to strongly recommend against using imaplib2 for any long running processes like IDLE - you simply can‘t deal with a library that’s going to silently hang itself after a half-day or so without crashing or logging anything to indicate this happens - the only detection is when self-addressed emails don‘t arrive, but that’s a really stupid keep-alive protocol. I&amp;#39;ll be retooling the script to try out imapclient next but that will be a future article and a separate gist.&lt;/p&gt;
 &lt;h1&gt;Why&lt;/h1&gt;
 &lt;p&gt;This is a script which took way too long to come together in Python 2.7 using imaplib2 (&lt;code&gt;pip install imaplib2&lt;/code&gt;).&lt;/p&gt;
 &lt;p&gt;The basic idea is to use the very reliabe GetMail4 (&lt;code&gt;apt-get install getmail4&lt;/code&gt;) - which is written in Python - to poll my IMAP mail accounts when new mail arrives, rather then as I had been doing with a 1 minute cronjob (which is slightly too slow for how we use email these days, and may not be liked by some mail servers - not to mention resource intensive).&lt;/p&gt;
