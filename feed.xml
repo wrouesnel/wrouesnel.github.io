@@ -16,10 +16,14 @@
       <author></author>
       <description>&lt;h1&gt;Updates&lt;/h1&gt;
 &lt;p&gt;(2013-10-14) So after 4 days of continuous usage I‘m happy with this script. The most important thing it does is crash properly when it encounters a bug. I’ve tweaked the Gist a few times in response (a typo meant imaplogin didn&amp;#39;t recover gracefully) and added a call to &lt;code&gt;notify_mail&lt;/code&gt; on exit which should&amp;#39;ve been there to start with.&lt;/p&gt;
+&lt;p&gt;It‘s also becoming abundantly clear that I’m way to click-happy with publishing things to this blog, so some type of interface to show my revisions is probably in the future (a long with a style overhaul).&lt;/p&gt;
 &lt;h1&gt;Why&lt;/h1&gt;
 &lt;p&gt;My previous attempt at a GetMail IDLE client was a huge disappointment, since imaplib2 seems to be buggy for handling long-running processes. It‘s possible some magic in hard terminating the IMAP session after each IDLE termination is necessary, but it raises the question of why the idle() function in the library doesn’t immediately exit when this happens - to me that implies I could still end up with a zombie daemon that doesn&amp;#39;t retreive any mail.&lt;/p&gt;
 &lt;p&gt;Thus a new project - this time based on the Python &lt;code&gt;imapclient&lt;/code&gt; library. imapclient uses imaplib behind the scenes, and seems to enjoy a little bit more use then &lt;code&gt;imaplib2&lt;/code&gt; so it seemed a good candidate.&lt;/p&gt;
 &lt;h1&gt;The script&lt;/h1&gt;
+&lt;h2&gt;Dependencies&lt;/h2&gt;
+&lt;p&gt;The script has a couple of dependencies, most easily installed with &lt;code&gt;pip&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ pip install psutil imapclient&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Get it from &lt;a href=&quot;https://gist.github.com/wrouesnel/6905023&quot;&gt;a Gist here&lt;/a&gt; - I‘m currently running it on my server, and naturally I’ll update this article based on how it performs as I go.&lt;/p&gt;
 &lt;h1&gt;Design&lt;/h1&gt;
 &lt;p&gt;The script implements a Unix daemon, and uses pidfiles to avoid concurrent executions. It&amp;#39;s designed to be stuck in a crontab file to recover from crashes.&lt;/p&gt;

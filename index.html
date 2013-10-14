@@ -41,10 +41,14 @@
         </header>
         <section class="content"><h1>Updates</h1>
 <p>(2013-10-14) So after 4 days of continuous usage I‘m happy with this script. The most important thing it does is crash properly when it encounters a bug. I’ve tweaked the Gist a few times in response (a typo meant imaplogin didn&#39;t recover gracefully) and added a call to <code>notify_mail</code> on exit which should&#39;ve been there to start&nbsp;with.</p>
+<p>It‘s also becoming abundantly clear that I’m way to click-happy with publishing things to this blog, so some type of interface to show my revisions is probably in the future (a long with a style&nbsp;overhaul).</p>
 <h1>Why</h1>
 <p>My previous attempt at a GetMail <span class="caps">IDLE</span> client was a huge disappointment, since imaplib2 seems to be buggy for handling long-running processes. It‘s possible some magic in hard terminating the IMAP session after each IDLE termination is necessary, but it raises the question of why the idle() function in the library doesn’t immediately exit when this happens - to me that implies I could still end up with a zombie daemon that doesn&#39;t retreive any&nbsp;mail.</p>
 <p>Thus a new project - this time based on the Python <code>imapclient</code> library. imapclient uses imaplib behind the scenes, and seems to enjoy a little bit more use then <code>imaplib2</code> so it seemed a good&nbsp;candidate.</p>
 <h1>The&nbsp;script</h1>
+<h2>Dependencies</h2>
+<p>The script has a couple of dependencies, most easily installed with <code>pip</code>:</p>
+<pre><code>$ pip install psutil imapclient</code></pre>
 <p>Get it from <a href="https://gist.github.com/wrouesnel/6905023">a Gist here</a> - I‘m currently running it on my server, and naturally I’ll update this article based on how it performs as I&nbsp;go.</p>
 <h1>Design</h1>
 <p>The script implements a Unix daemon, and uses pidfiles to avoid concurrent executions. It&#39;s designed to be stuck in a crontab file to recover from&nbsp;crashes.</p>
