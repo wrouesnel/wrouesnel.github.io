@@ -31,7 +31,9 @@
     <div id="content">
       <div class="content-wrap">
         <article class="article">
-          <section class="content"><h1>Why</h1>
+          <section class="content"><h1>Updates</h1>
+<p>(2013-10-14) So after 4 days of continuous usage I‘m happy with this script. The most important thing it does is crash properly when it encounters a bug. I’ve tweaked the Gist a few times in response (a typo meant imaplogin didn&#39;t recover gracefully) and added a call to <code>notify_mail</code> on exit which should&#39;ve been there to start&nbsp;with.</p>
+<h1>Why</h1>
 <p>My previous attempt at a GetMail <span class="caps">IDLE</span> client was a huge disappointment, since imaplib2 seems to be buggy for handling long-running processes. It‘s possible some magic in hard terminating the IMAP session after each IDLE termination is necessary, but it raises the question of why the idle() function in the library doesn’t immediately exit when this happens - to me that implies I could still end up with a zombie daemon that doesn&#39;t retreive any&nbsp;mail.</p>
 <p>Thus a new project - this time based on the Python <code>imapclient</code> library. imapclient uses imaplib behind the scenes, and seems to enjoy a little bit more use then <code>imaplib2</code> so it seemed a good&nbsp;candidate.</p>
 <h1>The&nbsp;script</h1>

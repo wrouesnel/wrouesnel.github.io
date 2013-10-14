@@ -14,7 +14,9 @@
       <pubDate>Thu, 10 Oct 2013 04:36:00 +1100</pubDate>
       <guid isPermaLink="true">http://localhost:8080/articles/A%20better%20Getmail%20IDLE%20client/</guid>
       <author></author>
-      <description>&lt;h1&gt;Why&lt;/h1&gt;
+      <description>&lt;h1&gt;Updates&lt;/h1&gt;
+&lt;p&gt;(2013-10-14) So after 4 days of continuous usage I‘m happy with this script. The most important thing it does is crash properly when it encounters a bug. I’ve tweaked the Gist a few times in response (a typo meant imaplogin didn&amp;#39;t recover gracefully) and added a call to &lt;code&gt;notify_mail&lt;/code&gt; on exit which should&amp;#39;ve been there to start with.&lt;/p&gt;
+&lt;h1&gt;Why&lt;/h1&gt;
 &lt;p&gt;My previous attempt at a GetMail IDLE client was a huge disappointment, since imaplib2 seems to be buggy for handling long-running processes. It‘s possible some magic in hard terminating the IMAP session after each IDLE termination is necessary, but it raises the question of why the idle() function in the library doesn’t immediately exit when this happens - to me that implies I could still end up with a zombie daemon that doesn&amp;#39;t retreive any mail.&lt;/p&gt;
 &lt;p&gt;Thus a new project - this time based on the Python &lt;code&gt;imapclient&lt;/code&gt; library. imapclient uses imaplib behind the scenes, and seems to enjoy a little bit more use then &lt;code&gt;imaplib2&lt;/code&gt; so it seemed a good candidate.&lt;/p&gt;
 &lt;h1&gt;The script&lt;/h1&gt;
