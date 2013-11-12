@@ -5,9 +5,68 @@
     <atom:link href="http://localhost:8080/feed.xml" rel="self" type="application/rss+xml"></atom:link>
     <link>http://localhost:8080</link>
     <description>negating information entropy</description>
-    <pubDate>Thu, 10 Oct 2013 04:36:00 +1100</pubDate>
+    <pubDate>Tue, 12 Nov 2013 12:29:00 +1100</pubDate>
     <generator>Wintersmith - https://github.com/jnordberg/wintersmith</generator>
     <language>en</language>
+    <item>
+      <title>Migrating to Gmail</title>
+      <link>http://localhost:8080/articles/Migrating%20to%20Gmail/</link>
+      <pubDate>Tue, 12 Nov 2013 12:29:00 +1100</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/Migrating%20to%20Gmail/</guid>
+      <author></author>
+      <description>&lt;h1&gt;Why&lt;/h1&gt;
+&lt;p&gt;In a stitch of irony given my prior articles wrestling with a decent IDLE daemon for use with getmail, I&amp;#39;m faced with a new problem in figuring out the best way to migrate all my existing, locally hosted email to Gmail.&lt;/p&gt;
+&lt;p&gt;This is evidently not an uncommon problem for people, presumably for largely the same reasons I‘m facing: although I like having everything locally on my own server, it only works in places where (1) I live in the same place as the server and (2) where my server won’t be double-NAT&amp;#39;d so dynamic DNS can actually reach it.&lt;/p&gt;
+&lt;h1&gt;How&lt;/h1&gt;
+&lt;p&gt;My personal email has been hosted on a Dovecot IMAP server in a Maildir up till now. Our tool of choice for this migration will be the venerable &lt;a href=&quot;http://offlineimap.org/&quot;&gt;OfflineIMAP&lt;/a&gt; utility, available on Debian-ish systems with &lt;code&gt;apt-get install offlineimap&lt;/code&gt;.&lt;/p&gt;
+&lt;h2&gt;A Foreword&lt;/h2&gt;
+&lt;p&gt;I tried a lot to get this to work properly in a Maildir -&amp;gt; Gmail configuration, and while it‘s technically possible I couldn’t seem to get the folder creation to play nicely with tags - OfflineIMAP wants to create them with a leading separate (‘/’ on Gmail) but Gmail itself doesn‘t recognize that as root tag. There doesn’t seem to be anyway around this behavior with name translation or anything.&lt;/p&gt;
+&lt;p&gt;I suspect you could work around this by uploading to a subdirectory, and then moving everything out of the subdirectory (sub-tag?) on Gmail, but didn&amp;#39;t try it.&lt;/p&gt;
+&lt;h2&gt;Configuration file&lt;/h2&gt;
+&lt;p&gt;In your home directory (I did this on my home server since 7gb of email takes a long time to upload over ADSL) you need to create an &lt;code&gt;.offlineimaprc&lt;/code&gt; file. For an IMAP -&amp;gt; IMAP transfer, it has a structure something like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[general]
+accounts = Gmail-wrouesnel
+
+# Gmail max attachment size - you&amp;#39;ll get errors otherwise.
+maxsize = 25000000
+socktimeout = 600
+
+[Account Gmail-wrouesnel]
+# Note the ordering - Gmail is the &amp;#39;local&amp;#39; folder.
+remoterepository = Local
+localrepository = Gmail
+
+[Repository Local]
+type = IMAP
+# This ensures we only do a 1-way transfer. If you want to do 2-way then you need a
+# rule to exclude the Gmail [All Mail] folder.
+readonly = True
+remotehost = localhost
+remoteuser = &amp;lt;local user&amp;gt;
+remotepass = &amp;lt;local password&amp;gt;
+ssl = yes
+# I use SSL so this is needed - let it throw an error, then copy the hash back.
+cert_fingerprint = 60571343279e7f43ee95000762f5fcd54ad24816
+sep = .
+subscribedonly = no
+
+[Repository Gmail]
+type = IMAP
+ssl = yes
+remotehost = imap.googlemail.com
+remoteuser = &amp;lt;gmail user&amp;gt;
+remotepass = &amp;lt;gmail password&amp;gt;
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+sep = /
+subscribedonly = no&lt;/code&gt;&lt;/pre&gt;
+&lt;h2&gt;Running&lt;/h2&gt;
+&lt;p&gt;Test the process first with &lt;code&gt;offlineimap --dry-run&lt;/code&gt; to check that things are going to turn out roughly how you expect. Then execute &lt;code&gt;offlineimap&lt;/code&gt; to start the process. I really recommend doing this in a byobu or screen session, or at least with the &lt;code&gt;nohup&lt;/code&gt; utility since a connection drop will cause offlineimap to abort.&lt;/p&gt;
+&lt;p&gt;Check back on the process once every day or so to check it‘s still running - OR - write a shell script to re-invoke it until it succeeds (untested so I won’t propose any code).&lt;/p&gt;
+&lt;h1&gt;Personal thoughts&lt;/h1&gt;
+&lt;p&gt;This seems to be the most painless way to upload old email to Gmail. In my case, the move is prompted by a real life move where my 24TB server won‘t be coming with me. I followed up some options for moving my email system, for example to a Docker image for $5 a month for 20gb, but at the end of the day had to face the fact that there was a perfectly capable free-alternative available and it would just be throwing money away. Everything already operates through my Gmail accounts anyway, so it’s not like there‘s a security concern there and when it comes to email you either use GPG or you’re doing nothing anyway.&lt;/p&gt;
+&lt;p&gt;It‘s worth the observation here that the same process used for the migration can also be used for a local backup, which is a system I will most definitely be using in the future. OfflineIMAP can write Maildir natively, so there’s no need to use an IMAP server locally for that, and helpfully solves the “what if Gmail suddenly disappears problem” (more likely from a power failure then anything else, but my email is important to me).&lt;/p&gt;
+</description>
+    </item>
     <item>
       <title>A Better Getmail IDLE client</title>
       <link>http://localhost:8080/articles/A%20better%20Getmail%20IDLE%20client/</link>

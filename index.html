@@ -34,7 +34,66 @@
         <!-- First article - render in full-->
         <article class="article intro"></article>
         <header>
-          <h1 class="indexfullarticle"><a href="/articles/A%20better%20Getmail%20IDLE%20client/">A Better Getmail IDLE client</a></h1>
+          <h1 class="indexfullarticle"><a href="/articles/Migrating%20to%20Gmail/">Migrating to Gmail</a></h1>
+          <div class="date"><span>12. November 2013</span></div>
+          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
+          </p>
+        </header>
+        <section class="content"><h1>Why</h1>
+<p>In a stitch of irony given my prior articles wrestling with a decent <span class="caps">IDLE</span> daemon for use with getmail, I&#39;m faced with a new problem in figuring out the best way to migrate all my existing, locally hosted email to&nbsp;Gmail.</p>
+<p>This is evidently not an uncommon problem for people, presumably for largely the same reasons I‘m facing: although I like having everything locally on my own server, it only works in places where (1) I live in the same place as the server and (2) where my server won’t be double-<span class="caps">NAT</span>&#39;d so dynamic DNS can actually reach&nbsp;it.</p>
+<h1>How</h1>
+<p>My personal email has been hosted on a Dovecot <span class="caps">IMAP</span> server in a Maildir up till now. Our tool of choice for this migration will be the venerable <a href="http://offlineimap.org/">OfflineIMAP</a> utility, available on Debian-ish systems with <code>apt-get install offlineimap</code>.</p>
+<h2>A&nbsp;Foreword</h2>
+<p>I tried a lot to get this to work properly in a Maildir -&gt; Gmail configuration, and while it‘s technically possible I couldn’t seem to get the folder creation to play nicely with tags - OfflineIMAP wants to create them with a leading separate (‘/’ on Gmail) but Gmail itself doesn‘t recognize that as root tag. There doesn’t seem to be anyway around this behavior with name translation or&nbsp;anything.</p>
+<p>I suspect you could work around this by uploading to a subdirectory, and then moving everything out of the subdirectory (sub-tag?) on Gmail, but didn&#39;t try&nbsp;it.</p>
+<h2>Configuration&nbsp;file</h2>
+<p>In your home directory (I did this on my home server since 7gb of email takes a long time to upload over <span class="caps">ADSL</span>) you need to create an <code>.offlineimaprc</code> file. For an <span class="caps">IMAP</span> -&gt; IMAP transfer, it has a structure something like&nbsp;this:</p>
+<pre><code>[general]
+accounts = Gmail-wrouesnel
+
+# Gmail max attachment size - you&#39;ll get errors otherwise.
+maxsize = 25000000
+socktimeout = 600
+
+[Account Gmail-wrouesnel]
+# Note the ordering - Gmail is the &#39;local&#39; folder.
+remoterepository = Local
+localrepository = Gmail
+
+[Repository Local]
+type = IMAP
+# This ensures we only do a 1-way transfer. If you want to do 2-way then you need a
+# rule to exclude the Gmail [All Mail] folder.
+readonly = True
+remotehost = localhost
+remoteuser = &lt;local user&gt;
+remotepass = &lt;local password&gt;
+ssl = yes
+# I use SSL so this is needed - let it throw an error, then copy the hash back.
+cert_fingerprint = 60571343279e7f43ee95000762f5fcd54ad24816
+sep = .
+subscribedonly = no
+
+[Repository Gmail]
+type = IMAP
+ssl = yes
+remotehost = imap.googlemail.com
+remoteuser = &lt;gmail user&gt;
+remotepass = &lt;gmail password&gt;
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+sep = /
+subscribedonly = no</code></pre>
+<h2>Running</h2>
+<p>Test the process first with <code>offlineimap --dry-run</code> to check that things are going to turn out roughly how you expect. Then execute <code>offlineimap</code> to start the process. I really recommend doing this in a byobu or screen session, or at least with the <code>nohup</code> utility since a connection drop will cause offlineimap to&nbsp;abort.</p>
+<p>Check back on the process once every day or so to check it‘s still running - <span class="caps">OR</span> - write a shell script to re-invoke it until it succeeds (untested so I won’t propose any&nbsp;code).</p>
+<h1>Personal&nbsp;thoughts</h1>
+<p>This seems to be the most painless way to upload old email to Gmail. In my case, the move is prompted by a real life move where my <span class="caps">24TB</span> server won‘t be coming with me. I followed up some options for moving my email system, for example to a Docker image for $5 a month for 20gb, but at the end of the day had to face the fact that there was a perfectly capable free-alternative available and it would just be throwing money away. Everything already operates through my Gmail accounts anyway, so it’s not like there‘s a security concern there and when it comes to email you either use GPG or you’re doing nothing&nbsp;anyway.</p>
+<p>It‘s worth the observation here that the same process used for the migration can also be used for a local backup, which is a system I will most definitely be using in the future. OfflineIMAP can write Maildir natively, so there’s no need to use an <span class="caps">IMAP</span> server locally for that, and helpfully solves the “what if Gmail suddenly disappears problem” (more likely from a power failure then anything else, but my email is important to&nbsp;me).</p>
+</section>
+        <article class="article intro"></article>
+        <header>
+          <h2><a href="/articles/A%20better%20Getmail%20IDLE%20client/">A Better Getmail IDLE client</a></h2>
           <div class="date"><span>10. October 2013</span></div>
           <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
           </p>
@@ -50,21 +109,9 @@ The problem here is that IMAPClient’s exceptions are not documented at all, so
 <p>My previous attempt at a GetMail <span class="caps">IDLE</span> client was a huge disappointment, since imaplib2 seems to be buggy for handling long-running processes. It‘s possible some magic in hard terminating the IMAP session after each IDLE termination is necessary, but it raises the question of why the idle() function in the library doesn’t immediately exit when this happens - to me that implies I could still end up with a zombie daemon that doesn&#39;t retreive any&nbsp;mail.</p>
 <p>Thus a new project - this time based on the Python <code>imapclient</code> library. imapclient uses imaplib behind the scenes, and seems to enjoy a little bit more use then <code>imaplib2</code> so it seemed a good&nbsp;candidate.</p>
 <h1>The&nbsp;script</h1>
-<h2>Dependencies</h2>
-<p>The script has a couple of dependencies, most easily installed with <code>pip</code>:</p>
-<pre><code>$ pip install psutil imapclient</code></pre>
-<p>Get it from <a href="https://gist.github.com/wrouesnel/6905023">a Gist here</a> - I‘m currently running it on my server, and naturally I’ll update this article based on how it performs as I&nbsp;go.</p>
-<h1>Design</h1>
-<p>The script implements a Unix daemon, and uses pidfiles to avoid concurrent executions. It&#39;s designed to be stuck in a crontab file to recover from&nbsp;crashes.</p>
-<p>I went purist on this project since I wanted to avoid as many additional frameworks as possible and work mostly with built-in constructs - partly as just an exercise in what can be done. At the end of the day I ended up implementing a somewhat half-baked messaging system to manage all the threads based on&nbsp;Queues.</p>
-<p>The main thread, being the listener for signals, creates a “manager” thread, which in turn spawns all my actual “idler”&nbsp;threads.</p>
-<p>Everything talks with Queue.Queue() objects, and block on the get() method which efficiently uses <span class="caps">CPU</span>. The actual idle() function, being blocking, runs on its own thread and posts “new mail” events back to the idler thread, which then invokes&nbsp;getmail.</p>
-<p>The biggest challenge was making sure exceptions were caught in all the right places - <code>imapclient</code> has no way to cleanly kill off an idle() process, so a shutdown involves causing the idle_check() call to return an&nbsp;exception.</p>
-<p>I kind of hacked this together as I went - the main thing I really targeted was trying to make sure failure modes caused crashes, which is hard to do with Python-threading a lot of the time. A crashed script can be restarted, a zombie script doing nothing looks like it&#39;s correctly&nbsp;alive.</p>
-<h1>Personal&nbsp;thoughts</h1>
-<p>Pure Python is not the best for this sort of thing - an evented <span class="caps">IMAP</span> library would definitely be better but this way I can stick with mostly single file deployment, and I don&#39;t want to write my own IMAP client at the&nbsp;moment.</p>
-<p>Of course <span class="caps">IMAP</span> is a simple enough protocol in most respects, so it&#39;s not like it would be hard but the exercise was still interesting. But if I want a new project with this, I would still like to tackle it in something like&nbsp;Haskell.</p>
-</section>
+
+          <p class="more"><a href="/articles/A%20better%20Getmail%20IDLE%20client/">more</a></p>
+        </section>
         <article class="article intro"></article>
         <header>
           <h2><a href="/articles/Getmail%20IDLE%20Client/">A GetMail IDLE daemon script</a></h2>
