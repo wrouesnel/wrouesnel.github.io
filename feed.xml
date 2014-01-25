@@ -5,9 +5,69 @@
     <atom:link href="http://localhost:8080/feed.xml" rel="self" type="application/rss+xml"></atom:link>
     <link>http://localhost:8080</link>
     <description>negating information entropy</description>
-    <pubDate>Tue, 12 Nov 2013 12:29:00 +1100</pubDate>
+    <pubDate>Sat, 25 Jan 2014 14:40:00 +1100</pubDate>
     <generator>Wintersmith - https://github.com/jnordberg/wintersmith</generator>
     <language>en</language>
+    <item>
+      <title>Running Gnome Tracker on a Server</title>
+      <link>http://localhost:8080/articles/Running%20Gnome%20Tracker%20on%20a%20Server/</link>
+      <pubDate>Sat, 25 Jan 2014 14:40:00 +1100</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/Running%20Gnome%20Tracker%20on%20a%20Server/</guid>
+      <author></author>
+      <description>&lt;p&gt;In a passing comment it was suggested to me that it would be really great if the home fileserver offered some type of web-interface to find things. We‘ve been aggregating downloaded files there for a while, and there’s been attempts made at categorization but this all really falls apart when you wonder “what does ‘productivity’ mean? And does this go under ‘Linux’ or some other thing?”&lt;/p&gt;
+&lt;p&gt;Since lately I‘ve been wanting to get desktop search working on my actual desktops, via Gnome’s Tracker project and it&amp;#39;s tie-in to Nautilus and Nemo (possibly the subject of a future blog), it seemed logical to run it on the fileserver as an indexer for our shared directories - and then to tie some kind of web ui to that.&lt;/p&gt;
+&lt;p&gt;Unfortunately, Tracker is very desktop orientated - there&amp;#39;s no easy daemon mode for running it on a headless system out-of-the-box, but with a little tweaking you &lt;em&gt;can&lt;/em&gt; make it work for you quite easily.&lt;/p&gt;
+&lt;h1&gt;How to&lt;/h1&gt;
+&lt;p&gt;On my system I keep Tracker running as it&amp;#39;s own user under a system account. On Ubuntu you need to create this like so (using a root shell - &lt;code&gt;sudo -i&lt;/code&gt;):&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;$ adduser --system --shell=/bin/&lt;span class=&quot;literal&quot;&gt;false&lt;/span&gt; --disabled-login --home=/var/lib/tracker tracker
+$ adduser tracker root&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Since tracker uses GSettings for it&amp;#39;s configuration these days, you need to su into the user you just created to actually configure the directories which should be indexed. Since this is a server, you probably just have a list of them so set it somewhat like the example below. Note: you must run the dbus-launch commands in order to have a viable session bus for dconf to work with. This will also be a requirement of Tracker later on.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;$ su --shell /bin/bash
+$ eval `dbus-launch --sh-syntax`
+$ dconf write org/freedesktop/tracker/miner/files/index-recursive-directories &lt;span class=&quot;string&quot;&gt;&quot;['/path/to/my/dir/1', '/path/to/my/dir/2', '/etc/etc']&quot;&lt;/span&gt;
+$ kill &lt;span class=&quot;variable&quot;&gt;$DBUS_SESSION_BUS_PID&lt;/span&gt;
+$ &lt;span class=&quot;keyword&quot;&gt;exit&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Your Tracker user is now ready at this point. To start and stop the service, we use an &lt;a href=&quot;http://localhost:8080/articles/Running%20Gnome%20Tracker%20on%20a%20Server/tracker.conf&quot;&gt;Upstart script like the one below&lt;/a&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;description &amp;quot;gnome tracker system startup script&amp;quot;
+author &amp;quot;wrouesnel&amp;quot;
+
+start on (local-filesystems and net-device-up)
+stop on shutdown
+
+respawn
+respawn limit 5 60
+
+setuid tracker
+
+script
+    chdir /var/lib/tracker
+    eval `dbus-launch --sh-syntax`
+    echo $DBUS_SESSION_BUS_PID &amp;gt; .tracker-sessionbus.pid
+    echo $DBUS_SESSION_BUS_ADDRESS &amp;gt; .tracker-sessionbus
+    /usr/lib/tracker/tracker-store
+end script
+
+post-start script
+    chdir /var/lib/tracker
+    while [ ! -e .tracker-sessionbus ]; do sleep 1; done
+    DBUS_SESSION_BUS_ADDRESS=$(cat .tracker-sessionbus) /usr/lib/tracker/tracker-miner-fs &amp;amp;
+end script
+
+post-stop script 
+    # We need to kill off the DBUS session here
+    chdir /var/lib/tracker
+    kill $(cat .tracker-sessionbus.pid)
+    rm .tracker-sessionbus.pid
+    rm .tracker-sessionbus
+end script&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Some things to focus on about the script: we launch and save the DBus session parameters. We&amp;#39;ll need these to reconnect to the session to run tracker related commands. The post-stop stanza is to kill off the DBus session.&lt;/p&gt;
+&lt;p&gt;You do need to explicitely launch &lt;code&gt;tracker-miner-fs&lt;/code&gt; in order for file indexing to work, but you don&amp;#39;t need to kill it explicitely - it will be automatically shutdown when Upstart kills &lt;code&gt;tracker-store&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Also note that since tracker runs as the user &lt;code&gt;tracker&lt;/code&gt; it can only index files and directories which it is allowed to traverse, so check your permissions.&lt;/p&gt;
+&lt;p&gt;You can now start Tracker as your user with &lt;code&gt;start tracker&lt;/code&gt;. And stop it with &lt;code&gt;stop tracker&lt;/code&gt;. Simple and clean.&lt;/p&gt;
+&lt;h1&gt;Using this&lt;/h1&gt;
+&lt;p&gt;My plan for this setup is to throw together a Node.js app on my server that will forward queries to the tracker command line client - that app will be a future post when it&amp;#39;s done.&lt;/p&gt;
+</description>
+    </item>
     <item>
       <title>Migrating to Gmail</title>
       <link>http://localhost:8080/articles/Migrating%20to%20Gmail/</link>
