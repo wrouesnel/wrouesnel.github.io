@@ -24,7 +24,7 @@
 &lt;h1&gt;Reprogramming an Arduino Mega 2560 (or compatible)&lt;/h1&gt;
 &lt;p&gt;The basic command line you need for the Arduino Mega when it&amp;#39;s running at 250000 bps is very simple. The avrdude command should be &lt;code&gt;avrdude -cstk500v2 -P/dev/ttyACM0 -b250000&lt;/code&gt; in Eclipse. You can enter this by typing in the baud rate directly in the drop down box - Eclipse will accept it just fine.&lt;/p&gt;
 &lt;p&gt;The AVRdude settings screen should look something like this when you&amp;#39;re done:&lt;/p&gt;
-&lt;p&gt;-&amp;gt; &lt;img src=&quot;http://localhost:8080/articles/Flashing%20Marlin%20with%20Eclipse%20and%20AVRDude/eclipse-avrdude-screen.png&quot; alt=&quot;AVRDude Configuration Screen&quot;&gt; &amp;lt;-&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:8080/articles/Flashing%20Marlin%20with%20Eclipse%20and%20AVRDude/eclipse-avrdude-screen.png&quot; alt=&quot;AVRDude Configuration Screen&quot;&gt;&lt;/p&gt;
 &lt;p&gt;The benefit of this configuration is your printer (or arduino for another project) can be easily reflashed without having to time-out resetting it so you can run AVRdude at one of the “standard” baudrates.&lt;/p&gt;
 &lt;p&gt;It&amp;#39;s worth noting that by creating a custom &lt;code&gt;boards.txt&lt;/code&gt; configuration it might be possible to accomplish this in the Arduino IDE as well, but Eclipse is a much easier to use dev-environment for big Arduino projects (like 3D printer firmwares) that I don&amp;#39;t really have any inclination to avoid it in the future (plus is generalizes out to non-Arduino AVR programming nicely).&lt;/p&gt;
 &lt;h1&gt;Going further&lt;/h1&gt;
