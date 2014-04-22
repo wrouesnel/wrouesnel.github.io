@@ -34,39 +34,21 @@
         <!-- First article - render in full-->
         <article class="article intro"></article>
         <header>
-          <h1 class="indexfullarticle"><a href="/articles/Flashing%20Marlin%20with%20Eclipse%20and%20AVRDude/">Flashing Marlin with Eclipse and AVR Dude</a></h1>
-          <div class="date"><span>23. April 2014</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><h1>Intro</h1>
-<p>3D printing is still very much in the hobbyist stage, and I am a tinkerer at heart. So flashing my printer&#39;s firmware is a basic operation - in fact it has to be a basic operation, since most configuration changes are baked into the&nbsp;firmware.</p>
-<p>But, I run my printer at 250000 baud rate over <span class="caps">USB</span>. This is an excellent choice for printing since the error rate from the serial line on the Arduino is basically 0, and it&#39;s faster to boot. Excellent for rapid G-code&nbsp;sending.</p>
-<p>But it can make reprogramming using the standard Arduino <span class="caps">IDE</span> a bit of a pain, and by and large I don&#39;t like the standard Arduino&nbsp;IDE.</p>
-<p>The problem is that your Arduino in 3D printing mode is running at a non-standard baudrate. Linux can handle this just fine, as can the underlying programming tool of Arduino <code>avrdude</code>, but the <span class="caps">IDE</span> doesn&#39;t let you just type in what you need. Eclipse does. Get the latest version of AVRdude you can, since it makes things <em>a lot</em> easier - I have 6.0.1 which is built into Ubuntu “Trusty&nbsp;Tahr”.</p>
-<h1>Reprogramming with&nbsp;Eclipse</h1>
-<p>People have covered setting up Eclipse for Arduino elsewhere, and I will in the future cover my setup in my own words (I believe understanding comes from finding an idea explained in the right voice a lot of the time) but for now I&#39;ll just say it works pretty&nbsp;well.</p>
-<h1>Reprogramming an Arduino Mega 2560 (or&nbsp;compatible)</h1>
-<p>The basic command line you need for the Arduino Mega when it&#39;s running at 250000 bps is very simple. The avrdude command should be <code>avrdude -cstk500v2 -P/dev/ttyACM0 -b250000</code> in Eclipse. You can enter this by typing in the baud rate directly in the drop down box - Eclipse will accept it just&nbsp;fine.</p>
-<p>The AVRdude settings screen should look something like this when you&#39;re&nbsp;done:</p>
-<p><img src="/articles/Flashing%20Marlin%20with%20Eclipse%20and%20AVRDude/eclipse-avrdude-screen.png" alt="AVRDude Configuration Screen"></p>
-<p>The benefit of this configuration is your printer (or arduino for another project) can be easily reflashed without having to time-out resetting it so you can run AVRdude at one of the “standard”&nbsp;baudrates.</p>
-<p>It&#39;s worth noting that by creating a custom <code>boards.txt</code> configuration it might be possible to accomplish this in the Arduino <span class="caps">IDE</span> as well, but Eclipse is a much easier to use dev-environment for big Arduino projects (like 3D printer firmwares) that I don&#39;t really have any inclination to avoid it in the future (plus is generalizes out to non-Arduino AVR programming&nbsp;nicely).</p>
-<h1>Going&nbsp;further</h1>
-<p>This is just a short “I did this a few minutes ago note”. In the future I&#39;ll detail my Arduino Eclipse workspace, to add to the signal to noise ratio on that&nbsp;subject.</p>
-</section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/Uninstalling%20r8168-dkms/">Quick note - uninstalling r8618-dkms</a></h2>
+          <h1 class="indexfullarticle"><a href="/articles/Uninstalling%20r8168-dkms/">Quick note - uninstalling r8618-dkms</a></h1>
           <div class="date"><span>30. January 2014</span></div>
           <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
           </p>
         </header>
         <section class="content"><p>This is a quick note on something I encountered while trying to work out why my Realtek NICs are so finicky about connecting and staying connected at gigabit speeds when running&nbsp;Linux.</p>
 <p>The current hypothesis is that the <code>r8168</code> driver isn&#39;t helping very much. So I uninstalled it - and ran into two&nbsp;problems.</p>
-
-          <p class="more"><a href="/articles/Uninstalling%20r8168-dkms/">more</a></p>
-        </section>
+<h2>Firstly</h2>
+<p>…you need to uninstall it on Ubuntu/Debian with <code>apt-get remove --purge r8168-dkms</code> or the config files (and it&#39;s <em>all</em> config files) won&#39;t be properly removed, and the module will be left&nbsp;installed.</p>
+<h2>Secondly</h2>
+<p>…you really need to make sure you&#39;ve removed all the <code>blacklist r8169</code> entries. They can be left behind if you don‘t purge configuration files, but I found I’d also left a few hanging around in the <code>/etc/modprobe.d</code> directory from earlier efforts. So a quick <code>fgrep r8169 *</code> would‘ve saved me a lot of trouble and confusion as to why r8169 wasn’t being automatically&nbsp;detected.</p>
+<p>In my case it turned out I&#39;d put a very official looking <code>blacklist-networking.conf</code> file in my modprobe.d directory. On both my&nbsp;machines.</p>
+<h2>Something about Realtek&nbsp;NICs?</h2>
+<p>If I find an answer I‘ll surely provide updates, but needless to say there’s no rthyme or reason to when they do or do not work, other then they consistently don&#39;t work on kernel 3.11 with the r8168 driver it&nbsp;seems.</p>
+</section>
         <article class="article intro"></article>
         <header>
           <h2><a href="/articles/Running%20Gnome%20Tracker%20on%20a%20Server/">Running Gnome Tracker on a Server</a></h2>
