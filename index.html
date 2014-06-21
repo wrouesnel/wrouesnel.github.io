@@ -34,21 +34,119 @@
         <!-- First article - render in full-->
         <article class="article intro"></article>
         <header>
-          <h1 class="indexfullarticle"><a href="/articles/Uninstalling%20r8168-dkms/">Quick note - uninstalling r8618-dkms</a></h1>
+          <h1 class="indexfullarticle"><a href="/articles/bup%20-%20towards%20the%20perfect%20backup/">bup - towards the perfect backup</a></h1>
+          <div class="date"><span>22. June 2014</span></div>
+          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
+          </p>
+        </header>
+        <section class="content"><p>Since I discovered it, I&#39;ve been in love with the concept behind <a href="https://github.com/bup/bup">bup</a>.</p>
+<p>bup appeals to my sense of efficiency in taking backups: backups should backup
+the absolute minimum amount of data so I can have the most versions, and then
+that frees me to use whatever level of redundancy I deem appropriate for my
+backup&nbsp;media.</p>
+<p>But more then that, the underlying technology of bup is ripe with possibility:
+the basic premise of a backup tool gives rise to the possibility of a sync tool,
+a deduplicated home directory tool, distributed repositories, archives and&nbsp;more.</p>
+<h1>how it&nbsp;works</h1>
+<p>A more complete explanation can be found on the main GitHub repository, but
+essentially bup applies rsync&#39;s rolling-checksum (literally, the same algorithm)
+to determine file-differences, and then only backs up the differences - somewhat
+like&nbsp;rsnapshot.</p>
+<p>Unlike rsnapshot however, bup then applies deduplication of the chunks produced
+this way using <span class="caps">SHA1</span> hashes, and stores the results in the git-packfile&nbsp;format.</p>
+<p>This is both very fast (rsnapshot, conversely, is quite slow) and very redundant
+- the Git tooling is able to read and understand a bup-repository as just a
+Git repository with a specific commit structure (you can run <code>gitk -a</code> in a
+<code>.bup</code> directory to inspect&nbsp;it).</p>
+<h1>why its space&nbsp;efficient</h1>
+<p>bup&#39;s archive and rolling-checksum format mean it is very space efficient. bup
+can correctly deduplicate data that undergoes insertions, deletions, shifts
+and copies. bup deduplicates across your entire backup set, meaning the same
+file uploaded 50 times is only stored once - in fact it will only be transferred
+across the network&nbsp;once.</p>
+<p>For comparison I recently moved 180 gb of <span class="caps">ZFS</span> snapshots of the same dataset
+undergoing various daily changes into a bup archive, and successfully compacted
+it down to 50 gb. I suspect I could have gotten it smaller if I&#39;d unpacked some
+of the archive files that have been created in that backup&nbsp;set.</p>
+<p>That is a dataset which is already deduplicated via copy-on-write semantics
+(it was not using <span class="caps">ZFS</span> deduplication because you should basically never use ZFS&nbsp;deduplication).</p>
+<h1>why its&nbsp;fast</h1>
+<p>Git is well known as being bad at handling large binary files - it was designed
+to handle patches of source code, and makes assumptions to that effect. <code>bup</code>
+steps around this problem because it only used the Git packfile and index
+format to store data: where Git is slow, bup implements its own packfile writers
+index readers to make looking up data in Git structures&nbsp;fast.</p>
+<p>bup also uses some other tricks to do this: it will combine indexes into <code>midx</code>
+files to speed up lookups, and builds <a href="http://en.wikipedia.org/wiki/Bloom_filter">bloom filters</a> to add data (a bloom filter is a
+fast data structure based on hashes which tells you something is either
+‘probably in the data set’ or <em>definitely</em>&nbsp;not).</p>
+<h1>using bup for Windows&nbsp;backups</h1>
+<p>bup is a Unix/Linux oriented tool, but in practice I&#39;ve applied it most usefully
+at the moment to some Windows&nbsp;servers.</p>
+<p>Running bup under <a href="https://www.cygwin.com/">cygwin</a> on Windows, and is far superior to the built in Windows backup system for file-based backups. It&#39;s best to combine it with
+the <a href="http://vscsc.sourceforge.net/">vscsc</a> tool which allows using 1-time
+snapshots to save the backup and avoid inconsistent&nbsp;state.</p>
+<p>You can see a <a href="https://gist.github.com/wrouesnel/8f0c681e4bf598176203">link to a Gist here</a> of my current favorite 
+script for this type of thing - this bash script needs to be invoked from a 
+scheduled task which runs a <a href="https://gist.github.com/wrouesnel/f5e5cc67d33db1cefdd4">batch file like this</a>.</p>
+<p>If you want to use this script on Cygwin then you need to install the <code>mail</code>
+utility for sending email, as well as rsync and&nbsp;bup.</p>
+<p>This script is reasonably complicated but it is designed to be robust against
+failures in a sensible way - and if we somehow fail running bup, to fallback to
+making tar archives - giving us an opportunity to fix a broken backup&nbsp;set.</p>
+<p>This script will work for backing up to your own remote server <em>today</em>. But, it
+was developed to work around limitations which can be fixed - and which I have
+fixed - and so the bup of tomorrow will not have&nbsp;them.</p>
+<h1>towards the perfect&nbsp;backup</h1>
+<p>The script above was developed for a client, and the rsync-first stage was
+designed to ensure that the most recent backup would always be directly readable
+from a Windows Samba share and not require using the command&nbsp;line.</p>
+<p>It was also designed to work around a flaw with bup&#39;s indexing step which makes
+it difficult to use with variable paths as produced by the vscsc tool in cygwin.
+Although bup will work just fine, it will insist on trying to hash the entire
+backup set every time - which is slow. This can be worked around by symlinking
+the backup path in cygwin beforehand, but since we needed a readable backup
+set it was as quick to use rsync in this&nbsp;instance.</p>
+<p>But it doesn‘t have to be this way. I’ve submitted several patches
+against bup which are also available in my <a href="https://github.com/wrouesnel/bup">personal development repository of bup</a> on&nbsp;GitHub.</p>
+<p>The indexing problem is fixed via <code>index-grafts</code>: modifying the bup-index to
+support representing the logical structure as it is intended to be in the bup
+repository, rather then the literal disk path structure. This allows the index
+to work as intended without any games on the filesystem, hashing only modified
+or updated&nbsp;files.</p>
+<p>The need for a directly accessible version of the backup is solved via a few
+other patches. We can modify the bup virtual-filesystems layer to support a
+dynamic view of the bup repository fairly easily, and add WebDAV support to
+the bup-web command (the <code>dynamic-vfs</code> and <code>bup-webdav</code> branches).</p>
+<p>With these changes, a bup repository can now be directly mounted as a Windows
+mapped network drive via explorers web client, and files opened and copied
+directly from the share. Any version of a backup set is then trivially 
+accessible and importantly we can simply start <code>bup-web</code> as a cygwin service
+and leave it&nbsp;running.</p>
+<p>Hopefully these patches will be incorporated into mainline bup soon (they are
+awaiting&nbsp;review).</p>
+<h1>so should I use&nbsp;it?</h1>
+<p>Even with the things I&#39;ve had to fix, the answer is <em>absolutely</em>. bup is by far
+the best backup tool I&#39;ve encountered lately. For a basic Linux system it will
+work great, for manual backups it will work great, and with a little scripting
+it will work <em>great</em> for automatic backups under Windows and&nbsp;Linux.</p>
+<p>The brave can try out the cutting-edge branch on my GitHub account to test out
+the fixes in this blog-post, and if you do then posting about them to
+bup-list@googlegroups.com with any problems or successes or code reviews would
+help a&nbsp;lot.</p>
+</section>
+        <article class="article intro"></article>
+        <header>
+          <h2><a href="/articles/Uninstalling%20r8168-dkms/">Quick note - uninstalling r8618-dkms</a></h2>
           <div class="date"><span>30. January 2014</span></div>
           <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
           </p>
         </header>
         <section class="content"><p>This is a quick note on something I encountered while trying to work out why my Realtek NICs are so finicky about connecting and staying connected at gigabit speeds when running&nbsp;Linux.</p>
 <p>The current hypothesis is that the <code>r8168</code> driver isn&#39;t helping very much. So I uninstalled it - and ran into two&nbsp;problems.</p>
-<h2>Firstly</h2>
-<p>…you need to uninstall it on Ubuntu/Debian with <code>apt-get remove --purge r8168-dkms</code> or the config files (and it&#39;s <em>all</em> config files) won&#39;t be properly removed, and the module will be left&nbsp;installed.</p>
-<h2>Secondly</h2>
-<p>…you really need to make sure you&#39;ve removed all the <code>blacklist r8169</code> entries. They can be left behind if you don‘t purge configuration files, but I found I’d also left a few hanging around in the <code>/etc/modprobe.d</code> directory from earlier efforts. So a quick <code>fgrep r8169 *</code> would‘ve saved me a lot of trouble and confusion as to why r8169 wasn’t being automatically&nbsp;detected.</p>
-<p>In my case it turned out I&#39;d put a very official looking <code>blacklist-networking.conf</code> file in my modprobe.d directory. On both my&nbsp;machines.</p>
-<h2>Something about Realtek&nbsp;NICs?</h2>
-<p>If I find an answer I‘ll surely provide updates, but needless to say there’s no rthyme or reason to when they do or do not work, other then they consistently don&#39;t work on kernel 3.11 with the r8168 driver it&nbsp;seems.</p>
-</section>
+
+          <p class="more"><a href="/articles/Uninstalling%20r8168-dkms/">more</a></p>
+        </section>
         <article class="article intro"></article>
         <header>
           <h2><a href="/articles/Running%20Gnome%20Tracker%20on%20a%20Server/">Running Gnome Tracker on a Server</a></h2>
@@ -205,6 +303,33 @@ mv myscript.conf.d myscript.conf</code></pre>
 <p>Instead I&#39;ll cover a few tweaks I had to do to get it running the way I wanted. To avoid being truly confusing, all the paths referenced here are relative to the site you create by running <code>wintersmith new &lt;your site dir here&gt;</code></p>
 
           <p class="more"><a href="/articles/Wintersmithing/">more</a></p>
+        </section>
+        <article class="article intro"></article>
+        <header>
+          <h2><a href="/articles/Quickly%20configuring%20modelines/">Untitled</a></h2>
+          <div class="date"><span>01. January 1970</span></div>
+          <p class="author"><span class="author"></span>
+          </p>
+        </header>
+        <section class="content"><h1>Quickly configuring&nbsp;modelines?</h1>
+<p>Something hopefully no one should ever have to do in the far distant future,
+but since I insist on using old-hardware till it drops, it still comes&nbsp;up.</p>
+<p>Working from an <span class="caps">SSH</span> console on an XBMC box, I was trying to tune in an elusive
+1366x768 modeline for an old plasma&nbsp;TV.</p>
+<p>The best way to do it is with xrandr these days in a <code>~/.xprofile</code> script which
+is loaded on boot&nbsp;up.</p>
+<p>To quickly go through modelines I used the following shell&nbsp;script:</p>
+<pre><code>#!/bin/bash
+xrandr -d :0 --output VGA-0 --mode &quot;1024x768&quot;
+xrandr -d :0 --delmode VGA-0 &quot;1360x768&quot;
+xrandr -d :0 --rmmode &quot;1360x768&quot;
+xrandr -d :0 --newmode &quot;1360x768&quot; $@
+xrandr -d :0 --addmode VGA-0 &quot;1360x768&quot;
+xrandr -d :0 --output VGA-0 --mode &quot;1360x768&quot;</code></pre>
+<p>Simply passing in a modeline when running it causes that modeline to be set and
+applied to the relevant output (<span class="caps">VGA</span>-0) in my&nbsp;case.</p>
+<p>i.e. <code>./tryout 84.750 1366 1480 1568 1800 768 769 776 800 -hsync +vsync</code></p>
+
         </section>
       </div>
     </div>

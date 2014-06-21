@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+    <script type="text/javascript">
+      // google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-43235370-1', 'wrouesnel.github.io');
+      ga('send', 'pageview');
+    </script>
+    <title>bup - towards the perfect backup - wrouesnel_blog
+    </title>
+    <link rel="alternate" href="http://localhost:8080/feed.xml" type="application/rss+xml" title="negating information entropy">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic|Anonymous+Pro:400,700,400italic,700italic|Merriweather:400,700,300">
+    <link rel="stylesheet" href="/css/main.css">
+  </head>
+  <body class="article-detail">
+    <header class="header">
+      <div class="content-wrap">
+        <h1>bup - towards the perfect backup</h1>
+        <p class="author">Written by <span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
+        </p>
+      </div>
+    </header>
+    <div id="content">
+      <div class="content-wrap">
+        <article class="article">
+          <section class="content"><p>Since I discovered it, I&#39;ve been in love with the concept behind <a href="https://github.com/bup/bup">bup</a>.</p>
+<p>bup appeals to my sense of efficiency in taking backups: backups should backup
+the absolute minimum amount of data so I can have the most versions, and then
+that frees me to use whatever level of redundancy I deem appropriate for my
+backup&nbsp;media.</p>
+<p>But more then that, the underlying technology of bup is ripe with possibility:
+the basic premise of a backup tool gives rise to the possibility of a sync tool,
+a deduplicated home directory tool, distributed repositories, archives and&nbsp;more.</p>
+<h1>how it&nbsp;works</h1>
+<p>A more complete explanation can be found on the main GitHub repository, but
+essentially bup applies rsync&#39;s rolling-checksum (literally, the same algorithm)
+to determine file-differences, and then only backs up the differences - somewhat
+like&nbsp;rsnapshot.</p>
+<p>Unlike rsnapshot however, bup then applies deduplication of the chunks produced
+this way using <span class="caps">SHA1</span> hashes, and stores the results in the git-packfile&nbsp;format.</p>
+<p>This is both very fast (rsnapshot, conversely, is quite slow) and very redundant
+- the Git tooling is able to read and understand a bup-repository as just a
+Git repository with a specific commit structure (you can run <code>gitk -a</code> in a
+<code>.bup</code> directory to inspect&nbsp;it).</p>
+<h1>why its space&nbsp;efficient</h1>
+<p>bup&#39;s archive and rolling-checksum format mean it is very space efficient. bup
+can correctly deduplicate data that undergoes insertions, deletions, shifts
+and copies. bup deduplicates across your entire backup set, meaning the same
+file uploaded 50 times is only stored once - in fact it will only be transferred
+across the network&nbsp;once.</p>
+<p>For comparison I recently moved 180 gb of <span class="caps">ZFS</span> snapshots of the same dataset
+undergoing various daily changes into a bup archive, and successfully compacted
+it down to 50 gb. I suspect I could have gotten it smaller if I&#39;d unpacked some
+of the archive files that have been created in that backup&nbsp;set.</p>
+<p>That is a dataset which is already deduplicated via copy-on-write semantics
+(it was not using <span class="caps">ZFS</span> deduplication because you should basically never use ZFS&nbsp;deduplication).</p>
+<h1>why its&nbsp;fast</h1>
+<p>Git is well known as being bad at handling large binary files - it was designed
+to handle patches of source code, and makes assumptions to that effect. <code>bup</code>
+steps around this problem because it only used the Git packfile and index
+format to store data: where Git is slow, bup implements its own packfile writers
+index readers to make looking up data in Git structures&nbsp;fast.</p>
+<p>bup also uses some other tricks to do this: it will combine indexes into <code>midx</code>
+files to speed up lookups, and builds <a href="http://en.wikipedia.org/wiki/Bloom_filter">bloom filters</a> to add data (a bloom filter is a
+fast data structure based on hashes which tells you something is either
+‘probably in the data set’ or <em>definitely</em>&nbsp;not).</p>
+<h1>using bup for Windows&nbsp;backups</h1>
+<p>bup is a Unix/Linux oriented tool, but in practice I&#39;ve applied it most usefully
+at the moment to some Windows&nbsp;servers.</p>
+<p>Running bup under <a href="https://www.cygwin.com/">cygwin</a> on Windows, and is far superior to the built in Windows backup system for file-based backups. It&#39;s best to combine it with
+the <a href="http://vscsc.sourceforge.net/">vscsc</a> tool which allows using 1-time
+snapshots to save the backup and avoid inconsistent&nbsp;state.</p>
+<p>You can see a <a href="https://gist.github.com/wrouesnel/8f0c681e4bf598176203">link to a Gist here</a> of my current favorite 
+script for this type of thing - this bash script needs to be invoked from a 
+scheduled task which runs a <a href="https://gist.github.com/wrouesnel/f5e5cc67d33db1cefdd4">batch file like this</a>.</p>
+<p>If you want to use this script on Cygwin then you need to install the <code>mail</code>
+utility for sending email, as well as rsync and&nbsp;bup.</p>
+<p>This script is reasonably complicated but it is designed to be robust against
+failures in a sensible way - and if we somehow fail running bup, to fallback to
+making tar archives - giving us an opportunity to fix a broken backup&nbsp;set.</p>
+<p>This script will work for backing up to your own remote server <em>today</em>. But, it
+was developed to work around limitations which can be fixed - and which I have
+fixed - and so the bup of tomorrow will not have&nbsp;them.</p>
+<h1>towards the perfect&nbsp;backup</h1>
+<p>The script above was developed for a client, and the rsync-first stage was
+designed to ensure that the most recent backup would always be directly readable
+from a Windows Samba share and not require using the command&nbsp;line.</p>
+<p>It was also designed to work around a flaw with bup&#39;s indexing step which makes
+it difficult to use with variable paths as produced by the vscsc tool in cygwin.
+Although bup will work just fine, it will insist on trying to hash the entire
+backup set every time - which is slow. This can be worked around by symlinking
+the backup path in cygwin beforehand, but since we needed a readable backup
+set it was as quick to use rsync in this&nbsp;instance.</p>
+<p>But it doesn‘t have to be this way. I’ve submitted several patches
+against bup which are also available in my <a href="https://github.com/wrouesnel/bup">personal development repository of bup</a> on&nbsp;GitHub.</p>
+<p>The indexing problem is fixed via <code>index-grafts</code>: modifying the bup-index to
+support representing the logical structure as it is intended to be in the bup
+repository, rather then the literal disk path structure. This allows the index
+to work as intended without any games on the filesystem, hashing only modified
+or updated&nbsp;files.</p>
+<p>The need for a directly accessible version of the backup is solved via a few
+other patches. We can modify the bup virtual-filesystems layer to support a
+dynamic view of the bup repository fairly easily, and add WebDAV support to
+the bup-web command (the <code>dynamic-vfs</code> and <code>bup-webdav</code> branches).</p>
+<p>With these changes, a bup repository can now be directly mounted as a Windows
+mapped network drive via explorers web client, and files opened and copied
+directly from the share. Any version of a backup set is then trivially 
+accessible and importantly we can simply start <code>bup-web</code> as a cygwin service
+and leave it&nbsp;running.</p>
+<p>Hopefully these patches will be incorporated into mainline bup soon (they are
+awaiting&nbsp;review).</p>
+<h1>so should I use&nbsp;it?</h1>
+<p>Even with the things I&#39;ve had to fix, the answer is <em>absolutely</em>. bup is by far
+the best backup tool I&#39;ve encountered lately. For a basic Linux system it will
+work great, for manual backups it will work great, and with a little scripting
+it will work <em>great</em> for automatic backups under Windows and&nbsp;Linux.</p>
+<p>The brave can try out the cutting-edge branch on my GitHub account to test out
+the fixes in this blog-post, and if you do then posting about them to
+bup-list@googlegroups.com with any problems or successes or code reviews would
+help a&nbsp;lot.</p>
+</section>
+        </article>
+      </div>
+    </div>
+    <footer>
+      <div class="content-wrap">
+        <div class="nav"><a href="/">« Full blog</a></div>
+        <section class="about">
+        </section>
+        <section class="copy">
+          <p>&copy; 2014 Will Rouesnel &mdash; powered by&nbsp;<a href="https://github.com/jnordberg/wintersmith">Wintersmith</a>
+          </p>
+        </section>
+      </div>
+    </footer>
+  </body>
+</html>
