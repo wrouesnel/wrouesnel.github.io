@@ -78,7 +78,7 @@ fixed - and so the bup of tomorrow will not have them.&lt;/p&gt;
 designed to ensure that the most recent backup would always be directly readable
 from a Windows Samba share and not require using the command line.&lt;/p&gt;
 &lt;p&gt;It was also designed to work around a flaw with bup&amp;#39;s indexing step which makes
-it difficult to use with variable paths as produced by the vscsc tool in cygwin.
+it difficult to use with variable paths as produced by the &lt;code&gt;vscsc&lt;/code&gt; tool in cygwin.
 Although bup will work just fine, it will insist on trying to hash the entire
 backup set every time - which is slow. This can be worked around by symlinking
 the backup path in cygwin beforehand, but since we needed a readable backup
@@ -108,7 +108,7 @@ work great, for manual backups it will work great, and with a little scripting
 it will work &lt;em&gt;great&lt;/em&gt; for automatic backups under Windows and Linux.&lt;/p&gt;
 &lt;p&gt;The brave can try out the cutting-edge branch on my GitHub account to test out
 the fixes in this blog-post, and if you do then posting about them to
-bup-list@googlegroups.com with any problems or successes or code reviews would
+[bup-list@googlegroups.com[(&lt;a href=&quot;https://groups.google.com/forum/#!forum/bup-list&quot;&gt;https://groups.google.com/forum/#!forum/bup-list&lt;/a&gt;) with any problems or successes or code reviews would
 help a lot.&lt;/p&gt;
 </description>
     </item>
