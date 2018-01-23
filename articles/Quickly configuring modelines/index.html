@@ -14,7 +14,7 @@
       ga('create', 'UA-43235370-1', 'wrouesnel.github.io');
       ga('send', 'pageview');
     </script>
-    <title>S4-i9505 in 2018 - wrouesnel_blog
+    <title>Quickly configuring modelines? - wrouesnel_blog
     </title>
     <link rel="alternate" href="http://blog.wrouesnel.com/feed.xml" type="application/rss+xml" title="negating information entropy">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic|Anonymous+Pro:400,700,400italic,700italic|Merriweather:400,700,300">
@@ -23,7 +23,7 @@
   <body class="article-detail">
     <header class="header">
       <div class="content-wrap">
-        <h1>S4-i9505 in 2018</h1>
+        <h1>Quickly configuring modelines?</h1>
         <p class="author">Written by <span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
         </p>
       </div>
@@ -31,24 +31,24 @@
     <div id="content">
       <div class="content-wrap">
         <article class="article">
-          <section class="content"><p>Some notes on running a Samsung Galaxy S4 i9505 in Australia in&nbsp;2018</p>
-<p>My first high end phone, still perfectly capable of everything I need from a
-smart phone and now dirt cheap on ebay so I’m basically going to keep buying
-them till there’s no more to be had (or someone releases a Spectre-immune <span class="caps">CPU</span>
-phone I guess&nbsp;now).</p>
-<p>Baseband: <span class="caps">XXUGNG8</span>
-I upgraded the baseband a bunch of times including to some alleged Telstra OTA
-packages, and found I lost wifi. The actual modem and APN-HLOS don’t seem to
-matter much but…the XXUGNG8 bootloader and related files are vitally
-important to getting sound to&nbsp;work.</p>
-<p><span class="caps">OS</span>: Lineage OS
-Loved Cyanogenmod, like seeing it continued. There’s a patch to the SELinux
-config needed on newer android to allow the proximity sensor to calibrate
-properly - the symptom is an apparent freeze when making/receiving calls and
-its to do with SELinux only allowing the phone to use the default prox-sensor
-thresholds - which if your phone meets them, great - if not - then it will
-appear&nbsp;broken.</p>
-<p>I’m hoping to get this patched in the upstream <a href="https://review.lineageos.org/#/c/201533/">soon</a>.</p>
+          <section class="content"><h1 id="quickly-configuring-modelines-">Quickly configuring&nbsp;modelines?</h1>
+<p>Something hopefully no one should ever have to do in the far distant future,
+but since I insist on using old-hardware till it drops, it still comes&nbsp;up.</p>
+<p>Working from an <span class="caps">SSH</span> console on an XBMC box, I was trying to tune in an elusive
+1366x768 modeline for an old plasma&nbsp;TV.</p>
+<p>The best way to do it is with xrandr these days in a <code>~/.xprofile</code> script which
+is loaded on boot&nbsp;up.</p>
+<p>To quickly go through modelines I used the following shell&nbsp;script:</p>
+<pre><code>#!/bin/bash
+xrandr -d :0 --output VGA-0 --mode &quot;1024x768&quot;
+xrandr -d :0 --delmode VGA-0 &quot;1360x768&quot;
+xrandr -d :0 --rmmode &quot;1360x768&quot;
+xrandr -d :0 --newmode &quot;1360x768&quot; $@
+xrandr -d :0 --addmode VGA-0 &quot;1360x768&quot;
+xrandr -d :0 --output VGA-0 --mode &quot;1360x768&quot;
+</code></pre><p>Simply passing in a modeline when running it causes that modeline to be set and
+applied to the relevant output (<span class="caps">VGA</span>-0) in my&nbsp;case.</p>
+<p>i.e. <code>./tryout 84.750 1366 1480 1568 1800 768 769 776 800 -hsync +vsync</code></p>
 </section>
         </article>
       </div>

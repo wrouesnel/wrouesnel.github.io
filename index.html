@@ -16,7 +16,7 @@
     </script>
     <title>wrouesnel_blog
     </title>
-    <link rel="alternate" href="http://localhost:8080/feed.xml" type="application/rss+xml" title="negating information entropy">
+    <link rel="alternate" href="http://blog.wrouesnel.com/feed.xml" type="application/rss+xml" title="negating information entropy">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic|Anonymous+Pro:400,700,400italic,700italic|Merriweather:400,700,300">
     <link rel="stylesheet" href="/css/main.css">
   </head>
@@ -24,7 +24,7 @@
     <header class="header">
       <div class="content-wrap">
         <div class="logo">
-          <h1><a href="http://localhost:8080">wrouesnel_blog</a></h1>
+          <h1><a href="http://blog.wrouesnel.com">wrouesnel_blog</a></h1>
           <p class="description">negating information entropy</p>
         </div>
       </div>
@@ -117,6 +117,139 @@ thusfar really happy with how this basic structure has turned out as I’ve
 evolved it and it’s proven relatively easy to extend when I need to (i.e.
 adding more testing levels, building web assets as well with npm and including
 them in the go-binary&nbsp;etc.)</p>
+
+        </section>
+        <article class="article intro"></article>
+        <header>
+          <h2><a href="/articles/Totally%20static%20Go%20builds/">Totally static Go builds</a></h2>
+          <div class="date"><span>12. March 2016</span></div>
+          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
+          </p>
+        </header>
+        <section class="content"><p>I wouldn’t make a post on my blog just so I don’t have to keep googling something
+would I? Of course I would. It’s like…95% of the reason I keep&nbsp;this.</p>
+<p>Totally static go builds - these are <em>great</em> for running in Docker containers.
+The important part is the command line to create them - it’s varied a bit, but
+the most thorough I’ve found is this (see this 
+<a href="https://github.com/golang/go/issues/9344">Github Issue</a>):</p>
+<pre><code class="lang-bash">CGO_ENABLED=0 GOOS=linux go build -a -ldflags <span class="string">'-extldflags "-static"'</span> .
+</code></pre>
+<p>This will create an “as static as possible” binary - beware linking in things
+which want glibc, since pluggable name resolvers will be a problem (which you
+can workaround in Docker quite well, but that’s another&nbsp;question).</p>
+
+        </section>
+        <article class="article intro"></article>
+        <header>
+          <h2><a href="/articles/Quickly%20configuring%20modelines/">Quickly configuring modelines?</a></h2>
+          <div class="date"><span>12. March 2016</span></div>
+          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
+          </p>
+        </header>
+        <section class="content"><h1 id="quickly-configuring-modelines-">Quickly configuring&nbsp;modelines?</h1>
+<p>Something hopefully no one should ever have to do in the far distant future,
+but since I insist on using old-hardware till it drops, it still comes&nbsp;up.</p>
+<p>Working from an <span class="caps">SSH</span> console on an XBMC box, I was trying to tune in an elusive
+1366x768 modeline for an old plasma&nbsp;TV.</p>
+<p>The best way to do it is with xrandr these days in a <code>~/.xprofile</code> script which
+is loaded on boot&nbsp;up.</p>
+<p>To quickly go through modelines I used the following shell&nbsp;script:</p>
+<pre><code>#!/bin/bash
+xrandr -d :0 --output VGA-0 --mode &quot;1024x768&quot;
+xrandr -d :0 --delmode VGA-0 &quot;1360x768&quot;
+xrandr -d :0 --rmmode &quot;1360x768&quot;
+xrandr -d :0 --newmode &quot;1360x768&quot; $@
+xrandr -d :0 --addmode VGA-0 &quot;1360x768&quot;
+xrandr -d :0 --output VGA-0 --mode &quot;1360x768&quot;
+</code></pre><p>Simply passing in a modeline when running it causes that modeline to be set and
+applied to the relevant output (<span class="caps">VGA</span>-0) in my&nbsp;case.</p>
+<p>i.e. <code>./tryout 84.750 1366 1480 1568 1800 768 769 776 800 -hsync +vsync</code></p>
+
+        </section>
+        <article class="article intro"></article>
+        <header>
+          <h2><a href="/articles/Installing%20the%20latest%20Docker%20release/">Installing the latest docker release</a></h2>
+          <div class="date"><span>12. September 2015</span></div>
+          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
+          </p>
+        </header>
+        <section class="content"><p>Somehow the installation instructions for Docker never work for me and the
+website is <em>surprisingly</em> cagey about the manual&nbsp;process.</p>
+<p>It works perfectly well if you just grab the relevant bits of that script and
+run them manually, but usually fails if you let it be a bit too&nbsp;magical.</p>
+<p>To be fair, I probably have issues due to the mismatch of <span class="caps">LSB</span> release since I
+run Mint. Still&nbsp;though.</p>
+<p>So here’s the commands for&nbsp;Ubuntu:</p>
+<pre><code>$ apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+$ echo deb https://apt.dockerproject.org/repo ubuntu-vivid main &gt; /etc/apt/sources.list.d/docker.list
+$ apt-get update &amp;&amp; apt-get install -y docker-engine
+</code></pre>
+        </section>
+        <article class="article intro"></article>
+        <header>
+          <h2><a href="/articles/Using%20the%20Go%20playground%20locally/">Using the Go playground locally</a></h2>
+          <div class="date"><span>09. August 2015</span></div>
+          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
+          </p>
+        </header>
+        <section class="content"><h1 id="summary">Summary</h1>
+<p>I modified Rocky Bernsteins go-play to compile with go-assetfs and run from a
+single executable. <a href="https://github.com/wrouesnel/go-play">Get it&nbsp;here!</a></p>
+<h1 id="why-and-how">Why and&nbsp;How</h1>
+<p>iPython is one of the things I love best about Python. In a dynamically typed
+language its a huge benefit to be able to quickly and easily paste in chunks of
+code and investigate what the actual output would be or what an error situation
+would look&nbsp;like.</p>
+<p><a href="http://golang.org">Go</a> is not dynamically typed, but many of the same issues
+tend to apply - when errors rise they can be tricky to introspect without diving
+through the code, and sometimes the syntax or results of a function call aren’t&nbsp;obvious.</p>
+<p>As a learning tool, Go provides the <a href="http://play.golang.org">Go Playground</a> -
+a web service which compiles and runs snippets of Go code within a sandbox,
+which has proven a huge boon to the community for sharing and testing solutions
+(its very popular on Stack&nbsp;Overflow).</p>
+<p>The public Go playground is necessariy limited - and it would be nice to be able
+to use Go in the same way clientside, or just without internet&nbsp;access.</p>
+<p>Fortunately Rocky Bernstein pulled together an unrestricted copy of the Go
+play ground which runs as a client-side <span class="caps">HTML5</span> app. Unlike the web playground,
+this allows unrestricted Go execution on your PC and full testing of things as
+they would work locally. The Github export is found <a href="https://github.com/rocky/go-play">here</a>.</p>
+<p>The one problem I had with this was that this version still exposed dependencies
+on the location of source files outside the executable - which for a tiny tool
+was kind of annoying. Fortunately this has been solved in Go for a long time -
+and a little fun with <a href="https://github.com/elazarl/go-bindata-assetfs">go-bindata-assetfs</a>
+yielded my own version which once built runs completely&nbsp;locally.</p>
+<p><a href="http://github.com/wrouesnel/go-play">Get it here</a>. It’s fully go-gettable too
+so <code>go get github.com/wrouesnel/go-play</code> will work&nbsp;too.</p>
+
+        </section>
+        <article class="article intro"></article>
+        <header>
+          <h2><a href="/articles/SSH%20port%20forwarding%20when%20AllowTCPForwarding%20is%20disabled/">SSH port forwarding when port fowarding is disabled with socat and nc</a></h2>
+          <div class="date"><span>07. June 2015</span></div>
+          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
+          </p>
+        </header>
+        <section class="content"><h1 id="the-problem">The&nbsp;Problem</h1>
+<p>You have a server you can <span class="caps">SSH</span> to. For whatever reason AllowTCPPortForwarding
+is disabled. You need to forward a port from it to your local&nbsp;machine.</p>
+<p>If it’s any sort of standard machine, then it probably has <code>netcat</code>. It’s less
+likely to have the far more powerful <code>socat</code> - which we’ll only need&nbsp;locally.</p>
+<p>This tiny tip servers two lessons: (1) disabling <span class="caps">SSH</span> port forwarding is not a
+serious security measure, and far more of an anoyance. And (2) since it’s pretty
+likely you still need to do whatever job you need to do, it would be nice to
+have a 1-liner which will just forward the port for&nbsp;you</p>
+<h1 id="the-solution">The&nbsp;Solution</h1>
+<pre><code>socat TCP-LISTEN:&lt;local port&gt;,reuseaddr,fork &quot;EXEC:ssh &lt;server&gt; nc localhost &lt;remote port&gt;&quot;
+</code></pre><p>It’s kind of obvious if you know socat well, but half the battle is simply
+knowing it’s&nbsp;possible.</p>
+<p>Obviously you can change localhost to also be a remote server. And
+this is really handy if you want to do debugging since socat can echo all
+data to the console for you if you&nbsp;want.</p>
+<h1 id="the-lesson">The&nbsp;Lesson</h1>
+<p>As I said at the start: if you have standard tools installed, or if your users
+can upload new tools (which, with shell access they can), and if you don’t have
+firewall rules or cgroups limitations on those accounts, then stuff like
+disabled port forwards <em>is not a security measure</em>.</p>
 
         </section>
         <article class="article intro"></article>
@@ -401,33 +534,6 @@ mv myscript.conf.d myscript.conf
 <p>Instead I’ll cover a few tweaks I had to do to get it running the way I wanted. To avoid being truly confusing, all the paths referenced here are relative to the site you create by running <code>wintersmith new &lt;your site dir here&gt;</code></p>
 
           <p class="more"><a href="/articles/Wintersmithing/">more</a></p>
-        </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/Quickly%20configuring%20modelines/">Untitled</a></h2>
-          <div class="date"><span>01. January 1970</span></div>
-          <p class="author"><span class="author"></span>
-          </p>
-        </header>
-        <section class="content"><h1 id="quickly-configuring-modelines-">Quickly configuring&nbsp;modelines?</h1>
-<p>Something hopefully no one should ever have to do in the far distant future,
-but since I insist on using old-hardware till it drops, it still comes&nbsp;up.</p>
-<p>Working from an <span class="caps">SSH</span> console on an XBMC box, I was trying to tune in an elusive
-1366x768 modeline for an old plasma&nbsp;TV.</p>
-<p>The best way to do it is with xrandr these days in a <code>~/.xprofile</code> script which
-is loaded on boot&nbsp;up.</p>
-<p>To quickly go through modelines I used the following shell&nbsp;script:</p>
-<pre><code>#!/bin/bash
-xrandr -d :0 --output VGA-0 --mode &quot;1024x768&quot;
-xrandr -d :0 --delmode VGA-0 &quot;1360x768&quot;
-xrandr -d :0 --rmmode &quot;1360x768&quot;
-xrandr -d :0 --newmode &quot;1360x768&quot; $@
-xrandr -d :0 --addmode VGA-0 &quot;1360x768&quot;
-xrandr -d :0 --output VGA-0 --mode &quot;1360x768&quot;
-</code></pre><p>Simply passing in a modeline when running it causes that modeline to be set and
-applied to the relevant output (<span class="caps">VGA</span>-0) in my&nbsp;case.</p>
-<p>i.e. <code>./tryout 84.750 1366 1480 1568 1800 768 769 776 800 -hsync +vsync</code></p>
-
         </section>
       </div>
     </div>

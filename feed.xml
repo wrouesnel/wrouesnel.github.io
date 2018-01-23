@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>wrouesnel_blog</title>
-    <atom:link href="http://localhost:8080/feed.xml" rel="self" type="application/rss+xml"></atom:link>
-    <link>http://localhost:8080</link>
+    <atom:link href="http://blog.wrouesnel.com/feed.xml" rel="self" type="application/rss+xml"></atom:link>
+    <link>http://blog.wrouesnel.com</link>
     <description>negating information entropy</description>
     <pubDate>Tue, 23 Jan 2018 23:20:00 +1100</pubDate>
     <generator>Wintersmith - https://github.com/jnordberg/wintersmith</generator>
     <language>en</language>
     <item>
       <title>S4-i9505 in 2018</title>
-      <link>http://localhost:8080/articles/S4-i9505%20in%202018/</link>
+      <link>http://blog.wrouesnel.com/articles/S4-i9505%20in%202018/</link>
       <pubDate>Tue, 23 Jan 2018 23:20:00 +1100</pubDate>
-      <guid isPermaLink="true">http://localhost:8080/articles/S4-i9505%20in%202018/</guid>
+      <guid isPermaLink="true">http://blog.wrouesnel.com/articles/S4-i9505%20in%202018/</guid>
       <author></author>
       <description>&lt;p&gt;Some notes on running a Samsung Galaxy S4 i9505 in Australia in 2018&lt;/p&gt;
 &lt;p&gt;My first high end phone, still perfectly capable of everything I need from a
@@ -36,9 +36,9 @@ appear broken.&lt;/p&gt;
     </item>
     <item>
       <title>Structuring my Go projects</title>
-      <link>http://localhost:8080/articles/Structuring%20my%20Go%20Projects/</link>
+      <link>http://blog.wrouesnel.com/articles/Structuring%20my%20Go%20Projects/</link>
       <pubDate>Thu, 21 Dec 2017 21:52:00 +1100</pubDate>
-      <guid isPermaLink="true">http://localhost:8080/articles/Structuring%20my%20Go%20Projects/</guid>
+      <guid isPermaLink="true">http://blog.wrouesnel.com/articles/Structuring%20my%20Go%20Projects/</guid>
       <author></author>
       <description>&lt;p&gt;Recently I’ve been maintaining a Github repository to serve as a generic
 template for my Golang projects, and its been working rather well for me.&lt;/p&gt;
@@ -96,10 +96,139 @@ them in the go-binary etc.)&lt;/p&gt;
 </description>
     </item>
     <item>
+      <title>Totally static Go builds</title>
+      <link>http://blog.wrouesnel.com/articles/Totally%20static%20Go%20builds/</link>
+      <pubDate>Sat, 12 Mar 2016 22:23:00 +1100</pubDate>
+      <guid isPermaLink="true">http://blog.wrouesnel.com/articles/Totally%20static%20Go%20builds/</guid>
+      <author></author>
+      <description>&lt;p&gt;I wouldn’t make a post on my blog just so I don’t have to keep googling something
+would I? Of course I would. It’s like…95% of the reason I keep this.&lt;/p&gt;
+&lt;p&gt;Totally static go builds - these are &lt;em&gt;great&lt;/em&gt; for running in Docker containers.
+The important part is the command line to create them - it’s varied a bit, but
+the most thorough I’ve found is this (see this 
+&lt;a href=&quot;https://github.com/golang/go/issues/9344&quot;&gt;Github Issue&lt;/a&gt;):&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;CGO_ENABLED=0 GOOS=linux go build -a -ldflags &lt;span class=&quot;string&quot;&gt;'-extldflags &quot;-static&quot;'&lt;/span&gt; .
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This will create an “as static as possible” binary - beware linking in things
+which want glibc, since pluggable name resolvers will be a problem (which you
+can workaround in Docker quite well, but that’s another question).&lt;/p&gt;
+</description>
+    </item>
+    <item>
+      <title>Quickly configuring modelines?</title>
+      <link>http://blog.wrouesnel.com/articles/Quickly%20configuring%20modelines/</link>
+      <pubDate>Sat, 12 Mar 2016 22:22:00 +1100</pubDate>
+      <guid isPermaLink="true">http://blog.wrouesnel.com/articles/Quickly%20configuring%20modelines/</guid>
+      <author></author>
+      <description>&lt;h1 id=&quot;quickly-configuring-modelines-&quot;&gt;Quickly configuring modelines?&lt;/h1&gt;
+&lt;p&gt;Something hopefully no one should ever have to do in the far distant future,
+but since I insist on using old-hardware till it drops, it still comes up.&lt;/p&gt;
+&lt;p&gt;Working from an SSH console on an XBMC box, I was trying to tune in an elusive
+1366x768 modeline for an old plasma TV.&lt;/p&gt;
+&lt;p&gt;The best way to do it is with xrandr these days in a &lt;code&gt;~/.xprofile&lt;/code&gt; script which
+is loaded on boot up.&lt;/p&gt;
+&lt;p&gt;To quickly go through modelines I used the following shell script:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#!/bin/bash
+xrandr -d :0 --output VGA-0 --mode &amp;quot;1024x768&amp;quot;
+xrandr -d :0 --delmode VGA-0 &amp;quot;1360x768&amp;quot;
+xrandr -d :0 --rmmode &amp;quot;1360x768&amp;quot;
+xrandr -d :0 --newmode &amp;quot;1360x768&amp;quot; $@
+xrandr -d :0 --addmode VGA-0 &amp;quot;1360x768&amp;quot;
+xrandr -d :0 --output VGA-0 --mode &amp;quot;1360x768&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Simply passing in a modeline when running it causes that modeline to be set and
+applied to the relevant output (VGA-0) in my case.&lt;/p&gt;
+&lt;p&gt;i.e. &lt;code&gt;./tryout 84.750 1366 1480 1568 1800 768 769 776 800 -hsync +vsync&lt;/code&gt;&lt;/p&gt;
+</description>
+    </item>
+    <item>
+      <title>Installing the latest docker release</title>
+      <link>http://blog.wrouesnel.com/articles/Installing%20the%20latest%20Docker%20release/</link>
+      <pubDate>Sat, 12 Sep 2015 03:54:00 +1000</pubDate>
+      <guid isPermaLink="true">http://blog.wrouesnel.com/articles/Installing%20the%20latest%20Docker%20release/</guid>
+      <author></author>
+      <description>&lt;p&gt;Somehow the installation instructions for Docker never work for me and the
+website is &lt;em&gt;surprisingly&lt;/em&gt; cagey about the manual process.&lt;/p&gt;
+&lt;p&gt;It works perfectly well if you just grab the relevant bits of that script and
+run them manually, but usually fails if you let it be a bit too magical.&lt;/p&gt;
+&lt;p&gt;To be fair, I probably have issues due to the mismatch of LSB release since I
+run Mint. Still though.&lt;/p&gt;
+&lt;p&gt;So here’s the commands for Ubuntu:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+$ echo deb https://apt.dockerproject.org/repo ubuntu-vivid main &amp;gt; /etc/apt/sources.list.d/docker.list
+$ apt-get update &amp;amp;&amp;amp; apt-get install -y docker-engine
+&lt;/code&gt;&lt;/pre&gt;</description>
+    </item>
+    <item>
+      <title>Using the Go playground locally</title>
+      <link>http://blog.wrouesnel.com/articles/Using%20the%20Go%20playground%20locally/</link>
+      <pubDate>Sun, 09  Aug 2015 03:21:00 +1000</pubDate>
+      <guid isPermaLink="true">http://blog.wrouesnel.com/articles/Using%20the%20Go%20playground%20locally/</guid>
+      <author></author>
+      <description>&lt;h1 id=&quot;summary&quot;&gt;Summary&lt;/h1&gt;
+&lt;p&gt;I modified Rocky Bernsteins go-play to compile with go-assetfs and run from a
+single executable. &lt;a href=&quot;https://github.com/wrouesnel/go-play&quot;&gt;Get it here!&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&quot;why-and-how&quot;&gt;Why and How&lt;/h1&gt;
+&lt;p&gt;iPython is one of the things I love best about Python. In a dynamically typed
+language its a huge benefit to be able to quickly and easily paste in chunks of
+code and investigate what the actual output would be or what an error situation
+would look like.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://golang.org&quot;&gt;Go&lt;/a&gt; is not dynamically typed, but many of the same issues
+tend to apply - when errors rise they can be tricky to introspect without diving
+through the code, and sometimes the syntax or results of a function call aren’t
+obvious.&lt;/p&gt;
+&lt;p&gt;As a learning tool, Go provides the &lt;a href=&quot;http://play.golang.org&quot;&gt;Go Playground&lt;/a&gt; -
+a web service which compiles and runs snippets of Go code within a sandbox,
+which has proven a huge boon to the community for sharing and testing solutions
+(its very popular on Stack Overflow).&lt;/p&gt;
+&lt;p&gt;The public Go playground is necessariy limited - and it would be nice to be able
+to use Go in the same way clientside, or just without internet access.&lt;/p&gt;
+&lt;p&gt;Fortunately Rocky Bernstein pulled together an unrestricted copy of the Go
+play ground which runs as a client-side HTML5 app. Unlike the web playground,
+this allows unrestricted Go execution on your PC and full testing of things as
+they would work locally. The Github export is found &lt;a href=&quot;https://github.com/rocky/go-play&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The one problem I had with this was that this version still exposed dependencies
+on the location of source files outside the executable - which for a tiny tool
+was kind of annoying. Fortunately this has been solved in Go for a long time -
+and a little fun with &lt;a href=&quot;https://github.com/elazarl/go-bindata-assetfs&quot;&gt;go-bindata-assetfs&lt;/a&gt;
+yielded my own version which once built runs completely locally.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://github.com/wrouesnel/go-play&quot;&gt;Get it here&lt;/a&gt;. It’s fully go-gettable too
+so &lt;code&gt;go get github.com/wrouesnel/go-play&lt;/code&gt; will work too.&lt;/p&gt;
+</description>
+    </item>
+    <item>
+      <title>SSH port forwarding when port fowarding is disabled with socat and nc</title>
+      <link>http://blog.wrouesnel.com/articles/SSH%20port%20forwarding%20when%20AllowTCPForwarding%20is%20disabled/</link>
+      <pubDate>Sun, 07 Jun 2015 12:07:00 +1000</pubDate>
+      <guid isPermaLink="true">http://blog.wrouesnel.com/articles/SSH%20port%20forwarding%20when%20AllowTCPForwarding%20is%20disabled/</guid>
+      <author></author>
+      <description>&lt;h1 id=&quot;the-problem&quot;&gt;The Problem&lt;/h1&gt;
+&lt;p&gt;You have a server you can SSH to. For whatever reason AllowTCPPortForwarding
+is disabled. You need to forward a port from it to your local machine.&lt;/p&gt;
+&lt;p&gt;If it’s any sort of standard machine, then it probably has &lt;code&gt;netcat&lt;/code&gt;. It’s less
+likely to have the far more powerful &lt;code&gt;socat&lt;/code&gt; - which we’ll only need locally.&lt;/p&gt;
+&lt;p&gt;This tiny tip servers two lessons: (1) disabling SSH port forwarding is not a
+serious security measure, and far more of an anoyance. And (2) since it’s pretty
+likely you still need to do whatever job you need to do, it would be nice to
+have a 1-liner which will just forward the port for you&lt;/p&gt;
+&lt;h1 id=&quot;the-solution&quot;&gt;The Solution&lt;/h1&gt;
+&lt;pre&gt;&lt;code&gt;socat TCP-LISTEN:&amp;lt;local port&amp;gt;,reuseaddr,fork &amp;quot;EXEC:ssh &amp;lt;server&amp;gt; nc localhost &amp;lt;remote port&amp;gt;&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;It’s kind of obvious if you know socat well, but half the battle is simply
+knowing it’s possible.&lt;/p&gt;
+&lt;p&gt;Obviously you can change localhost to also be a remote server. And
+this is really handy if you want to do debugging since socat can echo all
+data to the console for you if you want.&lt;/p&gt;
+&lt;h1 id=&quot;the-lesson&quot;&gt;The Lesson&lt;/h1&gt;
+&lt;p&gt;As I said at the start: if you have standard tools installed, or if your users
+can upload new tools (which, with shell access they can), and if you don’t have
+firewall rules or cgroups limitations on those accounts, then stuff like
+disabled port forwards &lt;em&gt;is not a security measure&lt;/em&gt;.&lt;/p&gt;
+</description>
+    </item>
+    <item>
       <title>bup - towards the perfect backup</title>
-      <link>http://localhost:8080/articles/bup%20-%20towards%20the%20perfect%20backup/</link>
+      <link>http://blog.wrouesnel.com/articles/bup%20-%20towards%20the%20perfect%20backup/</link>
       <pubDate>Sun, 22 Jun 2014 07:45:00 +1000</pubDate>
-      <guid isPermaLink="true">http://localhost:8080/articles/bup%20-%20towards%20the%20perfect%20backup/</guid>
+      <guid isPermaLink="true">http://blog.wrouesnel.com/articles/bup%20-%20towards%20the%20perfect%20backup/</guid>
       <author></author>
       <description>&lt;p&gt;Since I discovered it, I’ve been in love with the concept behind &lt;a href=&quot;https://github.com/bup/bup&quot;&gt;bup&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;bup appeals to my sense of efficiency in taking backups: backups should backup
@@ -203,9 +332,9 @@ help a lot.&lt;/p&gt;
     </item>
     <item>
       <title>Quick note - uninstalling r8618-dkms</title>
-      <link>http://localhost:8080/articles/Uninstalling%20r8168-dkms/</link>
+      <link>http://blog.wrouesnel.com/articles/Uninstalling%20r8168-dkms/</link>
       <pubDate>Thu, 30 Jan 2014 11:06:00 +1100</pubDate>
-      <guid isPermaLink="true">http://localhost:8080/articles/Uninstalling%20r8168-dkms/</guid>
+      <guid isPermaLink="true">http://blog.wrouesnel.com/articles/Uninstalling%20r8168-dkms/</guid>
       <author></author>
       <description>&lt;p&gt;This is a quick note on something I encountered while trying to work out why my Realtek NICs are so finicky about connecting and staying connected at gigabit speeds when running Linux.&lt;/p&gt;
 &lt;p&gt;The current hypothesis is that the &lt;code&gt;r8168&lt;/code&gt; driver isn’t helping very much. So I uninstalled it - and ran into two problems.&lt;/p&gt;
@@ -220,9 +349,9 @@ help a lot.&lt;/p&gt;
     </item>
     <item>
       <title>Running Gnome Tracker on a Server</title>
-      <link>http://localhost:8080/articles/Running%20Gnome%20Tracker%20on%20a%20Server/</link>
+      <link>http://blog.wrouesnel.com/articles/Running%20Gnome%20Tracker%20on%20a%20Server/</link>
       <pubDate>Sat, 25 Jan 2014 14:40:00 +1100</pubDate>
-      <guid isPermaLink="true">http://localhost:8080/articles/Running%20Gnome%20Tracker%20on%20a%20Server/</guid>
+      <guid isPermaLink="true">http://blog.wrouesnel.com/articles/Running%20Gnome%20Tracker%20on%20a%20Server/</guid>
       <author></author>
       <description>&lt;p&gt;In a passing comment it was suggested to me that it would be really great if the home fileserver offered some type of web-interface to find things. We’ve been aggregating downloaded files there for a while, and there’s been attempts made at categorization but this all really falls apart when you wonder “what does ‘productivity’ mean? And does this go under ‘Linux’ or some other thing?”&lt;/p&gt;
 &lt;p&gt;Since lately I’ve been wanting to get desktop search working on my actual desktops, via Gnome’s Tracker project and it’s tie-in to Nautilus and Nemo (possibly the subject of a future blog), it seemed logical to run it on the fileserver as an indexer for our shared directories - and then to tie some kind of web ui to that.&lt;/p&gt;
@@ -283,9 +412,9 @@ end script
     </item>
     <item>
       <title>Migrating to Gmail</title>
-      <link>http://localhost:8080/articles/Migrating%20to%20Gmail/</link>
+      <link>http://blog.wrouesnel.com/articles/Migrating%20to%20Gmail/</link>
       <pubDate>Tue, 12 Nov 2013 12:29:00 +1100</pubDate>
-      <guid isPermaLink="true">http://localhost:8080/articles/Migrating%20to%20Gmail/</guid>
+      <guid isPermaLink="true">http://blog.wrouesnel.com/articles/Migrating%20to%20Gmail/</guid>
       <author></author>
       <description>&lt;h1 id=&quot;why&quot;&gt;Why&lt;/h1&gt;
 &lt;p&gt;In a stitch of irony given my prior articles wrestling with a decent IDLE daemon for use with getmail, I’m faced with a new problem in figuring out the best way to migrate all my existing, locally hosted email to Gmail.&lt;/p&gt;
@@ -342,9 +471,9 @@ subscribedonly = no
     </item>
     <item>
       <title>A Better Getmail IDLE client</title>
-      <link>http://localhost:8080/articles/A%20better%20Getmail%20IDLE%20client/</link>
+      <link>http://blog.wrouesnel.com/articles/A%20better%20Getmail%20IDLE%20client/</link>
       <pubDate>Thu, 10 Oct 2013 04:36:00 +1100</pubDate>
-      <guid isPermaLink="true">http://localhost:8080/articles/A%20better%20Getmail%20IDLE%20client/</guid>
+      <guid isPermaLink="true">http://blog.wrouesnel.com/articles/A%20better%20Getmail%20IDLE%20client/</guid>
       <author></author>
       <description>&lt;h1 id=&quot;updates&quot;&gt;Updates&lt;/h1&gt;
 &lt;p&gt;(2013-10-15) And like that I’ve broken it again. Fixing the crash on IMAP disconnect actually broke IMAP disconnect handling.
@@ -375,9 +504,9 @@ The problem here is that IMAPClient’s exceptions are not documented at all, so
     </item>
     <item>
       <title>A GetMail IDLE daemon script</title>
-      <link>http://localhost:8080/articles/Getmail%20IDLE%20Client/</link>
+      <link>http://blog.wrouesnel.com/articles/Getmail%20IDLE%20Client/</link>
       <pubDate>Sat, 05 Oct 2013 03:07:00 +1000</pubDate>
-      <guid isPermaLink="true">http://localhost:8080/articles/Getmail%20IDLE%20Client/</guid>
+      <guid isPermaLink="true">http://blog.wrouesnel.com/articles/Getmail%20IDLE%20Client/</guid>
       <author></author>
       <description>&lt;h1 id=&quot;updates&quot;&gt;Updates&lt;/h1&gt;
 &lt;p&gt;Although the script in this article works, I’m having some problems with it after long-running sessions. The symptom seems to be that imaplib2 just stops processing IDLE session responses - it terminates and recreates them just fine, but no new mail is ever detected and thus getmail is never triggered. With 12 or so hours of usage out of the script, this seems odd as hell and probably like an imaplib2 bug.&lt;/p&gt;
@@ -427,9 +556,9 @@ optional arguments:
     </item>
     <item>
       <title>Setting up sshttp</title>
-      <link>http://localhost:8080/articles/Setting%20up%20sshttp/</link>
+      <link>http://blog.wrouesnel.com/articles/Setting%20up%20sshttp/</link>
       <pubDate>Tue, 27  Aug 2013 00:43:00 +1000</pubDate>
-      <guid isPermaLink="true">http://localhost:8080/articles/Setting%20up%20sshttp/</guid>
+      <guid isPermaLink="true">http://blog.wrouesnel.com/articles/Setting%20up%20sshttp/</guid>
       <author></author>
       <description>&lt;p&gt;When I was travelling Europe I found some surprisingly restricted wi-fi hotspots in hotels. This was annoying because I use SSH to upload photos back home from my phone, but having not setup any tunneling helpers I just had to wait till I found a better one.&lt;/p&gt;
 &lt;p&gt;There are a number of solutions to SSH tunneling, but the main thing I wanted to do was implement something which would let me run several fallbacks at once. Enter &lt;a href=&quot;https://github.com/stealth/sshttp&quot;&gt;sshttp&lt;/a&gt;.&lt;/p&gt;
@@ -566,9 +695,9 @@ LOG_PATH=/var/&lt;span class=&quot;built_in&quot;&gt;log&lt;/span&gt;/sshttp.log
     </item>
     <item>
       <title>Upstart script not recognized</title>
-      <link>http://localhost:8080/articles/Upstart%20troubles/</link>
+      <link>http://blog.wrouesnel.com/articles/Upstart%20troubles/</link>
       <pubDate>Mon, 26  Aug 2013 18:49:00 +1000</pubDate>
-      <guid isPermaLink="true">http://localhost:8080/articles/Upstart%20troubles/</guid>
+      <guid isPermaLink="true">http://blog.wrouesnel.com/articles/Upstart%20troubles/</guid>
       <author></author>
       <description>&lt;p&gt;I frequently find myself writing upstart scripts which checkout ok, but for some reason don’t get detected by the upstart daemon in the init directory, so when I run &lt;code&gt;start myscript&lt;/code&gt; I get &lt;code&gt;unknown job&lt;/code&gt; back. Some experimentation seems to indicate that the problem is I used gedit over GVFS SFTP to author a lot of these scripts.&lt;/p&gt;
 &lt;p&gt;For something like &lt;code&gt;myscript.conf&lt;/code&gt;, I find the following fixes this problem:&lt;/p&gt;
@@ -583,9 +712,9 @@ mv myscript.conf.d myscript.conf
     </item>
     <item>
       <title>Wintersmithing</title>
-      <link>http://localhost:8080/articles/Wintersmithing/</link>
+      <link>http://blog.wrouesnel.com/articles/Wintersmithing/</link>
       <pubDate>Sun, 18  Aug 2013 02:33:00 +1000</pubDate>
-      <guid isPermaLink="true">http://localhost:8080/articles/Wintersmithing/</guid>
+      <guid isPermaLink="true">http://blog.wrouesnel.com/articles/Wintersmithing/</guid>
       <author></author>
       <description>&lt;h1 id=&quot;wintersmith&quot;&gt;Wintersmith&lt;/h1&gt;
 &lt;p&gt;How to setup and use Wintersmith is covered pretty thoroughly elsewhere on the net, (namely the &lt;a href=&quot;http://wintersmith.io/&quot;&gt;wintersmith homepage&lt;/a&gt;.&lt;/p&gt;
@@ -788,35 +917,9 @@ publish: draft
 &lt;p&gt;I’ve been meaning to blog for sometime to have somewhere to put the things I do or random bits of knowledge I pick up so they might help someone else, but for one reason or another most blogging engines never did it for me.&lt;/p&gt;
 &lt;p&gt;I’ve never been much of a fan of managed services they lead to sprawling personal “infrastructure” - I’ll be happy when my entire digital life can be backed up by just making a copy of my home directory.&lt;/p&gt;
 &lt;p&gt;So for blogging I’ve not much cared for the services out there or their focus. I don’t particularly want to manage a heavyweight WordPress or other type of CMS installation on a web-server just for a personal blog, since that requires a lot of careful attention to security, patching, updates and I simply don’t need the features. &lt;/p&gt;
-&lt;p&gt;At the same time services like &lt;a href=&quot;http://localhost:8080/articles/Wintersmithing/www.tumblr.com&quot;&gt;tumblr&lt;/a&gt; never quite seemed &lt;em&gt;for&lt;/em&gt; me - it skirts the line between microblogging and blogging and it’s relationship with markdown and code didn’t gel for me. A deluge of social networking features is also not what I wanted.&lt;/p&gt;
+&lt;p&gt;At the same time services like &lt;a href=&quot;http://blog.wrouesnel.com/articles/Wintersmithing/www.tumblr.com&quot;&gt;tumblr&lt;/a&gt; never quite seemed &lt;em&gt;for&lt;/em&gt; me - it skirts the line between microblogging and blogging and it’s relationship with markdown and code didn’t gel for me. A deluge of social networking features is also not what I wanted.&lt;/p&gt;
 &lt;p&gt;With Github pages offering free static site hosting, I initially looked at Jekyll as an SSG for putting something together. But Jekyll is written in Ruby, and at the moment I’m on a node.js kick so I really wanted something in that direction. Hence Wintersmith - simple, easy to use, and written in something that I’m inclinded to hack-on but with enough features out of the box (code highlighting in particular) to not feel onerous.&lt;/p&gt;
 &lt;p&gt;So far I’m really liking the static site model - it’s simple, secure and easy to store, manage and keep in a nice neat git repository. Guess I’ll see how it goes.&lt;/p&gt;
-</description>
-    </item>
-    <item>
-      <title>Untitled</title>
-      <link>http://localhost:8080/articles/Quickly%20configuring%20modelines/</link>
-      <pubDate>Thu, 01 Jan 1970 10:00:00 +1000</pubDate>
-      <guid isPermaLink="true">http://localhost:8080/articles/Quickly%20configuring%20modelines/</guid>
-      <author></author>
-      <description>&lt;h1 id=&quot;quickly-configuring-modelines-&quot;&gt;Quickly configuring modelines?&lt;/h1&gt;
-&lt;p&gt;Something hopefully no one should ever have to do in the far distant future,
-but since I insist on using old-hardware till it drops, it still comes up.&lt;/p&gt;
-&lt;p&gt;Working from an SSH console on an XBMC box, I was trying to tune in an elusive
-1366x768 modeline for an old plasma TV.&lt;/p&gt;
-&lt;p&gt;The best way to do it is with xrandr these days in a &lt;code&gt;~/.xprofile&lt;/code&gt; script which
-is loaded on boot up.&lt;/p&gt;
-&lt;p&gt;To quickly go through modelines I used the following shell script:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;#!/bin/bash
-xrandr -d :0 --output VGA-0 --mode &amp;quot;1024x768&amp;quot;
-xrandr -d :0 --delmode VGA-0 &amp;quot;1360x768&amp;quot;
-xrandr -d :0 --rmmode &amp;quot;1360x768&amp;quot;
-xrandr -d :0 --newmode &amp;quot;1360x768&amp;quot; $@
-xrandr -d :0 --addmode VGA-0 &amp;quot;1360x768&amp;quot;
-xrandr -d :0 --output VGA-0 --mode &amp;quot;1360x768&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Simply passing in a modeline when running it causes that modeline to be set and
-applied to the relevant output (VGA-0) in my case.&lt;/p&gt;
-&lt;p&gt;i.e. &lt;code&gt;./tryout 84.750 1366 1480 1568 1800 768 769 776 800 -hsync +vsync&lt;/code&gt;&lt;/p&gt;
 </description>
     </item>
   </channel>

@@ -14,7 +14,7 @@
       ga('create', 'UA-43235370-1', 'wrouesnel.github.io');
       ga('send', 'pageview');
     </script>
-    <title>S4-i9505 in 2018 - wrouesnel_blog
+    <title>Totally static Go builds - wrouesnel_blog
     </title>
     <link rel="alternate" href="http://blog.wrouesnel.com/feed.xml" type="application/rss+xml" title="negating information entropy">
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic|Anonymous+Pro:400,700,400italic,700italic|Merriweather:400,700,300">
@@ -23,7 +23,7 @@
   <body class="article-detail">
     <header class="header">
       <div class="content-wrap">
-        <h1>S4-i9505 in 2018</h1>
+        <h1>Totally static Go builds</h1>
         <p class="author">Written by <span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
         </p>
       </div>
@@ -31,24 +31,17 @@
     <div id="content">
       <div class="content-wrap">
         <article class="article">
-          <section class="content"><p>Some notes on running a Samsung Galaxy S4 i9505 in Australia in&nbsp;2018</p>
-<p>My first high end phone, still perfectly capable of everything I need from a
-smart phone and now dirt cheap on ebay so I’m basically going to keep buying
-them till there’s no more to be had (or someone releases a Spectre-immune <span class="caps">CPU</span>
-phone I guess&nbsp;now).</p>
-<p>Baseband: <span class="caps">XXUGNG8</span>
-I upgraded the baseband a bunch of times including to some alleged Telstra OTA
-packages, and found I lost wifi. The actual modem and APN-HLOS don’t seem to
-matter much but…the XXUGNG8 bootloader and related files are vitally
-important to getting sound to&nbsp;work.</p>
-<p><span class="caps">OS</span>: Lineage OS
-Loved Cyanogenmod, like seeing it continued. There’s a patch to the SELinux
-config needed on newer android to allow the proximity sensor to calibrate
-properly - the symptom is an apparent freeze when making/receiving calls and
-its to do with SELinux only allowing the phone to use the default prox-sensor
-thresholds - which if your phone meets them, great - if not - then it will
-appear&nbsp;broken.</p>
-<p>I’m hoping to get this patched in the upstream <a href="https://review.lineageos.org/#/c/201533/">soon</a>.</p>
+          <section class="content"><p>I wouldn’t make a post on my blog just so I don’t have to keep googling something
+would I? Of course I would. It’s like…95% of the reason I keep&nbsp;this.</p>
+<p>Totally static go builds - these are <em>great</em> for running in Docker containers.
+The important part is the command line to create them - it’s varied a bit, but
+the most thorough I’ve found is this (see this 
+<a href="https://github.com/golang/go/issues/9344">Github Issue</a>):</p>
+<pre><code class="lang-bash">CGO_ENABLED=0 GOOS=linux go build -a -ldflags <span class="string">'-extldflags "-static"'</span> .
+</code></pre>
+<p>This will create an “as static as possible” binary - beware linking in things
+which want glibc, since pluggable name resolvers will be a problem (which you
+can workaround in Docker quite well, but that’s another&nbsp;question).</p>
 </section>
         </article>
       </div>
