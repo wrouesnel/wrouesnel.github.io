@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+    <script type="text/javascript">
+      // google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-43235370-1', 'wrouesnel.github.io');
+      ga('send', 'pageview');
+    </script>
+    <title>Structuring my Go projects - wrouesnel_blog
+    </title>
+    <link rel="alternate" href="http://localhost:8080/feed.xml" type="application/rss+xml" title="negating information entropy">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic|Anonymous+Pro:400,700,400italic,700italic|Merriweather:400,700,300">
+    <link rel="stylesheet" href="/css/main.css">
+  </head>
+  <body class="article-detail">
+    <header class="header">
+      <div class="content-wrap">
+        <h1>Structuring my Go projects</h1>
+        <p class="author">Written by <span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
+        </p>
+      </div>
+    </header>
+    <div id="content">
+      <div class="content-wrap">
+        <article class="article">
+          <section class="content"><p>Recently I’ve been maintaining a Github repository to serve as a generic
+template for my Golang projects, and its been working rather well for&nbsp;me.</p>
+<p>The repository is here: <a href="https://github.com/wrouesnel/self-contained-go-project">Self-contained Go&nbsp;Project</a></p>
+<p>The basic idea is that using this template, you can setup a Go project with
+vendored dependencies not just for the main project but also for every tool
+used in building and linting it (with the exception of <code>make</code>, <code>git</code> and a 
+working Golang&nbsp;install). </p>
+<pre><code class="lang-bash">go get &lt;my project&gt;
+<span class="built_in">cd</span> <span class="variable">$<span class="caps">GOPATH</span></span>/src/&lt;my project&gt;
+make
+</code></pre>
+<p>does a production&nbsp;build.</p>
+<h1 id="how-to-use-it">How to Use&nbsp;It</h1>
+<p>Out of the box (i.e. <code>git clone https://github.com/wrouesnel/self-contained-go-project.git</code>)
+on a Linux machine it should be all setup to go. I’ve made some effort to try
+and remove Linux specific things from it, but since I don’t run Mac <span class="caps">OS</span> or
+Windows for Go development it’s probably not working too well&nbsp;there.</p>
+<p>Essentially, it’ll build multi-platform, <span class="caps">CGO</span>-less binaries for any <code>main</code>
+package you place in a folder underneath the <code>cmd</code> directory. Running <code>make binary</code>
+will build all current commands for your current platform and symlink them into
+the root folder, while running <code>make release</code> will build all binaries and then
+create tarballs with the name and version in the <code>release</code> directory.</p>
+<p>It also includes bevy of other <span class="caps">CI</span>-friendly commands - namely <code>make style</code> which
+checks for <code>gofmt</code> and <code>goimports</code> formatting and <code>make lint</code> which runs 
+<a href="https://github.com/alecthomas/gometalinter">gometalinter</a> against the entire&nbsp;project.</p>
+<h1 id="philosophy">Philosophy</h1>
+<p>Just looking at the commands, the main thing accomplished is a lot of use of
+<code>make</code>. It’s practically used for ergonomics more then utility to some level
+since <code>make</code> is a familiar “build whatever this is” command in the Unix&nbsp;world.</p>
+<p>But, importantly, <code>make</code> is used <em>correctly</em> - build dependencies are expressed
+and managed in a form it understands so it only rebuilds as&nbsp;necessary.</p>
+<p>But there is more important element, and that is not just that there is a 
+Makefile but that the repository for the project, through <code>govendor</code>ing includes
+not just the code but also the linting and checking tools needed to build it,
+and a mechanism to update them&nbsp;all.</p>
+<p>Under the <code>tools</code> directory we have a secondary <code>Makefile</code> which is called from
+the top-level and is reposible for managing the tools. By running <code>make update</code>
+here we can <code>go get</code> a new version of <code>gometalinter</code>, extract the list of tools
+it runs, then automatically have them updated and installed inside the source
+directory and made available to the top level <code>Makefile</code> to use to run <span class="caps">CI</span>&nbsp;tasks.</p>
+<p>This combines to make project management <em>extremely</em> ergonomic in my opinion,
+and avoids dragging a heavier tool like <code>Docker</code> into the mix (which often means
+some uncontrolled external&nbsp;dependencies).</p>
+<p>Basically: you check in everything your project needs to be built and run and
+tested into the one Git repository, because storage is cheap but your time is
+not and external dependencies can’t be trusted to always&nbsp;exist.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>It’s not the be all and end all - in build tooling there never is one, but I’m
+thusfar really happy with how this basic structure has turned out as I’ve
+evolved it and it’s proven relatively easy to extend when I need to (i.e.
+adding more testing levels, building web assets as well with npm and including
+them in the go-binary&nbsp;etc.)</p>
+</section>
+        </article>
+      </div>
+    </div>
+    <footer>
+      <div class="content-wrap">
+        <div class="nav"><a href="/">« Full blog</a></div>
+        <section class="about">
+        </section>
+        <section class="copy">
+          <p>&copy; 2018 Will Rouesnel &mdash; powered by&nbsp;<a href="https://github.com/jnordberg/wintersmith">Wintersmith</a>
+          </p>
+        </section>
+      </div>
+    </footer>
+  </body>
+</html>

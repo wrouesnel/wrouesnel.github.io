@@ -5,16 +5,103 @@
     <atom:link href="http://localhost:8080/feed.xml" rel="self" type="application/rss+xml"></atom:link>
     <link>http://localhost:8080</link>
     <description>negating information entropy</description>
-    <pubDate>Sun, 22 Jun 2014 07:45:00 +1000</pubDate>
+    <pubDate>Tue, 23 Jan 2018 23:20:00 +1100</pubDate>
     <generator>Wintersmith - https://github.com/jnordberg/wintersmith</generator>
     <language>en</language>
+    <item>
+      <title>S4-i9505 in 2018</title>
+      <link>http://localhost:8080/articles/S4-i9505%20in%202018/</link>
+      <pubDate>Tue, 23 Jan 2018 23:20:00 +1100</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/S4-i9505%20in%202018/</guid>
+      <author></author>
+      <description>&lt;p&gt;Some notes on running a Samsung Galaxy S4 i9505 in Australia in 2018&lt;/p&gt;
+&lt;p&gt;My first high end phone, still perfectly capable of everything I need from a
+smart phone and now dirt cheap on ebay so I’m basically going to keep buying
+them till there’s no more to be had (or someone releases a Spectre-immune CPU
+phone I guess now).&lt;/p&gt;
+&lt;p&gt;Baseband: XXUGNG8
+I upgraded the baseband a bunch of times including to some alleged Telstra OTA
+packages, and found I lost wifi. The actual modem and APN-HLOS don’t seem to
+matter much but…the XXUGNG8 bootloader and related files are vitally
+important to getting sound to work.&lt;/p&gt;
+&lt;p&gt;OS: Lineage OS
+Loved Cyanogenmod, like seeing it continued. There’s a patch to the SELinux
+config needed on newer android to allow the proximity sensor to calibrate
+properly - the symptom is an apparent freeze when making/receiving calls and
+its to do with SELinux only allowing the phone to use the default prox-sensor
+thresholds - which if your phone meets them, great - if not - then it will
+appear broken.&lt;/p&gt;
+&lt;p&gt;I’m hoping to get this patched in the upstream &lt;a href=&quot;https://review.lineageos.org/#/c/201533/&quot;&gt;soon&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    <item>
+      <title>Structuring my Go projects</title>
+      <link>http://localhost:8080/articles/Structuring%20my%20Go%20Projects/</link>
+      <pubDate>Thu, 21 Dec 2017 21:52:00 +1100</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/Structuring%20my%20Go%20Projects/</guid>
+      <author></author>
+      <description>&lt;p&gt;Recently I’ve been maintaining a Github repository to serve as a generic
+template for my Golang projects, and its been working rather well for me.&lt;/p&gt;
+&lt;p&gt;The repository is here: &lt;a href=&quot;https://github.com/wrouesnel/self-contained-go-project&quot;&gt;Self-contained Go Project&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The basic idea is that using this template, you can setup a Go project with
+vendored dependencies not just for the main project but also for every tool
+used in building and linting it (with the exception of &lt;code&gt;make&lt;/code&gt;, &lt;code&gt;git&lt;/code&gt; and a 
+working Golang install). &lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;go get &amp;lt;my project&amp;gt;
+&lt;span class=&quot;built_in&quot;&gt;cd&lt;/span&gt; &lt;span class=&quot;variable&quot;&gt;$GOPATH&lt;/span&gt;/src/&amp;lt;my project&amp;gt;
+make
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;does a production build.&lt;/p&gt;
+&lt;h1 id=&quot;how-to-use-it&quot;&gt;How to Use It&lt;/h1&gt;
+&lt;p&gt;Out of the box (i.e. &lt;code&gt;git clone https://github.com/wrouesnel/self-contained-go-project.git&lt;/code&gt;)
+on a Linux machine it should be all setup to go. I’ve made some effort to try
+and remove Linux specific things from it, but since I don’t run Mac OS or
+Windows for Go development it’s probably not working too well there.&lt;/p&gt;
+&lt;p&gt;Essentially, it’ll build multi-platform, CGO-less binaries for any &lt;code&gt;main&lt;/code&gt;
+package you place in a folder underneath the &lt;code&gt;cmd&lt;/code&gt; directory. Running &lt;code&gt;make binary&lt;/code&gt;
+will build all current commands for your current platform and symlink them into
+the root folder, while running &lt;code&gt;make release&lt;/code&gt; will build all binaries and then
+create tarballs with the name and version in the &lt;code&gt;release&lt;/code&gt; directory.&lt;/p&gt;
+&lt;p&gt;It also includes bevy of other CI-friendly commands - namely &lt;code&gt;make style&lt;/code&gt; which
+checks for &lt;code&gt;gofmt&lt;/code&gt; and &lt;code&gt;goimports&lt;/code&gt; formatting and &lt;code&gt;make lint&lt;/code&gt; which runs 
+&lt;a href=&quot;https://github.com/alecthomas/gometalinter&quot;&gt;gometalinter&lt;/a&gt; against the entire
+project.&lt;/p&gt;
+&lt;h1 id=&quot;philosophy&quot;&gt;Philosophy&lt;/h1&gt;
+&lt;p&gt;Just looking at the commands, the main thing accomplished is a lot of use of
+&lt;code&gt;make&lt;/code&gt;. It’s practically used for ergonomics more then utility to some level
+since &lt;code&gt;make&lt;/code&gt; is a familiar “build whatever this is” command in the Unix world.&lt;/p&gt;
+&lt;p&gt;But, importantly, &lt;code&gt;make&lt;/code&gt; is used &lt;em&gt;correctly&lt;/em&gt; - build dependencies are expressed
+and managed in a form it understands so it only rebuilds as necessary.&lt;/p&gt;
+&lt;p&gt;But there is more important element, and that is not just that there is a 
+Makefile but that the repository for the project, through &lt;code&gt;govendor&lt;/code&gt;ing includes
+not just the code but also the linting and checking tools needed to build it,
+and a mechanism to update them all.&lt;/p&gt;
+&lt;p&gt;Under the &lt;code&gt;tools&lt;/code&gt; directory we have a secondary &lt;code&gt;Makefile&lt;/code&gt; which is called from
+the top-level and is reposible for managing the tools. By running &lt;code&gt;make update&lt;/code&gt;
+here we can &lt;code&gt;go get&lt;/code&gt; a new version of &lt;code&gt;gometalinter&lt;/code&gt;, extract the list of tools
+it runs, then automatically have them updated and installed inside the source
+directory and made available to the top level &lt;code&gt;Makefile&lt;/code&gt; to use to run CI tasks.&lt;/p&gt;
+&lt;p&gt;This combines to make project management &lt;em&gt;extremely&lt;/em&gt; ergonomic in my opinion,
+and avoids dragging a heavier tool like &lt;code&gt;Docker&lt;/code&gt; into the mix (which often means
+some uncontrolled external dependencies).&lt;/p&gt;
+&lt;p&gt;Basically: you check in everything your project needs to be built and run and
+tested into the one Git repository, because storage is cheap but your time is
+not and external dependencies can’t be trusted to always exist.&lt;/p&gt;
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;It’s not the be all and end all - in build tooling there never is one, but I’m
+thusfar really happy with how this basic structure has turned out as I’ve
+evolved it and it’s proven relatively easy to extend when I need to (i.e.
+adding more testing levels, building web assets as well with npm and including
+them in the go-binary etc.)&lt;/p&gt;
+</description>
+    </item>
     <item>
       <title>bup - towards the perfect backup</title>
       <link>http://localhost:8080/articles/bup%20-%20towards%20the%20perfect%20backup/</link>
       <pubDate>Sun, 22 Jun 2014 07:45:00 +1000</pubDate>
       <guid isPermaLink="true">http://localhost:8080/articles/bup%20-%20towards%20the%20perfect%20backup/</guid>
       <author></author>
-      <description>&lt;p&gt;Since I discovered it, I&amp;#39;ve been in love with the concept behind &lt;a href=&quot;https://github.com/bup/bup&quot;&gt;bup&lt;/a&gt;.&lt;/p&gt;
+      <description>&lt;p&gt;Since I discovered it, I’ve been in love with the concept behind &lt;a href=&quot;https://github.com/bup/bup&quot;&gt;bup&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;bup appeals to my sense of efficiency in taking backups: backups should backup
 the absolute minimum amount of data so I can have the most versions, and then
 that frees me to use whatever level of redundancy I deem appropriate for my
@@ -22,31 +109,33 @@ backup media.&lt;/p&gt;
 &lt;p&gt;But more then that, the underlying technology of bup is ripe with possibility:
 the basic premise of a backup tool gives rise to the possibility of a sync tool,
 a deduplicated home directory tool, distributed repositories, archives and more.&lt;/p&gt;
-&lt;h1&gt;how it works&lt;/h1&gt;
+&lt;h1 id=&quot;how-it-works&quot;&gt;how it works&lt;/h1&gt;
 &lt;p&gt;A more complete explanation can be found on the main GitHub repository, but
-essentially bup applies rsync&amp;#39;s rolling-checksum (literally, the same algorithm)
+essentially bup applies rsync’s rolling-checksum (literally, the same algorithm)
 to determine file-differences, and then only backs up the differences - somewhat
 like rsnapshot.&lt;/p&gt;
 &lt;p&gt;Unlike rsnapshot however, bup then applies deduplication of the chunks produced
 this way using SHA1 hashes, and stores the results in the git-packfile format.&lt;/p&gt;
-&lt;p&gt;This is both very fast (rsnapshot, conversely, is quite slow) and very redundant
-- the Git tooling is able to read and understand a bup-repository as just a
+&lt;p&gt;This is both very fast (rsnapshot, conversely, is quite slow) and very redundant&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;the Git tooling is able to read and understand a bup-repository as just a
 Git repository with a specific commit structure (you can run &lt;code&gt;gitk -a&lt;/code&gt; in a
-&lt;code&gt;.bup&lt;/code&gt; directory to inspect it).&lt;/p&gt;
-&lt;h1&gt;why its space efficient&lt;/h1&gt;
-&lt;p&gt;bup&amp;#39;s archive and rolling-checksum format mean it is very space efficient. bup
+&lt;code&gt;.bup&lt;/code&gt; directory to inspect it).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;why-its-space-efficient&quot;&gt;why its space efficient&lt;/h1&gt;
+&lt;p&gt;bup’s archive and rolling-checksum format mean it is very space efficient. bup
 can correctly deduplicate data that undergoes insertions, deletions, shifts
 and copies. bup deduplicates across your entire backup set, meaning the same
 file uploaded 50 times is only stored once - in fact it will only be transferred
 across the network once.&lt;/p&gt;
 &lt;p&gt;For comparison I recently moved 180 gb of ZFS snapshots of the same dataset
 undergoing various daily changes into a bup archive, and successfully compacted
-it down to 50 gb. I suspect I could have gotten it smaller if I&amp;#39;d unpacked some
+it down to 50 gb. I suspect I could have gotten it smaller if I’d unpacked some
 of the archive files that have been created in that backup set.&lt;/p&gt;
 &lt;p&gt;That is a dataset which is already deduplicated via copy-on-write semantics
 (it was not using ZFS deduplication because you should basically never use ZFS
 deduplication).&lt;/p&gt;
-&lt;h1&gt;why its fast&lt;/h1&gt;
+&lt;h1 id=&quot;why-its-fast&quot;&gt;why its fast&lt;/h1&gt;
 &lt;p&gt;Git is well known as being bad at handling large binary files - it was designed
 to handle patches of source code, and makes assumptions to that effect. &lt;code&gt;bup&lt;/code&gt;
 steps around this problem because it only used the Git packfile and index
@@ -56,10 +145,10 @@ index readers to make looking up data in Git structures fast.&lt;/p&gt;
 files to speed up lookups, and builds &lt;a href=&quot;http://en.wikipedia.org/wiki/Bloom_filter&quot;&gt;bloom filters&lt;/a&gt; to add data (a bloom filter is a
 fast data structure based on hashes which tells you something is either
 ‘probably in the data set’ or &lt;em&gt;definitely&lt;/em&gt; not).&lt;/p&gt;
-&lt;h1&gt;using bup for Windows backups&lt;/h1&gt;
-&lt;p&gt;bup is a Unix/Linux oriented tool, but in practice I&amp;#39;ve applied it most usefully
+&lt;h1 id=&quot;using-bup-for-windows-backups&quot;&gt;using bup for Windows backups&lt;/h1&gt;
+&lt;p&gt;bup is a Unix/Linux oriented tool, but in practice I’ve applied it most usefully
 at the moment to some Windows servers.&lt;/p&gt;
-&lt;p&gt;Running bup under &lt;a href=&quot;https://www.cygwin.com/&quot;&gt;cygwin&lt;/a&gt; on Windows, and is far superior to the built in Windows backup system for file-based backups. It&amp;#39;s best to combine it with
+&lt;p&gt;Running bup under &lt;a href=&quot;https://www.cygwin.com/&quot;&gt;cygwin&lt;/a&gt; on Windows, and is far superior to the built in Windows backup system for file-based backups. It’s best to combine it with
 the &lt;a href=&quot;http://vscsc.sourceforge.net/&quot;&gt;vscsc&lt;/a&gt; tool which allows using 1-time
 snapshots to save the backup and avoid inconsistent state.&lt;/p&gt;
 &lt;p&gt;You can see a &lt;a href=&quot;https://gist.github.com/wrouesnel/8f0c681e4bf598176203&quot;&gt;link to a Gist here&lt;/a&gt; of my current favorite 
@@ -73,17 +162,17 @@ making tar archives - giving us an opportunity to fix a broken backup set.&lt;/p
 &lt;p&gt;This script will work for backing up to your own remote server &lt;em&gt;today&lt;/em&gt;. But, it
 was developed to work around limitations which can be fixed - and which I have
 fixed - and so the bup of tomorrow will not have them.&lt;/p&gt;
-&lt;h1&gt;towards the perfect backup&lt;/h1&gt;
+&lt;h1 id=&quot;towards-the-perfect-backup&quot;&gt;towards the perfect backup&lt;/h1&gt;
 &lt;p&gt;The script above was developed for a client, and the rsync-first stage was
 designed to ensure that the most recent backup would always be directly readable
 from a Windows Samba share and not require using the command line.&lt;/p&gt;
-&lt;p&gt;It was also designed to work around a flaw with bup&amp;#39;s indexing step which makes
+&lt;p&gt;It was also designed to work around a flaw with bup’s indexing step which makes
 it difficult to use with variable paths as produced by the &lt;code&gt;vscsc&lt;/code&gt; tool in cygwin.
 Although bup will work just fine, it will insist on trying to hash the entire
 backup set every time - which is slow. This can be worked around by symlinking
 the backup path in cygwin beforehand, but since we needed a readable backup
 set it was as quick to use rsync in this instance.&lt;/p&gt;
-&lt;p&gt;But it doesn‘t have to be this way. I’ve submitted several patches
+&lt;p&gt;But it doesn’t have to be this way. I’ve submitted several patches
 against bup which are also available in my &lt;a href=&quot;https://github.com/wrouesnel/bup&quot;&gt;personal development repository of bup&lt;/a&gt; on GitHub.&lt;/p&gt;
 &lt;p&gt;The indexing problem is fixed via &lt;code&gt;index-grafts&lt;/code&gt;: modifying the bup-index to
 support representing the logical structure as it is intended to be in the bup
@@ -101,9 +190,9 @@ accessible and importantly we can simply start &lt;code&gt;bup-web&lt;/code&gt; 
 and leave it running.&lt;/p&gt;
 &lt;p&gt;Hopefully these patches will be incorporated into mainline bup soon (they are
 awaiting review).&lt;/p&gt;
-&lt;h1&gt;so should I use it?&lt;/h1&gt;
-&lt;p&gt;Even with the things I&amp;#39;ve had to fix, the answer is &lt;em&gt;absolutely&lt;/em&gt;. bup is by far
-the best backup tool I&amp;#39;ve encountered lately. For a basic Linux system it will
+&lt;h1 id=&quot;so-should-i-use-it-&quot;&gt;so should I use it?&lt;/h1&gt;
+&lt;p&gt;Even with the things I’ve had to fix, the answer is &lt;em&gt;absolutely&lt;/em&gt;. bup is by far
+the best backup tool I’ve encountered lately. For a basic Linux system it will
 work great, for manual backups it will work great, and with a little scripting
 it will work &lt;em&gt;great&lt;/em&gt; for automatic backups under Windows and Linux.&lt;/p&gt;
 &lt;p&gt;The brave can try out the cutting-edge branch on my GitHub account to test out
@@ -119,14 +208,14 @@ help a lot.&lt;/p&gt;
       <guid isPermaLink="true">http://localhost:8080/articles/Uninstalling%20r8168-dkms/</guid>
       <author></author>
       <description>&lt;p&gt;This is a quick note on something I encountered while trying to work out why my Realtek NICs are so finicky about connecting and staying connected at gigabit speeds when running Linux.&lt;/p&gt;
-&lt;p&gt;The current hypothesis is that the &lt;code&gt;r8168&lt;/code&gt; driver isn&amp;#39;t helping very much. So I uninstalled it - and ran into two problems.&lt;/p&gt;
-&lt;h2&gt;Firstly&lt;/h2&gt;
-&lt;p&gt;…you need to uninstall it on Ubuntu/Debian with &lt;code&gt;apt-get remove --purge r8168-dkms&lt;/code&gt; or the config files (and it&amp;#39;s &lt;em&gt;all&lt;/em&gt; config files) won&amp;#39;t be properly removed, and the module will be left installed.&lt;/p&gt;
-&lt;h2&gt;Secondly&lt;/h2&gt;
-&lt;p&gt;…you really need to make sure you&amp;#39;ve removed all the &lt;code&gt;blacklist r8169&lt;/code&gt; entries. They can be left behind if you don‘t purge configuration files, but I found I’d also left a few hanging around in the &lt;code&gt;/etc/modprobe.d&lt;/code&gt; directory from earlier efforts. So a quick &lt;code&gt;fgrep r8169 *&lt;/code&gt; would‘ve saved me a lot of trouble and confusion as to why r8169 wasn’t being automatically detected.&lt;/p&gt;
-&lt;p&gt;In my case it turned out I&amp;#39;d put a very official looking &lt;code&gt;blacklist-networking.conf&lt;/code&gt; file in my modprobe.d directory. On both my machines.&lt;/p&gt;
-&lt;h2&gt;Something about Realtek NICs?&lt;/h2&gt;
-&lt;p&gt;If I find an answer I‘ll surely provide updates, but needless to say there’s no rthyme or reason to when they do or do not work, other then they consistently don&amp;#39;t work on kernel 3.11 with the r8168 driver it seems.&lt;/p&gt;
+&lt;p&gt;The current hypothesis is that the &lt;code&gt;r8168&lt;/code&gt; driver isn’t helping very much. So I uninstalled it - and ran into two problems.&lt;/p&gt;
+&lt;p&gt;##Firstly
+…you need to uninstall it on Ubuntu/Debian with &lt;code&gt;apt-get remove --purge r8168-dkms&lt;/code&gt; or the config files (and it’s &lt;em&gt;all&lt;/em&gt; config files) won’t be properly removed, and the module will be left installed.&lt;/p&gt;
+&lt;p&gt;##Secondly
+…you really need to make sure you’ve removed all the &lt;code&gt;blacklist r8169&lt;/code&gt; entries. They can be left behind if you don’t purge configuration files, but I found I’d also left a few hanging around in the &lt;code&gt;/etc/modprobe.d&lt;/code&gt; directory from earlier efforts. So a quick &lt;code&gt;fgrep r8169 *&lt;/code&gt; would’ve saved me a lot of trouble and confusion as to why r8169 wasn’t being automatically detected.&lt;/p&gt;
+&lt;p&gt;In my case it turned out I’d put a very official looking &lt;code&gt;blacklist-networking.conf&lt;/code&gt; file in my modprobe.d directory. On both my machines.&lt;/p&gt;
+&lt;h2 id=&quot;something-about-realtek-nics-&quot;&gt;Something about Realtek NICs?&lt;/h2&gt;
+&lt;p&gt;If I find an answer I’ll surely provide updates, but needless to say there’s no rthyme or reason to when they do or do not work, other then they consistently don’t work on kernel 3.11 with the r8168 driver it seems.&lt;/p&gt;
 </description>
     </item>
     <item>
@@ -135,58 +224,61 @@ help a lot.&lt;/p&gt;
       <pubDate>Sat, 25 Jan 2014 14:40:00 +1100</pubDate>
       <guid isPermaLink="true">http://localhost:8080/articles/Running%20Gnome%20Tracker%20on%20a%20Server/</guid>
       <author></author>
-      <description>&lt;p&gt;In a passing comment it was suggested to me that it would be really great if the home fileserver offered some type of web-interface to find things. We‘ve been aggregating downloaded files there for a while, and there’s been attempts made at categorization but this all really falls apart when you wonder “what does ‘productivity’ mean? And does this go under ‘Linux’ or some other thing?”&lt;/p&gt;
-&lt;p&gt;Since lately I‘ve been wanting to get desktop search working on my actual desktops, via Gnome’s Tracker project and it&amp;#39;s tie-in to Nautilus and Nemo (possibly the subject of a future blog), it seemed logical to run it on the fileserver as an indexer for our shared directories - and then to tie some kind of web ui to that.&lt;/p&gt;
-&lt;p&gt;Unfortunately, Tracker is very desktop orientated - there&amp;#39;s no easy daemon mode for running it on a headless system out-of-the-box, but with a little tweaking you &lt;em&gt;can&lt;/em&gt; make it work for you quite easily.&lt;/p&gt;
-&lt;h1&gt;How to&lt;/h1&gt;
-&lt;p&gt;On my system I keep Tracker running as it&amp;#39;s own user under a system account. On Ubuntu you need to create this like so (using a root shell - &lt;code&gt;sudo -i&lt;/code&gt;):&lt;/p&gt;
+      <description>&lt;p&gt;In a passing comment it was suggested to me that it would be really great if the home fileserver offered some type of web-interface to find things. We’ve been aggregating downloaded files there for a while, and there’s been attempts made at categorization but this all really falls apart when you wonder “what does ‘productivity’ mean? And does this go under ‘Linux’ or some other thing?”&lt;/p&gt;
+&lt;p&gt;Since lately I’ve been wanting to get desktop search working on my actual desktops, via Gnome’s Tracker project and it’s tie-in to Nautilus and Nemo (possibly the subject of a future blog), it seemed logical to run it on the fileserver as an indexer for our shared directories - and then to tie some kind of web ui to that.&lt;/p&gt;
+&lt;p&gt;Unfortunately, Tracker is very desktop orientated - there’s no easy daemon mode for running it on a headless system out-of-the-box, but with a little tweaking you &lt;em&gt;can&lt;/em&gt; make it work for you quite easily.&lt;/p&gt;
+&lt;h1 id=&quot;how-to&quot;&gt;How to&lt;/h1&gt;
+&lt;p&gt;On my system I keep Tracker running as it’s own user under a system account. On Ubuntu you need to create this like so (using a root shell - &lt;code&gt;sudo -i&lt;/code&gt;):&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;$ adduser --system --shell=/bin/&lt;span class=&quot;literal&quot;&gt;false&lt;/span&gt; --disabled-login --home=/var/lib/tracker tracker
-$ adduser tracker root&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Since tracker uses GSettings for it&amp;#39;s configuration these days, you need to su into the user you just created to actually configure the directories which should be indexed. Since this is a server, you probably just have a list of them so set it somewhat like the example below. Note: you must run the dbus-launch commands in order to have a viable session bus for dconf to work with. This will also be a requirement of Tracker later on.&lt;/p&gt;
+$ adduser tracker root
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Since tracker uses GSettings for it’s configuration these days, you need to su into the user you just created to actually configure the directories which should be indexed. Since this is a server, you probably just have a list of them so set it somewhat like the example below. Note: you must run the dbus-launch commands in order to have a viable session bus for dconf to work with. This will also be a requirement of Tracker later on.&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;$ su --shell /bin/bash
-$ eval `dbus-launch --sh-syntax`
+$ &lt;span class=&quot;built_in&quot;&gt;eval&lt;/span&gt; `dbus-launch --sh-syntax`
 $ dconf write org/freedesktop/tracker/miner/files/index-recursive-directories &lt;span class=&quot;string&quot;&gt;&quot;['/path/to/my/dir/1', '/path/to/my/dir/2', '/etc/etc']&quot;&lt;/span&gt;
-$ kill &lt;span class=&quot;variable&quot;&gt;$DBUS_SESSION_BUS_PID&lt;/span&gt;
-$ &lt;span class=&quot;keyword&quot;&gt;exit&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Your Tracker user is now ready at this point. To start and stop the service, we use an &lt;a href=&quot;http://localhost:8080/articles/Running%20Gnome%20Tracker%20on%20a%20Server/tracker.conf&quot;&gt;Upstart script like the one below&lt;/a&gt;:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;description &amp;quot;gnome tracker system startup script&amp;quot;
-author &amp;quot;wrouesnel&amp;quot;
+$ &lt;span class=&quot;built_in&quot;&gt;kill&lt;/span&gt; &lt;span class=&quot;variable&quot;&gt;$DBUS_SESSION_BUS_PID&lt;/span&gt;
+$ &lt;span class=&quot;built_in&quot;&gt;exit&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Your Tracker user is now ready at this point. To start and stop the service, we use an &lt;a href=&quot;/articles/Running%20Gnome%20Tracker%20on%20a%20Server/tracker.conf&quot;&gt;Upstart script like the one below&lt;/a&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-sh&quot;&gt;description &lt;span class=&quot;string&quot;&gt;&quot;gnome tracker system startup script&quot;&lt;/span&gt;
+author &lt;span class=&quot;string&quot;&gt;&quot;wrouesnel&quot;&lt;/span&gt;
 
-start on (local-filesystems and net-device-up)
+start on (&lt;span class=&quot;built_in&quot;&gt;local&lt;/span&gt;-filesystems and net-device-up)
 stop on shutdown
 
 respawn
-respawn limit 5 60
+respawn &lt;span class=&quot;built_in&quot;&gt;limit&lt;/span&gt; 5 60
 
 setuid tracker
 
 script
-    chdir /var/lib/tracker
-    eval `dbus-launch --sh-syntax`
-    echo $DBUS_SESSION_BUS_PID &amp;gt; .tracker-sessionbus.pid
-    echo $DBUS_SESSION_BUS_ADDRESS &amp;gt; .tracker-sessionbus
+    &lt;span class=&quot;built_in&quot;&gt;chdir&lt;/span&gt; /var/lib/tracker
+    &lt;span class=&quot;built_in&quot;&gt;eval&lt;/span&gt; `dbus-launch --sh-syntax`
+    &lt;span class=&quot;built_in&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;variable&quot;&gt;$DBUS_SESSION_BUS_PID&lt;/span&gt; &amp;gt; .tracker-sessionbus.pid
+    &lt;span class=&quot;built_in&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;variable&quot;&gt;$DBUS_SESSION_BUS_ADDRESS&lt;/span&gt; &amp;gt; .tracker-sessionbus
     /usr/lib/tracker/tracker-store
 end script
 
 post-start script
-    chdir /var/lib/tracker
-    while [ ! -e .tracker-sessionbus ]; do sleep 1; done
+    &lt;span class=&quot;built_in&quot;&gt;chdir&lt;/span&gt; /var/lib/tracker
+    &lt;span class=&quot;keyword&quot;&gt;while&lt;/span&gt; [ ! -e .tracker-sessionbus ]; &lt;span class=&quot;keyword&quot;&gt;do&lt;/span&gt; sleep 1; &lt;span class=&quot;keyword&quot;&gt;done&lt;/span&gt;
     DBUS_SESSION_BUS_ADDRESS=$(cat .tracker-sessionbus) /usr/lib/tracker/tracker-miner-fs &amp;amp;
 end script
 
 post-stop script 
-    # We need to kill off the DBUS session here
-    chdir /var/lib/tracker
-    kill $(cat .tracker-sessionbus.pid)
+    &lt;span class=&quot;comment&quot;&gt;# We need to kill off the DBUS session here&lt;/span&gt;
+    &lt;span class=&quot;built_in&quot;&gt;chdir&lt;/span&gt; /var/lib/tracker
+    &lt;span class=&quot;built_in&quot;&gt;kill&lt;/span&gt; $(cat .tracker-sessionbus.pid)
     rm .tracker-sessionbus.pid
     rm .tracker-sessionbus
-end script&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Some things to focus on about the script: we launch and save the DBus session parameters. We&amp;#39;ll need these to reconnect to the session to run tracker related commands. The post-stop stanza is to kill off the DBus session.&lt;/p&gt;
-&lt;p&gt;You do need to explicitely launch &lt;code&gt;tracker-miner-fs&lt;/code&gt; in order for file indexing to work, but you don&amp;#39;t need to kill it explicitely - it will be automatically shutdown when Upstart kills &lt;code&gt;tracker-store&lt;/code&gt;.&lt;/p&gt;
+end script
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Some things to focus on about the script: we launch and save the DBus session parameters. We’ll need these to reconnect to the session to run tracker related commands. The post-stop stanza is to kill off the DBus session.&lt;/p&gt;
+&lt;p&gt;You do need to explicitely launch &lt;code&gt;tracker-miner-fs&lt;/code&gt; in order for file indexing to work, but you don’t need to kill it explicitely - it will be automatically shutdown when Upstart kills &lt;code&gt;tracker-store&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;Also note that since tracker runs as the user &lt;code&gt;tracker&lt;/code&gt; it can only index files and directories which it is allowed to traverse, so check your permissions.&lt;/p&gt;
 &lt;p&gt;You can now start Tracker as your user with &lt;code&gt;start tracker&lt;/code&gt;. And stop it with &lt;code&gt;stop tracker&lt;/code&gt;. Simple and clean.&lt;/p&gt;
-&lt;h1&gt;Using this&lt;/h1&gt;
-&lt;p&gt;My plan for this setup is to throw together a Node.js app on my server that will forward queries to the tracker command line client - that app will be a future post when it&amp;#39;s done.&lt;/p&gt;
+&lt;h1 id=&quot;using-this&quot;&gt;Using this&lt;/h1&gt;
+&lt;p&gt;My plan for this setup is to throw together a Node.js app on my server that will forward queries to the tracker command line client - that app will be a future post when it’s done.&lt;/p&gt;
 </description>
     </item>
     <item>
@@ -195,15 +287,15 @@ end script&lt;/code&gt;&lt;/pre&gt;
       <pubDate>Tue, 12 Nov 2013 12:29:00 +1100</pubDate>
       <guid isPermaLink="true">http://localhost:8080/articles/Migrating%20to%20Gmail/</guid>
       <author></author>
-      <description>&lt;h1&gt;Why&lt;/h1&gt;
-&lt;p&gt;In a stitch of irony given my prior articles wrestling with a decent IDLE daemon for use with getmail, I&amp;#39;m faced with a new problem in figuring out the best way to migrate all my existing, locally hosted email to Gmail.&lt;/p&gt;
-&lt;p&gt;This is evidently not an uncommon problem for people, presumably for largely the same reasons I‘m facing: although I like having everything locally on my own server, it only works in places where (1) I live in the same place as the server and (2) where my server won’t be double-NAT&amp;#39;d so dynamic DNS can actually reach it.&lt;/p&gt;
-&lt;h1&gt;How&lt;/h1&gt;
+      <description>&lt;h1 id=&quot;why&quot;&gt;Why&lt;/h1&gt;
+&lt;p&gt;In a stitch of irony given my prior articles wrestling with a decent IDLE daemon for use with getmail, I’m faced with a new problem in figuring out the best way to migrate all my existing, locally hosted email to Gmail.&lt;/p&gt;
+&lt;p&gt;This is evidently not an uncommon problem for people, presumably for largely the same reasons I’m facing: although I like having everything locally on my own server, it only works in places where (1) I live in the same place as the server and (2) where my server won’t be double-NAT’d so dynamic DNS can actually reach it.&lt;/p&gt;
+&lt;h1 id=&quot;how&quot;&gt;How&lt;/h1&gt;
 &lt;p&gt;My personal email has been hosted on a Dovecot IMAP server in a Maildir up till now. Our tool of choice for this migration will be the venerable &lt;a href=&quot;http://offlineimap.org/&quot;&gt;OfflineIMAP&lt;/a&gt; utility, available on Debian-ish systems with &lt;code&gt;apt-get install offlineimap&lt;/code&gt;.&lt;/p&gt;
-&lt;h2&gt;A Foreword&lt;/h2&gt;
-&lt;p&gt;I tried a lot to get this to work properly in a Maildir -&amp;gt; Gmail configuration, and while it‘s technically possible I couldn’t seem to get the folder creation to play nicely with tags - OfflineIMAP wants to create them with a leading separate (‘/’ on Gmail) but Gmail itself doesn‘t recognize that as root tag. There doesn’t seem to be anyway around this behavior with name translation or anything.&lt;/p&gt;
-&lt;p&gt;I suspect you could work around this by uploading to a subdirectory, and then moving everything out of the subdirectory (sub-tag?) on Gmail, but didn&amp;#39;t try it.&lt;/p&gt;
-&lt;h2&gt;Configuration file&lt;/h2&gt;
+&lt;h2 id=&quot;a-foreword&quot;&gt;A Foreword&lt;/h2&gt;
+&lt;p&gt;I tried a lot to get this to work properly in a Maildir -&amp;gt; Gmail configuration, and while it’s technically possible I couldn’t seem to get the folder creation to play nicely with tags - OfflineIMAP wants to create them with a leading separate (‘/‘ on Gmail) but Gmail itself doesn’t recognize that as root tag. There doesn’t seem to be anyway around this behavior with name translation or anything.&lt;/p&gt;
+&lt;p&gt;I suspect you could work around this by uploading to a subdirectory, and then moving everything out of the subdirectory (sub-tag?) on Gmail, but didn’t try it.&lt;/p&gt;
+&lt;h2 id=&quot;configuration-file&quot;&gt;Configuration file&lt;/h2&gt;
 &lt;p&gt;In your home directory (I did this on my home server since 7gb of email takes a long time to upload over ADSL) you need to create an &lt;code&gt;.offlineimaprc&lt;/code&gt; file. For an IMAP -&amp;gt; IMAP transfer, it has a structure something like this:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;[general]
 accounts = Gmail-wrouesnel
@@ -239,13 +331,13 @@ remoteuser = &amp;lt;gmail user&amp;gt;
 remotepass = &amp;lt;gmail password&amp;gt;
 sslcacertfile = /etc/ssl/certs/ca-certificates.crt
 sep = /
-subscribedonly = no&lt;/code&gt;&lt;/pre&gt;
-&lt;h2&gt;Running&lt;/h2&gt;
+subscribedonly = no
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;running&quot;&gt;Running&lt;/h2&gt;
 &lt;p&gt;Test the process first with &lt;code&gt;offlineimap --dry-run&lt;/code&gt; to check that things are going to turn out roughly how you expect. Then execute &lt;code&gt;offlineimap&lt;/code&gt; to start the process. I really recommend doing this in a byobu or screen session, or at least with the &lt;code&gt;nohup&lt;/code&gt; utility since a connection drop will cause offlineimap to abort.&lt;/p&gt;
-&lt;p&gt;Check back on the process once every day or so to check it‘s still running - OR - write a shell script to re-invoke it until it succeeds (untested so I won’t propose any code).&lt;/p&gt;
-&lt;h1&gt;Personal thoughts&lt;/h1&gt;
-&lt;p&gt;This seems to be the most painless way to upload old email to Gmail. In my case, the move is prompted by a real life move where my 24TB server won‘t be coming with me. I followed up some options for moving my email system, for example to a Docker image for $5 a month for 20gb, but at the end of the day had to face the fact that there was a perfectly capable free-alternative available and it would just be throwing money away. Everything already operates through my Gmail accounts anyway, so it’s not like there‘s a security concern there and when it comes to email you either use GPG or you’re doing nothing anyway.&lt;/p&gt;
-&lt;p&gt;It‘s worth the observation here that the same process used for the migration can also be used for a local backup, which is a system I will most definitely be using in the future. OfflineIMAP can write Maildir natively, so there’s no need to use an IMAP server locally for that, and helpfully solves the “what if Gmail suddenly disappears problem” (more likely from a power failure then anything else, but my email is important to me).&lt;/p&gt;
+&lt;p&gt;Check back on the process once every day or so to check it’s still running - OR - write a shell script to re-invoke it until it succeeds (untested so I won’t propose any code).&lt;/p&gt;
+&lt;h1 id=&quot;personal-thoughts&quot;&gt;Personal thoughts&lt;/h1&gt;
+&lt;p&gt;This seems to be the most painless way to upload old email to Gmail. In my case, the move is prompted by a real life move where my 24TB server won’t be coming with me. I followed up some options for moving my email system, for example to a Docker image for $5 a month for 20gb, but at the end of the day had to face the fact that there was a perfectly capable free-alternative available and it would just be throwing money away. Everything already operates through my Gmail accounts anyway, so it’s not like there’s a security concern there and when it comes to email you either use GPG or you’re doing nothing anyway.&lt;/p&gt;
+&lt;p&gt;It’s worth the observation here that the same process used for the migration can also be used for a local backup, which is a system I will most definitely be using in the future. OfflineIMAP can write Maildir natively, so there’s no need to use an IMAP server locally for that, and helpfully solves the “what if Gmail suddenly disappears problem” (more likely from a power failure then anything else, but my email is important to me).&lt;/p&gt;
 </description>
     </item>
     <item>
@@ -254,31 +346,31 @@ subscribedonly = no&lt;/code&gt;&lt;/pre&gt;
       <pubDate>Thu, 10 Oct 2013 04:36:00 +1100</pubDate>
       <guid isPermaLink="true">http://localhost:8080/articles/A%20better%20Getmail%20IDLE%20client/</guid>
       <author></author>
-      <description>&lt;h1&gt;Updates&lt;/h1&gt;
-&lt;p&gt;(2013-10-15) And like that I‘ve broken it again. Fixing the crash on IMAP disconnect actually broke IMAP disconnect handling.
+      <description>&lt;h1 id=&quot;updates&quot;&gt;Updates&lt;/h1&gt;
+&lt;p&gt;(2013-10-15) And like that I’ve broken it again. Fixing the crash on IMAP disconnect actually broke IMAP disconnect handling.
 The problem here is that IMAPClient’s exceptions are not documented at all, so a time-based thing like IDLE requires some guessing as to what IMAPClient will handle and what you need to handle. This would all be fine if there was a way to get Gmail to boot my client after 30 seconds so I could test it easily.&lt;/p&gt;
-&lt;p&gt;I&amp;#39;ve amended the code so that anytime the code would call &lt;code&gt;_imaplogin()&lt;/code&gt; it explicitely dumps the IMAPClient object after trying to log it out, and recreates it. Near as I can tell this seems to be the safe way to do it, since the IMAPClient object &lt;em&gt;does&lt;/em&gt; open a socket connection when created, and doesn&amp;#39;t necessarily re-open if you simply re-issue the login command.&lt;/p&gt;
-&lt;p&gt;There&amp;#39;s an ongoing lesson here that doing anything that needs to stay up with protocol like IMAP is an incredible pain.&lt;/p&gt;
-&lt;p&gt;(2013-10-14) So after 4 days of continuous usage I‘m happy with this script. The most important thing it does is crash properly when it encounters a bug. I’ve tweaked the Gist a few times in response (a typo meant imaplogin didn&amp;#39;t recover gracefully) and added a call to &lt;code&gt;notify_mail&lt;/code&gt; on exit which should&amp;#39;ve been there to start with.&lt;/p&gt;
-&lt;p&gt;It‘s also becoming abundantly clear that I’m way to click-happy with publishing things to this blog, so some type of interface to show my revisions is probably in the future (a long with a style overhaul).&lt;/p&gt;
-&lt;h1&gt;Why&lt;/h1&gt;
-&lt;p&gt;My previous attempt at a GetMail IDLE client was a huge disappointment, since imaplib2 seems to be buggy for handling long-running processes. It‘s possible some magic in hard terminating the IMAP session after each IDLE termination is necessary, but it raises the question of why the idle() function in the library doesn’t immediately exit when this happens - to me that implies I could still end up with a zombie daemon that doesn&amp;#39;t retreive any mail.&lt;/p&gt;
+&lt;p&gt;I’ve amended the code so that anytime the code would call &lt;code&gt;_imaplogin()&lt;/code&gt; it explicitely dumps the IMAPClient object after trying to log it out, and recreates it. Near as I can tell this seems to be the safe way to do it, since the IMAPClient object &lt;em&gt;does&lt;/em&gt; open a socket connection when created, and doesn’t necessarily re-open if you simply re-issue the login command.&lt;/p&gt;
+&lt;p&gt;There’s an ongoing lesson here that doing anything that needs to stay up with protocol like IMAP is an incredible pain.&lt;/p&gt;
+&lt;p&gt;(2013-10-14) So after 4 days of continuous usage I’m happy with this script. The most important thing it does is crash properly when it encounters a bug. I’ve tweaked the Gist a few times in response (a typo meant imaplogin didn’t recover gracefully) and added a call to &lt;code&gt;notify_mail&lt;/code&gt; on exit which should’ve been there to start with.&lt;/p&gt;
+&lt;p&gt;It’s also becoming abundantly clear that I’m way to click-happy with publishing things to this blog, so some type of interface to show my revisions is probably in the future (a long with a style overhaul).&lt;/p&gt;
+&lt;h1 id=&quot;why&quot;&gt;Why&lt;/h1&gt;
+&lt;p&gt;My previous attempt at a GetMail IDLE client was a huge disappointment, since imaplib2 seems to be buggy for handling long-running processes. It’s possible some magic in hard terminating the IMAP session after each IDLE termination is necessary, but it raises the question of why the idle() function in the library doesn’t immediately exit when this happens - to me that implies I could still end up with a zombie daemon that doesn’t retreive any mail.&lt;/p&gt;
 &lt;p&gt;Thus a new project - this time based on the Python &lt;code&gt;imapclient&lt;/code&gt; library. imapclient uses imaplib behind the scenes, and seems to enjoy a little bit more use then &lt;code&gt;imaplib2&lt;/code&gt; so it seemed a good candidate.&lt;/p&gt;
-&lt;h1&gt;The script&lt;/h1&gt;
-&lt;h2&gt;Dependencies&lt;/h2&gt;
+&lt;h1 id=&quot;the-script&quot;&gt;The script&lt;/h1&gt;
+&lt;h2 id=&quot;dependencies&quot;&gt;Dependencies&lt;/h2&gt;
 &lt;p&gt;The script has a couple of dependencies, most easily installed with &lt;code&gt;pip&lt;/code&gt;:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ pip install psutil imapclient&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Get it from &lt;a href=&quot;https://gist.github.com/wrouesnel/6905023&quot;&gt;a Gist here&lt;/a&gt; - I‘m currently running it on my server, and naturally I’ll update this article based on how it performs as I go.&lt;/p&gt;
-&lt;h1&gt;Design&lt;/h1&gt;
-&lt;p&gt;The script implements a Unix daemon, and uses pidfiles to avoid concurrent executions. It&amp;#39;s designed to be stuck in a crontab file to recover from crashes.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ pip install psutil imapclient
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Get it from &lt;a href=&quot;https://gist.github.com/wrouesnel/6905023&quot;&gt;a Gist here&lt;/a&gt; - I’m currently running it on my server, and naturally I’ll update this article based on how it performs as I go.&lt;/p&gt;
+&lt;h1 id=&quot;design&quot;&gt;Design&lt;/h1&gt;
+&lt;p&gt;The script implements a Unix daemon, and uses pidfiles to avoid concurrent executions. It’s designed to be stuck in a crontab file to recover from crashes.&lt;/p&gt;
 &lt;p&gt;I went purist on this project since I wanted to avoid as many additional frameworks as possible and work mostly with built-in constructs - partly as just an exercise in what can be done. At the end of the day I ended up implementing a somewhat half-baked messaging system to manage all the threads based on Queues.&lt;/p&gt;
 &lt;p&gt;The main thread, being the listener for signals, creates a “manager” thread, which in turn spawns all my actual “idler” threads.&lt;/p&gt;
 &lt;p&gt;Everything talks with Queue.Queue() objects, and block on the get() method which efficiently uses CPU. The actual idle() function, being blocking, runs on its own thread and posts “new mail” events back to the idler thread, which then invokes getmail.&lt;/p&gt;
 &lt;p&gt;The biggest challenge was making sure exceptions were caught in all the right places - &lt;code&gt;imapclient&lt;/code&gt; has no way to cleanly kill off an idle() process, so a shutdown involves causing the idle_check() call to return an exception.&lt;/p&gt;
-&lt;p&gt;I kind of hacked this together as I went - the main thing I really targeted was trying to make sure failure modes caused crashes, which is hard to do with Python-threading a lot of the time. A crashed script can be restarted, a zombie script doing nothing looks like it&amp;#39;s correctly alive.&lt;/p&gt;
-&lt;h1&gt;Personal thoughts&lt;/h1&gt;
-&lt;p&gt;Pure Python is not the best for this sort of thing - an evented IMAP library would definitely be better but this way I can stick with mostly single file deployment, and I don&amp;#39;t want to write my own IMAP client at the moment.&lt;/p&gt;
-&lt;p&gt;Of course IMAP is a simple enough protocol in most respects, so it&amp;#39;s not like it would be hard but the exercise was still interesting. But if I want a new project with this, I would still like to tackle it in something like Haskell.&lt;/p&gt;
+&lt;p&gt;I kind of hacked this together as I went - the main thing I really targeted was trying to make sure failure modes caused crashes, which is hard to do with Python-threading a lot of the time. A crashed script can be restarted, a zombie script doing nothing looks like it’s correctly alive.&lt;/p&gt;
+&lt;h1 id=&quot;personal-thoughts&quot;&gt;Personal thoughts&lt;/h1&gt;
+&lt;p&gt;Pure Python is not the best for this sort of thing - an evented IMAP library would definitely be better but this way I can stick with mostly single file deployment, and I don’t want to write my own IMAP client at the moment.&lt;/p&gt;
+&lt;p&gt;Of course IMAP is a simple enough protocol in most respects, so it’s not like it would be hard but the exercise was still interesting. But if I want a new project with this, I would still like to tackle it in something like Haskell.&lt;/p&gt;
 </description>
     </item>
     <item>
@@ -287,48 +379,50 @@ The problem here is that IMAPClient’s exceptions are not documented at all, so
       <pubDate>Sat, 05 Oct 2013 03:07:00 +1000</pubDate>
       <guid isPermaLink="true">http://localhost:8080/articles/Getmail%20IDLE%20Client/</guid>
       <author></author>
-      <description>&lt;h1&gt;Updates&lt;/h1&gt;
-&lt;p&gt;Although the script in this article works, I&amp;#39;m having some problems with it after long-running sessions. The symptom seems to be that imaplib2 just stops processing IDLE session responses - it terminates and recreates them just fine, but no new mail is ever detected and thus getmail is never triggered. With 12 or so hours of usage out of the script, this seems odd as hell and probably like an imaplib2 bug.&lt;/p&gt;
-&lt;p&gt;With the amount of sunk time on this, I‘m tempted to go in 1 of 2 directions: re-tool the script to simply invoke getmail’s IDLE functionality, and basically remove imaplib2 from the equation, or to write my own functions to read IMAP and use the IDLE command.&lt;/p&gt;
-&lt;p&gt;Currently I‘m going with option 3: turn on imaplib’s debugging to max, and see if I can spot the bug - but at the moment I can‘t really recommend this particular approach to anyone since it’s just not reliable enough - though it does somewhat belie the fact that Python really doesn&amp;#39;t have a good IMAP IDLE library.&lt;/p&gt;
-&lt;h2&gt;Updates 2&lt;/h2&gt;
-&lt;p&gt;After another long-running session of perfect performance, I‘m once again stuck with a process that claims to start idling successfully, but seems to hang - giving no exceptions or warnings of any kind and only doing so after 8+ hours of perfect functioning. It’s not a NAT issue since this is far short of the 5-day default timeout. &lt;/p&gt;
-&lt;p&gt;At a best guess the problem seems to be that once logged in, imaplib2 leaves the session open but dumbly just listens to the socket - which eventually dies for some reason (re-assigning IPs by my ISP maybe?) but imaplib&amp;#39;s “reader” thread just blocks on polling rather then triggering the callback code (since the notable thing is I can see the poll commands in the log stop, the session timeout detection, but no invocation of the callback).&lt;/p&gt;
-&lt;p&gt;As it stands, I have to strongly recommend against using imaplib2 for any long running processes like IDLE - you simply can‘t deal with a library that’s going to silently hang itself after a half-day or so without crashing or logging anything to indicate this happens - the only detection is when self-addressed emails don‘t arrive, but that’s a really stupid keep-alive protocol. I&amp;#39;ll be retooling the script to try out imapclient next but that will be a future article and a separate gist.&lt;/p&gt;
-&lt;h1&gt;Why&lt;/h1&gt;
+      <description>&lt;h1 id=&quot;updates&quot;&gt;Updates&lt;/h1&gt;
+&lt;p&gt;Although the script in this article works, I’m having some problems with it after long-running sessions. The symptom seems to be that imaplib2 just stops processing IDLE session responses - it terminates and recreates them just fine, but no new mail is ever detected and thus getmail is never triggered. With 12 or so hours of usage out of the script, this seems odd as hell and probably like an imaplib2 bug.&lt;/p&gt;
+&lt;p&gt;With the amount of sunk time on this, I’m tempted to go in 1 of 2 directions: re-tool the script to simply invoke getmail’s IDLE functionality, and basically remove imaplib2 from the equation, or to write my own functions to read IMAP and use the IDLE command.&lt;/p&gt;
+&lt;p&gt;Currently I’m going with option 3: turn on imaplib’s debugging to max, and see if I can spot the bug - but at the moment I can’t really recommend this particular approach to anyone since it’s just not reliable enough - though it does somewhat belie the fact that Python really doesn’t have a good IMAP IDLE library.&lt;/p&gt;
+&lt;h2 id=&quot;updates-2&quot;&gt;Updates 2&lt;/h2&gt;
+&lt;p&gt;After another long-running session of perfect performance, I’m once again stuck with a process that claims to start idling successfully, but seems to hang - giving no exceptions or warnings of any kind and only doing so after 8+ hours of perfect functioning. It’s not a NAT issue since this is far short of the 5-day default timeout. &lt;/p&gt;
+&lt;p&gt;At a best guess the problem seems to be that once logged in, imaplib2 leaves the session open but dumbly just listens to the socket - which eventually dies for some reason (re-assigning IPs by my ISP maybe?) but imaplib’s “reader” thread just blocks on polling rather then triggering the callback code (since the notable thing is I can see the poll commands in the log stop, the session timeout detection, but no invocation of the callback).&lt;/p&gt;
+&lt;p&gt;As it stands, I have to strongly recommend against using imaplib2 for any long running processes like IDLE - you simply can’t deal with a library that’s going to silently hang itself after a half-day or so without crashing or logging anything to indicate this happens - the only detection is when self-addressed emails don’t arrive, but that’s a really stupid keep-alive protocol. I’ll be retooling the script to try out imapclient next but that will be a future article and a separate gist.&lt;/p&gt;
+&lt;h1 id=&quot;why&quot;&gt;Why&lt;/h1&gt;
 &lt;p&gt;This is a script which took way too long to come together in Python 2.7 using imaplib2 (&lt;code&gt;pip install imaplib2&lt;/code&gt;).&lt;/p&gt;
 &lt;p&gt;The basic idea is to use the very reliabe GetMail4 (&lt;code&gt;apt-get install getmail4&lt;/code&gt;) - which is written in Python - to poll my IMAP mail accounts when new mail arrives, rather then as I had been doing with a 1 minute cronjob (which is slightly too slow for how we use email these days, and may not be liked by some mail servers - not to mention resource intensive).&lt;/p&gt;
-&lt;p&gt;The big benefit here is rapid mail delivery, but the other benefit is that it solves the problem of cron causing overlapping executions of getmail which can lead to blank messages (though not message loss). Other means of solving, such as wrapping cron in a &lt;code&gt;flock&lt;/code&gt; call aren‘t great, since if the lockfiles don’t get cleaned up it will just stop working silently.&lt;/p&gt;
-&lt;h1&gt;Requirements&lt;/h1&gt;
-&lt;p&gt;Writing a reliable IDLE daemon that won‘t cause us to spend half a day wondering where our email is is not easy. This was an interesting Python project for me, and it’s certainly not pretty or long - but I mostly spent a ton of time trying to think through as many edge cases as I could. In the end, I settled on tying the daemon itself to &lt;code&gt;sendmail&lt;/code&gt; on my system, so at least if it crashes or an upstream server goes offline I&amp;#39;m notified, and I have a decent chance of seeing why, and the use of pid files means I can have cron failsafe re-execute every 5 minutes if it does go down.&lt;/p&gt;
-&lt;h1&gt;The Script&lt;/h1&gt;
-&lt;p&gt;I started with &lt;a href=&quot;http://blog.timstoop.nl/2009/03/11/python-imap-idle-with-imaplib2/&quot;&gt;the example&lt;/a&gt; I found here but ended up modifiying it pretty heavily. That code isn&amp;#39;t a great approach in my opinion since it overwhelms the stack size pretty quickly with multiple accounts - imaplib2 is multithreaded behind the scenes (2 threads per account), so spawning an extra thread to handle each account gives you 3 per account, 6 accounts gives you 18 threads + the overhead of forking and running GetMail in a subprocess.&lt;/p&gt;
-&lt;p&gt;Though when all things are considered, I didn‘t improve things all that much but using a single-overwatch thread to reset the IDLE call on each object is simpler to handle (although I don’t present it that way IMO). But the important thing is it works.&lt;/p&gt;
-&lt;h2&gt;Download&lt;/h2&gt;
+&lt;p&gt;The big benefit here is rapid mail delivery, but the other benefit is that it solves the problem of cron causing overlapping executions of getmail which can lead to blank messages (though not message loss). Other means of solving, such as wrapping cron in a &lt;code&gt;flock&lt;/code&gt; call aren’t great, since if the lockfiles don’t get cleaned up it will just stop working silently.&lt;/p&gt;
+&lt;h1 id=&quot;requirements&quot;&gt;Requirements&lt;/h1&gt;
+&lt;p&gt;Writing a reliable IDLE daemon that won’t cause us to spend half a day wondering where our email is is not easy. This was an interesting Python project for me, and it’s certainly not pretty or long - but I mostly spent a ton of time trying to think through as many edge cases as I could. In the end, I settled on tying the daemon itself to &lt;code&gt;sendmail&lt;/code&gt; on my system, so at least if it crashes or an upstream server goes offline I’m notified, and I have a decent chance of seeing why, and the use of pid files means I can have cron failsafe re-execute every 5 minutes if it does go down.&lt;/p&gt;
+&lt;h1 id=&quot;the-script&quot;&gt;The Script&lt;/h1&gt;
+&lt;p&gt;I started with &lt;a href=&quot;http://blog.timstoop.nl/2009/03/11/python-imap-idle-with-imaplib2/&quot;&gt;the example&lt;/a&gt; I found here but ended up modifiying it pretty heavily. That code isn’t a great approach in my opinion since it overwhelms the stack size pretty quickly with multiple accounts - imaplib2 is multithreaded behind the scenes (2 threads per account), so spawning an extra thread to handle each account gives you 3 per account, 6 accounts gives you 18 threads + the overhead of forking and running GetMail in a subprocess.&lt;/p&gt;
+&lt;p&gt;Though when all things are considered, I didn’t improve things all that much but using a single-overwatch thread to reset the IDLE call on each object is simpler to handle (although I don’t present it that way IMO). But the important thing is it works.&lt;/p&gt;
+&lt;h2 id=&quot;download&quot;&gt;Download&lt;/h2&gt;
 &lt;p&gt;The script is quite long so grab it from the &lt;a href=&quot;https://gist.github.com/wrouesnel/6829044&quot;&gt;Gist&lt;/a&gt;. It has a few dependencies, best installed with &lt;code&gt;pip&lt;/code&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ pip install imaplib2 psutil&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;$./getmail-idler.py -h
+&lt;pre&gt;&lt;code&gt;$ pip install imaplib2 psutil
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;$./getmail-idler.py -h
 usage: getmail-idler.py [-h] [-r GETMAILRC] [--pid-file PIDFILE] [--verbose]
                         [--daemonize] [--logfile LOGFILE]
 
 optional arguments:
-  -h, --help            show this help message and &lt;span class=&quot;keyword&quot;&gt;exit&lt;/span&gt;
+  -h, --&lt;span class=&quot;built_in&quot;&gt;help&lt;/span&gt;            show this &lt;span class=&quot;built_in&quot;&gt;help&lt;/span&gt; message and &lt;span class=&quot;built_in&quot;&gt;exit&lt;/span&gt;
   -r GETMAILRC          getmail configuration file to use (can specify more
                         &lt;span class=&quot;keyword&quot;&gt;then&lt;/span&gt; once)
   --pid-file PIDFILE, -p PIDFILE
                         pidfile to use &lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt; process limiting
-  --verbose, -v         &lt;span class=&quot;keyword&quot;&gt;set&lt;/span&gt; output verbosity
+  --verbose, -v         &lt;span class=&quot;built_in&quot;&gt;set&lt;/span&gt; output verbosity
   --daemonize           should process daemonize?
-  --logfile LOGFILE     file to redirect log output too (useful &lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt; daemon
-                        mode)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;It uses a comprehensive argparse interface, the most important parameter is &lt;code&gt;-r&lt;/code&gt;. This is exactly like the getmail -r command, and accepts files in the same format - though it doesn&amp;#39;t search the same locations although it will search &lt;code&gt;$HOME/.getmail/&lt;/code&gt;.&lt;/p&gt;
+  --logfile LOGFILE     file to redirect &lt;span class=&quot;built_in&quot;&gt;log&lt;/span&gt; output too (useful &lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt; daemon
+                        mode)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;It uses a comprehensive argparse interface, the most important parameter is &lt;code&gt;-r&lt;/code&gt;. This is exactly like the getmail -r command, and accepts files in the same format - though it doesn’t search the same locations although it will search &lt;code&gt;$HOME/.getmail/&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;Currently it only handles IMAPSSL, which you should be using anyway though it should be easy to hack it to fix this I just have no incentive too at the moment.&lt;/p&gt;
-&lt;p&gt;Currently I use this with a cronjob set to every minute or 5 minutes - with verbose logging (&lt;code&gt;-vv&lt;/code&gt;) it won‘t produce output until it forks into a daemon. This means if it crashes (and I’ve tried to make it crash reliably) cron will restart it on the next round, and it&amp;#39;ll email a tracelog (hopefully).&lt;/p&gt;
+&lt;p&gt;Currently I use this with a cronjob set to every minute or 5 minutes - with verbose logging (&lt;code&gt;-vv&lt;/code&gt;) it won’t produce output until it forks into a daemon. This means if it crashes (and I’ve tried to make it crash reliably) cron will restart it on the next round, and it’ll email a tracelog (hopefully).&lt;/p&gt;
 &lt;p&gt;My current crontab using this script:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;* * * * * /home/will/bin/getmail-idler.py -r config1.getmailrc -r config2.getmailrc -r config3.getmailrc -r config4.getmailrc -r config5.getmailrc --pid-file /tmp/will-getmail-idler.pid --logfile .getmail-idler.log -vv --daemonize&lt;/code&gt;&lt;/pre&gt;
-&lt;h1&gt;Personal thoughts&lt;/h1&gt;
-&lt;p&gt;I‘m pretty pleased with how this turned out (edit: see updates section at the top on how that’s changed - I‘m happy with the script, less happy with imaplib2) since it was a great exercise for me in learning some new things about Python. That said, compared to something like NodeJS, I feel with the write library this would’ve been faster in a language with great eventing support, rather then Python&amp;#39;s weird middle-ground of “not quite parallel” threads. But, I keep coming back to the language, and the demo-code I used &lt;a href=&quot;http://blog.timstoop.nl/2009/03/11/python-imap-idle-with-imaplib2/&quot;&gt;here&lt;/a&gt; was Python so it must be doing something right.&lt;/p&gt;
-&lt;p&gt;I‘ll probably keep refining this if I run into problems - though if it doesn’t actually stop working, then I‘ll leave it alone since the whole self-hosted email thing’s biggest downside is when your listener dies and you stop getting email - that‘s the problem I’ve really tried to solve here - IDLE PUSH email functionality, and highly visible notifications when something is wrong.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;* * * * * /home/will/bin/getmail-idler.py -r config1.getmailrc -r config2.getmailrc -r config3.getmailrc -r config4.getmailrc -r config5.getmailrc --pid-file /tmp/will-getmail-idler.pid --logfile .getmail-idler.log -vv --daemonize
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&quot;personal-thoughts&quot;&gt;Personal thoughts&lt;/h1&gt;
+&lt;p&gt;I’m pretty pleased with how this turned out (edit: see updates section at the top on how that’s changed - I’m happy with the script, less happy with imaplib2) since it was a great exercise for me in learning some new things about Python. That said, compared to something like NodeJS, I feel with the write library this would’ve been faster in a language with great eventing support, rather then Python’s weird middle-ground of “not quite parallel” threads. But, I keep coming back to the language, and the demo-code I used &lt;a href=&quot;http://blog.timstoop.nl/2009/03/11/python-imap-idle-with-imaplib2/&quot;&gt;here&lt;/a&gt; was Python so it must be doing something right.&lt;/p&gt;
+&lt;p&gt;I’ll probably keep refining this if I run into problems - though if it doesn’t actually stop working, then I’ll leave it alone since the whole self-hosted email thing’s biggest downside is when your listener dies and you stop getting email - that’s the problem I’ve really tried to solve here - IDLE PUSH email functionality, and highly visible notifications when something is wrong.&lt;/p&gt;
 </description>
     </item>
     <item>
@@ -340,18 +434,19 @@ optional arguments:
       <description>&lt;p&gt;When I was travelling Europe I found some surprisingly restricted wi-fi hotspots in hotels. This was annoying because I use SSH to upload photos back home from my phone, but having not setup any tunneling helpers I just had to wait till I found a better one.&lt;/p&gt;
 &lt;p&gt;There are a number of solutions to SSH tunneling, but the main thing I wanted to do was implement something which would let me run several fallbacks at once. Enter &lt;a href=&quot;https://github.com/stealth/sshttp&quot;&gt;sshttp&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;sshttp is related to sslh, in the sense that they are both SSH connection multiplexers. The idea is that you point a web-browser at port 80, you get a web-page. You point your SSH client, and you get an SSH connection. Naive firewalls let the SSH traffic through without complaint.&lt;/p&gt;
-&lt;p&gt;The benefit of sshttp over sslh is that it uses Linux&amp;#39;s &lt;code&gt;IP_TRANSPARENT&lt;/code&gt; flag, which means that your SSH and HTTP logs all show proper source IPs, which is great for auditing and security.&lt;/p&gt;
+&lt;p&gt;The benefit of sshttp over sslh is that it uses Linux’s &lt;code&gt;IP_TRANSPARENT&lt;/code&gt; flag, which means that your SSH and HTTP logs all show proper source IPs, which is great for auditing and security.&lt;/p&gt;
 &lt;p&gt;This is a blog about how I set it up for my specific server case, the instructions I used as a guide were adapted from &lt;a href=&quot;http://blog.stalkr.net/2012/02/sshhttps-multiplexing-with-sshttp.html&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-&lt;h2&gt;Components&lt;/h2&gt;
-&lt;p&gt;My home server hosts a number of daemons, but namely a large number of nginx name-based virtual hosts for things on my network. I specifically &lt;em&gt;don&amp;#39;t&lt;/em&gt; want nginx trying to serve most of these pages to the web.&lt;/p&gt;
+&lt;h2 id=&quot;components&quot;&gt;Components&lt;/h2&gt;
+&lt;p&gt;My home server hosts a number of daemons, but namely a large number of nginx name-based virtual hosts for things on my network. I specifically &lt;em&gt;don’t&lt;/em&gt; want nginx trying to serve most of these pages to the web.&lt;/p&gt;
 &lt;p&gt;The idea is that sshttp is my first firewall punching fallback, and then I can install some sneakier options on the web-side of sshttp (topic for a future blog). I also wanted sshttp to be nicely integrated with upstart in case I wanted to add more daemons/redirects in the future.&lt;/p&gt;
-&lt;h2&gt;Installing sshttp&lt;/h2&gt;
-&lt;p&gt;There&amp;#39;s no deb package available, so installation is from github and then I copy it manually to /usr/local/sbin:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;$ git clone https://github.com/stealth/sshttp
-$ cd sshttp
+&lt;h2 id=&quot;installing-sshttp&quot;&gt;Installing sshttp&lt;/h2&gt;
+&lt;p&gt;There’s no deb package available, so installation is from github and then I copy it manually to /usr/local/sbin:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;$ git &lt;span class=&quot;built_in&quot;&gt;clone&lt;/span&gt; https://github.com/stealth/sshttp
+$ &lt;span class=&quot;built_in&quot;&gt;cd&lt;/span&gt; sshttp
 $ make
-$ sudo cp sshttpd /usr/local/sbin&lt;/code&gt;&lt;/pre&gt;
-&lt;h2&gt;Upstart Script&lt;/h2&gt;
+$ sudo cp sshttpd /usr/&lt;span class=&quot;built_in&quot;&gt;local&lt;/span&gt;/sbin
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;upstart-script&quot;&gt;Upstart Script&lt;/h2&gt;
 &lt;p&gt;I settled on the following upstart script for sshttp (adapted from my favorite nodeJS launching script):&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# sshttpd launcher&lt;/span&gt;
 &lt;span class=&quot;comment&quot;&gt;# note: this at minimum needs an iptables configuration which allows the&lt;/span&gt;
@@ -360,7 +455,7 @@ $ sudo cp sshttpd /usr/local/sbin&lt;/code&gt;&lt;/pre&gt;
 description &lt;span class=&quot;string&quot;&gt;&quot;sshttpd server upstart script&quot;&lt;/span&gt;
 author &lt;span class=&quot;string&quot;&gt;&quot;will rouesnel&quot;&lt;/span&gt;
 
-start on (local-filesystems and net-device-up)
+start on (&lt;span class=&quot;built_in&quot;&gt;local&lt;/span&gt;-filesystems and net-device-up)
 stop on shutdown
 
 instance &lt;span class=&quot;string&quot;&gt;&quot;sshttpd - &lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt;&quot;&lt;/span&gt;
@@ -371,8 +466,8 @@ expect daemon
 
 pre-start script
     &lt;span class=&quot;comment&quot;&gt;# Check script exists&lt;/span&gt;
-    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;test_condition&quot;&gt;[ ! -e /etc/sshttp.d/&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt;.conf ]&lt;/span&gt;; &lt;span class=&quot;keyword&quot;&gt;then&lt;/span&gt;
-        &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; 1
+    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; [ ! -e /etc/sshttp.d/&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt;.conf ]; &lt;span class=&quot;keyword&quot;&gt;then&lt;/span&gt;
+        &lt;span class=&quot;built_in&quot;&gt;return&lt;/span&gt; 1
     &lt;span class=&quot;keyword&quot;&gt;fi&lt;/span&gt;
     . /etc/sshttp.d/&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt;.conf
 
@@ -392,12 +487,12 @@ pre-start script
     &lt;span class=&quot;keyword&quot;&gt;fi&lt;/span&gt;
 
     &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; ! ip route show table &lt;span class=&quot;variable&quot;&gt;${TABLE}&lt;/span&gt; | grep -q &lt;span class=&quot;string&quot;&gt;&quot;default&quot;&lt;/span&gt;; &lt;span class=&quot;keyword&quot;&gt;then&lt;/span&gt;
-        ip route add local 0.0.0.0/0 dev lo table &lt;span class=&quot;variable&quot;&gt;${TABLE}&lt;/span&gt;
+        ip route add &lt;span class=&quot;built_in&quot;&gt;local&lt;/span&gt; 0.0.0.0/0 dev lo table &lt;span class=&quot;variable&quot;&gt;${TABLE}&lt;/span&gt;
     &lt;span class=&quot;keyword&quot;&gt;fi&lt;/span&gt;
 
     &lt;span class=&quot;comment&quot;&gt;# Add iptables mangle rule chain for this instance&lt;/span&gt;
     iptables -t mangle -N sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt; || &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;
-    iptables -t mangle -A sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt; -j MARK --&lt;span class=&quot;keyword&quot;&gt;set&lt;/span&gt;-mark &lt;span class=&quot;variable&quot;&gt;${MARK}&lt;/span&gt;
+    iptables -t mangle -A sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt; -j MARK --&lt;span class=&quot;built_in&quot;&gt;set&lt;/span&gt;-mark &lt;span class=&quot;variable&quot;&gt;${MARK}&lt;/span&gt;
     iptables -t mangle -A sshttpd-&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt; -j ACCEPT
 
     &lt;span class=&quot;comment&quot;&gt;# Add the output and prerouting rules&lt;/span&gt;
@@ -411,7 +506,7 @@ end script
 script
     . /etc/sshttp.d/&lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt;.conf
 
-    /usr/local/sbin/sshttpd -n 1 -S &lt;span class=&quot;variable&quot;&gt;${SSH_PORT}&lt;/span&gt; -H &lt;span class=&quot;variable&quot;&gt;${HTTP_PORT}&lt;/span&gt; -L&lt;span class=&quot;variable&quot;&gt;${LISTEN_PORT}&lt;/span&gt; -U nobody -R /var/empty &amp;gt;&amp;gt; &lt;span class=&quot;variable&quot;&gt;${LOG_PATH}&lt;/span&gt; 2&amp;gt;&amp;amp;1
+    /usr/&lt;span class=&quot;built_in&quot;&gt;local&lt;/span&gt;/sbin/sshttpd -n 1 -S &lt;span class=&quot;variable&quot;&gt;${SSH_PORT}&lt;/span&gt; -H &lt;span class=&quot;variable&quot;&gt;${HTTP_PORT}&lt;/span&gt; -L&lt;span class=&quot;variable&quot;&gt;${LISTEN_PORT}&lt;/span&gt; -U nobody -R /var/empty &amp;gt;&amp;gt; &lt;span class=&quot;variable&quot;&gt;${LOG_PATH}&lt;/span&gt; 2&amp;gt;&amp;amp;1
 end script
 
 post-stop script
@@ -431,15 +526,17 @@ post-stop script
         ip rule del fwmark &lt;span class=&quot;variable&quot;&gt;${MARK}&lt;/span&gt; lookup &lt;span class=&quot;variable&quot;&gt;${TABLE}&lt;/span&gt;
     &lt;span class=&quot;keyword&quot;&gt;fi&lt;/span&gt;
     &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; ip route show table &lt;span class=&quot;variable&quot;&gt;${TABLE}&lt;/span&gt; | grep -q &lt;span class=&quot;string&quot;&gt;&quot;default&quot;&lt;/span&gt;; &lt;span class=&quot;keyword&quot;&gt;then&lt;/span&gt;
-        ip route del local 0.0.0.0/0 dev lo table &lt;span class=&quot;variable&quot;&gt;${TABLE}&lt;/span&gt;
+        ip route del &lt;span class=&quot;built_in&quot;&gt;local&lt;/span&gt; 0.0.0.0/0 dev lo table &lt;span class=&quot;variable&quot;&gt;${TABLE}&lt;/span&gt;
     &lt;span class=&quot;keyword&quot;&gt;fi&lt;/span&gt;
 
     &lt;span class=&quot;comment&quot;&gt;# Let sysadmin know we went down for some reason.&lt;/span&gt;
     cat &lt;span class=&quot;variable&quot;&gt;${LOG_PATH}&lt;/span&gt; | mail -s &lt;span class=&quot;string&quot;&gt;&quot;sshttpd - &lt;span class=&quot;variable&quot;&gt;$NAME&lt;/span&gt; process killed.&quot;&lt;/span&gt; root
-end script&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This script nicely sets up and tears down the bits of iptables mangling and routing infrastructure needed for sshttp, and neatly creates chains for different sshttp instances based on configuration files. It&amp;#39;ll only launch a single instance, so launching them all on boot is handled by this &lt;a href=&quot;https://gist.github.com/wrouesnel/6341544&quot;&gt;upstart script&lt;/a&gt;.&lt;/p&gt;
+end script
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This script nicely sets up and tears down the bits of iptables mangling and routing infrastructure needed for sshttp, and neatly creates chains for different sshttp instances based on configuration files. It’ll only launch a single instance, so launching them all on boot is handled by this &lt;a href=&quot;https://gist.github.com/wrouesnel/6341544&quot;&gt;upstart script&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;To use this script, you need an /etc/sshttp.d directory:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;$ sudo mkdir /etc/sshttp.d&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;$ sudo mkdir /etc/sshttp.d
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;and a configuration file like the following, with a &lt;code&gt;*.conf&lt;/code&gt; extension:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;$ cat /etc/sshttp.d/http.conf
 SSH_PORT=22022
@@ -447,22 +544,24 @@ HTTP_PORT=20080
 LISTEN_PORT=20081
 MARK=1
 TABLE=22080
-LOG_PATH=/var/log/sshttp.log&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;LISTEN_PORT&lt;/code&gt; is your sshttp port. It‘s 20081 because we’re going to use iptables to forward port 80 to 20081 (to accomodate nginx - more on this later). &lt;code&gt;SSH_PORT&lt;/code&gt; is an extra SSH port for openssh - so we have both 22 and 22022 open as SSH ports since 22022 can‘t be publically accessible (and we’d like 22 to be publically accessible).&lt;/p&gt;
+LOG_PATH=/var/&lt;span class=&quot;built_in&quot;&gt;log&lt;/span&gt;/sshttp.log
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;LISTEN_PORT&lt;/code&gt; is your sshttp port. It’s 20081 because we’re going to use iptables to forward port 80 to 20081 (to accomodate nginx - more on this later). &lt;code&gt;SSH_PORT&lt;/code&gt; is an extra SSH port for openssh - so we have both 22 and 22022 open as SSH ports since 22022 can’t be publically accessible (and we’d like 22 to be publically accessible).&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;HTTP_PORT&lt;/code&gt; is the port your web-server is listening on, for the same reasons as the &lt;code&gt;SSH_PORT&lt;/code&gt;. &lt;code&gt;MARK&lt;/code&gt; is the connection marker the daemon looks for - it has to be unique for each one. &lt;code&gt;TABLE&lt;/code&gt; is the route table used for look ups - I think. This value can be anything - I think.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;LOG_PATH&lt;/code&gt; I currently set to the same value for each host for simplicity - sshttp doesn‘t really log anything too useful (and one of it’s features is that you don‘t need it’s logs anyway).&lt;/p&gt;
-&lt;h2&gt;IP Tables configuration&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;LOG_PATH&lt;/code&gt; I currently set to the same value for each host for simplicity - sshttp doesn’t really log anything too useful (and one of it’s features is that you don’t need it’s logs anyway).&lt;/p&gt;
+&lt;h2 id=&quot;ip-tables-configuration&quot;&gt;IP Tables configuration&lt;/h2&gt;
 &lt;p&gt;In addition to the sshttpd upstart scripts, some general &lt;code&gt;iptables&lt;/code&gt; configuration was needed for my specific server.&lt;/p&gt;
 &lt;p&gt;To make configuring nGinx simpler for my local network, IP Tables is set to redirect all traffic coming into the server on the &lt;code&gt;ppp0&lt;/code&gt; interface (my DSL line) on port 80 and 443, to the listen ports specified for sshttpd for each interface (so port 80 goes to port 20081 in the above).&lt;/p&gt;
 &lt;p&gt;This means I can happily keep setting up private internal servers on port 80 on my server withou futzing around with bind IPs, and instead can put anything I want to serve externally onto port 20080 as per the configuration file above.&lt;/p&gt;
-&lt;p&gt;I like &lt;a href=&quot;http://www.fwbuilder.org/&quot;&gt;Firewall Builder&lt;/a&gt; at the moment for my configuration (although I&amp;#39;m thinking a shell script might be better practice in future).&lt;/p&gt;
+&lt;p&gt;I like &lt;a href=&quot;http://www.fwbuilder.org/&quot;&gt;Firewall Builder&lt;/a&gt; at the moment for my configuration (although I’m thinking a shell script might be better practice in future).&lt;/p&gt;
 &lt;p&gt;The relevant IP tables lines if you were doing it manually would be something like&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;iptables -t nat -A PREROUTING -i ppp0 -p tcp -m tcp -d &amp;lt;your external ip&amp;gt; --dport 80 -j REDIRECT --to-ports 20081&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Configuring iptables like this is covered fantastically elsewhere so I won&amp;#39;t go into it here.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;iptables -t nat -A PREROUTING -i ppp0 -p tcp -m tcp -d &amp;lt;your external ip&amp;gt; --dport 80 -j REDIRECT --to-ports 20081
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Configuring iptables like this is covered fantastically elsewhere so I won’t go into it here.&lt;/p&gt;
 &lt;p&gt;But with this redirect, externally port 80 now goes to sshttp, which then redirects it to either SSH or to the specific external application I want to serve over HTTP on port 20080.&lt;/p&gt;
-&lt;h2&gt;Conclusion&lt;/h2&gt;
-&lt;p&gt;At the moment with this setup I just have nginx serving 404s back on my sshttp server ports. But the real benefit is, I can turn those into secure proxy&amp;#39;s to use with something like &lt;a href=&quot;http://pwet.fr/man/linux/commandes/corkscrew&quot;&gt;corkscrew&lt;/a&gt; or &lt;a href=&quot;http://proxytunnel.sourceforge.net/&quot;&gt;proxytunnel&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Or I can go further - use &lt;a href=&quot;http://www.nocrew.org/software/httptunnel.html&quot;&gt;httptunnel&lt;/a&gt; to tunnel TCP over GET and POST connections (my actual intent) on the public facing HTTP ports. Or do both - each method has it&amp;#39;s trade-offs, so we can just step down till we find one which works!&lt;/p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;At the moment with this setup I just have nginx serving 404s back on my sshttp server ports. But the real benefit is, I can turn those into secure proxy’s to use with something like &lt;a href=&quot;http://pwet.fr/man/linux/commandes/corkscrew&quot;&gt;corkscrew&lt;/a&gt; or &lt;a href=&quot;http://proxytunnel.sourceforge.net/&quot;&gt;proxytunnel&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Or I can go further - use &lt;a href=&quot;http://www.nocrew.org/software/httptunnel.html&quot;&gt;httptunnel&lt;/a&gt; to tunnel TCP over GET and POST connections (my actual intent) on the public facing HTTP ports. Or do both - each method has it’s trade-offs, so we can just step down till we find one which works!&lt;/p&gt;
 </description>
     </item>
     <item>
@@ -471,16 +570,16 @@ LOG_PATH=/var/log/sshttp.log&lt;/code&gt;&lt;/pre&gt;
       <pubDate>Mon, 26  Aug 2013 18:49:00 +1000</pubDate>
       <guid isPermaLink="true">http://localhost:8080/articles/Upstart%20troubles/</guid>
       <author></author>
-      <description>&lt;p&gt;I frequently find myself writing upstart scripts which checkout ok, but for some reason don&amp;#39;t get detected by the upstart daemon in the init directory, so when I run &lt;code&gt;start myscript&lt;/code&gt; I get &lt;code&gt;unknown job&lt;/code&gt; back. Some experimentation seems to indicate that the problem is I used gedit over GVFS SFTP to author a lot of these scripts.&lt;/p&gt;
+      <description>&lt;p&gt;I frequently find myself writing upstart scripts which checkout ok, but for some reason don’t get detected by the upstart daemon in the init directory, so when I run &lt;code&gt;start myscript&lt;/code&gt; I get &lt;code&gt;unknown job&lt;/code&gt; back. Some experimentation seems to indicate that the problem is I used gedit over GVFS SFTP to author a lot of these scripts.&lt;/p&gt;
 &lt;p&gt;For something like &lt;code&gt;myscript.conf&lt;/code&gt;, I find the following fixes this problem:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;mv myscript.conf myscript.conf.d
-mv myscript.conf.d myscript.conf&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;And then hey presto, the script works perfectly.&lt;/p&gt;
-&lt;p&gt;Along the same lines, the &lt;code&gt;init-checkconf&lt;/code&gt; utility isn‘t mentioned enough for upstart debugging - my last post shows I clearly didn’t know about it. Using it is simple:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ init-checkconf /etc/init/myscript.conf&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Note it needs to be run as a regular user. I&amp;#39;m often logged in as root, so sudo suffices:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ sudo -u nobody init-checkconf /etc/init/myscript.conf&lt;/code&gt;&lt;/pre&gt;
-</description>
+mv myscript.conf.d myscript.conf
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;And then hey presto, the script works perfectly.&lt;/p&gt;
+&lt;p&gt;Along the same lines, the &lt;code&gt;init-checkconf&lt;/code&gt; utility isn’t mentioned enough for upstart debugging - my last post shows I clearly didn’t know about it. Using it is simple:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ init-checkconf /etc/init/myscript.conf
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Note it needs to be run as a regular user. I’m often logged in as root, so sudo suffices:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ sudo -u nobody init-checkconf /etc/init/myscript.conf
+&lt;/code&gt;&lt;/pre&gt;</description>
     </item>
     <item>
       <title>Wintersmithing</title>
@@ -488,11 +587,11 @@ mv myscript.conf.d myscript.conf&lt;/code&gt;&lt;/pre&gt;
       <pubDate>Sun, 18  Aug 2013 02:33:00 +1000</pubDate>
       <guid isPermaLink="true">http://localhost:8080/articles/Wintersmithing/</guid>
       <author></author>
-      <description>&lt;h1&gt;Wintersmith&lt;/h1&gt;
+      <description>&lt;h1 id=&quot;wintersmith&quot;&gt;Wintersmith&lt;/h1&gt;
 &lt;p&gt;How to setup and use Wintersmith is covered pretty thoroughly elsewhere on the net, (namely the &lt;a href=&quot;http://wintersmith.io/&quot;&gt;wintersmith homepage&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Instead I&amp;#39;ll cover a few tweaks I had to do to get it running the way I wanted. To avoid being truly confusing, all the paths referenced here are relative to the site you create by running &lt;code&gt;wintersmith new &amp;lt;your site dir here&amp;gt;&lt;/code&gt;&lt;/p&gt;
-&lt;h2&gt;LiveReload plugin&lt;/h2&gt;
-&lt;p&gt;There&amp;#39;s a Wintersmith LiveReload plugin available which makes previewing your site with &lt;code&gt;wintersmith preview&lt;/code&gt; very easy - it&amp;#39;s great for editing or setting up CSS.&lt;/p&gt;
+&lt;p&gt;Instead I’ll cover a few tweaks I had to do to get it running the way I wanted. To avoid being truly confusing, all the paths referenced here are relative to the site you create by running &lt;code&gt;wintersmith new &amp;lt;your site dir here&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&quot;livereload-plugin&quot;&gt;LiveReload plugin&lt;/h2&gt;
+&lt;p&gt;There’s a Wintersmith LiveReload plugin available which makes previewing your site with &lt;code&gt;wintersmith preview&lt;/code&gt; very easy - it’s great for editing or setting up CSS.&lt;/p&gt;
 &lt;p&gt;Installing the LiveReload plugin on Linux Mint (which I run) can be done with &lt;code&gt;sudo npm install -g wintersmith-livereload&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;You need to then add the path to your &lt;code&gt;config.json&lt;/code&gt; file under “plugins” e.g. for this blog:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;lang-javascript&quot;&gt;{
@@ -522,10 +621,11 @@ mv myscript.conf.d myscript.conf&lt;/code&gt;&lt;/pre&gt;
   &lt;span class=&quot;string&quot;&gt;&quot;paginator&quot;&lt;/span&gt;: {
     &lt;span class=&quot;string&quot;&gt;&quot;perPage&quot;&lt;/span&gt;: &lt;span class=&quot;number&quot;&gt;20&lt;/span&gt;
   }
-}&lt;/code&gt;&lt;/pre&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;You then want to insert the line:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;!{ env.helpers.livereload() }&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;into the &lt;code&gt;templates/layout.jade&lt;/code&gt; file - giving you something like the following at the top of the file&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;!{ env.helpers.livereload() }
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;into the &lt;code&gt;templates/layout.jade&lt;/code&gt; file - giving you something like the following at the top of the file&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;lang-jade&quot;&gt;!!! 5
 block vars
   - var bodyclass = null;
@@ -536,8 +636,9 @@ html(lang=&amp;#39;en&amp;#39;)
       meta(http-equiv=&amp;#39;X-UA-Compatible&amp;#39;, content=&amp;#39;IE=edge,chrome=1&amp;#39;)
       meta(name=&amp;#39;viewport&amp;#39;, content=&amp;#39;width=device-width&amp;#39;)
       !{ env.helpers.livereload() }
-      script(type=&amp;#39;text/javascript&amp;#39;).&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;I also add a script section with &lt;a href=&quot;http://www.google.com/analytics/&quot;&gt;Google Analytics&lt;/a&gt; to layout.jade because I&amp;#39;m vain like that:&lt;/p&gt;
+      script(type=&amp;#39;text/javascript&amp;#39;).
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;I also add a script section with &lt;a href=&quot;http://www.google.com/analytics/&quot;&gt;Google Analytics&lt;/a&gt; to layout.jade because I’m vain like that:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;lang-jade&quot;&gt;!!! 5
 block vars
   - var bodyclass = null;
@@ -556,13 +657,14 @@ html(lang=&amp;#39;en&amp;#39;)
         })(window,document,&amp;#39;script&amp;#39;,&amp;#39;//www.google-analytics.com/analytics.js&amp;#39;,&amp;#39;ga&amp;#39;);
 
         ga(&amp;#39;create&amp;#39;, &amp;#39;UA-43235370-1&amp;#39;, &amp;#39;wrouesnel.github.io&amp;#39;);
-        ga(&amp;#39;send&amp;#39;, &amp;#39;pageview&amp;#39;);&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;strong&gt;The glitch&lt;/strong&gt;: Running &lt;code&gt;wintersmith preview&lt;/code&gt; with these changes you‘ll find it doesn’t work when trying to browse to the main index.html page with something like “env is undefined”. This is &lt;a href=&quot;https://github.com/jnordberg/wintersmith/issues/141&quot;&gt;a glitch in paginator which has been fixed upstream&lt;/a&gt; but not in wintersmith@2.0.5 in npm. &lt;/p&gt;
+        ga(&amp;#39;send&amp;#39;, &amp;#39;pageview&amp;#39;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;The glitch&lt;/strong&gt;: Running &lt;code&gt;wintersmith preview&lt;/code&gt; with these changes you’ll find it doesn’t work when trying to browse to the main index.html page with something like “env is undefined”. This is &lt;a href=&quot;https://github.com/jnordberg/wintersmith/issues/141&quot;&gt;a glitch in paginator which has been fixed upstream&lt;/a&gt; but not in wintersmith@2.0.5 in npm. &lt;/p&gt;
 &lt;p&gt;To fix it I just copied &lt;a href=&quot;https://github.com/jnordberg/wintersmith/commit/b959b35b9b153fb7ddbaa37533800777473b5a17.diff&quot;&gt;the commit patch&lt;/a&gt; manually into my local copy of &lt;code&gt;plugins/paginator.coffee&lt;/code&gt; : &lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;lang-diff&quot;&gt;diff --git a/examples/blog/plugins/paginator.coffee b/examples/blog/plugins/paginator.coffee
 index b8e9032..19098d5 100644
-&lt;span class=&quot;header&quot;&gt;--- a/examples/blog/plugins/paginator.coffee&lt;/span&gt;
-&lt;span class=&quot;header&quot;&gt;+++ b/examples/blog/plugins/paginator.coffee&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;--- a/examples/blog/plugins/paginator.coffee&lt;/span&gt;
+&lt;span class=&quot;comment&quot;&gt;+++ b/examples/blog/plugins/paginator.coffee&lt;/span&gt;
 @@ -43,7 +43,7 @@ module.exports = (env, callback) -&amp;gt;
          return callback new Error &quot;unknown paginator template '#{ options.template }'&quot;
 
@@ -571,10 +673,11 @@ index b8e9032..19098d5 100644
 &lt;span class=&quot;addition&quot;&gt;+      ctx = {env, contents, @articles, @prevPage, @nextPage}&lt;/span&gt;
 
        # extend the template context with the enviroment locals
-       env.utils.extend ctx, locals&lt;/code&gt;&lt;/pre&gt;
-&lt;h2&gt;Show most recent article in the index&lt;/h2&gt;
-&lt;p&gt;By default Wintersmith shows short summaries of articles on your &lt;code&gt;index.html&lt;/code&gt; page. I can&amp;#39;t decide whether or not I like this behavior yet, but until I do what I wanted was to always have my index show my most recent post.&lt;/p&gt;
-&lt;p&gt;To do this, we take advantage of Jade&amp;#39;s iteration and if/then functionality to modify &lt;code&gt;template/index.jade&lt;/code&gt;.&lt;/p&gt;
+       env.utils.extend ctx, locals
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;show-most-recent-article-in-the-index&quot;&gt;Show most recent article in the index&lt;/h2&gt;
+&lt;p&gt;By default Wintersmith shows short summaries of articles on your &lt;code&gt;index.html&lt;/code&gt; page. I can’t decide whether or not I like this behavior yet, but until I do what I wanted was to always have my index show my most recent post.&lt;/p&gt;
+&lt;p&gt;To do this, we take advantage of Jade’s iteration and if/then functionality to modify &lt;code&gt;template/index.jade&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;As of this article my index.jade looks as follows:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;lang-jade&quot;&gt;extends layout
 
@@ -614,47 +717,51 @@ block prepend footer
     else
       a(href=&amp;#39;/archive.html&amp;#39;) « Archives
     if nextPage
-      a(href=nextPage.url) Next page »&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;There might be a better way to do this, but for me, for now it works. Basically Jade&amp;#39;s iterators will provide an iteration number if you add a variable name for it (&lt;code&gt;num&lt;/code&gt; in this case) - and the articles are chronological by default. So 0 is always the most recent.&lt;/p&gt;
+      a(href=nextPage.url) Next page »
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;There might be a better way to do this, but for me, for now it works. Basically Jade’s iterators will provide an iteration number if you add a variable name for it (&lt;code&gt;num&lt;/code&gt; in this case) - and the articles are chronological by default. So 0 is always the most recent.&lt;/p&gt;
 &lt;p&gt;From there I just duplicate some code fro &lt;code&gt;template/article.jade&lt;/code&gt; to have it render the full article in &lt;code&gt;section.content&lt;/code&gt; - which is &lt;code&gt;article.html&lt;/code&gt;, rather then just the intro section - which is &lt;code&gt;article.intro&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;An important note here is that the default CSS selectors require some modification to get things to look right. I‘m not sure I’ve nailed it yet, so editing those is an exercise left to the reader (or just a matter of downloading the stylesheet from this site).&lt;/p&gt;
-&lt;h1&gt;Deploy Makefile&lt;/h1&gt;
-&lt;p&gt;This site is hosted on Github pages, but they have no support for Wintersmith - so it&amp;#39;s necessary to manually build the static content and upload that. &lt;code&gt;make&lt;/code&gt; is more then capable of handling this task, and while we‘re at it it’s a decent tool to automate housekeeping - in particular I wanted my article metadata to be automatically tagged with a date if the date field was blank.&lt;/p&gt;
-&lt;h2&gt;Automatic date tagging&lt;/h2&gt;
+&lt;p&gt;An important note here is that the default CSS selectors require some modification to get things to look right. I’m not sure I’ve nailed it yet, so editing those is an exercise left to the reader (or just a matter of downloading the stylesheet from this site).&lt;/p&gt;
+&lt;h1 id=&quot;deploy-makefile&quot;&gt;Deploy Makefile&lt;/h1&gt;
+&lt;p&gt;This site is hosted on Github pages, but they have no support for Wintersmith - so it’s necessary to manually build the static content and upload that. &lt;code&gt;make&lt;/code&gt; is more then capable of handling this task, and while we’re at it it’s a decent tool to automate housekeeping - in particular I wanted my article metadata to be automatically tagged with a date if the date field was blank.&lt;/p&gt;
+&lt;h2 id=&quot;automatic-date-tagging&quot;&gt;Automatic date tagging&lt;/h2&gt;
 &lt;p&gt;After banging my head with awk or sed one-liners (which probably can be done) I came to my senses and wrote a bash script to do this for me.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;&lt;span class=&quot;shebang&quot;&gt;#!/bin/bash&lt;/span&gt;
-
-find contents -name &lt;span class=&quot;string&quot;&gt;'*.md'&lt;/span&gt; | &lt;span class=&quot;keyword&quot;&gt;while&lt;/span&gt; read markdownfile; &lt;span class=&quot;keyword&quot;&gt;do&lt;/span&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;&lt;span class=&quot;meta&quot;&gt;#!/bin/bash
+&lt;/span&gt;
+find contents -name &lt;span class=&quot;string&quot;&gt;'*.md'&lt;/span&gt; | &lt;span class=&quot;keyword&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;built_in&quot;&gt;read&lt;/span&gt; markdownfile; &lt;span class=&quot;keyword&quot;&gt;do&lt;/span&gt;
     datemeta=$(cat &lt;span class=&quot;variable&quot;&gt;$markdownfile&lt;/span&gt; | grep -m1 date: )
     datestamp=$(cat &lt;span class=&quot;variable&quot;&gt;$markdownfile&lt;/span&gt; | grep -m1 date: | cut -d&lt;span class=&quot;string&quot;&gt;' '&lt;/span&gt; -f2)
 
-    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;test_condition&quot;&gt;[ ! -z &lt;span class=&quot;string&quot;&gt;&quot;&lt;span class=&quot;variable&quot;&gt;$datemeta&lt;/span&gt;&quot;&lt;/span&gt; ]&lt;/span&gt;; &lt;span class=&quot;keyword&quot;&gt;then&lt;/span&gt;
-        &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;test_condition&quot;&gt;[ -z &lt;span class=&quot;string&quot;&gt;&quot;&lt;span class=&quot;variable&quot;&gt;$datestamp&lt;/span&gt;&quot;&lt;/span&gt; ]&lt;/span&gt;; &lt;span class=&quot;keyword&quot;&gt;then&lt;/span&gt;
+    &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; [ ! -z &lt;span class=&quot;string&quot;&gt;&quot;&lt;span class=&quot;variable&quot;&gt;$datemeta&lt;/span&gt;&quot;&lt;/span&gt; ]; &lt;span class=&quot;keyword&quot;&gt;then&lt;/span&gt;
+        &lt;span class=&quot;keyword&quot;&gt;if&lt;/span&gt; [ -z &lt;span class=&quot;string&quot;&gt;&quot;&lt;span class=&quot;variable&quot;&gt;$datestamp&lt;/span&gt;&quot;&lt;/span&gt; ]; &lt;span class=&quot;keyword&quot;&gt;then&lt;/span&gt;
             &lt;span class=&quot;comment&quot;&gt;# generate a datestamp entry and replace the field with sed&lt;/span&gt;
-            &lt;span class=&quot;keyword&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&quot;Date stamping unstamped article &lt;span class=&quot;variable&quot;&gt;$markdownfile&lt;/span&gt;&quot;&lt;/span&gt;
+            &lt;span class=&quot;built_in&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&quot;Date stamping unstamped article &lt;span class=&quot;variable&quot;&gt;$markdownfile&lt;/span&gt;&quot;&lt;/span&gt;
             datestamp=$(date &lt;span class=&quot;string&quot;&gt;'+%Y-%m-%d %H:%M GMT%z'&lt;/span&gt;)
             sed -i &lt;span class=&quot;string&quot;&gt;&quot;s/date:\ .*/date: &lt;span class=&quot;variable&quot;&gt;$datestamp&lt;/span&gt;/&quot;&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&quot;&lt;span class=&quot;variable&quot;&gt;$markdownfile&lt;/span&gt;&quot;&lt;/span&gt;
         &lt;span class=&quot;keyword&quot;&gt;fi&lt;/span&gt;
     &lt;span class=&quot;keyword&quot;&gt;fi&lt;/span&gt;
-&lt;span class=&quot;keyword&quot;&gt;done&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
-&lt;h2&gt;Git Submodules&lt;/h2&gt;
-&lt;p&gt;Since I use Git to manage the blog, but GitHub Pages uses a git repo to represent the finished blog, it‘s necessary on my local machine to somehow have two repositories - one representing the Wintersmith site in source form, and one representing the GitHub Pages site after it’s rendered.&lt;/p&gt;
-&lt;p&gt;I do this by treating the &lt;code&gt;build/&lt;/code&gt; directory of my Wintersmith site as a Git submodule. Git won&amp;#39;t checkout an empty repo, so you need to create a full repo somewhere and then push it to your normal storage (in my case my private server, but it could be somewhere else on GitHub):&lt;/p&gt;
+&lt;span class=&quot;keyword&quot;&gt;done&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;git-submodules&quot;&gt;Git Submodules&lt;/h2&gt;
+&lt;p&gt;Since I use Git to manage the blog, but GitHub Pages uses a git repo to represent the finished blog, it’s necessary on my local machine to somehow have two repositories - one representing the Wintersmith site in source form, and one representing the GitHub Pages site after it’s rendered.&lt;/p&gt;
+&lt;p&gt;I do this by treating the &lt;code&gt;build/&lt;/code&gt; directory of my Wintersmith site as a Git submodule. Git won’t checkout an empty repo, so you need to create a full repo somewhere and then push it to your normal storage (in my case my private server, but it could be somewhere else on GitHub):&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;$ mkdir build
-$ cd build
+$ &lt;span class=&quot;built_in&quot;&gt;cd&lt;/span&gt; build
 $ git init
 $ git remote add origin ssh://will@myserver/~/wrouesnel.github.io~build.git
 $ touch .gitignore
 $ git add *
 $ git commit
-$ git push master&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;At this point you can delete the build/ directory you just created. It&amp;#39;s not needed any more. Then it can be imported as a submodule to the main Wintersmith repo. We also need to add a remote for pushing output to Github:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;$ cd your_wintersmith_repo
+$ git push master
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;At this point you can delete the build/ directory you just created. It’s not needed any more. Then it can be imported as a submodule to the main Wintersmith repo. We also need to add a remote for pushing output to Github:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;$ &lt;span class=&quot;built_in&quot;&gt;cd&lt;/span&gt; your_wintersmith_repo
 $ git submodule add ssh://will@myserver/~/wrouesnel.github.io~build.git build
-$ cd build
-$ git remote add github git@github.com:wrouesnel/wrouesnel.github.io.git&lt;/code&gt;&lt;/pre&gt;
+$ &lt;span class=&quot;built_in&quot;&gt;cd&lt;/span&gt; build
+$ git remote add github git@github.com:wrouesnel/wrouesnel.github.io.git
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;And after all that effort your module is imported and ready to participate in the build process.&lt;/p&gt;
-&lt;h2&gt;Putting the makefile together&lt;/h2&gt;
+&lt;h2 id=&quot;putting-the-makefile-together&quot;&gt;Putting the makefile together&lt;/h2&gt;
 &lt;p&gt;The final makefile looks something like this:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;lang-make&quot;&gt;# Makefile to deploy the blog
 
@@ -673,16 +780,17 @@ publish: draft
     cd build; git commit -m &amp;quot;published to github&amp;quot;; \
     git push github master
 
-.PHONY: date draft publish&lt;/code&gt;&lt;/pre&gt;
+.PHONY: date draft publish
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The workflow is that I can call &lt;code&gt;make draft&lt;/code&gt; which builds the site and commits the build to my private repo which just tracks draft sites elsewhere, and then &lt;code&gt;make publish&lt;/code&gt; for when I want things to go live.&lt;/p&gt;
 &lt;p&gt;There are obviously other ways this could work - for example, I could use post-commit hooks on the server to push to Github Pages, but the idea here is that provided I can access the the wintersmith repository, everything else can be rebuilt.&lt;/p&gt;
-&lt;h1&gt;Personal thoughts&lt;/h1&gt;
-&lt;p&gt;I&amp;#39;ve been meaning to blog for sometime to have somewhere to put the things I do or random bits of knowledge I pick up so they might help someone else, but for one reason or another most blogging engines never did it for me.&lt;/p&gt;
-&lt;p&gt;I‘ve never been much of a fan of managed services they lead to sprawling personal “infrastructure” - I’ll be happy when my entire digital life can be backed up by just making a copy of my home directory.&lt;/p&gt;
-&lt;p&gt;So for blogging I‘ve not much cared for the services out there or their focus. I don’t particularly want to manage a heavyweight WordPress or other type of CMS installation on a web-server just for a personal blog, since that requires a lot of careful attention to security, patching, updates and I simply don&amp;#39;t need the features. &lt;/p&gt;
-&lt;p&gt;At the same time services like &lt;a href=&quot;http://localhost:8080/articles/Wintersmithing/www.tumblr.com&quot;&gt;tumblr&lt;/a&gt; never quite seemed &lt;em&gt;for&lt;/em&gt; me - it skirts the line between microblogging and blogging and it‘s relationship with markdown and code didn’t gel for me. A deluge of social networking features is also not what I wanted.&lt;/p&gt;
-&lt;p&gt;With Github pages offering free static site hosting, I initially looked at Jekyll as an SSG for putting something together. But Jekyll is written in Ruby, and at the moment I‘m on a node.js kick so I really wanted something in that direction. Hence Wintersmith - simple, easy to use, and written in something that I’m inclinded to hack-on but with enough features out of the box (code highlighting in particular) to not feel onerous.&lt;/p&gt;
-&lt;p&gt;So far I‘m really liking the static site model - it’s simple, secure and easy to store, manage and keep in a nice neat git repository. Guess I&amp;#39;ll see how it goes.&lt;/p&gt;
+&lt;h1 id=&quot;personal-thoughts&quot;&gt;Personal thoughts&lt;/h1&gt;
+&lt;p&gt;I’ve been meaning to blog for sometime to have somewhere to put the things I do or random bits of knowledge I pick up so they might help someone else, but for one reason or another most blogging engines never did it for me.&lt;/p&gt;
+&lt;p&gt;I’ve never been much of a fan of managed services they lead to sprawling personal “infrastructure” - I’ll be happy when my entire digital life can be backed up by just making a copy of my home directory.&lt;/p&gt;
+&lt;p&gt;So for blogging I’ve not much cared for the services out there or their focus. I don’t particularly want to manage a heavyweight WordPress or other type of CMS installation on a web-server just for a personal blog, since that requires a lot of careful attention to security, patching, updates and I simply don’t need the features. &lt;/p&gt;
+&lt;p&gt;At the same time services like &lt;a href=&quot;http://localhost:8080/articles/Wintersmithing/www.tumblr.com&quot;&gt;tumblr&lt;/a&gt; never quite seemed &lt;em&gt;for&lt;/em&gt; me - it skirts the line between microblogging and blogging and it’s relationship with markdown and code didn’t gel for me. A deluge of social networking features is also not what I wanted.&lt;/p&gt;
+&lt;p&gt;With Github pages offering free static site hosting, I initially looked at Jekyll as an SSG for putting something together. But Jekyll is written in Ruby, and at the moment I’m on a node.js kick so I really wanted something in that direction. Hence Wintersmith - simple, easy to use, and written in something that I’m inclinded to hack-on but with enough features out of the box (code highlighting in particular) to not feel onerous.&lt;/p&gt;
+&lt;p&gt;So far I’m really liking the static site model - it’s simple, secure and easy to store, manage and keep in a nice neat git repository. Guess I’ll see how it goes.&lt;/p&gt;
 </description>
     </item>
     <item>
@@ -691,7 +799,7 @@ publish: draft
       <pubDate>Thu, 01 Jan 1970 10:00:00 +1000</pubDate>
       <guid isPermaLink="true">http://localhost:8080/articles/Quickly%20configuring%20modelines/</guid>
       <author></author>
-      <description>&lt;h1&gt;Quickly configuring modelines?&lt;/h1&gt;
+      <description>&lt;h1 id=&quot;quickly-configuring-modelines-&quot;&gt;Quickly configuring modelines?&lt;/h1&gt;
 &lt;p&gt;Something hopefully no one should ever have to do in the far distant future,
 but since I insist on using old-hardware till it drops, it still comes up.&lt;/p&gt;
 &lt;p&gt;Working from an SSH console on an XBMC box, I was trying to tune in an elusive
@@ -705,8 +813,8 @@ xrandr -d :0 --delmode VGA-0 &amp;quot;1360x768&amp;quot;
 xrandr -d :0 --rmmode &amp;quot;1360x768&amp;quot;
 xrandr -d :0 --newmode &amp;quot;1360x768&amp;quot; $@
 xrandr -d :0 --addmode VGA-0 &amp;quot;1360x768&amp;quot;
-xrandr -d :0 --output VGA-0 --mode &amp;quot;1360x768&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Simply passing in a modeline when running it causes that modeline to be set and
+xrandr -d :0 --output VGA-0 --mode &amp;quot;1360x768&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Simply passing in a modeline when running it causes that modeline to be set and
 applied to the relevant output (VGA-0) in my case.&lt;/p&gt;
 &lt;p&gt;i.e. &lt;code&gt;./tryout 84.750 1366 1480 1568 1800 768 769 776 800 -hsync +vsync&lt;/code&gt;&lt;/p&gt;
 </description>

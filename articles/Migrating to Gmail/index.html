@@ -31,15 +31,15 @@
     <div id="content">
       <div class="content-wrap">
         <article class="article">
-          <section class="content"><h1>Why</h1>
-<p>In a stitch of irony given my prior articles wrestling with a decent <span class="caps">IDLE</span> daemon for use with getmail, I&#39;m faced with a new problem in figuring out the best way to migrate all my existing, locally hosted email to&nbsp;Gmail.</p>
-<p>This is evidently not an uncommon problem for people, presumably for largely the same reasons I‘m facing: although I like having everything locally on my own server, it only works in places where (1) I live in the same place as the server and (2) where my server won’t be double-<span class="caps">NAT</span>&#39;d so dynamic DNS can actually reach&nbsp;it.</p>
-<h1>How</h1>
+          <section class="content"><h1 id="why">Why</h1>
+<p>In a stitch of irony given my prior articles wrestling with a decent <span class="caps">IDLE</span> daemon for use with getmail, I’m faced with a new problem in figuring out the best way to migrate all my existing, locally hosted email to&nbsp;Gmail.</p>
+<p>This is evidently not an uncommon problem for people, presumably for largely the same reasons I’m facing: although I like having everything locally on my own server, it only works in places where (1) I live in the same place as the server and (2) where my server won’t be double-<span class="caps">NAT</span>’d so dynamic DNS can actually reach&nbsp;it.</p>
+<h1 id="how">How</h1>
 <p>My personal email has been hosted on a Dovecot <span class="caps">IMAP</span> server in a Maildir up till now. Our tool of choice for this migration will be the venerable <a href="http://offlineimap.org/">OfflineIMAP</a> utility, available on Debian-ish systems with <code>apt-get install offlineimap</code>.</p>
-<h2>A&nbsp;Foreword</h2>
-<p>I tried a lot to get this to work properly in a Maildir -&gt; Gmail configuration, and while it‘s technically possible I couldn’t seem to get the folder creation to play nicely with tags - OfflineIMAP wants to create them with a leading separate (‘/’ on Gmail) but Gmail itself doesn‘t recognize that as root tag. There doesn’t seem to be anyway around this behavior with name translation or&nbsp;anything.</p>
-<p>I suspect you could work around this by uploading to a subdirectory, and then moving everything out of the subdirectory (sub-tag?) on Gmail, but didn&#39;t try&nbsp;it.</p>
-<h2>Configuration&nbsp;file</h2>
+<h2 id="a-foreword">A&nbsp;Foreword</h2>
+<p>I tried a lot to get this to work properly in a Maildir -&gt; Gmail configuration, and while it’s technically possible I couldn’t seem to get the folder creation to play nicely with tags - OfflineIMAP wants to create them with a leading separate (‘/‘ on Gmail) but Gmail itself doesn’t recognize that as root tag. There doesn’t seem to be anyway around this behavior with name translation or&nbsp;anything.</p>
+<p>I suspect you could work around this by uploading to a subdirectory, and then moving everything out of the subdirectory (sub-tag?) on Gmail, but didn’t try&nbsp;it.</p>
+<h2 id="configuration-file">Configuration&nbsp;file</h2>
 <p>In your home directory (I did this on my home server since 7gb of email takes a long time to upload over <span class="caps">ADSL</span>) you need to create an <code>.offlineimaprc</code> file. For an <span class="caps">IMAP</span> -&gt; IMAP transfer, it has a structure something like&nbsp;this:</p>
 <pre><code>[general]
 accounts = Gmail-wrouesnel
@@ -75,13 +75,13 @@ remoteuser = &lt;gmail user&gt;
 remotepass = &lt;gmail password&gt;
 sslcacertfile = /etc/ssl/certs/ca-certificates.crt
 sep = /
-subscribedonly = no</code></pre>
-<h2>Running</h2>
+subscribedonly = no
+</code></pre><h2 id="running">Running</h2>
 <p>Test the process first with <code>offlineimap --dry-run</code> to check that things are going to turn out roughly how you expect. Then execute <code>offlineimap</code> to start the process. I really recommend doing this in a byobu or screen session, or at least with the <code>nohup</code> utility since a connection drop will cause offlineimap to&nbsp;abort.</p>
-<p>Check back on the process once every day or so to check it‘s still running - <span class="caps">OR</span> - write a shell script to re-invoke it until it succeeds (untested so I won’t propose any&nbsp;code).</p>
-<h1>Personal&nbsp;thoughts</h1>
-<p>This seems to be the most painless way to upload old email to Gmail. In my case, the move is prompted by a real life move where my <span class="caps">24TB</span> server won‘t be coming with me. I followed up some options for moving my email system, for example to a Docker image for $5 a month for 20gb, but at the end of the day had to face the fact that there was a perfectly capable free-alternative available and it would just be throwing money away. Everything already operates through my Gmail accounts anyway, so it’s not like there‘s a security concern there and when it comes to email you either use GPG or you’re doing nothing&nbsp;anyway.</p>
-<p>It‘s worth the observation here that the same process used for the migration can also be used for a local backup, which is a system I will most definitely be using in the future. OfflineIMAP can write Maildir natively, so there’s no need to use an <span class="caps">IMAP</span> server locally for that, and helpfully solves the “what if Gmail suddenly disappears problem” (more likely from a power failure then anything else, but my email is important to&nbsp;me).</p>
+<p>Check back on the process once every day or so to check it’s still running - <span class="caps">OR</span> - write a shell script to re-invoke it until it succeeds (untested so I won’t propose any&nbsp;code).</p>
+<h1 id="personal-thoughts">Personal&nbsp;thoughts</h1>
+<p>This seems to be the most painless way to upload old email to Gmail. In my case, the move is prompted by a real life move where my <span class="caps">24TB</span> server won’t be coming with me. I followed up some options for moving my email system, for example to a Docker image for $5 a month for 20gb, but at the end of the day had to face the fact that there was a perfectly capable free-alternative available and it would just be throwing money away. Everything already operates through my Gmail accounts anyway, so it’s not like there’s a security concern there and when it comes to email you either use GPG or you’re doing nothing&nbsp;anyway.</p>
+<p>It’s worth the observation here that the same process used for the migration can also be used for a local backup, which is a system I will most definitely be using in the future. OfflineIMAP can write Maildir natively, so there’s no need to use an <span class="caps">IMAP</span> server locally for that, and helpfully solves the “what if Gmail suddenly disappears problem” (more likely from a power failure then anything else, but my email is important to&nbsp;me).</p>
 </section>
         </article>
       </div>
@@ -92,7 +92,7 @@ subscribedonly = no</code></pre>
         <section class="about">
         </section>
         <section class="copy">
-          <p>&copy; 2014 Will Rouesnel &mdash; powered by&nbsp;<a href="https://github.com/jnordberg/wintersmith">Wintersmith</a>
+          <p>&copy; 2018 Will Rouesnel &mdash; powered by&nbsp;<a href="https://github.com/jnordberg/wintersmith">Wintersmith</a>
           </p>
         </section>
       </div>

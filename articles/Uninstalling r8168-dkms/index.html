@@ -32,14 +32,14 @@
       <div class="content-wrap">
         <article class="article">
           <section class="content"><p>This is a quick note on something I encountered while trying to work out why my Realtek NICs are so finicky about connecting and staying connected at gigabit speeds when running&nbsp;Linux.</p>
-<p>The current hypothesis is that the <code>r8168</code> driver isn&#39;t helping very much. So I uninstalled it - and ran into two&nbsp;problems.</p>
-<h2>Firstly</h2>
-<p>…you need to uninstall it on Ubuntu/Debian with <code>apt-get remove --purge r8168-dkms</code> or the config files (and it&#39;s <em>all</em> config files) won&#39;t be properly removed, and the module will be left&nbsp;installed.</p>
-<h2>Secondly</h2>
-<p>…you really need to make sure you&#39;ve removed all the <code>blacklist r8169</code> entries. They can be left behind if you don‘t purge configuration files, but I found I’d also left a few hanging around in the <code>/etc/modprobe.d</code> directory from earlier efforts. So a quick <code>fgrep r8169 *</code> would‘ve saved me a lot of trouble and confusion as to why r8169 wasn’t being automatically&nbsp;detected.</p>
-<p>In my case it turned out I&#39;d put a very official looking <code>blacklist-networking.conf</code> file in my modprobe.d directory. On both my&nbsp;machines.</p>
-<h2>Something about Realtek&nbsp;NICs?</h2>
-<p>If I find an answer I‘ll surely provide updates, but needless to say there’s no rthyme or reason to when they do or do not work, other then they consistently don&#39;t work on kernel 3.11 with the r8168 driver it&nbsp;seems.</p>
+<p>The current hypothesis is that the <code>r8168</code> driver isn’t helping very much. So I uninstalled it - and ran into two&nbsp;problems.</p>
+<p>##Firstly
+…you need to uninstall it on Ubuntu/Debian with <code>apt-get remove --purge r8168-dkms</code> or the config files (and it’s <em>all</em> config files) won’t be properly removed, and the module will be left&nbsp;installed.</p>
+<p>##Secondly
+…you really need to make sure you’ve removed all the <code>blacklist r8169</code> entries. They can be left behind if you don’t purge configuration files, but I found I’d also left a few hanging around in the <code>/etc/modprobe.d</code> directory from earlier efforts. So a quick <code>fgrep r8169 *</code> would’ve saved me a lot of trouble and confusion as to why r8169 wasn’t being automatically&nbsp;detected.</p>
+<p>In my case it turned out I’d put a very official looking <code>blacklist-networking.conf</code> file in my modprobe.d directory. On both my&nbsp;machines.</p>
+<h2 id="something-about-realtek-nics-">Something about Realtek&nbsp;NICs?</h2>
+<p>If I find an answer I’ll surely provide updates, but needless to say there’s no rthyme or reason to when they do or do not work, other then they consistently don’t work on kernel 3.11 with the r8168 driver it&nbsp;seems.</p>
 </section>
         </article>
       </div>
@@ -50,7 +50,7 @@
         <section class="about">
         </section>
         <section class="copy">
-          <p>&copy; 2014 Will Rouesnel &mdash; powered by&nbsp;<a href="https://github.com/jnordberg/wintersmith">Wintersmith</a>
+          <p>&copy; 2018 Will Rouesnel &mdash; powered by&nbsp;<a href="https://github.com/jnordberg/wintersmith">Wintersmith</a>
           </p>
         </section>
       </div>

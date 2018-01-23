@@ -31,11 +31,11 @@
     <div id="content">
       <div class="content-wrap">
         <article class="article">
-          <section class="content"><h1>Wintersmith</h1>
+          <section class="content"><h1 id="wintersmith">Wintersmith</h1>
 <p>How to setup and use Wintersmith is covered pretty thoroughly elsewhere on the net, (namely the <a href="http://wintersmith.io/">wintersmith homepage</a>.</p>
-<p>Instead I&#39;ll cover a few tweaks I had to do to get it running the way I wanted. To avoid being truly confusing, all the paths referenced here are relative to the site you create by running <code>wintersmith new &lt;your site dir here&gt;</code></p>
-<h2>LiveReload&nbsp;plugin</h2>
-<p>There&#39;s a Wintersmith LiveReload plugin available which makes previewing your site with <code>wintersmith preview</code> very easy - it&#39;s great for editing or setting up&nbsp;<span class="caps">CSS</span>.</p>
+<p>Instead I’ll cover a few tweaks I had to do to get it running the way I wanted. To avoid being truly confusing, all the paths referenced here are relative to the site you create by running <code>wintersmith new &lt;your site dir here&gt;</code></p>
+<h2 id="livereload-plugin">LiveReload&nbsp;plugin</h2>
+<p>There’s a Wintersmith LiveReload plugin available which makes previewing your site with <code>wintersmith preview</code> very easy - it’s great for editing or setting up&nbsp;<span class="caps">CSS</span>.</p>
 <p>Installing the LiveReload plugin on Linux Mint (which I run) can be done with <code>sudo npm install -g wintersmith-livereload</code></p>
 <p>You need to then add the path to your <code>config.json</code> file under “plugins” e.g. for this&nbsp;blog:</p>
 <pre><code class="lang-javascript">{
@@ -65,10 +65,11 @@
   <span class="string">"paginator"</span>: {
     <span class="string">"perPage"</span>: <span class="number">20</span>
   }
-}</code></pre>
+}
+</code></pre>
 <p>You then want to insert the&nbsp;line:</p>
-<pre><code>!{ env.helpers.livereload() }</code></pre>
-<p>into the <code>templates/layout.jade</code> file - giving you something like the following at the top of the&nbsp;file</p>
+<pre><code>!{ env.helpers.livereload() }
+</code></pre><p>into the <code>templates/layout.jade</code> file - giving you something like the following at the top of the&nbsp;file</p>
 <pre><code class="lang-jade">!!! 5
 block vars
   - var bodyclass = null;
@@ -79,8 +80,9 @@ html(lang=&#39;en&#39;)
       meta(http-equiv=&#39;X-UA-Compatible&#39;, content=&#39;IE=edge,chrome=1&#39;)
       meta(name=&#39;viewport&#39;, content=&#39;width=device-width&#39;)
       !{ env.helpers.livereload() }
-      script(type=&#39;text/javascript&#39;).</code></pre>
-<p>I also add a script section with <a href="http://www.google.com/analytics/">Google Analytics</a> to layout.jade because I&#39;m vain like&nbsp;that:</p>
+      script(type=&#39;text/javascript&#39;).
+</code></pre>
+<p>I also add a script section with <a href="http://www.google.com/analytics/">Google Analytics</a> to layout.jade because I’m vain like&nbsp;that:</p>
 <pre><code class="lang-jade">!!! 5
 block vars
   - var bodyclass = null;
@@ -99,13 +101,14 @@ html(lang=&#39;en&#39;)
         })(window,document,&#39;script&#39;,&#39;//www.google-analytics.com/analytics.js&#39;,&#39;ga&#39;);
 
         ga(&#39;create&#39;, &#39;UA-43235370-1&#39;, &#39;wrouesnel.github.io&#39;);
-        ga(&#39;send&#39;, &#39;pageview&#39;);</code></pre>
-<p><strong>The glitch</strong>: Running <code>wintersmith preview</code> with these changes you‘ll find it doesn’t work when trying to browse to the main index.html page with something like “env is undefined”. This is <a href="https://github.com/jnordberg/wintersmith/issues/141">a glitch in paginator which has been fixed upstream</a> but not in wintersmith@2.0.5 in&nbsp;npm. </p>
+        ga(&#39;send&#39;, &#39;pageview&#39;);
+</code></pre>
+<p><strong>The glitch</strong>: Running <code>wintersmith preview</code> with these changes you’ll find it doesn’t work when trying to browse to the main index.html page with something like “env is undefined”. This is <a href="https://github.com/jnordberg/wintersmith/issues/141">a glitch in paginator which has been fixed upstream</a> but not in wintersmith@2.0.5 in&nbsp;npm. </p>
 <p>To fix it I just copied <a href="https://github.com/jnordberg/wintersmith/commit/b959b35b9b153fb7ddbaa37533800777473b5a17.diff">the commit patch</a> manually into my local copy of <code>plugins/paginator.coffee</code> : </p>
 <pre><code class="lang-diff">diff --git a/examples/blog/plugins/paginator.coffee b/examples/blog/plugins/paginator.coffee
 index b8e9032..19098d5 100644
-<span class="header">--- a/examples/blog/plugins/paginator.coffee</span>
-<span class="header">+++ b/examples/blog/plugins/paginator.coffee</span>
+<span class="comment">--- a/examples/blog/plugins/paginator.coffee</span>
+<span class="comment">+++ b/examples/blog/plugins/paginator.coffee</span>
 @@ -43,7 +43,7 @@ module.exports = (env, callback) -&gt;
          return callback new Error "unknown paginator template '#{ options.template }'"
 
@@ -114,10 +117,11 @@ index b8e9032..19098d5 100644
 <span class="addition">+      ctx = {env, contents, @articles, @prevPage, @nextPage}</span>
 
        # extend the template context with the enviroment locals
-       env.utils.extend ctx, locals</code></pre>
-<h2>Show most recent article in the&nbsp;index</h2>
-<p>By default Wintersmith shows short summaries of articles on your <code>index.html</code> page. I can&#39;t decide whether or not I like this behavior yet, but until I do what I wanted was to always have my index show my most recent&nbsp;post.</p>
-<p>To do this, we take advantage of Jade&#39;s iteration and if/then functionality to modify <code>template/index.jade</code>.</p>
+       env.utils.extend ctx, locals
+</code></pre>
+<h2 id="show-most-recent-article-in-the-index">Show most recent article in the&nbsp;index</h2>
+<p>By default Wintersmith shows short summaries of articles on your <code>index.html</code> page. I can’t decide whether or not I like this behavior yet, but until I do what I wanted was to always have my index show my most recent&nbsp;post.</p>
+<p>To do this, we take advantage of Jade’s iteration and if/then functionality to modify <code>template/index.jade</code>.</p>
 <p>As of this article my index.jade looks as&nbsp;follows:</p>
 <pre><code class="lang-jade">extends layout
 
@@ -157,47 +161,51 @@ block prepend footer
     else
       a(href=&#39;/archive.html&#39;) « Archives
     if nextPage
-      a(href=nextPage.url) Next page »</code></pre>
-<p>There might be a better way to do this, but for me, for now it works. Basically Jade&#39;s iterators will provide an iteration number if you add a variable name for it (<code>num</code> in this case) - and the articles are chronological by default. So 0 is always the most&nbsp;recent.</p>
+      a(href=nextPage.url) Next page »
+</code></pre>
+<p>There might be a better way to do this, but for me, for now it works. Basically Jade’s iterators will provide an iteration number if you add a variable name for it (<code>num</code> in this case) - and the articles are chronological by default. So 0 is always the most&nbsp;recent.</p>
 <p>From there I just duplicate some code fro <code>template/article.jade</code> to have it render the full article in <code>section.content</code> - which is <code>article.html</code>, rather then just the intro section - which is <code>article.intro</code>.</p>
-<p>An important note here is that the default <span class="caps">CSS</span> selectors require some modification to get things to look right. I‘m not sure I’ve nailed it yet, so editing those is an exercise left to the reader (or just a matter of downloading the stylesheet from this&nbsp;site).</p>
-<h1>Deploy&nbsp;Makefile</h1>
-<p>This site is hosted on Github pages, but they have no support for Wintersmith - so it&#39;s necessary to manually build the static content and upload that. <code>make</code> is more then capable of handling this task, and while we‘re at it it’s a decent tool to automate housekeeping - in particular I wanted my article metadata to be automatically tagged with a date if the date field was&nbsp;blank.</p>
-<h2>Automatic date&nbsp;tagging</h2>
+<p>An important note here is that the default <span class="caps">CSS</span> selectors require some modification to get things to look right. I’m not sure I’ve nailed it yet, so editing those is an exercise left to the reader (or just a matter of downloading the stylesheet from this&nbsp;site).</p>
+<h1 id="deploy-makefile">Deploy&nbsp;Makefile</h1>
+<p>This site is hosted on Github pages, but they have no support for Wintersmith - so it’s necessary to manually build the static content and upload that. <code>make</code> is more then capable of handling this task, and while we’re at it it’s a decent tool to automate housekeeping - in particular I wanted my article metadata to be automatically tagged with a date if the date field was&nbsp;blank.</p>
+<h2 id="automatic-date-tagging">Automatic date&nbsp;tagging</h2>
 <p>After banging my head with awk or sed one-liners (which probably can be done) I came to my senses and wrote a bash script to do this for&nbsp;me.</p>
-<pre><code class="lang-bash"><span class="shebang">#!/bin/bash</span>
-
-find contents -name <span class="string">'*.md'</span> | <span class="keyword">while</span> read markdownfile; <span class="keyword">do</span>
+<pre><code class="lang-bash"><span class="meta">#!/bin/bash
+</span>
+find contents -name <span class="string">'*.md'</span> | <span class="keyword">while</span> <span class="built_in">read</span> markdownfile; <span class="keyword">do</span>
     datemeta=$(cat <span class="variable">$markdownfile</span> | grep -m1 date: )
     datestamp=$(cat <span class="variable">$markdownfile</span> | grep -m1 date: | cut -d<span class="string">' '</span> -f2)
 
-    <span class="keyword">if</span> <span class="test_condition">[ ! -z <span class="string">"<span class="variable">$datemeta</span>"</span> ]</span>; <span class="keyword">then</span>
-        <span class="keyword">if</span> <span class="test_condition">[ -z <span class="string">"<span class="variable">$datestamp</span>"</span> ]</span>; <span class="keyword">then</span>
+    <span class="keyword">if</span> [ ! -z <span class="string">"<span class="variable">$datemeta</span>"</span> ]; <span class="keyword">then</span>
+        <span class="keyword">if</span> [ -z <span class="string">"<span class="variable">$datestamp</span>"</span> ]; <span class="keyword">then</span>
             <span class="comment"># generate a datestamp entry and replace the field with sed</span>
-            <span class="keyword">echo</span> <span class="string">"Date stamping unstamped article <span class="variable">$markdownfile</span>"</span>
+            <span class="built_in">echo</span> <span class="string">"Date stamping unstamped article <span class="variable">$markdownfile</span>"</span>
             datestamp=$(date <span class="string">'+%Y-%m-%d %H:%M <span class="caps">GMT</span>%z'</span>)
             sed -i <span class="string">"s/date:\ .*/date: <span class="variable">$datestamp</span>/"</span> <span class="string">"<span class="variable">$markdownfile</span>"</span>
         <span class="keyword">fi</span>
     <span class="keyword">fi</span>
-<span class="keyword">done</span></code></pre>
-<h2>Git&nbsp;Submodules</h2>
-<p>Since I use Git to manage the blog, but GitHub Pages uses a git repo to represent the finished blog, it‘s necessary on my local machine to somehow have two repositories - one representing the Wintersmith site in source form, and one representing the GitHub Pages site after it’s&nbsp;rendered.</p>
-<p>I do this by treating the <code>build/</code> directory of my Wintersmith site as a Git submodule. Git won&#39;t checkout an empty repo, so you need to create a full repo somewhere and then push it to your normal storage (in my case my private server, but it could be somewhere else on&nbsp;GitHub):</p>
+<span class="keyword">done</span>
+</code></pre>
+<h2 id="git-submodules">Git&nbsp;Submodules</h2>
+<p>Since I use Git to manage the blog, but GitHub Pages uses a git repo to represent the finished blog, it’s necessary on my local machine to somehow have two repositories - one representing the Wintersmith site in source form, and one representing the GitHub Pages site after it’s&nbsp;rendered.</p>
+<p>I do this by treating the <code>build/</code> directory of my Wintersmith site as a Git submodule. Git won’t checkout an empty repo, so you need to create a full repo somewhere and then push it to your normal storage (in my case my private server, but it could be somewhere else on&nbsp;GitHub):</p>
 <pre><code class="lang-bash">$ mkdir build
-$ cd build
+$ <span class="built_in">cd</span> build
 $ git init
 $ git remote add origin ssh://will@myserver/~/wrouesnel.github.io~build.git
 $ touch .gitignore
 $ git add *
 $ git commit
-$ git push master</code></pre>
-<p>At this point you can delete the build/ directory you just created. It&#39;s not needed any more. Then it can be imported as a submodule to the main Wintersmith repo. We also need to add a remote for pushing output to&nbsp;Github:</p>
-<pre><code class="lang-bash">$ cd your_wintersmith_repo
+$ git push master
+</code></pre>
+<p>At this point you can delete the build/ directory you just created. It’s not needed any more. Then it can be imported as a submodule to the main Wintersmith repo. We also need to add a remote for pushing output to&nbsp;Github:</p>
+<pre><code class="lang-bash">$ <span class="built_in">cd</span> your_wintersmith_repo
 $ git submodule add ssh://will@myserver/~/wrouesnel.github.io~build.git build
-$ cd build
-$ git remote add github git@github.com:wrouesnel/wrouesnel.github.io.git</code></pre>
+$ <span class="built_in">cd</span> build
+$ git remote add github git@github.com:wrouesnel/wrouesnel.github.io.git
+</code></pre>
 <p>And after all that effort your module is imported and ready to participate in the build&nbsp;process.</p>
-<h2>Putting the makefile&nbsp;together</h2>
+<h2 id="putting-the-makefile-together">Putting the makefile&nbsp;together</h2>
 <p>The final makefile looks something like&nbsp;this:</p>
 <pre><code class="lang-make"># Makefile to deploy the blog
 
@@ -216,16 +224,17 @@ publish: draft
     cd build; git commit -m &quot;published to github&quot;; \
     git push github master
 
-.PHONY: date draft publish</code></pre>
+.PHONY: date draft publish
+</code></pre>
 <p>The workflow is that I can call <code>make draft</code> which builds the site and commits the build to my private repo which just tracks draft sites elsewhere, and then <code>make publish</code> for when I want things to go&nbsp;live.</p>
 <p>There are obviously other ways this could work - for example, I could use post-commit hooks on the server to push to Github Pages, but the idea here is that provided I can access the the wintersmith repository, everything else can be&nbsp;rebuilt.</p>
-<h1>Personal&nbsp;thoughts</h1>
-<p>I&#39;ve been meaning to blog for sometime to have somewhere to put the things I do or random bits of knowledge I pick up so they might help someone else, but for one reason or another most blogging engines never did it for&nbsp;me.</p>
-<p>I‘ve never been much of a fan of managed services they lead to sprawling personal “infrastructure” - I’ll be happy when my entire digital life can be backed up by just making a copy of my home&nbsp;directory.</p>
-<p>So for blogging I‘ve not much cared for the services out there or their focus. I don’t particularly want to manage a heavyweight WordPress or other type of <span class="caps">CMS</span> installation on a web-server just for a personal blog, since that requires a lot of careful attention to security, patching, updates and I simply don&#39;t need the&nbsp;features. </p>
-<p>At the same time services like <a href="/articles/Wintersmithing/www.tumblr.com">tumblr</a> never quite seemed <em>for</em> me - it skirts the line between microblogging and blogging and it‘s relationship with markdown and code didn’t gel for me. A deluge of social networking features is also not what I&nbsp;wanted.</p>
-<p>With Github pages offering free static site hosting, I initially looked at Jekyll as an <span class="caps">SSG</span> for putting something together. But Jekyll is written in Ruby, and at the moment I‘m on a node.js kick so I really wanted something in that direction. Hence Wintersmith - simple, easy to use, and written in something that I’m inclinded to hack-on but with enough features out of the box (code highlighting in particular) to not feel&nbsp;onerous.</p>
-<p>So far I‘m really liking the static site model - it’s simple, secure and easy to store, manage and keep in a nice neat git repository. Guess I&#39;ll see how it&nbsp;goes.</p>
+<h1 id="personal-thoughts">Personal&nbsp;thoughts</h1>
+<p>I’ve been meaning to blog for sometime to have somewhere to put the things I do or random bits of knowledge I pick up so they might help someone else, but for one reason or another most blogging engines never did it for&nbsp;me.</p>
+<p>I’ve never been much of a fan of managed services they lead to sprawling personal “infrastructure” - I’ll be happy when my entire digital life can be backed up by just making a copy of my home&nbsp;directory.</p>
+<p>So for blogging I’ve not much cared for the services out there or their focus. I don’t particularly want to manage a heavyweight WordPress or other type of <span class="caps">CMS</span> installation on a web-server just for a personal blog, since that requires a lot of careful attention to security, patching, updates and I simply don’t need the&nbsp;features. </p>
+<p>At the same time services like <a href="/articles/Wintersmithing/www.tumblr.com">tumblr</a> never quite seemed <em>for</em> me - it skirts the line between microblogging and blogging and it’s relationship with markdown and code didn’t gel for me. A deluge of social networking features is also not what I&nbsp;wanted.</p>
+<p>With Github pages offering free static site hosting, I initially looked at Jekyll as an <span class="caps">SSG</span> for putting something together. But Jekyll is written in Ruby, and at the moment I’m on a node.js kick so I really wanted something in that direction. Hence Wintersmith - simple, easy to use, and written in something that I’m inclinded to hack-on but with enough features out of the box (code highlighting in particular) to not feel&nbsp;onerous.</p>
+<p>So far I’m really liking the static site model - it’s simple, secure and easy to store, manage and keep in a nice neat git repository. Guess I’ll see how it&nbsp;goes.</p>
 </section>
         </article>
       </div>
@@ -236,7 +245,7 @@ publish: draft
         <section class="about">
         </section>
         <section class="copy">
-          <p>&copy; 2014 Will Rouesnel &mdash; powered by&nbsp;<a href="https://github.com/jnordberg/wintersmith">Wintersmith</a>
+          <p>&copy; 2018 Will Rouesnel &mdash; powered by&nbsp;<a href="https://github.com/jnordberg/wintersmith">Wintersmith</a>
           </p>
         </section>
       </div>

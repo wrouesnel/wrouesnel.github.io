@@ -31,58 +31,61 @@
     <div id="content">
       <div class="content-wrap">
         <article class="article">
-          <section class="content"><p>In a passing comment it was suggested to me that it would be really great if the home fileserver offered some type of web-interface to find things. We‘ve been aggregating downloaded files there for a while, and there’s been attempts made at categorization but this all really falls apart when you wonder “what does ‘productivity’ mean? And does this go under ‘Linux’ or some other&nbsp;thing?”</p>
-<p>Since lately I‘ve been wanting to get desktop search working on my actual desktops, via Gnome’s Tracker project and it&#39;s tie-in to Nautilus and Nemo (possibly the subject of a future blog), it seemed logical to run it on the fileserver as an indexer for our shared directories - and then to tie some kind of web ui to&nbsp;that.</p>
-<p>Unfortunately, Tracker is very desktop orientated - there&#39;s no easy daemon mode for running it on a headless system out-of-the-box, but with a little tweaking you <em>can</em> make it work for you quite&nbsp;easily.</p>
-<h1>How&nbsp;to</h1>
-<p>On my system I keep Tracker running as it&#39;s own user under a system account. On Ubuntu you need to create this like so (using a root shell - <code>sudo -i</code>):</p>
+          <section class="content"><p>In a passing comment it was suggested to me that it would be really great if the home fileserver offered some type of web-interface to find things. We’ve been aggregating downloaded files there for a while, and there’s been attempts made at categorization but this all really falls apart when you wonder “what does ‘productivity’ mean? And does this go under ‘Linux’ or some other&nbsp;thing?”</p>
+<p>Since lately I’ve been wanting to get desktop search working on my actual desktops, via Gnome’s Tracker project and it’s tie-in to Nautilus and Nemo (possibly the subject of a future blog), it seemed logical to run it on the fileserver as an indexer for our shared directories - and then to tie some kind of web ui to&nbsp;that.</p>
+<p>Unfortunately, Tracker is very desktop orientated - there’s no easy daemon mode for running it on a headless system out-of-the-box, but with a little tweaking you <em>can</em> make it work for you quite&nbsp;easily.</p>
+<h1 id="how-to">How&nbsp;to</h1>
+<p>On my system I keep Tracker running as it’s own user under a system account. On Ubuntu you need to create this like so (using a root shell - <code>sudo -i</code>):</p>
 <pre><code class="lang-bash">$ adduser --system --shell=/bin/<span class="literal">false</span> --disabled-login --home=/var/lib/tracker tracker
-$ adduser tracker root</code></pre>
-<p>Since tracker uses GSettings for it&#39;s configuration these days, you need to su into the user you just created to actually configure the directories which should be indexed. Since this is a server, you probably just have a list of them so set it somewhat like the example below. Note: you must run the dbus-launch commands in order to have a viable session bus for dconf to work with. This will also be a requirement of Tracker later&nbsp;on.</p>
+$ adduser tracker root
+</code></pre>
+<p>Since tracker uses GSettings for it’s configuration these days, you need to su into the user you just created to actually configure the directories which should be indexed. Since this is a server, you probably just have a list of them so set it somewhat like the example below. Note: you must run the dbus-launch commands in order to have a viable session bus for dconf to work with. This will also be a requirement of Tracker later&nbsp;on.</p>
 <pre><code class="lang-bash">$ su --shell /bin/bash
-$ eval `dbus-launch --sh-syntax`
+$ <span class="built_in">eval</span> `dbus-launch --sh-syntax`
 $ dconf write org/freedesktop/tracker/miner/files/index-recursive-directories <span class="string">"['/path/to/my/dir/1', '/path/to/my/dir/2', '/etc/etc']"</span>
-$ kill <span class="variable">$DBUS_SESSION_BUS_PID</span>
-$ <span class="keyword">exit</span></code></pre>
+$ <span class="built_in">kill</span> <span class="variable">$DBUS_SESSION_BUS_PID</span>
+$ <span class="built_in">exit</span>
+</code></pre>
 <p>Your Tracker user is now ready at this point. To start and stop the service, we use an <a href="/articles/Running%20Gnome%20Tracker%20on%20a%20Server/tracker.conf">Upstart script like the one below</a>:</p>
-<pre><code class="lang-sh">description &quot;gnome tracker system startup script&quot;
-author &quot;wrouesnel&quot;
+<pre><code class="lang-sh">description <span class="string">"gnome tracker system startup script"</span>
+author <span class="string">"wrouesnel"</span>
 
-start on (local-filesystems and net-device-up)
+start on (<span class="built_in">local</span>-filesystems and net-device-up)
 stop on shutdown
 
 respawn
-respawn limit 5 60
+respawn <span class="built_in">limit</span> 5 60
 
 setuid tracker
 
 script
-    chdir /var/lib/tracker
-    eval `dbus-launch --sh-syntax`
-    echo $DBUS_SESSION_BUS_PID &gt; .tracker-sessionbus.pid
-    echo $DBUS_SESSION_BUS_ADDRESS &gt; .tracker-sessionbus
+    <span class="built_in">chdir</span> /var/lib/tracker
+    <span class="built_in">eval</span> `dbus-launch --sh-syntax`
+    <span class="built_in">echo</span> <span class="variable">$DBUS_SESSION_BUS_PID</span> &gt; .tracker-sessionbus.pid
+    <span class="built_in">echo</span> <span class="variable">$DBUS_SESSION_BUS_ADDRESS</span> &gt; .tracker-sessionbus
     /usr/lib/tracker/tracker-store
 end script
 
 post-start script
-    chdir /var/lib/tracker
-    while [ ! -e .tracker-sessionbus ]; do sleep 1; done
+    <span class="built_in">chdir</span> /var/lib/tracker
+    <span class="keyword">while</span> [ ! -e .tracker-sessionbus ]; <span class="keyword">do</span> sleep 1; <span class="keyword">done</span>
     DBUS_SESSION_BUS_ADDRESS=$(cat .tracker-sessionbus) /usr/lib/tracker/tracker-miner-fs <span class="amp">&amp;</span>
 end script
 
 post-stop script 
-    # We need to kill off the <span class="caps">DBUS</span> session here
-    chdir /var/lib/tracker
-    kill $(cat .tracker-sessionbus.pid)
+    <span class="comment"># We need to kill off the <span class="caps">DBUS</span> session here</span>
+    <span class="built_in">chdir</span> /var/lib/tracker
+    <span class="built_in">kill</span> $(cat .tracker-sessionbus.pid)
     rm .tracker-sessionbus.pid
     rm .tracker-sessionbus
-end script</code></pre>
-<p>Some things to focus on about the script: we launch and save the DBus session parameters. We&#39;ll need these to reconnect to the session to run tracker related commands. The post-stop stanza is to kill off the DBus&nbsp;session.</p>
-<p>You do need to explicitely launch <code>tracker-miner-fs</code> in order for file indexing to work, but you don&#39;t need to kill it explicitely - it will be automatically shutdown when Upstart kills <code>tracker-store</code>.</p>
+end script
+</code></pre>
+<p>Some things to focus on about the script: we launch and save the DBus session parameters. We’ll need these to reconnect to the session to run tracker related commands. The post-stop stanza is to kill off the DBus&nbsp;session.</p>
+<p>You do need to explicitely launch <code>tracker-miner-fs</code> in order for file indexing to work, but you don’t need to kill it explicitely - it will be automatically shutdown when Upstart kills <code>tracker-store</code>.</p>
 <p>Also note that since tracker runs as the user <code>tracker</code> it can only index files and directories which it is allowed to traverse, so check your&nbsp;permissions.</p>
 <p>You can now start Tracker as your user with <code>start tracker</code>. And stop it with <code>stop tracker</code>. Simple and&nbsp;clean.</p>
-<h1>Using&nbsp;this</h1>
-<p>My plan for this setup is to throw together a Node.js app on my server that will forward queries to the tracker command line client - that app will be a future post when it&#39;s&nbsp;done.</p>
+<h1 id="using-this">Using&nbsp;this</h1>
+<p>My plan for this setup is to throw together a Node.js app on my server that will forward queries to the tracker command line client - that app will be a future post when it’s&nbsp;done.</p>
 </section>
         </article>
       </div>
@@ -93,7 +96,7 @@ end script</code></pre>
         <section class="about">
         </section>
         <section class="copy">
-          <p>&copy; 2014 Will Rouesnel &mdash; powered by&nbsp;<a href="https://github.com/jnordberg/wintersmith">Wintersmith</a>
+          <p>&copy; 2018 Will Rouesnel &mdash; powered by&nbsp;<a href="https://github.com/jnordberg/wintersmith">Wintersmith</a>
           </p>
         </section>
       </div>
