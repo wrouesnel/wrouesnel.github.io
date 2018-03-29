@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+    <script type="text/javascript">
+      // google analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      
+      ga('create', 'UA-43235370-1', 'wrouesnel.github.io');
+      ga('send', 'pageview');
+    </script>
+    <title>Prometheus reverse_exporter - wrouesnel_blog
+    </title>
+    <link rel="alternate" href="http://blog.wrouesnel.com/feed.xml" type="application/rss+xml" title="negating information entropy">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic|Anonymous+Pro:400,700,400italic,700italic|Merriweather:400,700,300">
+    <link rel="stylesheet" href="/css/main.css">
+  </head>
+  <body class="article-detail">
+    <header class="header">
+      <div class="content-wrap">
+        <h1>Prometheus reverse_exporter</h1>
+        <p class="author">Written by <span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
+        </p>
+      </div>
+    </header>
+    <div id="content">
+      <div class="content-wrap">
+        <article class="article">
+          <section class="content"><p><a href="https://github.com/wrouesnel/reverse_exporter/releases">Find reverse_exporter on Github&nbsp;Releases</a></p>
+<p>In which I talk about something I made to solve a problem I&nbsp;had.</p>
+<h1 id="why">Why</h1>
+<p>I like to make my deployments of things as “appliance-like” as possible. I want
+them to be plug-and-play, and have sensible defaults - in fact if possible I
+want to make them production-ready “out of the&nbsp;box”.</p>
+<p>This usually involves setting up VMs or containers which include a number of
+components, or a quorum of either which do the&nbsp;same. </p>
+<p>To take a real example - I have a PowerDNS authoritative container which uses
+Postgres replication for a backend. These are tightly coupled components - so
+tightly that it’s a lot easier to run them in the same container. PowerDNS is
+nice because it has an <span class="caps">HTTP</span> REST API, which leads to a great turn-key DNS 
+solution while retaining a lot of power - but it totally lacks an authentication
+layer, so we also need to throw in nginx to provide that (and maybe something
+else for auth later - for now I manage static password lists, but we might do
+LDAP or something else - who&nbsp;knows?)</p>
+<p>Obviously, we want to monitor all these components, and the way I like doing
+that is with&nbsp;Prometheus.</p>
+<h1 id="the-problem">The&nbsp;Problem</h1>
+<p>Prometheus exporters provide metrics, typically on an http endpoint like <code>/metrics</code>.
+For our appliance like container, ideally, we want to replicate this&nbsp;experience.</p>
+<p>The individual components in it - PowerDNS, Postgres, nginx - all have their
+own exporters which provide specific metrics but also generic information about
+the exporter itself - which means we have conflicting metric names for at least
+the go-runtime specific metrics. And while we’re at it we probably have a bunch
+of random glue-code we’d like to produce some metrics about, plus some <span class="caps">SSL</span>
+certificates we’d like to advertise expiry dates&nbsp;for. </p>
+<p>There’s also a third factor here which is important: we don’t necessarily have
+liberty to just open ports willy-nilly to support this - or we’d like to able
+to avoid it. In the space of corporations with security policies, <span class="caps">HTTP</span>/HTTPS on
+port 80 and 443 is easy to justify. But good luck getting another 3 ports opened
+to support monitoring - oh and you’ll have to put SSL and auth on those&nbsp;too.</p>
+<h2 id="solution-1-separate-endpoints">Solution 1 - separate&nbsp;endpoints</h2>
+<p>In our single-container example, we only have the 1 <span class="caps">IP</span> for the container - but
+we have nginx so we could just farm the metrics out to separate endpoints. This
+works - it’s my original solution. But instead of a nice, by-convention <code>/metrics</code>
+endpoint we now have something like <code>/metrics/psql</code>, <code>/metrics/nginx</code>, <code>/metrics/pdns</code>.</p>
+<p>Which means 3 separate entries in the Prometheus config file to scrape them, and
+breaks nice features like <span class="caps">DNS</span>-SD to let us just&nbsp;discover.</p>
+<p>And it feels unclean: the PowerDNS container has a bunch of things in it, but
+they’re all providing one-service - they’re all one product. Shouldn’t their
+metrics all be given as one&nbsp;endpoint?</p>
+<h2 id="solution-2-just-use-multiple-ports">Solution 2 - just use multiple&nbsp;ports</h2>
+<p>This is the Prometheus way. And it would work. But it still has some of the
+drawbacks above - we’re still explicitly scraping 3 targets, and we’re doing
+some slicing on the Prometheus side to try and group these sensibly - in fact
+we’re requiring Prometheus to understand our architecture in detail which
+shouldn’t&nbsp;matter.</p>
+<p>i.e. is the <span class="caps">DNS</span> container a single job with 3 endpoints in it, multiple jobs
+per container? The latter feels wrong again - if our database goes sideways, its
+not really a database <em>cluster</em> going down - just a single “<span class="caps">DNS</span> server”&nbsp;instance.</p>
+<p>Prometheus has the idea of an “instance” tag per scraped endpoint…we’d kind of
+like to support&nbsp;that.</p>
+<h1 id="solution-3-combine-the-exporters-into-one-endpoint-reverse_exporter">Solution 3 - combine the exporters into one endpoint -&nbsp;reverse_exporter</h1>
+<p><code>reverse_exporter</code> is essentially the implementation of how we achieve&nbsp;this.</p>
+<p>The main thing <code>reverse_exporter</code> was designed to do is receive a scrape request,
+proxy it to a bunch of exporters listening on localhost behind it, and then
+decode the metrics they produce so it can rewrite them with unique identifier
+labels before handing them to&nbsp;Prometheus.</p>
+<p><em>Obviously</em> metric relabelling on Prometheus can do something like this, but in
+this case as solution designers/application developers/whatever we are, we want
+to express an opinion on how this container runs, and simplify the overhead to
+supporting&nbsp;it.</p>
+<p>The reason we rewrite the metrics is to allow namespace collisisions - specifically
+we want to ensure we can have multiple golang runtime metrics from Prometheus
+live side-by-side, but still be able to separate them out in our visualiazation
+tooling. We might also want to have multiples of the same application in our
+container (or maybe its something like a Kubernetes pod and we want it to be
+monitored like a single appliance). The point is: from a Prometheus perspective,
+it all comes out looking like metrics from the 1 “instance”, and gets metadata
+added by Prometheus as such without any extra effort. And that’s powerful - 
+because it means <span class="caps">DNS</span> SD or service discovery works again. And it means we can
+start to talk about cluster application policy in a sane way - “we’ll monitor
+<code>/metrics</code> on port 80 or 443 for you if it’s&nbsp;there.</p>
+<h1 id="other-problems-which-are-solved-">Other Problems (which are&nbsp;solved)</h1>
+<p>There were a few other common dilemmas I wanted a “correct” solution for when
+I started playing around with <code>reverse_exporter</code> which it&nbsp;solves.</p>
+<p>We don’t always want to write an entire exporter for Prometheus - sometimes we
+just have something tiny and fairly obvious we’d like to scrape with a text
+format script. When using the Prometheus <code>node_exporter</code> you can do this with
+the text collector, which will read <code>*.prom</code> files on every scrape - but you
+need to setup cron to periodically update these - which can be a pain, and gives
+the metrics&nbsp;lag.</p>
+<p>What if we want to have an on-demand&nbsp;script?</p>
+<p><code>reverse_exporter</code> allows this - you can specify a bash script, even allow
+arguments to be passed via <span class="caps">URL</span> params, and it’ll execute and collect any
+metrics you write to&nbsp;stdout.</p>
+<p>But it also protects you from the danger of naive approach here: a possible denial
+of service from an overzealous or possibly malicious user sending a huge number
+of requests to your script. If we just spawned a process each time, we could
+quickly exhaust container or system resources. <code>reverse_exporter</code> avoids this
+problem by waterfalling the results of each execution - since Prometheus regards
+a scrape as a time-slice of state at the moment it gets results, we can protect
+the system by queuing up inbound scrapers while the script executes, and then
+sending them all the same results (provided they’re happy with the wait time - 
+which Prometheus is good&nbsp;about).</p>
+<p>We avoid thrashing the system resources, and we can confidently let users and
+admins reload the metrics page without bringing down our container or our&nbsp;host.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>This post feels a bit marketing like to me, but I am pretty excited that for me
+at least <code>reverse_exporter</code> works&nbsp;well.</p>
+<p>Hopefully, it proves helpful to other Prometheus users as&nbsp;well!</p>
+</section>
+        </article>
+      </div>
+    </div>
+    <footer>
+      <div class="content-wrap">
+        <div class="nav"><a href="/">« Full blog</a></div>
+        <section class="about">
+        </section>
+        <section class="copy">
+          <p>&copy; 2018 Will Rouesnel &mdash; powered by&nbsp;<a href="https://github.com/jnordberg/wintersmith">Wintersmith</a>
+          </p>
+        </section>
+      </div>
+    </footer>
+  </body>
+</html>

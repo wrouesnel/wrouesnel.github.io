@@ -5,9 +5,119 @@
     <atom:link href="http://blog.wrouesnel.com/feed.xml" rel="self" type="application/rss+xml"></atom:link>
     <link>http://blog.wrouesnel.com</link>
     <description>negating information entropy</description>
-    <pubDate>Tue, 23 Jan 2018 23:20:00 +1100</pubDate>
+    <pubDate>Thu, 29 Mar 2018 22:10:00 +1100</pubDate>
     <generator>Wintersmith - https://github.com/jnordberg/wintersmith</generator>
     <language>en</language>
+    <item>
+      <title>Prometheus reverse_exporter</title>
+      <link>http://blog.wrouesnel.com/articles/Prometheus%20reverse_exporter/</link>
+      <pubDate>Thu, 29 Mar 2018 22:10:00 +1100</pubDate>
+      <guid isPermaLink="true">http://blog.wrouesnel.com/articles/Prometheus%20reverse_exporter/</guid>
+      <author></author>
+      <description>&lt;p&gt;&lt;a href=&quot;https://github.com/wrouesnel/reverse_exporter/releases&quot;&gt;Find reverse_exporter on Github Releases&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;In which I talk about something I made to solve a problem I had.&lt;/p&gt;
+&lt;h1 id=&quot;why&quot;&gt;Why&lt;/h1&gt;
+&lt;p&gt;I like to make my deployments of things as “appliance-like” as possible. I want
+them to be plug-and-play, and have sensible defaults - in fact if possible I
+want to make them production-ready “out of the box”.&lt;/p&gt;
+&lt;p&gt;This usually involves setting up VMs or containers which include a number of
+components, or a quorum of either which do the same. &lt;/p&gt;
+&lt;p&gt;To take a real example - I have a PowerDNS authoritative container which uses
+Postgres replication for a backend. These are tightly coupled components - so
+tightly that it’s a lot easier to run them in the same container. PowerDNS is
+nice because it has an HTTP REST API, which leads to a great turn-key DNS 
+solution while retaining a lot of power - but it totally lacks an authentication
+layer, so we also need to throw in nginx to provide that (and maybe something
+else for auth later - for now I manage static password lists, but we might do
+LDAP or something else - who knows?)&lt;/p&gt;
+&lt;p&gt;Obviously, we want to monitor all these components, and the way I like doing
+that is with Prometheus.&lt;/p&gt;
+&lt;h1 id=&quot;the-problem&quot;&gt;The Problem&lt;/h1&gt;
+&lt;p&gt;Prometheus exporters provide metrics, typically on an http endpoint like &lt;code&gt;/metrics&lt;/code&gt;.
+For our appliance like container, ideally, we want to replicate this experience.&lt;/p&gt;
+&lt;p&gt;The individual components in it - PowerDNS, Postgres, nginx - all have their
+own exporters which provide specific metrics but also generic information about
+the exporter itself - which means we have conflicting metric names for at least
+the go-runtime specific metrics. And while we’re at it we probably have a bunch
+of random glue-code we’d like to produce some metrics about, plus some SSL
+certificates we’d like to advertise expiry dates for. &lt;/p&gt;
+&lt;p&gt;There’s also a third factor here which is important: we don’t necessarily have
+liberty to just open ports willy-nilly to support this - or we’d like to able
+to avoid it. In the space of corporations with security policies, HTTP/HTTPS on
+port 80 and 443 is easy to justify. But good luck getting another 3 ports opened
+to support monitoring - oh and you’ll have to put SSL and auth on those too.&lt;/p&gt;
+&lt;h2 id=&quot;solution-1-separate-endpoints&quot;&gt;Solution 1 - separate endpoints&lt;/h2&gt;
+&lt;p&gt;In our single-container example, we only have the 1 IP for the container - but
+we have nginx so we could just farm the metrics out to separate endpoints. This
+works - it’s my original solution. But instead of a nice, by-convention &lt;code&gt;/metrics&lt;/code&gt;
+endpoint we now have something like &lt;code&gt;/metrics/psql&lt;/code&gt;, &lt;code&gt;/metrics/nginx&lt;/code&gt;, &lt;code&gt;/metrics/pdns&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Which means 3 separate entries in the Prometheus config file to scrape them, and
+breaks nice features like DNS-SD to let us just discover.&lt;/p&gt;
+&lt;p&gt;And it feels unclean: the PowerDNS container has a bunch of things in it, but
+they’re all providing one-service - they’re all one product. Shouldn’t their
+metrics all be given as one endpoint?&lt;/p&gt;
+&lt;h2 id=&quot;solution-2-just-use-multiple-ports&quot;&gt;Solution 2 - just use multiple ports&lt;/h2&gt;
+&lt;p&gt;This is the Prometheus way. And it would work. But it still has some of the
+drawbacks above - we’re still explicitly scraping 3 targets, and we’re doing
+some slicing on the Prometheus side to try and group these sensibly - in fact
+we’re requiring Prometheus to understand our architecture in detail which
+shouldn’t matter.&lt;/p&gt;
+&lt;p&gt;i.e. is the DNS container a single job with 3 endpoints in it, multiple jobs
+per container? The latter feels wrong again - if our database goes sideways, its
+not really a database &lt;em&gt;cluster&lt;/em&gt; going down - just a single “DNS server” instance.&lt;/p&gt;
+&lt;p&gt;Prometheus has the idea of an “instance” tag per scraped endpoint…we’d kind of
+like to support that.&lt;/p&gt;
+&lt;h1 id=&quot;solution-3-combine-the-exporters-into-one-endpoint-reverse_exporter&quot;&gt;Solution 3 - combine the exporters into one endpoint - reverse_exporter&lt;/h1&gt;
+&lt;p&gt;&lt;code&gt;reverse_exporter&lt;/code&gt; is essentially the implementation of how we achieve this.&lt;/p&gt;
+&lt;p&gt;The main thing &lt;code&gt;reverse_exporter&lt;/code&gt; was designed to do is receive a scrape request,
+proxy it to a bunch of exporters listening on localhost behind it, and then
+decode the metrics they produce so it can rewrite them with unique identifier
+labels before handing them to Prometheus.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Obviously&lt;/em&gt; metric relabelling on Prometheus can do something like this, but in
+this case as solution designers/application developers/whatever we are, we want
+to express an opinion on how this container runs, and simplify the overhead to
+supporting it.&lt;/p&gt;
+&lt;p&gt;The reason we rewrite the metrics is to allow namespace collisisions - specifically
+we want to ensure we can have multiple golang runtime metrics from Prometheus
+live side-by-side, but still be able to separate them out in our visualiazation
+tooling. We might also want to have multiples of the same application in our
+container (or maybe its something like a Kubernetes pod and we want it to be
+monitored like a single appliance). The point is: from a Prometheus perspective,
+it all comes out looking like metrics from the 1 “instance”, and gets metadata
+added by Prometheus as such without any extra effort. And that’s powerful - 
+because it means DNS SD or service discovery works again. And it means we can
+start to talk about cluster application policy in a sane way - “we’ll monitor
+&lt;code&gt;/metrics&lt;/code&gt; on port 80 or 443 for you if it’s there.&lt;/p&gt;
+&lt;h1 id=&quot;other-problems-which-are-solved-&quot;&gt;Other Problems (which are solved)&lt;/h1&gt;
+&lt;p&gt;There were a few other common dilemmas I wanted a “correct” solution for when
+I started playing around with &lt;code&gt;reverse_exporter&lt;/code&gt; which it solves.&lt;/p&gt;
+&lt;p&gt;We don’t always want to write an entire exporter for Prometheus - sometimes we
+just have something tiny and fairly obvious we’d like to scrape with a text
+format script. When using the Prometheus &lt;code&gt;node_exporter&lt;/code&gt; you can do this with
+the text collector, which will read &lt;code&gt;*.prom&lt;/code&gt; files on every scrape - but you
+need to setup cron to periodically update these - which can be a pain, and gives
+the metrics lag.&lt;/p&gt;
+&lt;p&gt;What if we want to have an on-demand script?&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;reverse_exporter&lt;/code&gt; allows this - you can specify a bash script, even allow
+arguments to be passed via URL params, and it’ll execute and collect any
+metrics you write to stdout.&lt;/p&gt;
+&lt;p&gt;But it also protects you from the danger of naive approach here: a possible denial
+of service from an overzealous or possibly malicious user sending a huge number
+of requests to your script. If we just spawned a process each time, we could
+quickly exhaust container or system resources. &lt;code&gt;reverse_exporter&lt;/code&gt; avoids this
+problem by waterfalling the results of each execution - since Prometheus regards
+a scrape as a time-slice of state at the moment it gets results, we can protect
+the system by queuing up inbound scrapers while the script executes, and then
+sending them all the same results (provided they’re happy with the wait time - 
+which Prometheus is good about).&lt;/p&gt;
+&lt;p&gt;We avoid thrashing the system resources, and we can confidently let users and
+admins reload the metrics page without bringing down our container or our host.&lt;/p&gt;
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;This post feels a bit marketing like to me, but I am pretty excited that for me
+at least &lt;code&gt;reverse_exporter&lt;/code&gt; works well.&lt;/p&gt;
+&lt;p&gt;Hopefully, it proves helpful to other Prometheus users as well!&lt;/p&gt;
+</description>
+    </item>
     <item>
       <title>S4-i9505 in 2018</title>
       <link>http://blog.wrouesnel.com/articles/S4-i9505%20in%202018/</link>
