@@ -81,6 +81,7 @@ html(lang=&#39;en&#39;)
       meta(name=&#39;viewport&#39;, content=&#39;width=device-width&#39;)
       !{ env.helpers.livereload() }
       script(type=&#39;text/javascript&#39;).
+
 </code></pre>
 <p>I also add a script section with <a href="http://www.google.com/analytics/">Google Analytics</a> to layout.jade because I’m vain like&nbsp;that:</p>
 <pre><code class="lang-jade">!!! 5
@@ -103,7 +104,7 @@ html(lang=&#39;en&#39;)
         ga(&#39;create&#39;, &#39;UA-43235370-1&#39;, &#39;wrouesnel.github.io&#39;);
         ga(&#39;send&#39;, &#39;pageview&#39;);
 </code></pre>
-<p><strong>The glitch</strong>: Running <code>wintersmith preview</code> with these changes you’ll find it doesn’t work when trying to browse to the main index.html page with something like “env is undefined”. This is <a href="https://github.com/jnordberg/wintersmith/issues/141">a glitch in paginator which has been fixed upstream</a> but not in wintersmith@2.0.5 in&nbsp;npm. </p>
+<p><strong>The glitch</strong>: Running <code>wintersmith preview</code> with these changes you’ll find it doesn’t work when trying to browse to the main index.html page with something like “env is undefined”. This is <a href="https://github.com/jnordberg/wintersmith/issues/141">a glitch in paginator which has been fixed upstream</a> but not in <a href="mailto:wintersmith@2.0.5">wintersmith@2.0.5</a> in&nbsp;npm. </p>
 <p>To fix it I just copied <a href="https://github.com/jnordberg/wintersmith/commit/b959b35b9b153fb7ddbaa37533800777473b5a17.diff">the commit patch</a> manually into my local copy of <code>plugins/paginator.coffee</code> : </p>
 <pre><code class="lang-diff">diff --git a/examples/blog/plugins/paginator.coffee b/examples/blog/plugins/paginator.coffee
 index b8e9032..19098d5 100644

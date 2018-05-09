@@ -34,7 +34,150 @@
         <!-- First article - render in full-->
         <article class="article intro"></article>
         <header>
-          <h1 class="indexfullarticle"><a href="/articles/Prometheus%20reverse_exporter/">Prometheus reverse_exporter</a></h1>
+          <h1 class="indexfullarticle"><a href="/articles/Securing%20cockroachdb/">Securing CockroachDB</a></h1>
+          <div class="date"><span>10. May 2018</span></div>
+          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
+          </p>
+        </header>
+        <section class="content"><p>So I just lost about 16 hours to this, and I haven’t even been able to
+evaluate whether it’ll work for me. On the one hand I suppose I could’ve not
+secured anything, but personally I feel you want to know what the production
+configuration looks like before you evaluate (and in my case, I like to default
+my docker containers to “would not be wrong to roll this into&nbsp;production”).</p>
+<p>So: how does <span class="caps">TLS</span> work for CockroachDB? Well the problem is CockroachDB has
+atrocious logging for its TLS certificate errors in&nbsp;v2.0.1.</p>
+<h1 id="the-problem">The&nbsp;Problem</h1>
+<p>The problem was basically that CockroachDB expects a very specific format
+for it’s x509 certificate data - outlined here <a href="https://github.com/cockroachdb/cockroach/issues/24621">https://github.com/cockroachdb/cockroach/issues/24621</a></p>
+<p>I have a small utility I use for test certificates called <a href="https://github.com/wrouesnel/makecerts">makecerts</a>
+which exists basically to have a much simpler static binary that does something
+like <a href="https://github.com/cloudflare/cfssl">cfssl</a> but with looser defaults. But
+the problem would apply to both&nbsp;scenarios.</p>
+<p>In short: <code>organization</code> needs to be set to <code>cockroach</code> for node certificates,
+and the <code>commonName</code> needs to be set to <code>node</code>. I was generating certificates with
+a <code>commonName</code> of my docker-compose test network - <code>172.20.0.1</code> and the like, 
+which is perfectly valid, validates correctly with the <span class="caps">CA</span>, and can be used to
+initialize the cluster - but none of the nodes will connect to each&nbsp;other.</p>
+<p>And as noted in the Github issue produces no logs actually describing the&nbsp;problem.</p>
+<h1 id="the-solution">The&nbsp;Solution</h1>
+<p>So there you have it - with <code>makecerts</code> the line I needed for the test docker-compose
+file&nbsp;was:</p>
+<pre><code class="lang-bash">makecerts --O=cockroach --CN=generated \
+    172_20_0_1=node,172.20.0.1,localhost,127.0.0.1 \
+    172_20_0_2=node,172.20.0.2,localhost,127.0.0.1 \
+    172_20_0_3=node,172.20.0.3,localhost,127.0.0.1 \
+    172_20_0_4=node,172.20.0.4,localhost,127.0.0.1 \
+    172_20_0_5=node,172.20.0.5,localhost,127.0.0.1 \
+    root
+</code></pre>
+<p>Note on how this works: this command above is saying “generate 
+172_20_0_1.crt and 172_20_0_1.pem for the certificate and key respectively,
+assign a commonName of <code>node</code> and then generate SANs for the commonName and
+all common-separated&nbsp;values.”</p>
+<p>Since <code>makecerts</code> is simple minded it also just signs the cert for all 
+use-cases - it’s very much a testing&nbsp;tool.</p>
+<p>The final docker-compose I used to get this started&nbsp;was:</p>
+<pre><code class="lang-yaml"><span class="attr">version:</span> <span class="string">'2'</span>
+
+<span class="attr">networks:</span>
+<span class="attr">  roachnet:</span>
+<span class="attr">    driver:</span> <span class="string">bridge</span>
+<span class="attr">    ipam:</span>
+<span class="attr">      driver:</span> <span class="string">default</span>
+<span class="attr">      config:</span>
+<span class="attr">      - subnet:</span> <span class="number">172.20</span><span class="number">.0</span><span class="number">.0</span><span class="string">/24</span>
+<span class="attr">        gateway:</span> <span class="number">172.20</span><span class="number">.0</span><span class="number">.254</span>
+
+<span class="attr">services:</span>
+<span class="attr">  roach1:</span>
+<span class="attr">    image:</span> <span class="string">cockroachdb/cockroach:v2.0.1</span>
+<span class="attr">    command:</span> <span class="string">start</span> <span class="bullet">--host=172.20.0.1</span> <span class="bullet">--logtostderr=<span class="caps">INFO</span></span> <span class="bullet">--certs-dir=/certs</span> <span class="bullet">--join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
+<span class="attr">    volumes:</span>
+<span class="bullet">    -</span> <span class="string">./roach1:/cockroach/cockroach-data</span>
+<span class="bullet">    -</span> <span class="string">./172_20_0_1.crt:/certs/node.crt</span>
+<span class="bullet">    -</span> <span class="string">./172_20_0_1.pem:/certs/node.key</span>
+<span class="bullet">    -</span> <span class="string">./root.crt:/certs/client.root.crt</span>
+<span class="bullet">    -</span> <span class="string">./root.pem:/certs/client.root.key</span>
+<span class="bullet">    -</span> <span class="string">./generated.crt:/certs/ca.crt</span>
+<span class="bullet">    -</span> <span class="string">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
+<span class="attr">    networks:</span>
+<span class="attr">      roachnet:</span>
+<span class="attr">        ipv4_address:</span> <span class="number">172.20</span><span class="number">.0</span><span class="number">.1</span>
+
+<span class="attr">  roach2:</span>
+<span class="attr">    image:</span> <span class="string">cockroachdb/cockroach:v2.0.1</span>
+<span class="attr">    command:</span> <span class="string">start</span> <span class="bullet">--host=172.20.0.2</span> <span class="bullet">--logtostderr=<span class="caps">INFO</span></span> <span class="bullet">--certs-dir=/certs</span> <span class="bullet">--join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
+<span class="attr">    volumes:</span>
+<span class="bullet">    -</span> <span class="string">./roach2:/cockroach/cockroach-data</span>
+<span class="bullet">    -</span> <span class="string">./172_20_0_2.crt:/certs/node.crt</span>
+<span class="bullet">    -</span> <span class="string">./172_20_0_2.pem:/certs/node.key</span>
+<span class="bullet">    -</span> <span class="string">./root.crt:/certs/client.root.crt</span>
+<span class="bullet">    -</span> <span class="string">./root.pem:/certs/client.root.key</span>
+<span class="bullet">    -</span> <span class="string">./generated.crt:/certs/ca.crt</span>
+<span class="bullet">    -</span> <span class="string">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
+<span class="attr">    networks:</span>
+<span class="attr">      roachnet:</span>
+<span class="attr">        ipv4_address:</span> <span class="number">172.20</span><span class="number">.0</span><span class="number">.2</span>
+
+<span class="attr">  roach3:</span>
+<span class="attr">    image:</span> <span class="string">cockroachdb/cockroach:v2.0.1</span>
+<span class="attr">    command:</span> <span class="string">start</span> <span class="bullet">--host=172.20.0.3</span> <span class="bullet">--logtostderr=<span class="caps">INFO</span></span> <span class="bullet">--certs-dir=/certs</span> <span class="bullet">--join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
+<span class="attr">    volumes:</span>
+<span class="bullet">    -</span> <span class="string">./roach3:/cockroach/cockroach-data</span>
+<span class="bullet">    -</span> <span class="string">./172_20_0_3.crt:/certs/node.crt</span>
+<span class="bullet">    -</span> <span class="string">./172_20_0_3.pem:/certs/node.key</span>
+<span class="bullet">    -</span> <span class="string">./root.crt:/certs/client.root.crt</span>
+<span class="bullet">    -</span> <span class="string">./root.pem:/certs/client.root.key</span>
+<span class="bullet">    -</span> <span class="string">./generated.crt:/certs/ca.crt</span>
+<span class="bullet">    -</span> <span class="string">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
+<span class="attr">    networks:</span>
+<span class="attr">      roachnet:</span>
+<span class="attr">        ipv4_address:</span> <span class="number">172.20</span><span class="number">.0</span><span class="number">.3</span>
+
+<span class="attr">  roach4:</span>
+<span class="attr">    image:</span> <span class="string">cockroachdb/cockroach:v2.0.1</span>
+<span class="attr">    command:</span> <span class="string">start</span> <span class="bullet">--host=172.20.0.4</span> <span class="bullet">--logtostderr=<span class="caps">INFO</span></span> <span class="bullet">--certs-dir=/certs</span> <span class="bullet">--join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
+<span class="attr">    volumes:</span>
+<span class="bullet">    -</span> <span class="string">./roach4:/cockroach/cockroach-data</span>
+<span class="bullet">    -</span> <span class="string">./172_20_0_4.crt:/certs/node.crt</span>
+<span class="bullet">    -</span> <span class="string">./172_20_0_4.pem:/certs/node.key</span>
+<span class="bullet">    -</span> <span class="string">./root.crt:/certs/client.root.crt</span>
+<span class="bullet">    -</span> <span class="string">./root.pem:/certs/client.root.key</span>
+<span class="bullet">    -</span> <span class="string">./generated.crt:/certs/ca.crt</span>
+<span class="bullet">    -</span> <span class="string">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
+<span class="attr">    networks:</span>
+<span class="attr">      roachnet:</span>
+<span class="attr">        ipv4_address:</span> <span class="number">172.20</span><span class="number">.0</span><span class="number">.4</span>
+
+<span class="attr">  roach5:</span>
+<span class="attr">    image:</span> <span class="string">cockroachdb/cockroach:v2.0.1</span>
+<span class="attr">    command:</span> <span class="string">start</span> <span class="bullet">--host=172.20.0.5</span> <span class="bullet">--logtostderr=<span class="caps">INFO</span></span> <span class="bullet">--certs-dir=/certs</span> <span class="bullet">--join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
+<span class="attr">    volumes:</span>
+<span class="bullet">    -</span> <span class="string">./roach5:/cockroach/cockroach-data</span>
+<span class="bullet">    -</span> <span class="string">./172_20_0_5.crt:/certs/node.crt</span>
+<span class="bullet">    -</span> <span class="string">./172_20_0_5.pem:/certs/node.key</span>
+<span class="bullet">    -</span> <span class="string">./root.crt:/certs/client.root.crt</span>
+<span class="bullet">    -</span> <span class="string">./root.pem:/certs/client.root.key</span>
+<span class="bullet">    -</span> <span class="string">./generated.crt:/certs/ca.crt</span>
+<span class="bullet">    -</span> <span class="string">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
+<span class="attr">    networks:</span>
+<span class="attr">      roachnet:</span>
+<span class="attr">        ipv4_address:</span> <span class="number">172.20</span><span class="number">.0</span><span class="number">.5</span>
+</code></pre>
+<p>and you need to run a once-off init phase to start the&nbsp;cluster:</p>
+<pre><code>#!/bin/bash
+docker-compose exec roach1 ./cockroach init --certs-dir=/certs/ --host=172.20.0.1
+</code></pre><h1 id="a-final-note-why-does-makecerts-exist-">A final note - why does makecerts&nbsp;exist?</h1>
+<p>I really want to like <code>cfssl</code>, but it still just seems like too much typing for
+when you’re setting up test scenarios. It’s a production tool for Cloudflare,
+whereas the goal with <code>makecerts</code> was to make it as easy as possible to generate
+<span class="caps">TLS</span> certs for test cases on the desktop and thus force myself to always turn
+TLS on when developing - since obviously I’m always going to be using it in
+production, so I should test with&nbsp;it.</p>
+</section>
+        <article class="article intro"></article>
+        <header>
+          <h2><a href="/articles/Prometheus%20reverse_exporter/">Prometheus reverse_exporter</a></h2>
           <div class="date"><span>29. March 2018</span></div>
           <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
           </p>
@@ -71,77 +214,9 @@ liberty to just open ports willy-nilly to support this - or we’d like to able
 to avoid it. In the space of corporations with security policies, <span class="caps">HTTP</span>/HTTPS on
 port 80 and 443 is easy to justify. But good luck getting another 3 ports opened
 to support monitoring - oh and you’ll have to put SSL and auth on those&nbsp;too.</p>
-<h2 id="solution-1-separate-endpoints">Solution 1 - separate&nbsp;endpoints</h2>
-<p>In our single-container example, we only have the 1 <span class="caps">IP</span> for the container - but
-we have nginx so we could just farm the metrics out to separate endpoints. This
-works - it’s my original solution. But instead of a nice, by-convention <code>/metrics</code>
-endpoint we now have something like <code>/metrics/psql</code>, <code>/metrics/nginx</code>, <code>/metrics/pdns</code>.</p>
-<p>Which means 3 separate entries in the Prometheus config file to scrape them, and
-breaks nice features like <span class="caps">DNS</span>-SD to let us just&nbsp;discover.</p>
-<p>And it feels unclean: the PowerDNS container has a bunch of things in it, but
-they’re all providing one-service - they’re all one product. Shouldn’t their
-metrics all be given as one&nbsp;endpoint?</p>
-<h2 id="solution-2-just-use-multiple-ports">Solution 2 - just use multiple&nbsp;ports</h2>
-<p>This is the Prometheus way. And it would work. But it still has some of the
-drawbacks above - we’re still explicitly scraping 3 targets, and we’re doing
-some slicing on the Prometheus side to try and group these sensibly - in fact
-we’re requiring Prometheus to understand our architecture in detail which
-shouldn’t&nbsp;matter.</p>
-<p>i.e. is the <span class="caps">DNS</span> container a single job with 3 endpoints in it, multiple jobs
-per container? The latter feels wrong again - if our database goes sideways, its
-not really a database <em>cluster</em> going down - just a single “<span class="caps">DNS</span> server”&nbsp;instance.</p>
-<p>Prometheus has the idea of an “instance” tag per scraped endpoint…we’d kind of
-like to support&nbsp;that.</p>
-<h1 id="solution-3-combine-the-exporters-into-one-endpoint-reverse_exporter">Solution 3 - combine the exporters into one endpoint -&nbsp;reverse_exporter</h1>
-<p><code>reverse_exporter</code> is essentially the implementation of how we achieve&nbsp;this.</p>
-<p>The main thing <code>reverse_exporter</code> was designed to do is receive a scrape request,
-proxy it to a bunch of exporters listening on localhost behind it, and then
-decode the metrics they produce so it can rewrite them with unique identifier
-labels before handing them to&nbsp;Prometheus.</p>
-<p><em>Obviously</em> metric relabelling on Prometheus can do something like this, but in
-this case as solution designers/application developers/whatever we are, we want
-to express an opinion on how this container runs, and simplify the overhead to
-supporting&nbsp;it.</p>
-<p>The reason we rewrite the metrics is to allow namespace collisisions - specifically
-we want to ensure we can have multiple golang runtime metrics from Prometheus
-live side-by-side, but still be able to separate them out in our visualiazation
-tooling. We might also want to have multiples of the same application in our
-container (or maybe its something like a Kubernetes pod and we want it to be
-monitored like a single appliance). The point is: from a Prometheus perspective,
-it all comes out looking like metrics from the 1 “instance”, and gets metadata
-added by Prometheus as such without any extra effort. And that’s powerful - 
-because it means <span class="caps">DNS</span> SD or service discovery works again. And it means we can
-start to talk about cluster application policy in a sane way - “we’ll monitor
-<code>/metrics</code> on port 80 or 443 for you if it’s&nbsp;there.</p>
-<h1 id="other-problems-which-are-solved-">Other Problems (which are&nbsp;solved)</h1>
-<p>There were a few other common dilemmas I wanted a “correct” solution for when
-I started playing around with <code>reverse_exporter</code> which it&nbsp;solves.</p>
-<p>We don’t always want to write an entire exporter for Prometheus - sometimes we
-just have something tiny and fairly obvious we’d like to scrape with a text
-format script. When using the Prometheus <code>node_exporter</code> you can do this with
-the text collector, which will read <code>*.prom</code> files on every scrape - but you
-need to setup cron to periodically update these - which can be a pain, and gives
-the metrics&nbsp;lag.</p>
-<p>What if we want to have an on-demand&nbsp;script?</p>
-<p><code>reverse_exporter</code> allows this - you can specify a bash script, even allow
-arguments to be passed via <span class="caps">URL</span> params, and it’ll execute and collect any
-metrics you write to&nbsp;stdout.</p>
-<p>But it also protects you from the danger of naive approach here: a possible denial
-of service from an overzealous or possibly malicious user sending a huge number
-of requests to your script. If we just spawned a process each time, we could
-quickly exhaust container or system resources. <code>reverse_exporter</code> avoids this
-problem by waterfalling the results of each execution - since Prometheus regards
-a scrape as a time-slice of state at the moment it gets results, we can protect
-the system by queuing up inbound scrapers while the script executes, and then
-sending them all the same results (provided they’re happy with the wait time - 
-which Prometheus is good&nbsp;about).</p>
-<p>We avoid thrashing the system resources, and we can confidently let users and
-admins reload the metrics page without bringing down our container or our&nbsp;host.</p>
-<h1 id="conclusion">Conclusion</h1>
-<p>This post feels a bit marketing like to me, but I am pretty excited that for me
-at least <code>reverse_exporter</code> works&nbsp;well.</p>
-<p>Hopefully, it proves helpful to other Prometheus users as&nbsp;well!</p>
-</section>
+
+          <p class="more"><a href="/articles/Prometheus%20reverse_exporter/">more</a></p>
+        </section>
         <article class="article intro"></article>
         <header>
           <h2><a href="/articles/S4-i9505%20in%202018/">S4-i9505 in 2018</a></h2>
@@ -465,7 +540,7 @@ work great, for manual backups it will work great, and with a little scripting
 it will work <em>great</em> for automatic backups under Windows and&nbsp;Linux.</p>
 <p>The brave can try out the cutting-edge branch on my GitHub account to test out
 the fixes in this blog-post, and if you do then posting about them to
-[bup-list@googlegroups.com[(<a href="https://groups.google.com/forum/#!forum/bup-list">https://groups.google.com/forum/#!forum/bup-list</a>) with any problems or successes or code reviews would
+[<a href="mailto:bup-list@googlegroups.com">bup-list@googlegroups.com</a>[(<a href="https://groups.google.com/forum/#!forum/bup-list">https://groups.google.com/forum/#!forum/bup-list</a>) with any problems or successes or code reviews would
 help a&nbsp;lot.</p>
 
         </section>
@@ -645,6 +720,17 @@ mv myscript.conf.d myscript.conf
 <p>Instead I’ll cover a few tweaks I had to do to get it running the way I wanted. To avoid being truly confusing, all the paths referenced here are relative to the site you create by running <code>wintersmith new &lt;your site dir here&gt;</code></p>
 
           <p class="more"><a href="/articles/Wintersmithing/">more</a></p>
+        </section>
+        <article class="article intro"></article>
+        <header>
+          <h2><a href="/articles/DNS%20as%20a%20cloud-configuration%20tool/">DNS as a cloud configuration tool (introducing DNS-config)</a></h2>
+          <div class="date"><span>01. January 1970</span></div>
+          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
+          </p>
+        </header>
+        <section class="content"><p>I’ve been playing with cluster bootstrapping a lot recently, which feels like an
+awfully relevant topic for a tech-themed blog on the internet&nbsp;somehow.</p>
+
         </section>
       </div>
     </div>

@@ -65,6 +65,7 @@ optional arguments:
   --daemonize           should process daemonize?
   --logfile <span class="caps">LOGFILE</span>     file to redirect <span class="built_in">log</span> output too (useful <span class="keyword">for</span> daemon
                         mode)
+
 </code></pre>
 <p>It uses a comprehensive argparse interface, the most important parameter is <code>-r</code>. This is exactly like the getmail -r command, and accepts files in the same format - though it doesn’t search the same locations although it will search <code>$HOME/.getmail/</code>.</p>
 <p>Currently it only handles <span class="caps">IMAPSSL</span>, which you should be using anyway though it should be easy to hack it to fix this I just have no incentive too at the&nbsp;moment.</p>

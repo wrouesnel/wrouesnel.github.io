@@ -5,13 +5,156 @@
     <atom:link href="http://blog.wrouesnel.com/feed.xml" rel="self" type="application/rss+xml"></atom:link>
     <link>http://blog.wrouesnel.com</link>
     <description>negating information entropy</description>
-    <pubDate>Thu, 29 Mar 2018 22:10:00 +1100</pubDate>
+    <pubDate>Thu, 10 May 2018 02:17:00 +1000</pubDate>
     <generator>Wintersmith - https://github.com/jnordberg/wintersmith</generator>
     <language>en</language>
     <item>
+      <title>Securing CockroachDB</title>
+      <link>http://blog.wrouesnel.com/articles/Securing%20cockroachdb/</link>
+      <pubDate>Thu, 10 May 2018 02:17:00 +1000</pubDate>
+      <guid isPermaLink="true">http://blog.wrouesnel.com/articles/Securing%20cockroachdb/</guid>
+      <author></author>
+      <description>&lt;p&gt;So I just lost about 16 hours to this, and I haven’t even been able to
+evaluate whether it’ll work for me. On the one hand I suppose I could’ve not
+secured anything, but personally I feel you want to know what the production
+configuration looks like before you evaluate (and in my case, I like to default
+my docker containers to “would not be wrong to roll this into production”).&lt;/p&gt;
+&lt;p&gt;So: how does TLS work for CockroachDB? Well the problem is CockroachDB has
+atrocious logging for its TLS certificate errors in v2.0.1.&lt;/p&gt;
+&lt;h1 id=&quot;the-problem&quot;&gt;The Problem&lt;/h1&gt;
+&lt;p&gt;The problem was basically that CockroachDB expects a very specific format
+for it’s x509 certificate data - outlined here &lt;a href=&quot;https://github.com/cockroachdb/cockroach/issues/24621&quot;&gt;https://github.com/cockroachdb/cockroach/issues/24621&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I have a small utility I use for test certificates called &lt;a href=&quot;https://github.com/wrouesnel/makecerts&quot;&gt;makecerts&lt;/a&gt;
+which exists basically to have a much simpler static binary that does something
+like &lt;a href=&quot;https://github.com/cloudflare/cfssl&quot;&gt;cfssl&lt;/a&gt; but with looser defaults. But
+the problem would apply to both scenarios.&lt;/p&gt;
+&lt;p&gt;In short: &lt;code&gt;organization&lt;/code&gt; needs to be set to &lt;code&gt;cockroach&lt;/code&gt; for node certificates,
+and the &lt;code&gt;commonName&lt;/code&gt; needs to be set to &lt;code&gt;node&lt;/code&gt;. I was generating certificates with
+a &lt;code&gt;commonName&lt;/code&gt; of my docker-compose test network - &lt;code&gt;172.20.0.1&lt;/code&gt; and the like, 
+which is perfectly valid, validates correctly with the CA, and can be used to
+initialize the cluster - but none of the nodes will connect to each other.&lt;/p&gt;
+&lt;p&gt;And as noted in the Github issue produces no logs actually describing the problem.&lt;/p&gt;
+&lt;h1 id=&quot;the-solution&quot;&gt;The Solution&lt;/h1&gt;
+&lt;p&gt;So there you have it - with &lt;code&gt;makecerts&lt;/code&gt; the line I needed for the test docker-compose
+file was:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-bash&quot;&gt;makecerts --O=cockroach --CN=generated \
+    172_20_0_1=node,172.20.0.1,localhost,127.0.0.1 \
+    172_20_0_2=node,172.20.0.2,localhost,127.0.0.1 \
+    172_20_0_3=node,172.20.0.3,localhost,127.0.0.1 \
+    172_20_0_4=node,172.20.0.4,localhost,127.0.0.1 \
+    172_20_0_5=node,172.20.0.5,localhost,127.0.0.1 \
+    root
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note on how this works: this command above is saying “generate 
+172_20_0_1.crt and 172_20_0_1.pem for the certificate and key respectively,
+assign a commonName of &lt;code&gt;node&lt;/code&gt; and then generate SANs for the commonName and
+all common-separated values.”&lt;/p&gt;
+&lt;p&gt;Since &lt;code&gt;makecerts&lt;/code&gt; is simple minded it also just signs the cert for all 
+use-cases - it’s very much a testing tool.&lt;/p&gt;
+&lt;p&gt;The final docker-compose I used to get this started was:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;lang-yaml&quot;&gt;&lt;span class=&quot;attr&quot;&gt;version:&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;'2'&lt;/span&gt;
+
+&lt;span class=&quot;attr&quot;&gt;networks:&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;  roachnet:&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;    driver:&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;bridge&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;    ipam:&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;      driver:&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;default&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;      config:&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;      - subnet:&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;172.20&lt;/span&gt;&lt;span class=&quot;number&quot;&gt;.0&lt;/span&gt;&lt;span class=&quot;number&quot;&gt;.0&lt;/span&gt;&lt;span class=&quot;string&quot;&gt;/24&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;        gateway:&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;172.20&lt;/span&gt;&lt;span class=&quot;number&quot;&gt;.0&lt;/span&gt;&lt;span class=&quot;number&quot;&gt;.254&lt;/span&gt;
+
+&lt;span class=&quot;attr&quot;&gt;services:&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;  roach1:&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;    image:&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;cockroachdb/cockroach:v2.0.1&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;    command:&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;start&lt;/span&gt; &lt;span class=&quot;bullet&quot;&gt;--host=172.20.0.1&lt;/span&gt; &lt;span class=&quot;bullet&quot;&gt;--logtostderr=INFO&lt;/span&gt; &lt;span class=&quot;bullet&quot;&gt;--certs-dir=/certs&lt;/span&gt; &lt;span class=&quot;bullet&quot;&gt;--join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;    volumes:&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./roach1:/cockroach/cockroach-data&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./172_20_0_1.crt:/certs/node.crt&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./172_20_0_1.pem:/certs/node.key&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./root.crt:/certs/client.root.crt&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./root.pem:/certs/client.root.key&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./generated.crt:/certs/ca.crt&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./generated.crt:/usr/local/share/ca-certificates/ca.crt&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;    networks:&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;      roachnet:&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;        ipv4_address:&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;172.20&lt;/span&gt;&lt;span class=&quot;number&quot;&gt;.0&lt;/span&gt;&lt;span class=&quot;number&quot;&gt;.1&lt;/span&gt;
+
+&lt;span class=&quot;attr&quot;&gt;  roach2:&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;    image:&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;cockroachdb/cockroach:v2.0.1&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;    command:&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;start&lt;/span&gt; &lt;span class=&quot;bullet&quot;&gt;--host=172.20.0.2&lt;/span&gt; &lt;span class=&quot;bullet&quot;&gt;--logtostderr=INFO&lt;/span&gt; &lt;span class=&quot;bullet&quot;&gt;--certs-dir=/certs&lt;/span&gt; &lt;span class=&quot;bullet&quot;&gt;--join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;    volumes:&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./roach2:/cockroach/cockroach-data&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./172_20_0_2.crt:/certs/node.crt&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./172_20_0_2.pem:/certs/node.key&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./root.crt:/certs/client.root.crt&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./root.pem:/certs/client.root.key&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./generated.crt:/certs/ca.crt&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./generated.crt:/usr/local/share/ca-certificates/ca.crt&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;    networks:&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;      roachnet:&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;        ipv4_address:&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;172.20&lt;/span&gt;&lt;span class=&quot;number&quot;&gt;.0&lt;/span&gt;&lt;span class=&quot;number&quot;&gt;.2&lt;/span&gt;
+
+&lt;span class=&quot;attr&quot;&gt;  roach3:&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;    image:&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;cockroachdb/cockroach:v2.0.1&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;    command:&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;start&lt;/span&gt; &lt;span class=&quot;bullet&quot;&gt;--host=172.20.0.3&lt;/span&gt; &lt;span class=&quot;bullet&quot;&gt;--logtostderr=INFO&lt;/span&gt; &lt;span class=&quot;bullet&quot;&gt;--certs-dir=/certs&lt;/span&gt; &lt;span class=&quot;bullet&quot;&gt;--join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;    volumes:&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./roach3:/cockroach/cockroach-data&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./172_20_0_3.crt:/certs/node.crt&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./172_20_0_3.pem:/certs/node.key&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./root.crt:/certs/client.root.crt&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./root.pem:/certs/client.root.key&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./generated.crt:/certs/ca.crt&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./generated.crt:/usr/local/share/ca-certificates/ca.crt&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;    networks:&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;      roachnet:&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;        ipv4_address:&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;172.20&lt;/span&gt;&lt;span class=&quot;number&quot;&gt;.0&lt;/span&gt;&lt;span class=&quot;number&quot;&gt;.3&lt;/span&gt;
+
+&lt;span class=&quot;attr&quot;&gt;  roach4:&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;    image:&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;cockroachdb/cockroach:v2.0.1&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;    command:&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;start&lt;/span&gt; &lt;span class=&quot;bullet&quot;&gt;--host=172.20.0.4&lt;/span&gt; &lt;span class=&quot;bullet&quot;&gt;--logtostderr=INFO&lt;/span&gt; &lt;span class=&quot;bullet&quot;&gt;--certs-dir=/certs&lt;/span&gt; &lt;span class=&quot;bullet&quot;&gt;--join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;    volumes:&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./roach4:/cockroach/cockroach-data&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./172_20_0_4.crt:/certs/node.crt&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./172_20_0_4.pem:/certs/node.key&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./root.crt:/certs/client.root.crt&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./root.pem:/certs/client.root.key&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./generated.crt:/certs/ca.crt&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./generated.crt:/usr/local/share/ca-certificates/ca.crt&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;    networks:&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;      roachnet:&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;        ipv4_address:&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;172.20&lt;/span&gt;&lt;span class=&quot;number&quot;&gt;.0&lt;/span&gt;&lt;span class=&quot;number&quot;&gt;.4&lt;/span&gt;
+
+&lt;span class=&quot;attr&quot;&gt;  roach5:&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;    image:&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;cockroachdb/cockroach:v2.0.1&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;    command:&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;start&lt;/span&gt; &lt;span class=&quot;bullet&quot;&gt;--host=172.20.0.5&lt;/span&gt; &lt;span class=&quot;bullet&quot;&gt;--logtostderr=INFO&lt;/span&gt; &lt;span class=&quot;bullet&quot;&gt;--certs-dir=/certs&lt;/span&gt; &lt;span class=&quot;bullet&quot;&gt;--join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;    volumes:&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./roach5:/cockroach/cockroach-data&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./172_20_0_5.crt:/certs/node.crt&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./172_20_0_5.pem:/certs/node.key&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./root.crt:/certs/client.root.crt&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./root.pem:/certs/client.root.key&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./generated.crt:/certs/ca.crt&lt;/span&gt;
+&lt;span class=&quot;bullet&quot;&gt;    -&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;./generated.crt:/usr/local/share/ca-certificates/ca.crt&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;    networks:&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;      roachnet:&lt;/span&gt;
+&lt;span class=&quot;attr&quot;&gt;        ipv4_address:&lt;/span&gt; &lt;span class=&quot;number&quot;&gt;172.20&lt;/span&gt;&lt;span class=&quot;number&quot;&gt;.0&lt;/span&gt;&lt;span class=&quot;number&quot;&gt;.5&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;and you need to run a once-off init phase to start the cluster:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#!/bin/bash
+docker-compose exec roach1 ./cockroach init --certs-dir=/certs/ --host=172.20.0.1
+&lt;/code&gt;&lt;/pre&gt;&lt;h1 id=&quot;a-final-note-why-does-makecerts-exist-&quot;&gt;A final note - why does makecerts exist?&lt;/h1&gt;
+&lt;p&gt;I really want to like &lt;code&gt;cfssl&lt;/code&gt;, but it still just seems like too much typing for
+when you’re setting up test scenarios. It’s a production tool for Cloudflare,
+whereas the goal with &lt;code&gt;makecerts&lt;/code&gt; was to make it as easy as possible to generate
+TLS certs for test cases on the desktop and thus force myself to always turn
+TLS on when developing - since obviously I’m always going to be using it in
+production, so I should test with it.&lt;/p&gt;
+</description>
+    </item>
+    <item>
       <title>Prometheus reverse_exporter</title>
       <link>http://blog.wrouesnel.com/articles/Prometheus%20reverse_exporter/</link>
-      <pubDate>Thu, 29 Mar 2018 22:10:00 +1100</pubDate>
+      <pubDate>Thu, 29 Mar 2018 22:13:00 +1100</pubDate>
       <guid isPermaLink="true">http://blog.wrouesnel.com/articles/Prometheus%20reverse_exporter/</guid>
       <author></author>
       <description>&lt;p&gt;&lt;a href=&quot;https://github.com/wrouesnel/reverse_exporter/releases&quot;&gt;Find reverse_exporter on Github Releases&lt;/a&gt;&lt;/p&gt;
@@ -436,7 +579,7 @@ work great, for manual backups it will work great, and with a little scripting
 it will work &lt;em&gt;great&lt;/em&gt; for automatic backups under Windows and Linux.&lt;/p&gt;
 &lt;p&gt;The brave can try out the cutting-edge branch on my GitHub account to test out
 the fixes in this blog-post, and if you do then posting about them to
-[bup-list@googlegroups.com[(&lt;a href=&quot;https://groups.google.com/forum/#!forum/bup-list&quot;&gt;https://groups.google.com/forum/#!forum/bup-list&lt;/a&gt;) with any problems or successes or code reviews would
+[&lt;a href=&quot;mailto:bup-list@googlegroups.com&quot;&gt;bup-list@googlegroups.com&lt;/a&gt;[(&lt;a href=&quot;https://groups.google.com/forum/#!forum/bup-list&quot;&gt;https://groups.google.com/forum/#!forum/bup-list&lt;/a&gt;) with any problems or successes or code reviews would
 help a lot.&lt;/p&gt;
 </description>
     </item>
@@ -652,6 +795,7 @@ optional arguments:
   --daemonize           should process daemonize?
   --logfile LOGFILE     file to redirect &lt;span class=&quot;built_in&quot;&gt;log&lt;/span&gt; output too (useful &lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt; daemon
                         mode)
+
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;It uses a comprehensive argparse interface, the most important parameter is &lt;code&gt;-r&lt;/code&gt;. This is exactly like the getmail -r command, and accepts files in the same format - though it doesn’t search the same locations although it will search &lt;code&gt;$HOME/.getmail/&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;Currently it only handles IMAPSSL, which you should be using anyway though it should be easy to hack it to fix this I just have no incentive too at the moment.&lt;/p&gt;
@@ -876,6 +1020,7 @@ html(lang=&amp;#39;en&amp;#39;)
       meta(name=&amp;#39;viewport&amp;#39;, content=&amp;#39;width=device-width&amp;#39;)
       !{ env.helpers.livereload() }
       script(type=&amp;#39;text/javascript&amp;#39;).
+
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;I also add a script section with &lt;a href=&quot;http://www.google.com/analytics/&quot;&gt;Google Analytics&lt;/a&gt; to layout.jade because I’m vain like that:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;lang-jade&quot;&gt;!!! 5
@@ -898,7 +1043,7 @@ html(lang=&amp;#39;en&amp;#39;)
         ga(&amp;#39;create&amp;#39;, &amp;#39;UA-43235370-1&amp;#39;, &amp;#39;wrouesnel.github.io&amp;#39;);
         ga(&amp;#39;send&amp;#39;, &amp;#39;pageview&amp;#39;);
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;strong&gt;The glitch&lt;/strong&gt;: Running &lt;code&gt;wintersmith preview&lt;/code&gt; with these changes you’ll find it doesn’t work when trying to browse to the main index.html page with something like “env is undefined”. This is &lt;a href=&quot;https://github.com/jnordberg/wintersmith/issues/141&quot;&gt;a glitch in paginator which has been fixed upstream&lt;/a&gt; but not in wintersmith@2.0.5 in npm. &lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;The glitch&lt;/strong&gt;: Running &lt;code&gt;wintersmith preview&lt;/code&gt; with these changes you’ll find it doesn’t work when trying to browse to the main index.html page with something like “env is undefined”. This is &lt;a href=&quot;https://github.com/jnordberg/wintersmith/issues/141&quot;&gt;a glitch in paginator which has been fixed upstream&lt;/a&gt; but not in &lt;a href=&quot;mailto:wintersmith@2.0.5&quot;&gt;wintersmith@2.0.5&lt;/a&gt; in npm. &lt;/p&gt;
 &lt;p&gt;To fix it I just copied &lt;a href=&quot;https://github.com/jnordberg/wintersmith/commit/b959b35b9b153fb7ddbaa37533800777473b5a17.diff&quot;&gt;the commit patch&lt;/a&gt; manually into my local copy of &lt;code&gt;plugins/paginator.coffee&lt;/code&gt; : &lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;lang-diff&quot;&gt;diff --git a/examples/blog/plugins/paginator.coffee b/examples/blog/plugins/paginator.coffee
 index b8e9032..19098d5 100644
@@ -1030,6 +1175,16 @@ publish: draft
 &lt;p&gt;At the same time services like &lt;a href=&quot;http://blog.wrouesnel.com/articles/Wintersmithing/www.tumblr.com&quot;&gt;tumblr&lt;/a&gt; never quite seemed &lt;em&gt;for&lt;/em&gt; me - it skirts the line between microblogging and blogging and it’s relationship with markdown and code didn’t gel for me. A deluge of social networking features is also not what I wanted.&lt;/p&gt;
 &lt;p&gt;With Github pages offering free static site hosting, I initially looked at Jekyll as an SSG for putting something together. But Jekyll is written in Ruby, and at the moment I’m on a node.js kick so I really wanted something in that direction. Hence Wintersmith - simple, easy to use, and written in something that I’m inclinded to hack-on but with enough features out of the box (code highlighting in particular) to not feel onerous.&lt;/p&gt;
 &lt;p&gt;So far I’m really liking the static site model - it’s simple, secure and easy to store, manage and keep in a nice neat git repository. Guess I’ll see how it goes.&lt;/p&gt;
+</description>
+    </item>
+    <item>
+      <title>DNS as a cloud configuration tool (introducing DNS-config)</title>
+      <link>http://blog.wrouesnel.com/articles/DNS%20as%20a%20cloud-configuration%20tool/</link>
+      <pubDate>Thu, 01 Jan 1970 10:00:00 +1000</pubDate>
+      <guid isPermaLink="true">http://blog.wrouesnel.com/articles/DNS%20as%20a%20cloud-configuration%20tool/</guid>
+      <author></author>
+      <description>&lt;p&gt;I’ve been playing with cluster bootstrapping a lot recently, which feels like an
+awfully relevant topic for a tech-themed blog on the internet somehow.&lt;/p&gt;
 </description>
     </item>
   </channel>
