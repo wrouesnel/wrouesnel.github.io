@@ -7,7 +7,7 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>https://blog.wrouesnel.com/</loc>
-  <lastmod>2021-12-09T14:53:00Z</lastmod>
+  <lastmod>2021-12-09T15:00:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/2013/</loc>
@@ -43,7 +43,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/archive.html</loc>
-  <lastmod>2021-12-09T14:53:00Z</lastmod>
+  <lastmod>2021-12-09T15:13:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/authors/</loc>
@@ -59,11 +59,23 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/</loc>
-  <lastmod>2021-12-09T14:53:00Z</lastmod>
+  <lastmod>2021-12-09T15:13:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/3d-printing/</loc>
+  <lastmod>2021-12-09T15:00:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/aluminatus/</loc>
+  <lastmod>2021-12-09T15:00:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/android/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/arduino/</loc>
+  <lastmod>2021-12-09T15:00:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/backup/</loc>
@@ -88,6 +100,10 @@
  <url>
   <loc>https://blog.wrouesnel.com/categories/debian/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/debugging/</loc>
+  <lastmod>2021-12-09T15:13:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/docker/</loc>
@@ -142,8 +158,16 @@
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
  <url>
+  <loc>https://blog.wrouesnel.com/categories/kernel/</loc>
+  <lastmod>2021-12-09T15:13:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://blog.wrouesnel.com/categories/linux/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/marlin/</loc>
+  <lastmod>2021-12-09T15:00:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/metrics/</loc>
@@ -170,6 +194,10 @@
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
  <url>
+  <loc>https://blog.wrouesnel.com/categories/power-management/</loc>
+  <lastmod>2021-12-09T15:13:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://blog.wrouesnel.com/categories/prometheus/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
@@ -188,6 +216,10 @@
  <url>
   <loc>https://blog.wrouesnel.com/categories/r8168/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/reprap/</loc>
+  <lastmod>2021-12-09T15:00:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/reverse-proxy/</loc>
@@ -247,7 +279,11 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/index-1.html</loc>
-  <lastmod>2021-12-09T14:53:00Z</lastmod>
+  <lastmod>2021-12-09T15:00:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/index-2.html</loc>
+  <lastmod>2021-12-09T15:13:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/a-better-getmail-idle-client/</loc>
@@ -256,6 +292,10 @@
  <url>
   <loc>https://blog.wrouesnel.com/posts/bup-towards-the-perfect-backup/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/posts/flashing-marlin-with-eclipse-and-avrdude/</loc>
+  <lastmod>2021-12-09T15:00:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/getmail-idle-client/</loc>
@@ -312,6 +352,10 @@
  <url>
   <loc>https://blog.wrouesnel.com/posts/totally-static-go-builds/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/posts/tracking-down-why-my-desktop-fails-every-second-resume/</loc>
+  <lastmod>2021-12-09T15:13:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/uninstalling-r8168-dkms/</loc>

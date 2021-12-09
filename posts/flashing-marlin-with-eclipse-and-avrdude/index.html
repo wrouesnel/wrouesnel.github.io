@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flashing Marlin with Eclipse and AVR Dude | wrouesnel_blog</title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="canonical" href="https://blog.wrouesnel.com/posts/flashing-marlin-with-eclipse-and-avrdude/">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><meta name="author" content="wrouesnel">
+<link rel="prev" href="../uninstalling-r8168-dkms/" title="Quick note - uninstalling r8618-dkms" type="text/html">
+<link rel="next" href="../bup-towards-the-perfect-backup/" title="bup - towards the perfect backup" type="text/html">
+<meta property="og:site_name" content="wrouesnel_blog">
+<meta property="og:title" content="Flashing Marlin with Eclipse and AVR Dude">
+<meta property="og:url" content="https://blog.wrouesnel.com/posts/flashing-marlin-with-eclipse-and-avrdude/">
+<meta property="og:description" content="Intro
+3D printing is still very much in the hobbyist stage, and I am a tinkerer at heart. So flashing my printer's firmware is a basic operation - in fact it has to be a basic operation, since most co">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2014-04-23T06:00:00-10:00">
+<meta property="article:tag" content="3d printing">
+<meta property="article:tag" content="aluminatus">
+<meta property="article:tag" content="arduino">
+<meta property="article:tag" content="marlin">
+<meta property="article:tag" content="reprap">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Header and menu bar -->
+<div class="container">
+      <header class="blog-header py-3"><div class="row nbb-header align-items-center">
+          <div class="col-md-3 col-xs-2 col-sm-2" style="width: auto;">
+            <button class="navbar-toggler navbar-light bg-light nbb-navbar-toggler" type="button" data-toggle="collapse" data-target=".bs-nav-collapsible" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse bs-nav-collapsible bootblog4-search-form-holder">
+                
+            </div>
+        </div>
+          <div class="col-md-6 col-xs-10 col-sm-10 bootblog4-brand" style="width: auto;">
+            <a class="navbar-brand blog-header-logo text-dark" href="../../">
+
+            <span id="blog-title">wrouesnel_blog</span>
+        </a>
+          </div>
+            <div class="col-md-3 justify-content-end align-items-center bs-nav-collapsible collapse flex-collapse bootblog4-right-nav">
+            <nav class="navbar navbar-light bg-white"><ul class="navbar-nav bootblog4-right-nav"></ul></nav>
+</div>
+    </div>
+</header><nav class="navbar navbar-expand-md navbar-light bg-white static-top"><div class="collapse navbar-collapse bs-nav-collapsible" id="bs-navbar">
+            <ul class="navbar-nav nav-fill d-flex w-100">
+<li class="nav-item">
+<a href="../../archive.html" class="nav-link">Archive</a>
+                </li>
+<li class="nav-item">
+<a href="../../categories/" class="nav-link">Tags</a>
+                </li>
+<li class="nav-item">
+<a href="../../rss.xml" class="nav-link">RSS feed</a>
+
+                
+            </li>
+</ul>
+</div>
+<!-- /.navbar-collapse -->
+</nav>
+</div>
+
+<div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        
+        
+        
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Flashing Marlin with Eclipse and AVR Dude</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    <a class="u-url" href="../../authors/wrouesnel/">wrouesnel</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2014-04-23T06:00:00-10:00" itemprop="datePublished" title="2014-04-23 06:00">2014-04-23 06:00</time></a>
+            </p>
+            
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<h2>Intro</h2>
+<p>3D printing is still very much in the hobbyist stage, and I am a tinkerer at heart. So flashing my printer's firmware is a basic operation - in fact it has to be a basic operation, since most configuration changes are baked into the firmware.</p>
+<p>But, I run my printer at 250000 baud rate over USB. This is an excellent choice for printing since the error rate from the serial line on the Arduino is basically 0, and it's faster to boot. Excellent for rapid G-code sending.</p>
+<p>But it can make reprogramming using the standard Arduino IDE a bit of a pain, and by and large I don't like the standard Arduino IDE.</p>
+<p>The problem is that your Arduino in 3D printing mode is running at a non-standard baudrate. Linux can handle this just fine, as can the underlying programming tool of Arduino <code>avrdude</code>, but the IDE doesn't let you just type in what you need. Eclipse does. Get the latest version of AVRdude you can, since it makes things <em>a lot</em> easier - I have 6.0.1 which is built into Ubuntu "Trusty Tahr".</p>
+<h2>Reprogramming with Eclipse</h2>
+<p>People have covered setting up Eclipse for Arduino elsewhere, and I will in the future cover my setup in my own words (I believe understanding comes from finding an idea explained in the right voice a lot of the time) but for now I'll just say it works pretty well.</p>
+<h2>Reprogramming an Arduino Mega 2560 (or compatible)</h2>
+<p>The basic command line you need for the Arduino Mega when it's running at 250000 bps is very simple. The avrdude command should be <code>avrdude -cstk500v2 -P/dev/ttyACM0 -b250000</code> in Eclipse. You can enter this by typing in the baud rate directly in the drop down box - Eclipse will accept it just fine.</p>
+<p>The AVRdude settings screen should look something like this when you're done:</p>
+<p><img alt="AVRDude Configuration Screen" src="images/eclipse-avrdude-screen.png"></p>
+<p>The benefit of this configuration is your printer (or arduino for another project) can be easily reflashed without having to time-out resetting it so you can run AVRdude at one of the "standard" baudrates.</p>
+<p>It's worth noting that by creating a custom <code>boards.txt</code> configuration it might be possible to accomplish this in the Arduino IDE as well, but Eclipse is a much easier to use dev-environment for big Arduino projects (like 3D printer firmwares) that I don't really have any inclination to avoid it in the future (plus is generalizes out to non-Arduino AVR programming nicely).</p>
+<h2>Going further</h2>
+<p>This is just a short "I did this a few minutes ago note". In the future I'll detail my Arduino Eclipse workspace, to add to the signal to noise ratio on that subject.</p>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/3d-printing/" rel="tag">3d printing</a></li>
+            <li><a class="tag p-category" href="../../categories/aluminatus/" rel="tag">aluminatus</a></li>
+            <li><a class="tag p-category" href="../../categories/arduino/" rel="tag">arduino</a></li>
+            <li><a class="tag p-category" href="../../categories/marlin/" rel="tag">marlin</a></li>
+            <li><a class="tag p-category" href="../../categories/reprap/" rel="tag">reprap</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../uninstalling-r8168-dkms/" rel="prev" title="Quick note - uninstalling r8618-dkms">Previous post</a>
+            </li>
+            <li class="next">
+                <a href="../bup-towards-the-perfect-backup/" rel="next" title="bup - towards the perfect backup">Next post</a>
+            </li>
+        </ul></nav></aside></article><!--End of body content--><footer id="footer">
+            Contents © 2021         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+            
+        </footer>
+</div>
+</div>
+
+
+        <script src="../../assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element){var i=element.getElementsByTagName('img')[0];return i===undefined?'':i.alt;}});
+    </script>
+</body>
+</html>
