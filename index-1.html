@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="en">
+<html prefix="
+og: http://ogp.me/ns# article: http://ogp.me/ns/article#
+" lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="description" content="negating information entropy">
@@ -8,80 +10,65 @@
 <link href="assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
 <link href="assets/css/ipython.min.css" rel="stylesheet" type="text/css">
 <link href="assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
-<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
 <meta name="theme-color" content="#5670d4">
 <meta name="generator" content="Nikola (getnikola.com)">
 <link rel="canonical" href="https://blog.wrouesnel.com/index-1.html">
 <link rel="prev" href="index-2.html" type="text/html">
-<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]-->
+<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="stylesheet" href="assets/css/wrouesnel_blog-theme.css">
 </head>
 <body>
 <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
 
-<!-- Header and menu bar -->
-<div class="container">
-      <header class="blog-header py-3"><div class="row nbb-header align-items-center">
-          <div class="col-md-3 col-xs-2 col-sm-2" style="width: auto;">
-            <button class="navbar-toggler navbar-light bg-light nbb-navbar-toggler" type="button" data-toggle="collapse" data-target=".bs-nav-collapsible" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse bs-nav-collapsible bootblog4-search-form-holder">
-                
-            </div>
-        </div>
-          <div class="col-md-6 col-xs-10 col-sm-10 bootblog4-brand" style="width: auto;">
-            <a class="navbar-brand blog-header-logo text-dark" href=".">
+<!-- Menubar -->
+
+<nav class="navbar navbar-expand-md static-top mb-4
+navbar-dark
+bg-dark
+"><div class="container">
+<!-- This keeps the margins nice -->
+        <a class="navbar-brand" href=".">
 
             <span id="blog-title">wrouesnel_blog</span>
         </a>
-          </div>
-            <div class="col-md-3 justify-content-end align-items-center bs-nav-collapsible collapse flex-collapse bootblog4-right-nav">
-            <nav class="navbar navbar-light bg-white"><ul class="navbar-nav bootblog4-right-nav"></ul></nav>
-</div>
-    </div>
-</header><nav class="navbar navbar-expand-md navbar-light bg-white static-top"><div class="collapse navbar-collapse bs-nav-collapsible" id="bs-navbar">
-            <ul class="navbar-nav nav-fill d-flex w-100">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="bs-navbar">
+            <ul class="navbar-nav mr-auto">
 <li class="nav-item">
 <a href="archive.html" class="nav-link">Archive</a>
                 </li>
 <li class="nav-item">
 <a href="categories/" class="nav-link">Tags</a>
-                </li>
-<li class="nav-item">
-<a href="rss.xml" class="nav-link">RSS feed</a>
 
                 
             </li>
 </ul>
+<ul class="navbar-nav navbar-right"></ul>
 </div>
 <!-- /.navbar-collapse -->
-</nav>
-</div>
-
-<div class="container" id="content" role="main">
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
     <div class="body-content">
         <!--Body content-->
         
-        
-        
     
-        
-
     
-        
-    <div class="postindex">
-            <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/bup-towards-the-perfect-backup/" class="u-url">bup - towards the perfect backup</a></h1>
-                <div class="metadata">
-                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                        <a href="authors/wrouesnel/">wrouesnel</a>
-                    </span></p>
+<div class="postindex">
+    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/bup-towards-the-perfect-backup/" class="u-url">bup - towards the perfect backup</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/wrouesnel/">wrouesnel</a>
+            </span></p>
             <p class="dateline">
             <a href="posts/bup-towards-the-perfect-backup/" rel="bookmark">
             <time class="published dt-published" datetime="2014-06-22T07:45:00-10:00" itemprop="datePublished" title="2014-06-22 07:45">2014-06-22 07:45</time></a>
             </p>
-                </div>
-            </header><div class="e-content entry-content">
-                    <div>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
 <p>Since I discovered it, I've been in love with the concept behind <a href="https://github.com/bup/bup">bup</a>.</p>
 <p>bup appeals to my sense of efficiency in taking backups: backups should backup
 the absolute minimum amount of data so I can have the most versions, and then
@@ -179,19 +166,19 @@ the fixes in this blog-post, and if you do then posting about them to
 [bup-list@googlegroups.com[(https://groups.google.com/forum/#!forum/bup-list) with any problems or successes or code reviews would
 help a lot.</p>
 </div>
-                </div>
-            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/flashing-marlin-with-eclipse-and-avrdude/" class="u-url">Flashing Marlin with Eclipse and AVR Dude</a></h1>
-                <div class="metadata">
-                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                        <a href="authors/wrouesnel/">wrouesnel</a>
-                    </span></p>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/flashing-marlin-with-eclipse-and-avrdude/" class="u-url">Flashing Marlin with Eclipse and AVR Dude</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/wrouesnel/">wrouesnel</a>
+            </span></p>
             <p class="dateline">
             <a href="posts/flashing-marlin-with-eclipse-and-avrdude/" rel="bookmark">
             <time class="published dt-published" datetime="2014-04-23T06:00:00-10:00" itemprop="datePublished" title="2014-04-23 06:00">2014-04-23 06:00</time></a>
             </p>
-                </div>
-            </header><div class="e-content entry-content">
-                    <div>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
 <h2>Intro</h2>
 <p>3D printing is still very much in the hobbyist stage, and I am a tinkerer at heart. So flashing my printer's firmware is a basic operation - in fact it has to be a basic operation, since most configuration changes are baked into the firmware.</p>
 <p>But, I run my printer at 250000 baud rate over USB. This is an excellent choice for printing since the error rate from the serial line on the Arduino is basically 0, and it's faster to boot. Excellent for rapid G-code sending.</p>
@@ -208,19 +195,19 @@ help a lot.</p>
 <h2>Going further</h2>
 <p>This is just a short "I did this a few minutes ago note". In the future I'll detail my Arduino Eclipse workspace, to add to the signal to noise ratio on that subject.</p>
 </div>
-                </div>
-            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/uninstalling-r8168-dkms/" class="u-url">Quick note - uninstalling r8618-dkms</a></h1>
-                <div class="metadata">
-                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                        <a href="authors/wrouesnel/">wrouesnel</a>
-                    </span></p>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/uninstalling-r8168-dkms/" class="u-url">Quick note - uninstalling r8618-dkms</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/wrouesnel/">wrouesnel</a>
+            </span></p>
             <p class="dateline">
             <a href="posts/uninstalling-r8168-dkms/" rel="bookmark">
             <time class="published dt-published" datetime="2014-01-30T11:06:00-11:00" itemprop="datePublished" title="2014-01-30 11:06">2014-01-30 11:06</time></a>
             </p>
-                </div>
-            </header><div class="e-content entry-content">
-                    <div>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
 <p>This is a quick note on something I encountered while trying to work out why my Realtek NICs are so finicky about connecting and staying connected at gigabit speeds when running Linux.</p>
 <p>The current hypothesis is that the <code>r8168</code> driver isn't helping very much. So I uninstalled it - and ran into two problems.</p>
 <h3>Firstly</h3>
@@ -231,19 +218,19 @@ help a lot.</p>
 <h3>Something about Realtek NICs?</h3>
 <p>If I find an answer I'll surely provide updates, but needless to say there's no rthyme or reason to when they do or do not work, other then they consistently don't work on kernel 3.11 with the r8168 driver it seems.</p>
 </div>
-                </div>
-            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/running-gnome-tracker-on-a-server/" class="u-url">Running Gnome Tracker on a Server</a></h1>
-                <div class="metadata">
-                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                        <a href="authors/wrouesnel/">wrouesnel</a>
-                    </span></p>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/running-gnome-tracker-on-a-server/" class="u-url">Running Gnome Tracker on a Server</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/wrouesnel/">wrouesnel</a>
+            </span></p>
             <p class="dateline">
             <a href="posts/running-gnome-tracker-on-a-server/" rel="bookmark">
             <time class="published dt-published" datetime="2014-01-25T14:40:00-11:00" itemprop="datePublished" title="2014-01-25 14:40">2014-01-25 14:40</time></a>
             </p>
-                </div>
-            </header><div class="e-content entry-content">
-                    <div>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
 <p>In a passing comment it was suggested to me that it would be really great if the home fileserver offered some type of web-interface to find things. We've been aggregating downloaded files there for a while, and there's been attempts made at categorization but this all really falls apart when you wonder "what does 'productivity' mean? And does this go under 'Linux' or some other thing?"</p>
 <p>Since lately I've been wanting to get desktop search working on my actual desktops, via Gnome's Tracker project and it's tie-in to Nautilus and Nemo (possibly the subject of a future blog), it seemed logical to run it on the fileserver as an indexer for our shared directories - and then to tie some kind of web ui to that.</p>
 <p>Unfortunately, Tracker is very desktop orientated - there's no easy daemon mode for running it on a headless system out-of-the-box, but with a little tweaking you <em>can</em> make it work for you quite easily.</p>
@@ -303,19 +290,19 @@ end script
 <h2>Using this</h2>
 <p>My plan for this setup is to throw together a Node.js app on my server that will forward queries to the tracker command line client - that app will be a future post when it's done.</p>
 </div>
-                </div>
-            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/migrating-to-gmail/" class="u-url">Migrating to Gmail</a></h1>
-                <div class="metadata">
-                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                        <a href="authors/wrouesnel/">wrouesnel</a>
-                    </span></p>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/migrating-to-gmail/" class="u-url">Migrating to Gmail</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/wrouesnel/">wrouesnel</a>
+            </span></p>
             <p class="dateline">
             <a href="posts/migrating-to-gmail/" rel="bookmark">
             <time class="published dt-published" datetime="2013-11-12T12:29:00-11:00" itemprop="datePublished" title="2013-11-12 12:29">2013-11-12 12:29</time></a>
             </p>
-                </div>
-            </header><div class="e-content entry-content">
-                    <div>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
 <h2>Why</h2>
 <p>In a stitch of irony given my prior articles wrestling with a decent IDLE daemon for use with getmail, I'm faced with a new problem in figuring out the best way to migrate all my existing, locally hosted email to Gmail.</p>
 <p>This is evidently not an uncommon problem for people, presumably for largely the same reasons I'm facing: although I like having everything locally on my own server, it only works in places where (1) I live in the same place as the server and (2) where my server won't be double-NAT'd so dynamic DNS can actually reach it.</p>
@@ -370,19 +357,19 @@ end script
 <p>This seems to be the most painless way to upload old email to Gmail. In my case, the move is prompted by a real life move where my 24TB server won't be coming with me. I followed up some options for moving my email system, for example to a Docker image for $5 a month for 20gb, but at the end of the day had to face the fact that there was a perfectly capable free-alternative available and it would just be throwing money away. Everything already operates through my Gmail accounts anyway, so it's not like there's a security concern there and when it comes to email you either use GPG or you're doing nothing anyway.</p>
 <p>It's worth the observation here that the same process used for the migration can also be used for a local backup, which is a system I will most definitely be using in the future. OfflineIMAP can write Maildir natively, so there's no need to use an IMAP server locally for that, and helpfully solves the "what if Gmail suddenly disappears problem" (more likely from a power failure then anything else, but my email is important to me).</p>
 </div>
-                </div>
-            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/a-better-getmail-idle-client/" class="u-url">A Better Getmail IDLE client</a></h1>
-                <div class="metadata">
-                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                        <a href="authors/wrouesnel/">wrouesnel</a>
-                    </span></p>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/a-better-getmail-idle-client/" class="u-url">A Better Getmail IDLE client</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/wrouesnel/">wrouesnel</a>
+            </span></p>
             <p class="dateline">
             <a href="posts/a-better-getmail-idle-client/" rel="bookmark">
             <time class="published dt-published" datetime="2013-10-10T04:36:00-11:00" itemprop="datePublished" title="2013-10-10 04:36">2013-10-10 04:36</time></a>
             </p>
-                </div>
-            </header><div class="e-content entry-content">
-                    <div>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
 <h2>Updates</h2>
 <p>(2013-10-15) And like that I've broken it again. Fixing the crash on IMAP disconnect actually broke IMAP disconnect handling.
 The problem here is that IMAPClient's exceptions are not documented at all, so a time-based thing like IDLE requires some guessing as to what IMAPClient will handle and what you need to handle. This would all be fine if there was a way to get Gmail to boot my client after 30 seconds so I could test it easily.</p>
@@ -411,19 +398,19 @@ The problem here is that IMAPClient's exceptions are not documented at all, so a
 <p>Pure Python is not the best for this sort of thing - an evented IMAP library would definitely be better but this way I can stick with mostly single file deployment, and I don't want to write my own IMAP client at the moment.</p>
 <p>Of course IMAP is a simple enough protocol in most respects, so it's not like it would be hard but the exercise was still interesting. But if I want a new project with this, I would still like to tackle it in something like Haskell.</p>
 </div>
-                </div>
-            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/getmail-idle-client/" class="u-url">A GetMail IDLE daemon script</a></h1>
-                <div class="metadata">
-                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                        <a href="authors/wrouesnel/">wrouesnel</a>
-                    </span></p>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/getmail-idle-client/" class="u-url">A GetMail IDLE daemon script</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/wrouesnel/">wrouesnel</a>
+            </span></p>
             <p class="dateline">
             <a href="posts/getmail-idle-client/" rel="bookmark">
             <time class="published dt-published" datetime="2013-10-05T03:07:00-10:00" itemprop="datePublished" title="2013-10-05 03:07">2013-10-05 03:07</time></a>
             </p>
-                </div>
-            </header><div class="e-content entry-content">
-                    <div>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
 <h2>Updates</h2>
 <p>Although the script in this article works, I'm having some problems with it after long-running sessions. The symptom seems to be that imaplib2 just stops processing IDLE session responses - it terminates and recreates them just fine, but no new mail is ever detected and thus getmail is never triggered. With 12 or so hours of usage out of the script, this seems odd as hell and probably like an imaplib2 bug.</p>
 <p>With the amount of sunk time on this, I'm tempted to go in 1 of 2 directions: re-tool the script to simply invoke getmail's IDLE functionality, and basically remove imaplib2 from the equation, or to write my own functions to read IMAP and use the IDLE command.</p>
@@ -473,19 +460,19 @@ optional arguments:
 <p>I'm pretty pleased with how this turned out (edit: see updates section at the top on how that's changed - I'm happy with the script, less happy with imaplib2) since it was a great exercise for me in learning some new things about Python. That said, compared to something like NodeJS, I feel with the write library this would've been faster in a language with great eventing support, rather then Python's weird middle-ground of "not quite parallel" threads. But, I keep coming back to the language, and the demo-code I used <a href="http://blog.timstoop.nl/2009/03/11/python-imap-idle-with-imaplib2/">here</a> was Python so it must be doing something right.</p>
 <p>I'll probably keep refining this if I run into problems - though if it doesn't actually stop working, then I'll leave it alone since the whole self-hosted email thing's biggest downside is when your listener dies and you stop getting email - that's the problem I've really tried to solve here - IDLE PUSH email functionality, and highly visible notifications when something is wrong.</p>
 </div>
-                </div>
-            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/setting-up-sshttp/" class="u-url">Setting up sshttp</a></h1>
-                <div class="metadata">
-                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                        <a href="authors/wrouesnel/">wrouesnel</a>
-                    </span></p>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/setting-up-sshttp/" class="u-url">Setting up sshttp</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/wrouesnel/">wrouesnel</a>
+            </span></p>
             <p class="dateline">
             <a href="posts/setting-up-sshttp/" rel="bookmark">
             <time class="published dt-published" datetime="2013-08-27T00:43:00-10:00" itemprop="datePublished" title="2013-08-27 00:43">2013-08-27 00:43</time></a>
             </p>
-                </div>
-            </header><div class="e-content entry-content">
-                    <div>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
 <p>When I was travelling Europe I found some surprisingly restricted wi-fi hotspots in hotels. This was annoying because I use SSH to upload photos back home from my phone, but having not setup any tunneling helpers I just had to wait till I found a better one.</p>
 <p>There are a number of solutions to SSH tunneling, but the main thing I wanted to do was implement something which would let me run several fallbacks at once. Enter <a href="https://github.com/stealth/sshttp">sshttp</a>.</p>
 <p>sshttp is related to sslh, in the sense that they are both SSH connection multiplexers. The idea is that you point a web-browser at port 80, you get a web-page. You point your SSH client, and you get an SSH connection. Naive firewalls let the SSH traffic through without complaint.</p>
@@ -623,19 +610,19 @@ end script
 <p>At the moment with this setup I just have nginx serving 404s back on my sshttp server ports. But the real benefit is, I can turn those into secure proxy's to use with something like <a href="http://pwet.fr/man/linux/commandes/corkscrew">corkscrew</a> or <a href="http://proxytunnel.sourceforge.net/">proxytunnel</a>.</p>
 <p>Or I can go further - use <a href="http://www.nocrew.org/software/httptunnel.html">httptunnel</a> to tunnel TCP over GET and POST connections (my actual intent) on the public facing HTTP ports. Or do both - each method has it's trade-offs, so we can just step down till we find one which works!</p>
 </div>
-                </div>
-            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/upstart-troubles/" class="u-url">Upstart script not recognized</a></h1>
-                <div class="metadata">
-                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                        <a href="authors/wrouesnel/">wrouesnel</a>
-                    </span></p>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/upstart-troubles/" class="u-url">Upstart script not recognized</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/wrouesnel/">wrouesnel</a>
+            </span></p>
             <p class="dateline">
             <a href="posts/upstart-troubles/" rel="bookmark">
             <time class="published dt-published" datetime="2013-08-26T18:49:00-10:00" itemprop="datePublished" title="2013-08-26 18:49">2013-08-26 18:49</time></a>
             </p>
-                </div>
-            </header><div class="e-content entry-content">
-                    <div>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
 <p>I frequently find myself writing upstart scripts which checkout ok, but for some reason don't get detected by the upstart daemon in the init directory, so when I run <code>start myscript</code> I get <code>unknown job</code> back. Some experimentation seems to indicate that the problem is I used gedit over GVFS SFTP to author a lot of these scripts.</p>
 <p>For something like <code>myscript.conf</code>, I find the following fixes this problem:</p>
 <pre class="code literal-block"><span></span><code>mv myscript.conf myscript.conf.d
@@ -651,19 +638,19 @@ mv myscript.conf.d myscript.conf
 <pre class="code literal-block"><span></span><code>$ sudo -u nobody init-checkconf /etc/init/myscript.conf
 </code></pre>
 </div>
-                </div>
-            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/wintersmithing/" class="u-url">Wintersmithing</a></h1>
-                <div class="metadata">
-                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                        <a href="authors/wrouesnel/">wrouesnel</a>
-                    </span></p>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/wintersmithing/" class="u-url">Wintersmithing</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/wrouesnel/">wrouesnel</a>
+            </span></p>
             <p class="dateline">
             <a href="posts/wintersmithing/" rel="bookmark">
             <time class="published dt-published" datetime="2013-08-18T02:33:00-10:00" itemprop="datePublished" title="2013-08-18 02:33">2013-08-18 02:33</time></a>
             </p>
-                </div>
-            </header><div class="e-content entry-content">
-                    <div>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
 <h2>Wintersmith</h2>
 <p>How to setup and use Wintersmith is covered pretty thoroughly elsewhere on the net, (namely the <a href="http://wintersmith.io/">wintersmith homepage</a>.</p>
 <p>Instead I'll cover a few tweaks I had to do to get it running the way I wanted. To avoid being truly confusing, all the paths referenced here are relative to the site you create by running <code>wintersmith new &lt;your site dir here&gt;</code></p>
@@ -880,21 +867,18 @@ $ git remote add github git@github.com:wrouesnel/wrouesnel.github.io.git
 <p>With Github pages offering free static site hosting, I initially looked at Jekyll as an SSG for putting something together. But Jekyll is written in Ruby, and at the moment I'm on a node.js kick so I really wanted something in that direction. Hence Wintersmith - simple, easy to use, and written in something that I'm inclinded to hack-on but with enough features out of the box (code highlighting in particular) to not feel onerous.</p>
 <p>So far I'm really liking the static site model - it's simple, secure and easy to store, manage and keep in a nice neat git repository. Guess I'll see how it goes.</p>
 </div>
-                </div>
-            </article>
+    </div>
+    </article>
 </div>
-    
         <ul class="pager postindexpager clearfix">
 <li class="previous"><a href="index-2.html" rel="prev">Newer posts</a></li>
         </ul>
 <!--End of body content--><footer id="footer">
             Contents © 2021         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
-            
         </footer>
 </div>
 </div>
-
 
         <script src="assets/js/all-nocdn.js"></script><script>
     baguetteBox.run('div#content', {
