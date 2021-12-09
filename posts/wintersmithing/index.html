@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wintersmithing | wrouesnel_blog</title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="canonical" href="https://blog.wrouesnel.com/posts/wintersmithing/">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><meta name="author" content="wrouesnel">
+<link rel="next" href="../upstart-troubles/" title="Upstart script not recognized" type="text/html">
+<meta property="og:site_name" content="wrouesnel_blog">
+<meta property="og:title" content="Wintersmithing">
+<meta property="og:url" content="https://blog.wrouesnel.com/posts/wintersmithing/">
+<meta property="og:description" content="Wintersmith
+How to setup and use Wintersmith is covered pretty thoroughly elsewhere on the net, (namely the wintersmith homepage.
+Instead I'll cover a few tweaks I had to do to get it running the way ">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2013-08-18T02:33:00-10:00">
+<meta property="article:tag" content="blogging">
+<meta property="article:tag" content="static site generators">
+<meta property="article:tag" content="wintersmith">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Header and menu bar -->
+<div class="container">
+      <header class="blog-header py-3"><div class="row nbb-header align-items-center">
+          <div class="col-md-3 col-xs-2 col-sm-2" style="width: auto;">
+            <button class="navbar-toggler navbar-light bg-light nbb-navbar-toggler" type="button" data-toggle="collapse" data-target=".bs-nav-collapsible" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse bs-nav-collapsible bootblog4-search-form-holder">
+                
+            </div>
+        </div>
+          <div class="col-md-6 col-xs-10 col-sm-10 bootblog4-brand" style="width: auto;">
+            <a class="navbar-brand blog-header-logo text-dark" href="../../">
+
+            <span id="blog-title">wrouesnel_blog</span>
+        </a>
+          </div>
+            <div class="col-md-3 justify-content-end align-items-center bs-nav-collapsible collapse flex-collapse bootblog4-right-nav">
+            <nav class="navbar navbar-light bg-white"><ul class="navbar-nav bootblog4-right-nav"></ul></nav>
+</div>
+    </div>
+</header><nav class="navbar navbar-expand-md navbar-light bg-white static-top"><div class="collapse navbar-collapse bs-nav-collapsible" id="bs-navbar">
+            <ul class="navbar-nav nav-fill d-flex w-100">
+<li class="nav-item">
+<a href="../../archive.html" class="nav-link">Archive</a>
+                </li>
+<li class="nav-item">
+<a href="../../categories/" class="nav-link">Tags</a>
+                </li>
+<li class="nav-item">
+<a href="../../rss.xml" class="nav-link">RSS feed</a>
+
+                
+            </li>
+</ul>
+</div>
+<!-- /.navbar-collapse -->
+</nav>
+</div>
+
+<div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        
+        
+        
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Wintersmithing</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    <a class="u-url" href="../../authors/wrouesnel/">wrouesnel</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2013-08-18T02:33:00-10:00" itemprop="datePublished" title="2013-08-18 02:33">2013-08-18 02:33</time></a>
+            </p>
+            
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<h2>Wintersmith</h2>
+<p>How to setup and use Wintersmith is covered pretty thoroughly elsewhere on the net, (namely the <a href="http://wintersmith.io/">wintersmith homepage</a>.</p>
+<p>Instead I'll cover a few tweaks I had to do to get it running the way I wanted. To avoid being truly confusing, all the paths referenced here are relative to the site you create by running <code>wintersmith new &lt;your site dir here&gt;</code></p>
+<h3>LiveReload plugin</h3>
+<p>There's a Wintersmith LiveReload plugin available which makes previewing your site with <code>wintersmith preview</code> very easy - it's great for editing or setting up CSS.</p>
+<p>Installing the LiveReload plugin on Linux Mint (which I run) can be done with <code>sudo npm install -g wintersmith-livereload</code></p>
+<p>You need to then add the path to your <code>config.json</code> file under "plugins" e.g. for this blog:</p>
+<pre class="code literal-block"><span></span><code><span class="p">{</span>
+  <span class="s2">"locals"</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">"url"</span><span class="o">:</span> <span class="s2">"http://localhost:8080"</span><span class="p">,</span>
+    <span class="s2">"name"</span><span class="o">:</span> <span class="s2">"wrouesnel_blog"</span><span class="p">,</span>
+    <span class="s2">"owner"</span><span class="o">:</span> <span class="s2">"Will Rouesnel"</span><span class="p">,</span>
+    <span class="s2">"description"</span><span class="o">:</span> <span class="s2">"negating information entropy"</span>
+  <span class="p">},</span>
+  <span class="s2">"plugins"</span><span class="o">:</span> <span class="p">[</span>
+    <span class="s2">"./plugins/paginator.coffee"</span><span class="p">,</span>
+    <span class="s2">"wintersmith-stylus"</span><span class="p">,</span>
+    <span class="s2">"wintersmith-livereload"</span>
+  <span class="p">],</span>
+  <span class="s2">"require"</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">"moment"</span><span class="o">:</span> <span class="s2">"moment"</span><span class="p">,</span>
+    <span class="s2">"_"</span><span class="o">:</span> <span class="s2">"underscore"</span><span class="p">,</span>
+    <span class="s2">"typogr"</span><span class="o">:</span> <span class="s2">"typogr"</span>
+  <span class="p">},</span>
+  <span class="s2">"jade"</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">"pretty"</span><span class="o">:</span> <span class="kc">true</span>
+  <span class="p">},</span>
+  <span class="s2">"markdown"</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">"smartLists"</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="s2">"smartypants"</span><span class="o">:</span> <span class="kc">true</span>
+  <span class="p">},</span>
+  <span class="s2">"paginator"</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">"perPage"</span><span class="o">:</span> <span class="mf">20</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>You then want to insert the line:</p>
+<pre class="code literal-block"><span></span><code><span class="o">!</span><span class="p">{</span> <span class="n">env</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">livereload</span><span class="p">()</span> <span class="p">}</span>
+</code></pre>
+
+<p>into the <code>templates/layout.jade</code> file - giving you something like the following at the top of the file</p>
+<pre class="code literal-block"><span></span><code><span class="nn">!!! 5</span>
+<span class="nt">block</span> vars
+  <span class="p">-</span> <span class="kd">var</span> <span class="n">bodyclass</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nt">html</span>(<span class="na">lang=</span><span class="s">'en'</span>)
+  <span class="nt">head</span>
+    <span class="nt">block</span> head
+      <span class="nt">meta</span>(<span class="na">charset=</span><span class="s">'utf-8'</span>)
+      <span class="nt">meta</span>(<span class="na">http-equiv=</span><span class="s">'X-UA-Compatible'</span><span class="err">,</span> <span class="na">content=</span><span class="s">'IE=edge,chrome=1'</span>)
+      <span class="nt">meta</span>(<span class="na">name=</span><span class="s">'viewport'</span><span class="err">,</span> <span class="na">content=</span><span class="s">'width=device-width'</span>)
+      <span class="err">!{ </span><span class="nt">env</span><span class="nc">.helpers.livereload</span>() }
+      <span class="nt">script</span>(<span class="na">type=</span><span class="s">'text/javascript'</span>).
+</code></pre>
+
+<p>I also add a script section with <a href="http://www.google.com/analytics/">Google Analytics</a> to layout.jade because I'm vain like that:</p>
+<pre class="code literal-block"><span></span><code><span class="nn">!!! 5</span>
+<span class="nt">block</span> vars
+  <span class="p">-</span> <span class="kd">var</span> <span class="n">bodyclass</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="nt">html</span>(<span class="na">lang=</span><span class="s">'en'</span>)
+  <span class="nt">head</span>
+    <span class="nt">block</span> head
+      <span class="nt">meta</span>(<span class="na">charset=</span><span class="s">'utf-8'</span>)
+      <span class="nt">meta</span>(<span class="na">http-equiv=</span><span class="s">'X-UA-Compatible'</span><span class="err">,</span> <span class="na">content=</span><span class="s">'IE=edge,chrome=1'</span>)
+      <span class="nt">meta</span>(<span class="na">name=</span><span class="s">'viewport'</span><span class="err">,</span> <span class="na">content=</span><span class="s">'width=device-width'</span>)
+      <span class="err">!{ </span><span class="nt">env</span><span class="nc">.helpers.livereload</span>() }
+      <span class="nt">script</span>(<span class="na">type=</span><span class="s">'text/javascript'</span>).
+        <span class="c">// google analytics</span>
+        <span class="err">(</span><span class="nt">function</span>(<span class="na">i</span><span class="err">,</span><span class="na">s</span><span class="err">,</span><span class="na">o</span><span class="err">,</span><span class="na">g</span><span class="err">,</span><span class="na">r</span><span class="err">,</span><span class="na">a</span><span class="err">,</span><span class="na">m</span>){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        <span class="err">(</span><span class="nt">i</span><span class="p">[</span><span class="n">r</span><span class="p">]</span><span class="nc">.q</span><span class="p">=</span><span class="n">i</span><span class="p">[</span><span class="n">r</span><span class="p">].</span><span class="n">q</span><span class="o">||</span><span class="p">[]).</span><span class="n">push</span><span class="p">(</span><span class="n">arguments</span><span class="p">)},</span><span class="n">i</span><span class="p">[</span><span class="n">r</span><span class="p">].</span><span class="n">l</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="k">new</span> <span class="nc">Date</span><span class="p">();</span><span class="n">a</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">createElement</span><span class="p">(</span><span class="n">o</span><span class="p">),</span>
+        <span class="nt">m</span><span class="p">=</span><span class="n">s</span><span class="p">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="n">o</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span><span class="n">a</span><span class="p">.</span><span class="n">async</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">a</span><span class="p">.</span><span class="n">src</span><span class="o">=</span><span class="n">g</span><span class="p">;</span><span class="n">m</span><span class="p">.</span><span class="n">parentNode</span><span class="p">.</span><span class="n">insertBefore</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">m</span><span class="p">)</span>
+        <span class="err">})(</span><span class="nt">window</span>,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        <span class="nt">ga</span>(<span class="err">'</span><span class="na">create</span><span class="err">',</span> <span class="err">'</span><span class="na">UA-43235370-1</span><span class="err">',</span> <span class="err">'</span><span class="na">wrouesnel</span><span class="err">.</span><span class="na">github</span><span class="err">.</span><span class="na">io</span><span class="err">'</span>);
+        <span class="nt">ga</span>(<span class="err">'</span><span class="na">send</span><span class="err">',</span> <span class="err">'</span><span class="na">pageview</span><span class="err">'</span>);
+</code></pre>
+
+<p><strong>The glitch</strong>: Running <code>wintersmith preview</code> with these changes you'll find it doesn't work when trying to browse to the main index.html page with something like "env is undefined". This is <a href="https://github.com/jnordberg/wintersmith/issues/141">a glitch in paginator which has been fixed upstream</a> but not in wintersmith@2.0.5 in npm. </p>
+<p>To fix it I just copied <a href="https://github.com/jnordberg/wintersmith/commit/b959b35b9b153fb7ddbaa37533800777473b5a17.diff">the commit patch</a> manually into my local copy of <code>plugins/paginator.coffee</code> : </p>
+<pre class="code literal-block"><span></span><code><span class="gh">diff --git a/examples/blog/plugins/paginator.coffee b/examples/blog/plugins/paginator.coffee</span>
+<span class="gh">index b8e9032..19098d5 100644</span>
+<span class="gd">--- a/examples/blog/plugins/paginator.coffee</span>
+<span class="gi">+++ b/examples/blog/plugins/paginator.coffee</span>
+<span class="gu">@@ -43,7 +43,7 @@ module.exports = (env, callback) -&gt;</span>
+         return callback new Error "unknown paginator template '#{ options.template }'"
+
+       # setup the template context
+<span class="gd">-      ctx = {contents, @articles, @prevPage, @nextPage}</span>
+<span class="gi">+      ctx = {env, contents, @articles, @prevPage, @nextPage}</span>
+
+       # extend the template context with the enviroment locals
+       env.utils.extend ctx, locals
+</code></pre>
+
+<h3>Show most recent article in the index</h3>
+<p>By default Wintersmith shows short summaries of articles on your <code>index.html</code> page. I can't decide whether or not I like this behavior yet, but until I do what I wanted was to always have my index show my most recent post.</p>
+<p>To do this, we take advantage of Jade's iteration and if/then functionality to modify <code>template/index.jade</code>.</p>
+<p>As of this article my index.jade looks as follows:</p>
+<pre class="code literal-block"><span></span><code><span class="nt">extends</span> layout
+
+<span class="nt">block</span> content
+  <span class="nt">include</span> author
+  <span class="nt">each</span> article, num in articles
+    <span class="nt">if</span> num === 0
+      <span class="c">// First article - render in full</span>
+      <span class="nt">article</span><span class="nc">.article.intro</span>
+      <span class="nt">header</span>
+        <span class="nt">h1</span><span class="nc">.indexfullarticle</span>
+          <span class="nt">a</span>(<span class="na">href=</span><span class="nv">article</span><span class="err">.</span><span class="na">url</span>)<span class="p">=</span> <span class="n">article</span><span class="p">.</span><span class="n">title</span>
+        <span class="nt">div</span><span class="nc">.date</span>
+          <span class="nt">span</span><span class="p">=</span> <span class="n">moment</span><span class="p">(</span><span class="n">article</span><span class="p">.</span><span class="n">date</span><span class="p">).</span><span class="n">format</span><span class="p">(</span><span class="ss">'DD</span><span class="p">.</span> <span class="nc">MMMM</span> <span class="nc">YYYY</span><span class="err">'</span><span class="p">)</span>
+        <span class="nt">p</span><span class="nc">.author</span>
+            <span class="nt">mixin</span> author(article.metadata.author)
+      <span class="nt">section</span><span class="nc">.content</span><span class="p">!=</span> <span class="n">typogr</span><span class="p">(</span><span class="n">article</span><span class="p">.</span><span class="n">html</span><span class="p">).</span><span class="n">typogrify</span><span class="p">()</span>
+    <span class="nt">else</span>
+      <span class="nt">article</span><span class="nc">.article.intro</span>
+      <span class="nt">header</span>
+        <span class="nt">h2</span>
+          <span class="nt">a</span>(<span class="na">href=</span><span class="nv">article</span><span class="err">.</span><span class="na">url</span>)<span class="p">=</span> <span class="n">article</span><span class="p">.</span><span class="n">title</span>
+        <span class="nt">div</span><span class="nc">.date</span>
+          <span class="nt">span</span><span class="p">=</span> <span class="n">moment</span><span class="p">(</span><span class="n">article</span><span class="p">.</span><span class="n">date</span><span class="p">).</span><span class="n">format</span><span class="p">(</span><span class="ss">'DD</span><span class="p">.</span> <span class="nc">MMMM</span> <span class="nc">YYYY</span><span class="err">'</span><span class="p">)</span>
+        <span class="nt">p</span><span class="nc">.author</span>
+            <span class="nt">mixin</span> author(article.metadata.author)
+      <span class="nt">section</span><span class="nc">.content</span>
+        <span class="err">!{ </span><span class="nt">typogr</span>(<span class="na">article</span><span class="err">.</span><span class="na">intro</span>)<span class="nc">.typogrify</span>() }
+        <span class="nt">if</span> article.hasMore
+          <span class="nt">p</span><span class="nc">.more</span>
+            <span class="nt">a</span>(<span class="na">href=</span><span class="nv">article</span><span class="err">.</span><span class="na">url</span>) more
+
+<span class="nt">block</span> prepend footer
+  <span class="nt">div</span><span class="nc">.nav</span>
+    <span class="nt">if</span> prevPage
+      <span class="nt">a</span>(<span class="na">href=</span><span class="nv">prevPage</span><span class="err">.</span><span class="na">url</span>) « Newer
+    <span class="nt">else</span>
+      <span class="nt">a</span>(<span class="na">href=</span><span class="s">'/archive.html'</span>) « Archives
+    <span class="nt">if</span> nextPage
+      <span class="nt">a</span>(<span class="na">href=</span><span class="nv">nextPage</span><span class="err">.</span><span class="na">url</span>) Next page »
+</code></pre>
+
+<p>There might be a better way to do this, but for me, for now it works. Basically Jade's iterators will provide an iteration number if you add a variable name for it (<code>num</code> in this case) - and the articles are chronological by default. So 0 is always the most recent.</p>
+<p>From there I just duplicate some code fro <code>template/article.jade</code> to have it render the full article in <code>section.content</code> - which is <code>article.html</code>, rather then just the intro section - which is <code>article.intro</code>.</p>
+<p>An important note here is that the default CSS selectors require some modification to get things to look right. I'm not sure I've nailed it yet, so editing those is an exercise left to the reader (or just a matter of downloading the stylesheet from this site).</p>
+<h2>Deploy Makefile</h2>
+<p>This site is hosted on Github pages, but they have no support for Wintersmith - so it's necessary to manually build the static content and upload that. <code>make</code> is more then capable of handling this task, and while we're at it it's a decent tool to automate housekeeping - in particular I wanted my article metadata to be automatically tagged with a date if the date field was blank.</p>
+<h3>Automatic date tagging</h3>
+<p>After banging my head with awk or sed one-liners (which probably can be done) I came to my senses and wrote a bash script to do this for me.</p>
+<pre class="code literal-block"><span></span><code><span class="ch">#!/bin/bash</span>
+
+find contents -name <span class="s1">'*.md'</span> <span class="p">|</span> <span class="k">while</span> <span class="nb">read</span> markdownfile<span class="p">;</span> <span class="k">do</span>
+    <span class="nv">datemeta</span><span class="o">=</span><span class="k">$(</span>cat <span class="nv">$markdownfile</span> <span class="p">|</span> grep -m1 date: <span class="k">)</span>
+    <span class="nv">datestamp</span><span class="o">=</span><span class="k">$(</span>cat <span class="nv">$markdownfile</span> <span class="p">|</span> grep -m1 date: <span class="p">|</span> cut -d<span class="s1">' '</span> -f2<span class="k">)</span>
+
+    <span class="k">if</span> <span class="o">[</span> ! -z <span class="s2">"</span><span class="nv">$datemeta</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+        <span class="k">if</span> <span class="o">[</span> -z <span class="s2">"</span><span class="nv">$datestamp</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+            <span class="c1"># generate a datestamp entry and replace the field with sed</span>
+            <span class="nb">echo</span> <span class="s2">"Date stamping unstamped article </span><span class="nv">$markdownfile</span><span class="s2">"</span>
+            <span class="nv">datestamp</span><span class="o">=</span><span class="k">$(</span>date <span class="s1">'+%Y-%m-%d %H:%M GMT%z'</span><span class="k">)</span>
+            sed -i <span class="s2">"s/date:\ .*/date: </span><span class="nv">$datestamp</span><span class="s2">/"</span> <span class="s2">"</span><span class="nv">$markdownfile</span><span class="s2">"</span>
+        <span class="k">fi</span>
+    <span class="k">fi</span>
+<span class="k">done</span>
+</code></pre>
+
+<h3>Git Submodules</h3>
+<p>Since I use Git to manage the blog, but GitHub Pages uses a git repo to represent the finished blog, it's necessary on my local machine to somehow have two repositories - one representing the Wintersmith site in source form, and one representing the GitHub Pages site after it's rendered.</p>
+<p>I do this by treating the <code>build/</code> directory of my Wintersmith site as a Git submodule. Git won't checkout an empty repo, so you need to create a full repo somewhere and then push it to your normal storage (in my case my private server, but it could be somewhere else on GitHub):</p>
+<pre class="code literal-block"><span></span><code>$ mkdir build
+$ <span class="nb">cd</span> build
+$ git init
+$ git remote add origin ssh://will@myserver/~/wrouesnel.github.io~build.git
+$ touch .gitignore
+$ git add *
+$ git commit
+$ git push master
+</code></pre>
+
+<p>At this point you can delete the build/ directory you just created. It's not needed any more. Then it can be imported as a submodule to the main Wintersmith repo. We also need to add a remote for pushing output to Github:</p>
+<pre class="code literal-block"><span></span><code>$ <span class="nb">cd</span> your_wintersmith_repo
+$ git submodule add ssh://will@myserver/~/wrouesnel.github.io~build.git build
+$ <span class="nb">cd</span> build
+$ git remote add github git@github.com:wrouesnel/wrouesnel.github.io.git
+</code></pre>
+
+<p>And after all that effort your module is imported and ready to participate in the build process.</p>
+<h3>Putting the makefile together</h3>
+<p>The final makefile looks something like this:</p>
+<pre class="code literal-block"><span></span><code><span class="c"># Makefile to deploy the blog</span>
+
+<span class="c"># Search article markdown for "date" metadata that is unset and set it.</span>
+<span class="nf">date</span><span class="o">:</span> 
+    ./add-date-stamps.bsh
+
+<span class="c"># Draft's are pushed to my private server</span>
+<span class="nf">draft</span><span class="o">:</span> <span class="n">date</span>
+    wintersmith build
+    <span class="nb">cd</span> build<span class="p">;</span> git add *<span class="p">;</span> git commit -m <span class="s2">"draft"</span> <span class="p">;</span> <span class="se">\</span>
+    git push origin
+
+<span class="c"># Publish makes a draft, but then pushes to GitHub.</span>
+<span class="nf">publish</span><span class="o">:</span> <span class="n">draft</span>
+    <span class="nb">cd</span> build<span class="p">;</span> git commit -m <span class="s2">"published to github"</span><span class="p">;</span> <span class="se">\</span>
+    git push github master
+
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">date</span> <span class="n">draft</span> <span class="n">publish</span>
+</code></pre>
+
+<p>The workflow is that I can call <code>make draft</code> which builds the site and commits the build to my private repo which just tracks draft sites elsewhere, and then <code>make publish</code> for when I want things to go live.</p>
+<p>There are obviously other ways this could work - for example, I could use post-commit hooks on the server to push to Github Pages, but the idea here is that provided I can access the the wintersmith repository, everything else can be rebuilt.</p>
+<h2>Personal thoughts</h2>
+<p>I've been meaning to blog for sometime to have somewhere to put the things I do or random bits of knowledge I pick up so they might help someone else, but for one reason or another most blogging engines never did it for me.</p>
+<p>I've never been much of a fan of managed services they lead to sprawling personal "infrastructure" - I'll be happy when my entire digital life can be backed up by just making a copy of my home directory.</p>
+<p>So for blogging I've not much cared for the services out there or their focus. I don't particularly want to manage a heavyweight WordPress or other type of CMS installation on a web-server just for a personal blog, since that requires a lot of careful attention to security, patching, updates and I simply don't need the features. </p>
+<p>At the same time services like <a href="www.tumblr.com">tumblr</a> never quite seemed <em>for</em> me - it skirts the line between microblogging and blogging and it's relationship with markdown and code didn't gel for me. A deluge of social networking features is also not what I wanted.</p>
+<p>With Github pages offering free static site hosting, I initially looked at Jekyll as an SSG for putting something together. But Jekyll is written in Ruby, and at the moment I'm on a node.js kick so I really wanted something in that direction. Hence Wintersmith - simple, easy to use, and written in something that I'm inclinded to hack-on but with enough features out of the box (code highlighting in particular) to not feel onerous.</p>
+<p>So far I'm really liking the static site model - it's simple, secure and easy to store, manage and keep in a nice neat git repository. Guess I'll see how it goes.</p>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/blogging/" rel="tag">blogging</a></li>
+            <li><a class="tag p-category" href="../../categories/static-site-generators/" rel="tag">static site generators</a></li>
+            <li><a class="tag p-category" href="../../categories/wintersmith/" rel="tag">wintersmith</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="next">
+                <a href="../upstart-troubles/" rel="next" title="Upstart script not recognized">Next post</a>
+            </li>
+        </ul></nav></aside></article><!--End of body content--><footer id="footer">
+            Contents © 2021         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+            
+        </footer>
+</div>
+</div>
+
+
+        <script src="../../assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element){var i=element.getElementsByTagName('img')[0];return i===undefined?'':i.alt;}});
+    </script>
+</body>
+</html>

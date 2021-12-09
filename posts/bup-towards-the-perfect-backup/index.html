@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bup - towards the perfect backup | wrouesnel_blog</title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="canonical" href="https://blog.wrouesnel.com/posts/bup-towards-the-perfect-backup/">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><meta name="author" content="wrouesnel">
+<link rel="prev" href="../uninstalling-r8168-dkms/" title="Quick note - uninstalling r8618-dkms" type="text/html">
+<link rel="next" href="../ssh-port-forwarding-when-allowtcpforwarding-is-disabled/" title="SSH port forwarding when port fowarding is disabled with socat and nc" type="text/html">
+<meta property="og:site_name" content="wrouesnel_blog">
+<meta property="og:title" content="bup - towards the perfect backup">
+<meta property="og:url" content="https://blog.wrouesnel.com/posts/bup-towards-the-perfect-backup/">
+<meta property="og:description" content="Since I discovered it, I've been in love with the concept behind bup.
+bup appeals to my sense of efficiency in taking backups: backups should backup
+the absolute minimum amount of data so I can have t">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2014-06-22T07:45:00-10:00">
+<meta property="article:tag" content="backup">
+<meta property="article:tag" content="bup">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Header and menu bar -->
+<div class="container">
+      <header class="blog-header py-3"><div class="row nbb-header align-items-center">
+          <div class="col-md-3 col-xs-2 col-sm-2" style="width: auto;">
+            <button class="navbar-toggler navbar-light bg-light nbb-navbar-toggler" type="button" data-toggle="collapse" data-target=".bs-nav-collapsible" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse bs-nav-collapsible bootblog4-search-form-holder">
+                
+            </div>
+        </div>
+          <div class="col-md-6 col-xs-10 col-sm-10 bootblog4-brand" style="width: auto;">
+            <a class="navbar-brand blog-header-logo text-dark" href="../../">
+
+            <span id="blog-title">wrouesnel_blog</span>
+        </a>
+          </div>
+            <div class="col-md-3 justify-content-end align-items-center bs-nav-collapsible collapse flex-collapse bootblog4-right-nav">
+            <nav class="navbar navbar-light bg-white"><ul class="navbar-nav bootblog4-right-nav"></ul></nav>
+</div>
+    </div>
+</header><nav class="navbar navbar-expand-md navbar-light bg-white static-top"><div class="collapse navbar-collapse bs-nav-collapsible" id="bs-navbar">
+            <ul class="navbar-nav nav-fill d-flex w-100">
+<li class="nav-item">
+<a href="../../archive.html" class="nav-link">Archive</a>
+                </li>
+<li class="nav-item">
+<a href="../../categories/" class="nav-link">Tags</a>
+                </li>
+<li class="nav-item">
+<a href="../../rss.xml" class="nav-link">RSS feed</a>
+
+                
+            </li>
+</ul>
+</div>
+<!-- /.navbar-collapse -->
+</nav>
+</div>
+
+<div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        
+        
+        
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">bup - towards the perfect backup</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    <a class="u-url" href="../../authors/wrouesnel/">wrouesnel</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2014-06-22T07:45:00-10:00" itemprop="datePublished" title="2014-06-22 07:45">2014-06-22 07:45</time></a>
+            </p>
+            
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<p>Since I discovered it, I've been in love with the concept behind <a href="https://github.com/bup/bup">bup</a>.</p>
+<p>bup appeals to my sense of efficiency in taking backups: backups should backup
+the absolute minimum amount of data so I can have the most versions, and then
+that frees me to use whatever level of redundancy I deem appropriate for my
+backup media.</p>
+<p>But more then that, the underlying technology of bup is ripe with possibility:
+the basic premise of a backup tool gives rise to the possibility of a sync tool,
+a deduplicated home directory tool, distributed repositories, archives and more.</p>
+<h2>how it works</h2>
+<p>A more complete explanation can be found on the main GitHub repository, but
+essentially bup applies rsync's rolling-checksum (literally, the same algorithm)
+to determine file-differences, and then only backs up the differences - somewhat
+like rsnapshot.</p>
+<p>Unlike rsnapshot however, bup then applies deduplication of the chunks produced
+this way using SHA1 hashes, and stores the results in the git-packfile format.</p>
+<p>This is both very fast (rsnapshot, conversely, is quite slow) and very redundant
+- the Git tooling is able to read and understand a bup-repository as just a
+Git repository with a specific commit structure (you can run <code>gitk -a</code> in a
+<code>.bup</code> directory to inspect it).</p>
+<h2>why its space efficient</h2>
+<p>bup's archive and rolling-checksum format mean it is very space efficient. bup
+can correctly deduplicate data that undergoes insertions, deletions, shifts
+and copies. bup deduplicates across your entire backup set, meaning the same
+file uploaded 50 times is only stored once - in fact it will only be transferred
+across the network once.</p>
+<p>For comparison I recently moved 180 gb of ZFS snapshots of the same dataset
+undergoing various daily changes into a bup archive, and successfully compacted
+it down to 50 gb. I suspect I could have gotten it smaller if I'd unpacked some
+of the archive files that have been created in that backup set.</p>
+<p>That is a dataset which is already deduplicated via copy-on-write semantics
+(it was not using ZFS deduplication because you should basically never use ZFS
+deduplication).</p>
+<h2>why its fast</h2>
+<p>Git is well known as being bad at handling large binary files - it was designed
+to handle patches of source code, and makes assumptions to that effect. <code>bup</code>
+steps around this problem because it only used the Git packfile and index
+format to store data: where Git is slow, bup implements its own packfile writers
+index readers to make looking up data in Git structures fast.</p>
+<p>bup also uses some other tricks to do this: it will combine indexes into <code>midx</code>
+files to speed up lookups, and builds <a href="http://en.wikipedia.org/wiki/Bloom_filter">bloom filters</a> to add data (a bloom filter is a
+fast data structure based on hashes which tells you something is either
+'probably in the data set' or <em>definitely</em> not).</p>
+<h2>using bup for Windows backups</h2>
+<p>bup is a Unix/Linux oriented tool, but in practice I've applied it most usefully
+at the moment to some Windows servers.</p>
+<p>Running bup under <a href="https://www.cygwin.com/">cygwin</a> on Windows, and is far superior to the built in Windows backup system for file-based backups. It's best to combine it with
+the <a href="http://vscsc.sourceforge.net/">vscsc</a> tool which allows using 1-time
+snapshots to save the backup and avoid inconsistent state.</p>
+<p>You can see a <a href="https://gist.github.com/wrouesnel/8f0c681e4bf598176203">link to a Gist here</a> of my current favorite 
+script for this type of thing - this bash script needs to be invoked from a 
+scheduled task which runs a <a href="https://gist.github.com/wrouesnel/f5e5cc67d33db1cefdd4">batch file like this</a>.</p>
+<p>If you want to use this script on Cygwin then you need to install the <code>mail</code>
+utility for sending email, as well as rsync and bup.</p>
+<p>This script is reasonably complicated but it is designed to be robust against
+failures in a sensible way - and if we somehow fail running bup, to fallback to
+making tar archives - giving us an opportunity to fix a broken backup set.</p>
+<p>This script will work for backing up to your own remote server <em>today</em>. But, it
+was developed to work around limitations which can be fixed - and which I have
+fixed - and so the bup of tomorrow will not have them.</p>
+<h2>towards the perfect backup</h2>
+<p>The script above was developed for a client, and the rsync-first stage was
+designed to ensure that the most recent backup would always be directly readable
+from a Windows Samba share and not require using the command line.</p>
+<p>It was also designed to work around a flaw with bup's indexing step which makes
+it difficult to use with variable paths as produced by the <code>vscsc</code> tool in cygwin.
+Although bup will work just fine, it will insist on trying to hash the entire
+backup set every time - which is slow. This can be worked around by symlinking
+the backup path in cygwin beforehand, but since we needed a readable backup
+set it was as quick to use rsync in this instance.</p>
+<p>But it doesn't have to be this way. I've submitted several patches
+against bup which are also available in my <a href="https://github.com/wrouesnel/bup">personal development repository of bup</a> on GitHub.</p>
+<p>The indexing problem is fixed via <code>index-grafts</code>: modifying the bup-index to
+support representing the logical structure as it is intended to be in the bup
+repository, rather then the literal disk path structure. This allows the index
+to work as intended without any games on the filesystem, hashing only modified
+or updated files.</p>
+<p>The need for a directly accessible version of the backup is solved via a few
+other patches. We can modify the bup virtual-filesystems layer to support a
+dynamic view of the bup repository fairly easily, and add WebDAV support to
+the bup-web command (the <code>dynamic-vfs</code> and <code>bup-webdav</code> branches).</p>
+<p>With these changes, a bup repository can now be directly mounted as a Windows
+mapped network drive via explorers web client, and files opened and copied
+directly from the share. Any version of a backup set is then trivially 
+accessible and importantly we can simply start <code>bup-web</code> as a cygwin service
+and leave it running.</p>
+<p>Hopefully these patches will be incorporated into mainline bup soon (they are
+awaiting review).</p>
+<h2>so should I use it?</h2>
+<p>Even with the things I've had to fix, the answer is <em>absolutely</em>. bup is by far
+the best backup tool I've encountered lately. For a basic Linux system it will
+work great, for manual backups it will work great, and with a little scripting
+it will work <em>great</em> for automatic backups under Windows and Linux.</p>
+<p>The brave can try out the cutting-edge branch on my GitHub account to test out
+the fixes in this blog-post, and if you do then posting about them to
+[bup-list@googlegroups.com[(https://groups.google.com/forum/#!forum/bup-list) with any problems or successes or code reviews would
+help a lot.</p>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/backup/" rel="tag">backup</a></li>
+            <li><a class="tag p-category" href="../../categories/bup/" rel="tag">bup</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../uninstalling-r8168-dkms/" rel="prev" title="Quick note - uninstalling r8618-dkms">Previous post</a>
+            </li>
+            <li class="next">
+                <a href="../ssh-port-forwarding-when-allowtcpforwarding-is-disabled/" rel="next" title="SSH port forwarding when port fowarding is disabled with socat and nc">Next post</a>
+            </li>
+        </ul></nav></aside></article><!--End of body content--><footer id="footer">
+            Contents © 2021         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+            
+        </footer>
+</div>
+</div>
+
+
+        <script src="../../assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element){var i=element.getElementsByTagName('img')[0];return i===undefined?'':i.alt;}});
+    </script>
+</body>
+</html>

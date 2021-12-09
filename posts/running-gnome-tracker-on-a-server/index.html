@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Running Gnome Tracker on a Server | wrouesnel_blog</title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="canonical" href="https://blog.wrouesnel.com/posts/running-gnome-tracker-on-a-server/">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><meta name="author" content="wrouesnel">
+<link rel="prev" href="../migrating-to-gmail/" title="Migrating to Gmail" type="text/html">
+<link rel="next" href="../uninstalling-r8168-dkms/" title="Quick note - uninstalling r8618-dkms" type="text/html">
+<meta property="og:site_name" content="wrouesnel_blog">
+<meta property="og:title" content="Running Gnome Tracker on a Server">
+<meta property="og:url" content="https://blog.wrouesnel.com/posts/running-gnome-tracker-on-a-server/">
+<meta property="og:description" content="In a passing comment it was suggested to me that it would be really great if the home fileserver offered some type of web-interface to find things. We've been aggregating downloaded files there for a ">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2014-01-25T14:40:00-11:00">
+<meta property="article:tag" content="gnome">
+<meta property="article:tag" content="tracker">
+<meta property="article:tag" content="ubuntu">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Header and menu bar -->
+<div class="container">
+      <header class="blog-header py-3"><div class="row nbb-header align-items-center">
+          <div class="col-md-3 col-xs-2 col-sm-2" style="width: auto;">
+            <button class="navbar-toggler navbar-light bg-light nbb-navbar-toggler" type="button" data-toggle="collapse" data-target=".bs-nav-collapsible" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse bs-nav-collapsible bootblog4-search-form-holder">
+                
+            </div>
+        </div>
+          <div class="col-md-6 col-xs-10 col-sm-10 bootblog4-brand" style="width: auto;">
+            <a class="navbar-brand blog-header-logo text-dark" href="../../">
+
+            <span id="blog-title">wrouesnel_blog</span>
+        </a>
+          </div>
+            <div class="col-md-3 justify-content-end align-items-center bs-nav-collapsible collapse flex-collapse bootblog4-right-nav">
+            <nav class="navbar navbar-light bg-white"><ul class="navbar-nav bootblog4-right-nav"></ul></nav>
+</div>
+    </div>
+</header><nav class="navbar navbar-expand-md navbar-light bg-white static-top"><div class="collapse navbar-collapse bs-nav-collapsible" id="bs-navbar">
+            <ul class="navbar-nav nav-fill d-flex w-100">
+<li class="nav-item">
+<a href="../../archive.html" class="nav-link">Archive</a>
+                </li>
+<li class="nav-item">
+<a href="../../categories/" class="nav-link">Tags</a>
+                </li>
+<li class="nav-item">
+<a href="../../rss.xml" class="nav-link">RSS feed</a>
+
+                
+            </li>
+</ul>
+</div>
+<!-- /.navbar-collapse -->
+</nav>
+</div>
+
+<div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        
+        
+        
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Running Gnome Tracker on a Server</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    <a class="u-url" href="../../authors/wrouesnel/">wrouesnel</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2014-01-25T14:40:00-11:00" itemprop="datePublished" title="2014-01-25 14:40">2014-01-25 14:40</time></a>
+            </p>
+            
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<p>In a passing comment it was suggested to me that it would be really great if the home fileserver offered some type of web-interface to find things. We've been aggregating downloaded files there for a while, and there's been attempts made at categorization but this all really falls apart when you wonder "what does 'productivity' mean? And does this go under 'Linux' or some other thing?"</p>
+<p>Since lately I've been wanting to get desktop search working on my actual desktops, via Gnome's Tracker project and it's tie-in to Nautilus and Nemo (possibly the subject of a future blog), it seemed logical to run it on the fileserver as an indexer for our shared directories - and then to tie some kind of web ui to that.</p>
+<p>Unfortunately, Tracker is very desktop orientated - there's no easy daemon mode for running it on a headless system out-of-the-box, but with a little tweaking you <em>can</em> make it work for you quite easily.</p>
+<h2>How to</h2>
+<p>On my system I keep Tracker running as it's own user under a system account. On Ubuntu you need to create this like so (using a root shell - <code>sudo -i</code>):</p>
+<pre class="code literal-block"><span></span><code>$ adduser --system --shell<span class="o">=</span>/bin/false --disabled-login --home<span class="o">=</span>/var/lib/tracker tracker
+$ adduser tracker root
+</code></pre>
+
+<p>Since tracker uses GSettings for it's configuration these days, you need to su into the user you just created to actually configure the directories which should be indexed. Since this is a server, you probably just have a list of them so set it somewhat like the example below. Note: you must run the dbus-launch commands in order to have a viable session bus for dconf to work with. This will also be a requirement of Tracker later on.</p>
+<pre class="code literal-block"><span></span><code>$ su --shell /bin/bash
+$ <span class="nb">eval</span> <span class="sb">`</span>dbus-launch --sh-syntax<span class="sb">`</span>
+$ dconf write org/freedesktop/tracker/miner/files/index-recursive-directories <span class="s2">"['/path/to/my/dir/1', '/path/to/my/dir/2', '/etc/etc']"</span>
+$ <span class="nb">kill</span> <span class="nv">$DBUS_SESSION_BUS_PID</span>
+$ <span class="nb">exit</span>
+</code></pre>
+
+<p>Your Tracker user is now ready at this point. To start and stop the service, we use an <a href="files/tracker.conf">Upstart script like the one below</a>:</p>
+<pre class="code literal-block"><span></span><code>description <span class="s2">"gnome tracker system startup script"</span>
+author <span class="s2">"wrouesnel"</span>
+
+start on <span class="o">(</span>local-filesystems and net-device-up<span class="o">)</span>
+stop on shutdown
+
+respawn
+respawn limit <span class="m">5</span> <span class="m">60</span>
+
+setuid tracker
+
+script
+    chdir /var/lib/tracker
+    <span class="nb">eval</span> <span class="sb">`</span>dbus-launch --sh-syntax<span class="sb">`</span>
+    <span class="nb">echo</span> <span class="nv">$DBUS_SESSION_BUS_PID</span> &gt; .tracker-sessionbus.pid
+    <span class="nb">echo</span> <span class="nv">$DBUS_SESSION_BUS_ADDRESS</span> &gt; .tracker-sessionbus
+    /usr/lib/tracker/tracker-store
+end script
+
+post-start script
+    chdir /var/lib/tracker
+    <span class="k">while</span> <span class="o">[</span> ! -e .tracker-sessionbus <span class="o">]</span><span class="p">;</span> <span class="k">do</span> sleep <span class="m">1</span><span class="p">;</span> <span class="k">done</span>
+    <span class="nv">DBUS_SESSION_BUS_ADDRESS</span><span class="o">=</span><span class="k">$(</span>cat .tracker-sessionbus<span class="k">)</span> /usr/lib/tracker/tracker-miner-fs <span class="p">&amp;</span>
+end script
+
+post-stop script 
+    <span class="c1"># We need to kill off the DBUS session here</span>
+    chdir /var/lib/tracker
+    <span class="nb">kill</span> <span class="k">$(</span>cat .tracker-sessionbus.pid<span class="k">)</span>
+    rm .tracker-sessionbus.pid
+    rm .tracker-sessionbus
+end script
+</code></pre>
+
+<p>Some things to focus on about the script: we launch and save the DBus session parameters. We'll need these to reconnect to the session to run tracker related commands. The post-stop stanza is to kill off the DBus session.</p>
+<p>You do need to explicitely launch <code>tracker-miner-fs</code> in order for file indexing to work, but you don't need to kill it explicitely - it will be automatically shutdown when Upstart kills <code>tracker-store</code>.</p>
+<p>Also note that since tracker runs as the user <code>tracker</code> it can only index files and directories which it is allowed to traverse, so check your permissions.</p>
+<p>You can now start Tracker as your user with <code>start tracker</code>. And stop it with <code>stop tracker</code>. Simple and clean.</p>
+<h2>Using this</h2>
+<p>My plan for this setup is to throw together a Node.js app on my server that will forward queries to the tracker command line client - that app will be a future post when it's done.</p>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/gnome/" rel="tag">gnome</a></li>
+            <li><a class="tag p-category" href="../../categories/tracker/" rel="tag">tracker</a></li>
+            <li><a class="tag p-category" href="../../categories/ubuntu/" rel="tag">ubuntu</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../migrating-to-gmail/" rel="prev" title="Migrating to Gmail">Previous post</a>
+            </li>
+            <li class="next">
+                <a href="../uninstalling-r8168-dkms/" rel="next" title="Quick note - uninstalling r8618-dkms">Next post</a>
+            </li>
+        </ul></nav></aside></article><!--End of body content--><footer id="footer">
+            Contents © 2021         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+            
+        </footer>
+</div>
+</div>
+
+
+        <script src="../../assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element){var i=element.getElementsByTagName('img')[0];return i===undefined?'':i.alt;}});
+    </script>
+</body>
+</html>

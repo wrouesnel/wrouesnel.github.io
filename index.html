@@ -1,815 +1,860 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width">
-    <script type="text/javascript">
-      // google analytics
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-      
-      ga('create', 'UA-43235370-1', 'wrouesnel.github.io');
-      ga('send', 'pageview');
-    </script>
-    <title>wrouesnel_blog
-    </title>
-    <link rel="alternate" href="http://blog.wrouesnel.com/feed.xml" type="application/rss+xml" title="negating information entropy">
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic|Anonymous+Pro:400,700,400italic,700italic|Merriweather:400,700,300">
-    <link rel="stylesheet" href="/css/main.css">
-  </head>
-  <body>
-    <header class="header">
-      <div class="content-wrap">
-        <div class="logo">
-          <h1><a href="http://blog.wrouesnel.com">wrouesnel_blog</a></h1>
-          <p class="description">negating information entropy</p>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="negating information entropy">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>wrouesnel_blog</title>
+<link href="assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link href="assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="canonical" href="https://blog.wrouesnel.com/">
+<link rel="next" href="index-1.html" type="text/html">
+<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="prefetch" href="posts/switching-to-nikola-for-blogging/" type="text/html">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Header and menu bar -->
+<div class="container">
+      <header class="blog-header py-3"><div class="row nbb-header align-items-center">
+          <div class="col-md-3 col-xs-2 col-sm-2" style="width: auto;">
+            <button class="navbar-toggler navbar-light bg-light nbb-navbar-toggler" type="button" data-toggle="collapse" data-target=".bs-nav-collapsible" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse bs-nav-collapsible bootblog4-search-form-holder">
+                
+            </div>
         </div>
-      </div>
-    </header>
-    <div id="content">
-      <div class="content-wrap">
-        <!-- First article - render in full-->
-        <article class="article intro"></article>
-        <header>
-          <h1 class="indexfullarticle"><a href="/articles/Setting%20a%20separate%20pattern%20lock%20and%20encryption%20password%20on%20Android/">Setting a separate encryption password and pattern lock on Android</a></h1>
-          <div class="date"><span>24. March 2019</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><p>If you run an older version of LineageOS (14.1 or so) then by using the cryptfs
-utility you can separate your devices pattern lock and boot&nbsp;password.</p>
+          <div class="col-md-6 col-xs-10 col-sm-10 bootblog4-brand" style="width: auto;">
+            <a class="navbar-brand blog-header-logo text-dark" href=".">
+
+            <span id="blog-title">wrouesnel_blog</span>
+        </a>
+          </div>
+            <div class="col-md-3 justify-content-end align-items-center bs-nav-collapsible collapse flex-collapse bootblog4-right-nav">
+            <nav class="navbar navbar-light bg-white"><ul class="navbar-nav bootblog4-right-nav"></ul></nav>
+</div>
+    </div>
+</header><nav class="navbar navbar-expand-md navbar-light bg-white static-top"><div class="collapse navbar-collapse bs-nav-collapsible" id="bs-navbar">
+            <ul class="navbar-nav nav-fill d-flex w-100">
+<li class="nav-item">
+<a href="archive.html" class="nav-link">Archive</a>
+                </li>
+<li class="nav-item">
+<a href="categories/" class="nav-link">Tags</a>
+                </li>
+<li class="nav-item">
+<a href="rss.xml" class="nav-link">RSS feed</a>
+
+                
+            </li>
+</ul>
+</div>
+<!-- /.navbar-collapse -->
+</nav>
+</div>
+
+<div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        
+        
+        
+    
+        
+
+    
+        
+    <div class="postindex">
+            <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/switching-to-nikola-for-blogging/" class="u-url">Switching to nikola for blogging</a></h1>
+                <div class="metadata">
+                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                        <a href="authors/will-rouesnel/">Will Rouesnel</a>
+                    </span></p>
+            <p class="dateline">
+            <a href="posts/switching-to-nikola-for-blogging/" rel="bookmark">
+            <time class="published dt-published" datetime="2021-12-09T20:59:29+11:00" itemprop="datePublished" title="2021-12-09 20:59">2021-12-09 20:59</time></a>
+            </p>
+                </div>
+            </header><div class="e-content entry-content">
+                    <div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Why?">Why?<a class="anchor-link" href="posts/switching-to-nikola-for-blogging/#Why?">¶</a>
+</h2>
+<p>The key to me for blogging is to keep it simple. This at first meant static sites that rendered nicely, and this was a function fulfilled by Wintersmith.</p>
+<h2 id="The-Problems">The Problems<a class="anchor-link" href="posts/switching-to-nikola-for-blogging/#The-Problems">¶</a>
+</h2>
+<p>The problem with Wintersmith was that it was a pure markdown solution. At the end of the day, it turned out that most of what I wanted to talk about probably had some type of interactive or graphical component to it, or I just wanted to be able to add photos and images easily.</p>
+<p>None of this is easy with pure markdown.</p>
+<h2 id="The-Solution">The Solution<a class="anchor-link" href="posts/switching-to-nikola-for-blogging/#The-Solution">¶</a>
+</h2>
+<p>The new solution for me here is Nikola which seems to hit a new sweetspot of codeability versus low friction. Specifcially it's support for posts being rendered out of jupter-lab notebooks, something that I've had just grow in usefulness.</p>
+<h2 id="Perceived-Benefits">Perceived Benefits<a class="anchor-link" href="posts/switching-to-nikola-for-blogging/#Perceived-Benefits">¶</a>
+</h2>
+<p>Getting the transition from "jupyter notebook" to "blog" post down to as frictionless as possible feels important. When you want to share neat stuff about code, it helps to do it right next to the neat code you just wrote.</p>
+<p>When you want to share data analysis - well that's a jupyter specialty. And when you want to show off something you're doing in your workshop, then at the very least pulling in some images with jupyter is a bit more practical and probably a lot more likely to be low enough effort that I'll do it - this last part is the bit that's definitely up in the air here.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Workarounds">Workarounds<a class="anchor-link" href="posts/switching-to-nikola-for-blogging/#Workarounds">¶</a>
+</h2>
+<h3 id="Keeping-media-and-posts-together">Keeping media and posts together<a class="anchor-link" href="posts/switching-to-nikola-for-blogging/#Keeping-media-and-posts-together">¶</a>
+</h3>
+<p>The first problem I ran into with Nikola is that it and I disagree on how to structure posts.</p>
+<p>Namely: out of the box Nikola has the notion of separate <code>/images</code> <code>/files</code> and <code>/posts</code> (or <code>/pages</code>) directories for determining content.</p>
+<p>I don't like this, and it has a practical downside: when working on a Jupyter notebook for a post, suppose it requires data or I'm using some tool which will do drag and drop images for me? What I'd like is to open that notebook, and just that notebook in Jupyter or VSCode and work on just that file - including how I reference data.</p>
+<p>Although <a href="https://github.com/getnikola/nikola/issues/2266">this issue</a> suggests a workaround, it has a of drawbacks. But more importantly - one of the reasons we use Nikola is it's written in Python, and better - it's main configuration file <code>conf.py</code> is itself, runnable Python.</p>
+<p>This gives us a much better solution: we can just generate our post finding logic at config time.</p>
+<p>To do this we need to find this stanza:</p>
+<div class="highlight"><pre><span></span><span class="n">POSTS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="s2">"posts/*.ipynb"</span><span class="p">,</span> <span class="s2">"posts"</span><span class="p">,</span> <span class="s2">"post.tmpl"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"posts/*.rst"</span><span class="p">,</span> <span class="s2">"posts"</span><span class="p">,</span> <span class="s2">"post.tmpl"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"posts/*.md"</span><span class="p">,</span> <span class="s2">"posts"</span><span class="p">,</span> <span class="s2">"post.tmpl"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"posts/*.txt"</span><span class="p">,</span> <span class="s2">"posts"</span><span class="p">,</span> <span class="s2">"post.tmpl"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"posts/*.html"</span><span class="p">,</span> <span class="s2">"posts"</span><span class="p">,</span> <span class="s2">"post.tmpl"</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+<p>This is a pretty standard stanza which configures how posts are located. Importantly: the wildcard here isn't a regular glob, and all these paths act recursive searches, with the directory names winding up in our paths (i.e. <code>posts/some path with spaces/mypost.ipynb</code> winds up as <code>https://yoursite/posts/some path with spaces/mypost-name-from-metadata</code>)</p>
+<p>So what do we want to have happen?</p>
+<p>Ideally we want something like this to work:</p>
+
+<pre><code>|-my-post/- my-post.ipynb
+         |- images/some-image.jpg
+         |- files/data_for_the_folder.tsv</code></pre>
+<p>and then on the output it should end up in a sensible location.</p>
+<p>We can do this by calculating all these paths at compile time in the config file, to workaround the default behavior.</p>
+<p>So for our POSTS element we use this dynamic bit of Python code:</p>
+<div class="highlight"><pre><span></span><span class="c1"># Calculate POSTS so they must follow the convention &lt;post-name&gt;/&lt;post-name&gt;.&lt;supported extension&gt;</span>
+<span class="n">_post_exts</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"ipynb"</span><span class="p">,</span>
+    <span class="s2">"rst"</span><span class="p">,</span>
+    <span class="s2">"md"</span><span class="p">,</span>
+    <span class="s2">"txt"</span><span class="p">,</span>
+    <span class="s2">"html"</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">_posts</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">_root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span><span class="s2">"posts"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">_root_dir</span><span class="p">):</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_root_dir</span><span class="p">,</span><span class="n">e</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">fpath</span><span class="p">):</span>
+        <span class="k">continue</span>
+    <span class="n">_postmatchers</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">"."</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"posts"</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">e</span><span class="p">),</span><span class="n">ext</span><span class="p">))</span> <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="n">_post_exts</span> <span class="p">]</span>
+    <span class="n">_posts</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="s2">"posts"</span><span class="p">,</span> <span class="s2">"post.tmpl"</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">_postmatchers</span> <span class="p">])</span>
+
+<span class="n">POSTS</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">_posts</span><span class="p">)</span>
+
+<span class="n">PAGES</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="s2">"pages/*.ipynb"</span><span class="p">,</span> <span class="s2">"posts"</span><span class="p">,</span> <span class="s2">"page.tmpl"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"pages/*.rst"</span><span class="p">,</span> <span class="s2">"pages"</span><span class="p">,</span> <span class="s2">"page.tmpl"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"pages/*.md"</span><span class="p">,</span> <span class="s2">"pages"</span><span class="p">,</span> <span class="s2">"page.tmpl"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"pages/*.txt"</span><span class="p">,</span> <span class="s2">"pages"</span><span class="p">,</span> <span class="s2">"page.tmpl"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"pages/*.html"</span><span class="p">,</span> <span class="s2">"pages"</span><span class="p">,</span> <span class="s2">"page.tmpl"</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+<p>Testing this - it works. It means we can keep our actual post bodies, and any supporting files, nicely organized.</p>
+<p>Now there's two additional problems: <code>images</code> and <code>files</code>. We'd like to handle <code>images</code> specially because Nikola will do automatic thumbnailing and resizing for us in our posts. They're handled lossily. Whereas <code>files</code> are not touched at all in the final output.</p>
+<p>The solution I settled on is just to move these paths to under <code>images</code> and <code>files</code> adjacent to the posts respectfully. This means is the Jupyter notebook I'm using is referencing data, it's reasonably well behaved.</p>
+<p>For files we use this config stanza:</p>
+<div class="highlight"><pre><span></span><span class="n">FILES_FOLDERS</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'files'</span><span class="p">:</span> <span class="s1">'files'</span><span class="p">}</span>
+
+<span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">_root_dir</span><span class="p">):</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_root_dir</span><span class="p">,</span><span class="n">e</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">fpath</span><span class="p">):</span>
+        <span class="k">continue</span>
+    <span class="n">FILES_FOLDERS</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span><span class="s2">"files"</span><span class="p">)]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"posts"</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="s2">"files"</span><span class="p">)</span>
+</pre></div>
+<p>and for images we use this:</p>
+<div class="highlight"><pre><span></span><span class="n">IMAGE_FOLDERS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"images"</span><span class="p">:</span> <span class="s2">"images"</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">_root_dir</span><span class="p">):</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_root_dir</span><span class="p">,</span><span class="n">e</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">fpath</span><span class="p">):</span>
+        <span class="k">continue</span>
+    <span class="n">IMAGE_FOLDERS</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span><span class="s2">"images"</span><span class="p">)]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"posts"</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="s2">"images"</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Setting-up-the-publish-workflow">Setting up the publish workflow<a class="anchor-link" href="posts/switching-to-nikola-for-blogging/#Setting-up-the-publish-workflow">¶</a>
+</h3>
+<p>Nikola comes out of the box with a publishing workflow for Github pages, which is where I host this blog.</p>
+<p>Since I've switched over to running decentralized with my git repos stored in syncthing, I wanted to ensure I only pushed the content of this blog and kept the regular repo on my local systems since it leads to an easier drafting experience.</p>
+<p>I configure the github publish workflow like so in <code>conf.py</code>:</p>
+<div class="highlight"><pre><span></span><span class="n">GITHUB_SOURCE_BRANCH</span> <span class="o">=</span> <span class="s2">"src"</span>
+<span class="n">GITHUB_DEPLOY_BRANCH</span> <span class="o">=</span> <span class="s2">"master"</span>
+
+<span class="c1"># The name of the remote where you wish to push to, using github_deploy.</span>
+<span class="n">GITHUB_REMOTE_NAME</span> <span class="o">=</span> <span class="s2">"publish"</span>
+
+<span class="c1"># Whether or not github_deploy should commit to the source branch automatically</span>
+<span class="c1"># before deploying.</span>
+<span class="n">GITHUB_COMMIT_SOURCE</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+<p>and then add my Github repo as the remote named <code>publish</code> as</p>
+
+<pre><code>git remote add publish https://github.com/wrouesnel/wrouesnel.github.io.git</code></pre>
+<p>and then synchronize my old blog so nikola can take it over:</p>
+
+<pre><code>git fetch publish
+git checkout master
+find -depth -delete
+git commit -m "Transition to Nikola"
+git checkout main</code></pre>
+<p>and then finally just do the deploy:</p>
+
+<pre><code>nikola github_deploy</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Next-Steps">Next Steps<a class="anchor-link" href="posts/switching-to-nikola-for-blogging/#Next-Steps">¶</a>
+</h2>
+<p>This isn't perfect, but it's a static site and it looks okay and that's good enough.</p>
+<p>I've got a few things I want to fix:</p>
+<ul>
+<li>presentation of jupyter notebooks - I'd like it to look seamless to "writing things in Markdown"</li>
+<li>a tag line under the blog title - the old site had it, the new one should have it.</li>
+<li>using <code>nikola new_post</code> with this system probably doesn't put the new file anywhere sensible - it would be nice if it did</li>
+<li>figure out how I want to use galleries</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+                </div>
+            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/setting-a-separate-pattern-lock-and-encryption-password-on-android/" class="u-url">Setting a separate encryption password and pattern lock on Android</a></h1>
+                <div class="metadata">
+                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                        <a href="authors/wrouesnel/">wrouesnel</a>
+                    </span></p>
+            <p class="dateline">
+            <a href="posts/setting-a-separate-pattern-lock-and-encryption-password-on-android/" rel="bookmark">
+            <time class="published dt-published" datetime="2019-03-24T01:56:00-11:00" itemprop="datePublished" title="2019-03-24 01:56">2019-03-24 01:56</time></a>
+            </p>
+                </div>
+            </header><div class="e-content entry-content">
+                    <div>
+<p>If you run an older version of LineageOS (14.1 or so) then by using the cryptfs
+utility you can separate your devices pattern lock and boot password.</p>
 <p>This is something you want to do. While state-of-the-art for security is going
 to belong to Apple for the forseeable future, practical security for the every
 day user can be achieved (sort of) in Android by ensuring that the password to
 decrypt your devices storage from a cold boot is much more complicated then the
-online pattern&nbsp;lock.</p>
+online pattern lock.</p>
 <p>A human sitting there trying it is unlikely to break the pattern lock (or 
 will actually power off the phone). Whereas someone looking to go farming your
-device for personal data might try to image it and break it&nbsp;offline.</p>
+device for personal data might try to image it and break it offline.</p>
 <p>For peace of mind then, we want to know that if the device is powered off,
-they’re unlikely to break the initial login&nbsp;password.</p>
-<p>Irritatingly, LineageOS makes this&nbsp;difficult.</p>
+they're unlikely to break the initial login password.</p>
+<p>Irritatingly, LineageOS makes this difficult.</p>
 <p>Thankfully (if you trust the author) the <a href="https://play.google.com/store/apps/details?id=org.nick.cryptfs.passwdmanager&amp;hl=en">cryptfs</a> 
-tool makes this easy…provided you know how to convert a pattern lock key into
-a password to do&nbsp;it.</p>
-<h1 id="3x3-patterns">3x3&nbsp;Patterns</h1>
-<p>Look around the net and 3x3 patterns don’t have a clear translation&nbsp;table.</p>
-<p>However, there’s not too many possibilities - and in fact the basic translation
-is left to right, top to bottom, you&nbsp;get:</p>
-<pre><code>1 2 3
-4 5 6
-7 8 9
-</code></pre><p>When using cryptfs, just convert your pattern to numbers using the above table.
-Simple&nbsp;right?</p>
-<p>But I use a 4x4 pattern. What&nbsp;then?</p>
-<h1 id="4x4-patterns">4x4&nbsp;Patterns</h1>
-<p>Always look at the code and think about it. Someone on <a href="https://android.stackexchange.com/questions/83854/is-there-a-way-to-map-translate-a-pattern-lock-to-a-numeric-pin">StackOverflow</a> did - but
-the code is not correct for current&nbsp;LineageOS.</p>
-<p>The real function in LineageOS is&nbsp;this:</p>
-<pre><code>    /**
-     * Serialize a pattern.
-     * @param pattern The pattern.
-     * @return The pattern in string form.
-     */
-    public static String patternToString(List&lt;LockPatternView.Cell&gt; pattern, byte gridSize) {
-        if (pattern == null) {
-            return &quot;&quot;;
-        }
-        final int patternSize = pattern.size();
-        LockPatternView.Cell.updateSize(gridSize);
+tool makes this easy...provided you know how to convert a pattern lock key into
+a password to do it.</p>
+<h2>3x3 Patterns</h2>
+<p>Look around the net and 3x3 patterns don't have a clear translation table.</p>
+<p>However, there's not too many possibilities - and in fact the basic translation
+is left to right, top to bottom, you get:</p>
+<pre class="code literal-block"><span></span><code><span class="mf">1</span> <span class="mf">2</span> <span class="mf">3</span>
+<span class="mf">4</span> <span class="mf">5</span> <span class="mf">6</span>
+<span class="mf">7</span> <span class="mf">8</span> <span class="mf">9</span>
+</code></pre>
 
-        byte[] res = new byte[patternSize];
-        for (int i = 0; i &lt; patternSize; i++) {
-            LockPatternView.Cell cell = pattern.get(i);
-            res[i] = (byte) (cell.getRow() * gridSize + cell.getColumn() + &#39;1&#39;);
-        }
-        return new String(res);
-    }
-</code></pre><p>Found in the file <code>frameworks/base/core/java/com/android/internal/widget/LockPatternUtils.java</code>
-in the Android source&nbsp;tree.</p>
-<p>The important line is here - <code>res[i] = (byte) (cell.getRow() * gridSize + cell.getColumn() + &#39;1&#39;);</code></p>
-<p>The key being the <code>&#39;1&#39;</code> - what’s happening is that the pattern lock is converted
-to an offset from <span class="caps">ASCII</span> <code>1</code>, which actually converts to the (byte) number <code>49</code>.</p>
+<p>When using cryptfs, just convert your pattern to numbers using the above table.
+Simple right?</p>
+<p>But I use a 4x4 pattern. What then?</p>
+<h2>4x4 Patterns</h2>
+<p>Always look at the code and think about it. Someone on <a href="https://android.stackexchange.com/questions/83854/is-there-a-way-to-map-translate-a-pattern-lock-to-a-numeric-pin">StackOverflow</a> did - but
+the code is not correct for current LineageOS.</p>
+<p>The real function in LineageOS is this:</p>
+<pre class="code literal-block"><span></span><code><span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * Serialize a pattern.</span>
+<span class="cm">     * @param pattern The pattern.</span>
+<span class="cm">     * @return The pattern in string form.</span>
+<span class="cm">     */</span><span class="w"></span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">patternToString</span><span class="p">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">LockPatternView</span><span class="p">.</span><span class="n">Cell</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pattern</span><span class="p">,</span><span class="w"> </span><span class="n">byte</span><span class="w"> </span><span class="n">gridSize</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pattern</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">null</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="ss">""</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">final</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="n">patternSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pattern</span><span class="p">.</span><span class="k">size</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="n">LockPatternView</span><span class="p">.</span><span class="n">Cell</span><span class="p">.</span><span class="n">updateSize</span><span class="p">(</span><span class="n">gridSize</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">byte</span><span class="err">[]</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">byte</span><span class="o">[</span><span class="n">patternSize</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="nc">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">patternSize</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">LockPatternView</span><span class="p">.</span><span class="n">Cell</span><span class="w"> </span><span class="n">cell</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pattern</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="n">i</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="n">res</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">byte</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n">cell</span><span class="p">.</span><span class="n">getRow</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">gridSize</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cell</span><span class="p">.</span><span class="n">getColumn</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">'1'</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">String</span><span class="p">(</span><span class="n">res</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+</code></pre>
+
+<p>Found in the file <code>frameworks/base/core/java/com/android/internal/widget/LockPatternUtils.java</code>
+in the Android source tree.</p>
+<p>The important line is here - <code>res[i] = (byte) (cell.getRow() * gridSize + cell.getColumn() + '1');</code></p>
+<p>The key being the <code>'1'</code> - what's happening is that the pattern lock is converted
+to an offset from ASCII <code>1</code>, which actually converts to the (byte) number <code>49</code>.</p>
 <p>But the final conversion is just mapping the whole byte sequence to characters - 
-so higher number patterns are just offsets into the <span class="caps">ASCII</span> lookup table past <code>1</code>.</p>
-<p>So for a 4x4 grid this gives us the following translation&nbsp;table:</p>
-<pre><code>1 2 3 4
-5 6 7 8
-9 : ; &lt;
-= &gt; ? @
-</code></pre><h1 id="5x5-pattern">5x5&nbsp;Pattern</h1>
-<p>Here’s the pattern following the above for a 5x5 code if you use&nbsp;it:</p>
-<pre><code>1 2 3 4 5
-6 7 8 9 :
-; &lt; = &gt; ?
-@ A B C D
-</code></pre></section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/Securing%20cockroachdb/">Securing CockroachDB</a></h2>
-          <div class="date"><span>10. May 2018</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><p>So I just lost about 16 hours to this, and I haven’t even been able to
-evaluate whether it’ll work for me. On the one hand I suppose I could’ve not
+so higher number patterns are just offsets into the ASCII lookup table past <code>1</code>.</p>
+<p>So for a 4x4 grid this gives us the following translation table:</p>
+<pre class="code literal-block"><span></span><code><span class="mf">1</span> <span class="mf">2</span> <span class="mf">3</span> <span class="mf">4</span>
+<span class="mf">5</span> <span class="mf">6</span> <span class="mf">7</span> <span class="mf">8</span>
+<span class="mf">9</span> <span class="p">:</span> <span class="p">;</span> <span class="o">&lt;</span>
+<span class="o">=</span> <span class="o">&gt;</span> <span class="err">?</span> <span class="err">@</span>
+</code></pre>
+
+<h2>5x5 Pattern</h2>
+<p>Here's the pattern following the above for a 5x5 code if you use it:</p>
+<pre class="code literal-block"><span></span><code><span class="mf">1</span> <span class="mf">2</span> <span class="mf">3</span> <span class="mf">4</span> <span class="mf">5</span>
+<span class="mf">6</span> <span class="mf">7</span> <span class="mf">8</span> <span class="mf">9</span> <span class="p">:</span>
+<span class="p">;</span> <span class="o">&lt;</span> <span class="o">=</span> <span class="o">&gt;</span> <span class="err">?</span>
+<span class="err">@</span> <span class="n">A</span> <span class="n">B</span> <span class="n">C</span> <span class="n">D</span>
+</code></pre>
+</div>
+                </div>
+            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/securing-cockroachdb/" class="u-url">Securing CockroachDB</a></h1>
+                <div class="metadata">
+                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                        <a href="authors/wrouesnel/">wrouesnel</a>
+                    </span></p>
+            <p class="dateline">
+            <a href="posts/securing-cockroachdb/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-05-10T02:17:00-10:00" itemprop="datePublished" title="2018-05-10 02:17">2018-05-10 02:17</time></a>
+            </p>
+                </div>
+            </header><div class="e-content entry-content">
+                    <div>
+<p>So I just lost about 16 hours to this, and I haven't even been able to
+evaluate whether it'll work for me. On the one hand I suppose I could've not
 secured anything, but personally I feel you want to know what the production
 configuration looks like before you evaluate (and in my case, I like to default
-my docker containers to “would not be wrong to roll this into&nbsp;production”).</p>
-<p>So: how does <span class="caps">TLS</span> work for CockroachDB? Well the problem is CockroachDB has
-atrocious logging for its TLS certificate errors in&nbsp;v2.0.1.</p>
-<h1 id="the-problem">The&nbsp;Problem</h1>
+my docker containers to "would not be wrong to roll this into production").</p>
+<p>So: how does TLS work for CockroachDB? Well the problem is CockroachDB has
+atrocious logging for its TLS certificate errors in v2.0.1.</p>
+<h2>The Problem</h2>
 <p>The problem was basically that CockroachDB expects a very specific format
-for it’s x509 certificate data - outlined here <a href="https://github.com/cockroachdb/cockroach/issues/24621">https://github.com/cockroachdb/cockroach/issues/24621</a></p>
+for it's x509 certificate data - outlined here <a href="https://github.com/cockroachdb/cockroach/issues/24621">https://github.com/cockroachdb/cockroach/issues/24621</a></p>
 <p>I have a small utility I use for test certificates called <a href="https://github.com/wrouesnel/makecerts">makecerts</a>
 which exists basically to have a much simpler static binary that does something
 like <a href="https://github.com/cloudflare/cfssl">cfssl</a> but with looser defaults. But
-the problem would apply to both&nbsp;scenarios.</p>
+the problem would apply to both scenarios.</p>
 <p>In short: <code>organization</code> needs to be set to <code>cockroach</code> for node certificates,
 and the <code>commonName</code> needs to be set to <code>node</code>. I was generating certificates with
 a <code>commonName</code> of my docker-compose test network - <code>172.20.0.1</code> and the like, 
-which is perfectly valid, validates correctly with the <span class="caps">CA</span>, and can be used to
-initialize the cluster - but none of the nodes will connect to each&nbsp;other.</p>
-<p>And as noted in the Github issue produces no logs actually describing the&nbsp;problem.</p>
-<h1 id="the-solution">The&nbsp;Solution</h1>
+which is perfectly valid, validates correctly with the CA, and can be used to
+initialize the cluster - but none of the nodes will connect to each other.</p>
+<p>And as noted in the Github issue produces no logs actually describing the problem.</p>
+<h2>The Solution</h2>
 <p>So there you have it - with <code>makecerts</code> the line I needed for the test docker-compose
-file&nbsp;was:</p>
-<pre><code class="lang-bash">makecerts --O=cockroach --CN=generated \
-    172_20_0_1=node,172.20.0.1,localhost,127.0.0.1 \
-    172_20_0_2=node,172.20.0.2,localhost,127.0.0.1 \
-    172_20_0_3=node,172.20.0.3,localhost,127.0.0.1 \
-    172_20_0_4=node,172.20.0.4,localhost,127.0.0.1 \
-    172_20_0_5=node,172.20.0.5,localhost,127.0.0.1 \
+file was:</p>
+<pre class="code literal-block"><span></span><code>makecerts --O<span class="o">=</span>cockroach --CN<span class="o">=</span>generated <span class="se">\</span>
+    <span class="nv">172_20_0_1</span><span class="o">=</span>node,172.20.0.1,localhost,127.0.0.1 <span class="se">\</span>
+    <span class="nv">172_20_0_2</span><span class="o">=</span>node,172.20.0.2,localhost,127.0.0.1 <span class="se">\</span>
+    <span class="nv">172_20_0_3</span><span class="o">=</span>node,172.20.0.3,localhost,127.0.0.1 <span class="se">\</span>
+    <span class="nv">172_20_0_4</span><span class="o">=</span>node,172.20.0.4,localhost,127.0.0.1 <span class="se">\</span>
+    <span class="nv">172_20_0_5</span><span class="o">=</span>node,172.20.0.5,localhost,127.0.0.1 <span class="se">\</span>
     root
 </code></pre>
-<p>Note on how this works: this command above is saying “generate 
+
+<p>Note on how this works: this command above is saying "generate 
 172_20_0_1.crt and 172_20_0_1.pem for the certificate and key respectively,
 assign a commonName of <code>node</code> and then generate SANs for the commonName and
-all common-separated&nbsp;values.”</p>
+all common-separated values."</p>
 <p>Since <code>makecerts</code> is simple minded it also just signs the cert for all 
-use-cases - it’s very much a testing&nbsp;tool.</p>
-<p>The final docker-compose I used to get this started&nbsp;was:</p>
-<pre><code class="lang-yaml"><span class="attr">version:</span> <span class="string">'2'</span>
+use-cases - it's very much a testing tool.</p>
+<p>The final docker-compose I used to get this started was:</p>
+<pre class="code literal-block"><span></span><code><span class="nt">version</span><span class="p">:</span> <span class="s">'2'</span>
 
-<span class="attr">networks:</span>
-<span class="attr">  roachnet:</span>
-<span class="attr">    driver:</span> <span class="string">bridge</span>
-<span class="attr">    ipam:</span>
-<span class="attr">      driver:</span> <span class="string">default</span>
-<span class="attr">      config:</span>
-<span class="attr">      - subnet:</span> <span class="number">172.20</span><span class="number">.0</span><span class="number">.0</span><span class="string">/24</span>
-<span class="attr">        gateway:</span> <span class="number">172.20</span><span class="number">.0</span><span class="number">.254</span>
+<span class="nt">networks</span><span class="p">:</span>
+  <span class="nt">roachnet</span><span class="p">:</span>
+    <span class="nt">driver</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bridge</span>
+    <span class="nt">ipam</span><span class="p">:</span>
+      <span class="nt">driver</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">default</span>
+      <span class="nt">config</span><span class="p">:</span>
+      <span class="p p-Indicator">-</span> <span class="nt">subnet</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.20.0.0/24</span>
+        <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.20.0.254</span>
 
-<span class="attr">services:</span>
-<span class="attr">  roach1:</span>
-<span class="attr">    image:</span> <span class="string">cockroachdb/cockroach:v2.0.1</span>
-<span class="attr">    command:</span> <span class="string">start</span> <span class="bullet">--host=172.20.0.1</span> <span class="bullet">--logtostderr=<span class="caps">INFO</span></span> <span class="bullet">--certs-dir=/certs</span> <span class="bullet">--join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
-<span class="attr">    volumes:</span>
-<span class="bullet">    -</span> <span class="string">./roach1:/cockroach/cockroach-data</span>
-<span class="bullet">    -</span> <span class="string">./172_20_0_1.crt:/certs/node.crt</span>
-<span class="bullet">    -</span> <span class="string">./172_20_0_1.pem:/certs/node.key</span>
-<span class="bullet">    -</span> <span class="string">./root.crt:/certs/client.root.crt</span>
-<span class="bullet">    -</span> <span class="string">./root.pem:/certs/client.root.key</span>
-<span class="bullet">    -</span> <span class="string">./generated.crt:/certs/ca.crt</span>
-<span class="bullet">    -</span> <span class="string">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
-<span class="attr">    networks:</span>
-<span class="attr">      roachnet:</span>
-<span class="attr">        ipv4_address:</span> <span class="number">172.20</span><span class="number">.0</span><span class="number">.1</span>
+<span class="nt">services</span><span class="p">:</span>
+  <span class="nt">roach1</span><span class="p">:</span>
+    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
+    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.1 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
+    <span class="nt">volumes</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./roach1:/cockroach/cockroach-data</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_1.crt:/certs/node.crt</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_1.pem:/certs/node.key</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
+    <span class="nt">networks</span><span class="p">:</span>
+      <span class="nt">roachnet</span><span class="p">:</span>
+        <span class="nt">ipv4_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.20.0.1</span>
 
-<span class="attr">  roach2:</span>
-<span class="attr">    image:</span> <span class="string">cockroachdb/cockroach:v2.0.1</span>
-<span class="attr">    command:</span> <span class="string">start</span> <span class="bullet">--host=172.20.0.2</span> <span class="bullet">--logtostderr=<span class="caps">INFO</span></span> <span class="bullet">--certs-dir=/certs</span> <span class="bullet">--join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
-<span class="attr">    volumes:</span>
-<span class="bullet">    -</span> <span class="string">./roach2:/cockroach/cockroach-data</span>
-<span class="bullet">    -</span> <span class="string">./172_20_0_2.crt:/certs/node.crt</span>
-<span class="bullet">    -</span> <span class="string">./172_20_0_2.pem:/certs/node.key</span>
-<span class="bullet">    -</span> <span class="string">./root.crt:/certs/client.root.crt</span>
-<span class="bullet">    -</span> <span class="string">./root.pem:/certs/client.root.key</span>
-<span class="bullet">    -</span> <span class="string">./generated.crt:/certs/ca.crt</span>
-<span class="bullet">    -</span> <span class="string">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
-<span class="attr">    networks:</span>
-<span class="attr">      roachnet:</span>
-<span class="attr">        ipv4_address:</span> <span class="number">172.20</span><span class="number">.0</span><span class="number">.2</span>
+  <span class="nt">roach2</span><span class="p">:</span>
+    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
+    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.2 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
+    <span class="nt">volumes</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./roach2:/cockroach/cockroach-data</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_2.crt:/certs/node.crt</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_2.pem:/certs/node.key</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
+    <span class="nt">networks</span><span class="p">:</span>
+      <span class="nt">roachnet</span><span class="p">:</span>
+        <span class="nt">ipv4_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.20.0.2</span>
 
-<span class="attr">  roach3:</span>
-<span class="attr">    image:</span> <span class="string">cockroachdb/cockroach:v2.0.1</span>
-<span class="attr">    command:</span> <span class="string">start</span> <span class="bullet">--host=172.20.0.3</span> <span class="bullet">--logtostderr=<span class="caps">INFO</span></span> <span class="bullet">--certs-dir=/certs</span> <span class="bullet">--join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
-<span class="attr">    volumes:</span>
-<span class="bullet">    -</span> <span class="string">./roach3:/cockroach/cockroach-data</span>
-<span class="bullet">    -</span> <span class="string">./172_20_0_3.crt:/certs/node.crt</span>
-<span class="bullet">    -</span> <span class="string">./172_20_0_3.pem:/certs/node.key</span>
-<span class="bullet">    -</span> <span class="string">./root.crt:/certs/client.root.crt</span>
-<span class="bullet">    -</span> <span class="string">./root.pem:/certs/client.root.key</span>
-<span class="bullet">    -</span> <span class="string">./generated.crt:/certs/ca.crt</span>
-<span class="bullet">    -</span> <span class="string">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
-<span class="attr">    networks:</span>
-<span class="attr">      roachnet:</span>
-<span class="attr">        ipv4_address:</span> <span class="number">172.20</span><span class="number">.0</span><span class="number">.3</span>
+  <span class="nt">roach3</span><span class="p">:</span>
+    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
+    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.3 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
+    <span class="nt">volumes</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./roach3:/cockroach/cockroach-data</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_3.crt:/certs/node.crt</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_3.pem:/certs/node.key</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
+    <span class="nt">networks</span><span class="p">:</span>
+      <span class="nt">roachnet</span><span class="p">:</span>
+        <span class="nt">ipv4_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.20.0.3</span>
 
-<span class="attr">  roach4:</span>
-<span class="attr">    image:</span> <span class="string">cockroachdb/cockroach:v2.0.1</span>
-<span class="attr">    command:</span> <span class="string">start</span> <span class="bullet">--host=172.20.0.4</span> <span class="bullet">--logtostderr=<span class="caps">INFO</span></span> <span class="bullet">--certs-dir=/certs</span> <span class="bullet">--join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
-<span class="attr">    volumes:</span>
-<span class="bullet">    -</span> <span class="string">./roach4:/cockroach/cockroach-data</span>
-<span class="bullet">    -</span> <span class="string">./172_20_0_4.crt:/certs/node.crt</span>
-<span class="bullet">    -</span> <span class="string">./172_20_0_4.pem:/certs/node.key</span>
-<span class="bullet">    -</span> <span class="string">./root.crt:/certs/client.root.crt</span>
-<span class="bullet">    -</span> <span class="string">./root.pem:/certs/client.root.key</span>
-<span class="bullet">    -</span> <span class="string">./generated.crt:/certs/ca.crt</span>
-<span class="bullet">    -</span> <span class="string">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
-<span class="attr">    networks:</span>
-<span class="attr">      roachnet:</span>
-<span class="attr">        ipv4_address:</span> <span class="number">172.20</span><span class="number">.0</span><span class="number">.4</span>
+  <span class="nt">roach4</span><span class="p">:</span>
+    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
+    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.4 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
+    <span class="nt">volumes</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./roach4:/cockroach/cockroach-data</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_4.crt:/certs/node.crt</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_4.pem:/certs/node.key</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
+    <span class="nt">networks</span><span class="p">:</span>
+      <span class="nt">roachnet</span><span class="p">:</span>
+        <span class="nt">ipv4_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.20.0.4</span>
 
-<span class="attr">  roach5:</span>
-<span class="attr">    image:</span> <span class="string">cockroachdb/cockroach:v2.0.1</span>
-<span class="attr">    command:</span> <span class="string">start</span> <span class="bullet">--host=172.20.0.5</span> <span class="bullet">--logtostderr=<span class="caps">INFO</span></span> <span class="bullet">--certs-dir=/certs</span> <span class="bullet">--join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
-<span class="attr">    volumes:</span>
-<span class="bullet">    -</span> <span class="string">./roach5:/cockroach/cockroach-data</span>
-<span class="bullet">    -</span> <span class="string">./172_20_0_5.crt:/certs/node.crt</span>
-<span class="bullet">    -</span> <span class="string">./172_20_0_5.pem:/certs/node.key</span>
-<span class="bullet">    -</span> <span class="string">./root.crt:/certs/client.root.crt</span>
-<span class="bullet">    -</span> <span class="string">./root.pem:/certs/client.root.key</span>
-<span class="bullet">    -</span> <span class="string">./generated.crt:/certs/ca.crt</span>
-<span class="bullet">    -</span> <span class="string">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
-<span class="attr">    networks:</span>
-<span class="attr">      roachnet:</span>
-<span class="attr">        ipv4_address:</span> <span class="number">172.20</span><span class="number">.0</span><span class="number">.5</span>
+  <span class="nt">roach5</span><span class="p">:</span>
+    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
+    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.5 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
+    <span class="nt">volumes</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./roach5:/cockroach/cockroach-data</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_5.crt:/certs/node.crt</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_5.pem:/certs/node.key</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
+    <span class="nt">networks</span><span class="p">:</span>
+      <span class="nt">roachnet</span><span class="p">:</span>
+        <span class="nt">ipv4_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.20.0.5</span>
 </code></pre>
-<p>and you need to run a once-off init phase to start the&nbsp;cluster:</p>
-<pre><code>#!/bin/bash
-docker-compose exec roach1 ./cockroach init --certs-dir=/certs/ --host=172.20.0.1
-</code></pre><h1 id="a-final-note-why-does-makecerts-exist-">A final note - why does makecerts&nbsp;exist?</h1>
-<p>I really want to like <code>cfssl</code>, but it still just seems like too much typing for
-when you’re setting up test scenarios. It’s a production tool for Cloudflare,
-whereas the goal with <code>makecerts</code> was to make it as easy as possible to generate
-<span class="caps">TLS</span> certs for test cases on the desktop and thus force myself to always turn
-TLS on when developing - since obviously I’m always going to be using it in
-production, so I should test with&nbsp;it.</p>
 
-        </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/Prometheus%20reverse_exporter/">Prometheus reverse_exporter</a></h2>
-          <div class="date"><span>29. March 2018</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><p><a href="https://github.com/wrouesnel/reverse_exporter/releases">Find reverse_exporter on Github&nbsp;Releases</a></p>
-<p>In which I talk about something I made to solve a problem I&nbsp;had.</p>
-<h1 id="why">Why</h1>
-<p>I like to make my deployments of things as “appliance-like” as possible. I want
+<p>and you need to run a once-off init phase to start the cluster:</p>
+<pre class="code literal-block"><span></span><code><span class="ch">#!/bin/bash</span>
+docker-compose <span class="nb">exec</span> roach1 ./cockroach init --certs-dir<span class="o">=</span>/certs/ --host<span class="o">=</span><span class="m">172</span>.20.0.1
+</code></pre>
+
+<h2>A final note - why does makecerts exist?</h2>
+<p>I really want to like <code>cfssl</code>, but it still just seems like too much typing for
+when you're setting up test scenarios. It's a production tool for Cloudflare,
+whereas the goal with <code>makecerts</code> was to make it as easy as possible to generate
+TLS certs for test cases on the desktop and thus force myself to always turn
+TLS on when developing - since obviously I'm always going to be using it in
+production, so I should test with it.</p>
+</div>
+                </div>
+            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/prometheus-reverse_exporter/" class="u-url">Prometheus reverse_exporter</a></h1>
+                <div class="metadata">
+                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                        <a href="authors/wrouesnel/">wrouesnel</a>
+                    </span></p>
+            <p class="dateline">
+            <a href="posts/prometheus-reverse_exporter/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-03-29T22:13:00-11:00" itemprop="datePublished" title="2018-03-29 22:13">2018-03-29 22:13</time></a>
+            </p>
+                </div>
+            </header><div class="e-content entry-content">
+                    <div>
+<p><a href="https://github.com/wrouesnel/reverse_exporter/releases">Find reverse_exporter on Github Releases</a></p>
+<p>In which I talk about something I made to solve a problem I had.</p>
+<h2>Why</h2>
+<p>I like to make my deployments of things as "appliance-like" as possible. I want
 them to be plug-and-play, and have sensible defaults - in fact if possible I
-want to make them production-ready “out of the&nbsp;box”.</p>
+want to make them production-ready "out of the box".</p>
 <p>This usually involves setting up VMs or containers which include a number of
-components, or a quorum of either which do the&nbsp;same. </p>
+components, or a quorum of either which do the same. </p>
 <p>To take a real example - I have a PowerDNS authoritative container which uses
 Postgres replication for a backend. These are tightly coupled components - so
-tightly that it’s a lot easier to run them in the same container. PowerDNS is
-nice because it has an <span class="caps">HTTP</span> REST API, which leads to a great turn-key DNS 
+tightly that it's a lot easier to run them in the same container. PowerDNS is
+nice because it has an HTTP REST API, which leads to a great turn-key DNS 
 solution while retaining a lot of power - but it totally lacks an authentication
 layer, so we also need to throw in nginx to provide that (and maybe something
 else for auth later - for now I manage static password lists, but we might do
-LDAP or something else - who&nbsp;knows?)</p>
+LDAP or something else - who knows?)</p>
 <p>Obviously, we want to monitor all these components, and the way I like doing
-that is with&nbsp;Prometheus.</p>
-<h1 id="the-problem">The&nbsp;Problem</h1>
+that is with Prometheus.</p>
+<h2>The Problem</h2>
 <p>Prometheus exporters provide metrics, typically on an http endpoint like <code>/metrics</code>.
-For our appliance like container, ideally, we want to replicate this&nbsp;experience.</p>
+For our appliance like container, ideally, we want to replicate this experience.</p>
 <p>The individual components in it - PowerDNS, Postgres, nginx - all have their
 own exporters which provide specific metrics but also generic information about
 the exporter itself - which means we have conflicting metric names for at least
-the go-runtime specific metrics. And while we’re at it we probably have a bunch
-of random glue-code we’d like to produce some metrics about, plus some <span class="caps">SSL</span>
-certificates we’d like to advertise expiry dates&nbsp;for. </p>
-<p>There’s also a third factor here which is important: we don’t necessarily have
-liberty to just open ports willy-nilly to support this - or we’d like to able
-to avoid it. In the space of corporations with security policies, <span class="caps">HTTP</span>/HTTPS on
+the go-runtime specific metrics. And while we're at it we probably have a bunch
+of random glue-code we'd like to produce some metrics about, plus some SSL
+certificates we'd like to advertise expiry dates for. </p>
+<p>There's also a third factor here which is important: we don't necessarily have
+liberty to just open ports willy-nilly to support this - or we'd like to able
+to avoid it. In the space of corporations with security policies, HTTP/HTTPS on
 port 80 and 443 is easy to justify. But good luck getting another 3 ports opened
-to support monitoring - oh and you’ll have to put SSL and auth on those&nbsp;too.</p>
-
-          <p class="more"><a href="/articles/Prometheus%20reverse_exporter/">more</a></p>
-        </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/S4-i9505%20in%202018/">S4-i9505 in 2018</a></h2>
-          <div class="date"><span>23. January 2018</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><p>Some notes on running a Samsung Galaxy S4 i9505 in Australia in&nbsp;2018</p>
+to support monitoring - oh and you'll have to put SSL and auth on those too.</p>
+<h3>Solution 1 - separate endpoints</h3>
+<p>In our single-container example, we only have the 1 IP for the container - but
+we have nginx so we could just farm the metrics out to separate endpoints. This
+works - it's my original solution. But instead of a nice, by-convention <code>/metrics</code>
+endpoint we now have something like <code>/metrics/psql</code>, <code>/metrics/nginx</code>, <code>/metrics/pdns</code>.</p>
+<p>Which means 3 separate entries in the Prometheus config file to scrape them, and
+breaks nice features like DNS-SD to let us just discover.</p>
+<p>And it feels unclean: the PowerDNS container has a bunch of things in it, but
+they're all providing one-service - they're all one product. Shouldn't their
+metrics all be given as one endpoint?</p>
+<h3>Solution 2 - just use multiple ports</h3>
+<p>This is the Prometheus way. And it would work. But it still has some of the
+drawbacks above - we're still explicitly scraping 3 targets, and we're doing
+some slicing on the Prometheus side to try and group these sensibly - in fact
+we're requiring Prometheus to understand our architecture in detail which
+shouldn't matter.</p>
+<p>i.e. is the DNS container a single job with 3 endpoints in it, multiple jobs
+per container? The latter feels wrong again - if our database goes sideways, its
+not really a database <em>cluster</em> going down - just a single "DNS server" instance.</p>
+<p>Prometheus has the idea of an "instance" tag per scraped endpoint...we'd kind of
+like to support that.</p>
+<h2>Solution 3 - combine the exporters into one endpoint - reverse_exporter</h2>
+<p><code>reverse_exporter</code> is essentially the implementation of how we achieve this.</p>
+<p>The main thing <code>reverse_exporter</code> was designed to do is receive a scrape request,
+proxy it to a bunch of exporters listening on localhost behind it, and then
+decode the metrics they produce so it can rewrite them with unique identifier
+labels before handing them to Prometheus.</p>
+<p><em>Obviously</em> metric relabelling on Prometheus can do something like this, but in
+this case as solution designers/application developers/whatever we are, we want
+to express an opinion on how this container runs, and simplify the overhead to
+supporting it.</p>
+<p>The reason we rewrite the metrics is to allow namespace collisisions - specifically
+we want to ensure we can have multiple golang runtime metrics from Prometheus
+live side-by-side, but still be able to separate them out in our visualiazation
+tooling. We might also want to have multiples of the same application in our
+container (or maybe its something like a Kubernetes pod and we want it to be
+monitored like a single appliance). The point is: from a Prometheus perspective,
+it all comes out looking like metrics from the 1 "instance", and gets metadata
+added by Prometheus as such without any extra effort. And that's powerful - 
+because it means DNS SD or service discovery works again. And it means we can
+start to talk about cluster application policy in a sane way - "we'll monitor
+<code>/metrics</code> on port 80 or 443 for you if it's there.</p>
+<h2>Other Problems (which are solved)</h2>
+<p>There were a few other common dilemmas I wanted a "correct" solution for when
+I started playing around with <code>reverse_exporter</code> which it solves.</p>
+<p>We don't always want to write an entire exporter for Prometheus - sometimes we
+just have something tiny and fairly obvious we'd like to scrape with a text
+format script. When using the Prometheus <code>node_exporter</code> you can do this with
+the text collector, which will read <code>*.prom</code> files on every scrape - but you
+need to setup cron to periodically update these - which can be a pain, and gives
+the metrics lag.</p>
+<p>What if we want to have an on-demand script?</p>
+<p><code>reverse_exporter</code> allows this - you can specify a bash script, even allow
+arguments to be passed via URL params, and it'll execute and collect any
+metrics you write to stdout.</p>
+<p>But it also protects you from the danger of naive approach here: a possible denial
+of service from an overzealous or possibly malicious user sending a huge number
+of requests to your script. If we just spawned a process each time, we could
+quickly exhaust container or system resources. <code>reverse_exporter</code> avoids this
+problem by waterfalling the results of each execution - since Prometheus regards
+a scrape as a time-slice of state at the moment it gets results, we can protect
+the system by queuing up inbound scrapers while the script executes, and then
+sending them all the same results (provided they're happy with the wait time - 
+which Prometheus is good about).</p>
+<p>We avoid thrashing the system resources, and we can confidently let users and
+admins reload the metrics page without bringing down our container or our host.</p>
+<h2>Conclusion</h2>
+<p>This post feels a bit marketing like to me, but I am pretty excited that for me
+at least <code>reverse_exporter</code> works well.</p>
+<p>Hopefully, it proves helpful to other Prometheus users as well!</p>
+</div>
+                </div>
+            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/s4-i9505-in-2018/" class="u-url">S4-i9505 in 2018</a></h1>
+                <div class="metadata">
+                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                        <a href="authors/wrouesnel/">wrouesnel</a>
+                    </span></p>
+            <p class="dateline">
+            <a href="posts/s4-i9505-in-2018/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-01-23T23:20:00-11:00" itemprop="datePublished" title="2018-01-23 23:20">2018-01-23 23:20</time></a>
+            </p>
+                </div>
+            </header><div class="e-content entry-content">
+                    <div>
+<p>Some notes on running a Samsung Galaxy S4 i9505 in Australia in 2018</p>
 <p>My first high end phone, still perfectly capable of everything I need from a
-smart phone and now dirt cheap on ebay so I’m basically going to keep buying
-them till there’s no more to be had (or someone releases a Spectre-immune <span class="caps">CPU</span>
-phone I guess&nbsp;now).</p>
-<p>Baseband: <span class="caps">XXUGNG8</span>
+smart phone and now dirt cheap on ebay so I'm basically going to keep buying
+them till there's no more to be had (or someone releases a Spectre-immune CPU
+phone I guess now).</p>
+<p>Baseband: XXUGNG8
 I upgraded the baseband a bunch of times including to some alleged Telstra OTA
-packages, and found I lost wifi. The actual modem and APN-HLOS don’t seem to
-matter much but…the XXUGNG8 bootloader and related files are vitally
-important to getting sound to&nbsp;work.</p>
-<p><span class="caps">OS</span>: Lineage OS
-Loved Cyanogenmod, like seeing it continued. There’s a patch to the SELinux
+packages, and found I lost wifi. The actual modem and APN-HLOS don't seem to
+matter much but...the XXUGNG8 bootloader and related files are vitally
+important to getting sound to work.</p>
+<p>OS: Lineage OS
+Loved Cyanogenmod, like seeing it continued. There's a patch to the SELinux
 config needed on newer android to allow the proximity sensor to calibrate
 properly - the symptom is an apparent freeze when making/receiving calls and
 its to do with SELinux only allowing the phone to use the default prox-sensor
 thresholds - which if your phone meets them, great - if not - then it will
-appear&nbsp;broken.</p>
-<p>I’m hoping to get this patched in the upstream <a href="https://review.lineageos.org/#/c/201533/">soon</a>.</p>
-
-        </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/Structuring%20my%20Go%20Projects/">Structuring my Go projects</a></h2>
-          <div class="date"><span>21. December 2017</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><p>Recently I’ve been maintaining a Github repository to serve as a generic
-template for my Golang projects, and its been working rather well for&nbsp;me.</p>
-<p>The repository is here: <a href="https://github.com/wrouesnel/self-contained-go-project">Self-contained Go&nbsp;Project</a></p>
+appear broken.</p>
+<p>I'm hoping to get this patched in the upstream <a href="https://review.lineageos.org/#/c/201533/">soon</a>.</p>
+</div>
+                </div>
+            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/structuring-my-go-projects/" class="u-url">Structuring my Go projects</a></h1>
+                <div class="metadata">
+                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                        <a href="authors/wrouesnel/">wrouesnel</a>
+                    </span></p>
+            <p class="dateline">
+            <a href="posts/structuring-my-go-projects/" rel="bookmark">
+            <time class="published dt-published" datetime="2017-12-21T21:52:00-11:00" itemprop="datePublished" title="2017-12-21 21:52">2017-12-21 21:52</time></a>
+            </p>
+                </div>
+            </header><div class="e-content entry-content">
+                    <div>
+<p>Recently I've been maintaining a Github repository to serve as a generic
+template for my Golang projects, and its been working rather well for me.</p>
+<p>The repository is here: <a href="https://github.com/wrouesnel/self-contained-go-project">Self-contained Go Project</a></p>
 <p>The basic idea is that using this template, you can setup a Go project with
 vendored dependencies not just for the main project but also for every tool
 used in building and linting it (with the exception of <code>make</code>, <code>git</code> and a 
-working Golang&nbsp;install). </p>
-<pre><code class="lang-bash">go get &lt;my project&gt;
-<span class="built_in">cd</span> <span class="variable">$<span class="caps">GOPATH</span></span>/src/&lt;my project&gt;
+working Golang install). </p>
+<pre class="code literal-block"><span></span><code>go get &lt;my project&gt;
+<span class="nb">cd</span> <span class="nv">$GOPATH</span>/src/&lt;my project&gt;
 make
 </code></pre>
-<p>does a production&nbsp;build.</p>
-<h1 id="how-to-use-it">How to Use&nbsp;It</h1>
+
+<p>does a production build.</p>
+<h2>How to Use It</h2>
 <p>Out of the box (i.e. <code>git clone https://github.com/wrouesnel/self-contained-go-project.git</code>)
-on a Linux machine it should be all setup to go. I’ve made some effort to try
-and remove Linux specific things from it, but since I don’t run Mac <span class="caps">OS</span> or
-Windows for Go development it’s probably not working too well&nbsp;there.</p>
-<p>Essentially, it’ll build multi-platform, <span class="caps">CGO</span>-less binaries for any <code>main</code>
+on a Linux machine it should be all setup to go. I've made some effort to try
+and remove Linux specific things from it, but since I don't run Mac OS or
+Windows for Go development it's probably not working too well there.</p>
+<p>Essentially, it'll build multi-platform, CGO-less binaries for any <code>main</code>
 package you place in a folder underneath the <code>cmd</code> directory. Running <code>make binary</code>
 will build all current commands for your current platform and symlink them into
 the root folder, while running <code>make release</code> will build all binaries and then
 create tarballs with the name and version in the <code>release</code> directory.</p>
-<p>It also includes bevy of other <span class="caps">CI</span>-friendly commands - namely <code>make style</code> which
+<p>It also includes bevy of other CI-friendly commands - namely <code>make style</code> which
 checks for <code>gofmt</code> and <code>goimports</code> formatting and <code>make lint</code> which runs 
-<a href="https://github.com/alecthomas/gometalinter">gometalinter</a> against the entire&nbsp;project.</p>
-<h1 id="philosophy">Philosophy</h1>
+<a href="https://github.com/alecthomas/gometalinter">gometalinter</a> against the entire
+project.</p>
+<h2>Philosophy</h2>
 <p>Just looking at the commands, the main thing accomplished is a lot of use of
-<code>make</code>. It’s practically used for ergonomics more then utility to some level
-since <code>make</code> is a familiar “build whatever this is” command in the Unix&nbsp;world.</p>
+<code>make</code>. It's practically used for ergonomics more then utility to some level
+since <code>make</code> is a familiar "build whatever this is" command in the Unix world.</p>
 <p>But, importantly, <code>make</code> is used <em>correctly</em> - build dependencies are expressed
-and managed in a form it understands so it only rebuilds as&nbsp;necessary.</p>
+and managed in a form it understands so it only rebuilds as necessary.</p>
 <p>But there is more important element, and that is not just that there is a 
 Makefile but that the repository for the project, through <code>govendor</code>ing includes
 not just the code but also the linting and checking tools needed to build it,
-and a mechanism to update them&nbsp;all.</p>
+and a mechanism to update them all.</p>
 <p>Under the <code>tools</code> directory we have a secondary <code>Makefile</code> which is called from
 the top-level and is reposible for managing the tools. By running <code>make update</code>
 here we can <code>go get</code> a new version of <code>gometalinter</code>, extract the list of tools
 it runs, then automatically have them updated and installed inside the source
-directory and made available to the top level <code>Makefile</code> to use to run <span class="caps">CI</span>&nbsp;tasks.</p>
+directory and made available to the top level <code>Makefile</code> to use to run CI tasks.</p>
 <p>This combines to make project management <em>extremely</em> ergonomic in my opinion,
 and avoids dragging a heavier tool like <code>Docker</code> into the mix (which often means
-some uncontrolled external&nbsp;dependencies).</p>
+some uncontrolled external dependencies).</p>
 <p>Basically: you check in everything your project needs to be built and run and
 tested into the one Git repository, because storage is cheap but your time is
-not and external dependencies can’t be trusted to always&nbsp;exist.</p>
-<h1 id="conclusion">Conclusion</h1>
-<p>It’s not the be all and end all - in build tooling there never is one, but I’m
-thusfar really happy with how this basic structure has turned out as I’ve
-evolved it and it’s proven relatively easy to extend when I need to (i.e.
+not and external dependencies can't be trusted to always exist.</p>
+<h2>Conclusion</h2>
+<p>It's not the be all and end all - in build tooling there never is one, but I'm
+thusfar really happy with how this basic structure has turned out as I've
+evolved it and it's proven relatively easy to extend when I need to (i.e.
 adding more testing levels, building web assets as well with npm and including
-them in the go-binary&nbsp;etc.)</p>
-
-        </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/Totally%20static%20Go%20builds/">Totally static Go builds</a></h2>
-          <div class="date"><span>12. March 2016</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><p>I wouldn’t make a post on my blog just so I don’t have to keep googling something
-would I? Of course I would. It’s like…95% of the reason I keep&nbsp;this.</p>
+them in the go-binary etc.)</p>
+</div>
+                </div>
+            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/totally-static-go-builds/" class="u-url">Totally static Go builds</a></h1>
+                <div class="metadata">
+                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                        <a href="authors/wrouesnel/">wrouesnel</a>
+                    </span></p>
+            <p class="dateline">
+            <a href="posts/totally-static-go-builds/" rel="bookmark">
+            <time class="published dt-published" datetime="2016-03-12T22:23:00-11:00" itemprop="datePublished" title="2016-03-12 22:23">2016-03-12 22:23</time></a>
+            </p>
+                </div>
+            </header><div class="e-content entry-content">
+                    <div>
+<p>I wouldn't make a post on my blog just so I don't have to keep googling something
+would I? Of course I would. It's like...95% of the reason I keep this.</p>
 <p>Totally static go builds - these are <em>great</em> for running in Docker containers.
-The important part is the command line to create them - it’s varied a bit, but
-the most thorough I’ve found is this (see this 
+The important part is the command line to create them - it's varied a bit, but
+the most thorough I've found is this (see this 
 <a href="https://github.com/golang/go/issues/9344">Github Issue</a>):</p>
-<pre><code class="lang-bash">CGO_ENABLED=0 GOOS=linux go build -a -ldflags <span class="string">'-extldflags "-static"'</span> .
+<pre class="code literal-block"><span></span><code><span class="nv">CGO_ENABLED</span><span class="o">=</span><span class="m">0</span> <span class="nv">GOOS</span><span class="o">=</span>linux go build -a -ldflags <span class="s1">'-extldflags "-static"'</span> .
 </code></pre>
-<p>This will create an “as static as possible” binary - beware linking in things
+
+<p>This will create an "as static as possible" binary - beware linking in things
 which want glibc, since pluggable name resolvers will be a problem (which you
-can workaround in Docker quite well, but that’s another&nbsp;question).</p>
-
-        </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/Quickly%20configuring%20modelines/">Quickly configuring modelines?</a></h2>
-          <div class="date"><span>12. March 2016</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><h1 id="quickly-configuring-modelines-">Quickly configuring&nbsp;modelines?</h1>
+can workaround in Docker quite well, but that's another question).</p>
+</div>
+                </div>
+            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/quickly-configuring-modelines/" class="u-url">Quickly configuring modelines?</a></h1>
+                <div class="metadata">
+                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                        <a href="authors/wrouesnel/">wrouesnel</a>
+                    </span></p>
+            <p class="dateline">
+            <a href="posts/quickly-configuring-modelines/" rel="bookmark">
+            <time class="published dt-published" datetime="2016-03-12T22:22:00-11:00" itemprop="datePublished" title="2016-03-12 22:22">2016-03-12 22:22</time></a>
+            </p>
+                </div>
+            </header><div class="e-content entry-content">
+                    <div>
+<h2>Quickly configuring modelines?</h2>
 <p>Something hopefully no one should ever have to do in the far distant future,
-but since I insist on using old-hardware till it drops, it still comes&nbsp;up.</p>
-<p>Working from an <span class="caps">SSH</span> console on an XBMC box, I was trying to tune in an elusive
-1366x768 modeline for an old plasma&nbsp;TV.</p>
+but since I insist on using old-hardware till it drops, it still comes up.</p>
+<p>Working from an SSH console on an XBMC box, I was trying to tune in an elusive
+1366x768 modeline for an old plasma TV.</p>
 <p>The best way to do it is with xrandr these days in a <code>~/.xprofile</code> script which
-is loaded on boot&nbsp;up.</p>
-<p>To quickly go through modelines I used the following shell&nbsp;script:</p>
-<pre><code>#!/bin/bash
-xrandr -d :0 --output VGA-0 --mode &quot;1024x768&quot;
-xrandr -d :0 --delmode VGA-0 &quot;1360x768&quot;
-xrandr -d :0 --rmmode &quot;1360x768&quot;
-xrandr -d :0 --newmode &quot;1360x768&quot; $@
-xrandr -d :0 --addmode VGA-0 &quot;1360x768&quot;
-xrandr -d :0 --output VGA-0 --mode &quot;1360x768&quot;
-</code></pre><p>Simply passing in a modeline when running it causes that modeline to be set and
-applied to the relevant output (<span class="caps">VGA</span>-0) in my&nbsp;case.</p>
-<p>i.e. <code>./tryout 84.750 1366 1480 1568 1800 768 769 776 800 -hsync +vsync</code></p>
-
-        </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/Installing%20the%20latest%20Docker%20release/">Installing the latest docker release</a></h2>
-          <div class="date"><span>12. September 2015</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><p>Somehow the installation instructions for Docker never work for me and the
-website is <em>surprisingly</em> cagey about the manual&nbsp;process.</p>
-<p>It works perfectly well if you just grab the relevant bits of that script and
-run them manually, but usually fails if you let it be a bit too&nbsp;magical.</p>
-<p>To be fair, I probably have issues due to the mismatch of <span class="caps">LSB</span> release since I
-run Mint. Still&nbsp;though.</p>
-<p>So here’s the commands for&nbsp;Ubuntu:</p>
-<pre><code>$ apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
-$ echo deb https://apt.dockerproject.org/repo ubuntu-vivid main &gt; /etc/apt/sources.list.d/docker.list
-$ apt-get update &amp;&amp; apt-get install -y docker-engine
+is loaded on boot up.</p>
+<p>To quickly go through modelines I used the following shell script:</p>
+<pre class="code literal-block"><span></span><code><span class="ch">#!/bin/bash</span>
+xrandr -d :0 --output VGA-0 --mode <span class="s2">"1024x768"</span>
+xrandr -d :0 --delmode VGA-0 <span class="s2">"1360x768"</span>
+xrandr -d :0 --rmmode <span class="s2">"1360x768"</span>
+xrandr -d :0 --newmode <span class="s2">"1360x768"</span> <span class="nv">$@</span>
+xrandr -d :0 --addmode VGA-0 <span class="s2">"1360x768"</span>
+xrandr -d :0 --output VGA-0 --mode <span class="s2">"1360x768"</span>
 </code></pre>
-        </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/Using%20the%20Go%20playground%20locally/">Using the Go playground locally</a></h2>
-          <div class="date"><span>09. August 2015</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><h1 id="summary">Summary</h1>
+
+<p>Simply passing in a modeline when running it causes that modeline to be set and
+applied to the relevant output (VGA-0) in my case.</p>
+<p>i.e. <code>./tryout 84.750 1366 1480 1568 1800 768 769 776 800 -hsync +vsync</code></p>
+</div>
+                </div>
+            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/installing-the-latest-docker-release/" class="u-url">Installing the latest docker release</a></h1>
+                <div class="metadata">
+                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                        <a href="authors/wrouesnel/">wrouesnel</a>
+                    </span></p>
+            <p class="dateline">
+            <a href="posts/installing-the-latest-docker-release/" rel="bookmark">
+            <time class="published dt-published" datetime="2015-09-12T03:54:00-10:00" itemprop="datePublished" title="2015-09-12 03:54">2015-09-12 03:54</time></a>
+            </p>
+                </div>
+            </header><div class="e-content entry-content">
+                    <div>
+<p>Somehow the installation instructions for Docker never work for me and the
+website is <em>surprisingly</em> cagey about the manual process.</p>
+<p>It works perfectly well if you just grab the relevant bits of that script and
+run them manually, but usually fails if you let it be a bit too magical.</p>
+<p>To be fair, I probably have issues due to the mismatch of LSB release since I
+run Mint. Still though.</p>
+<p>So here's the commands for Ubuntu:</p>
+<pre class="code literal-block"><span></span><code>$ apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+$ <span class="nb">echo</span> deb https://apt.dockerproject.org/repo ubuntu-vivid main &gt; /etc/apt/sources.list.d/docker.list
+$ apt-get update <span class="o">&amp;&amp;</span> apt-get install -y docker-engine
+</code></pre>
+</div>
+                </div>
+            </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/using-the-go-playground-locally/" class="u-url">Using the Go playground locally</a></h1>
+                <div class="metadata">
+                    <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                        <a href="authors/wrouesnel/">wrouesnel</a>
+                    </span></p>
+            <p class="dateline">
+            <a href="posts/using-the-go-playground-locally/" rel="bookmark">
+            <time class="published dt-published" datetime="2015-08-09T03:21:00-10:00" itemprop="datePublished" title="2015-08-09 03:21">2015-08-09 03:21</time></a>
+            </p>
+                </div>
+            </header><div class="e-content entry-content">
+                    <div>
+<h2>Summary</h2>
 <p>I modified Rocky Bernsteins go-play to compile with go-assetfs and run from a
-single executable. <a href="https://github.com/wrouesnel/go-play">Get it&nbsp;here!</a></p>
-<h1 id="why-and-how">Why and&nbsp;How</h1>
+single executable. <a href="https://github.com/wrouesnel/go-play">Get it here!</a></p>
+<h2>Why and How</h2>
 <p>iPython is one of the things I love best about Python. In a dynamically typed
 language its a huge benefit to be able to quickly and easily paste in chunks of
 code and investigate what the actual output would be or what an error situation
-would look&nbsp;like.</p>
+would look like.</p>
 <p><a href="http://golang.org">Go</a> is not dynamically typed, but many of the same issues
 tend to apply - when errors rise they can be tricky to introspect without diving
-through the code, and sometimes the syntax or results of a function call aren’t&nbsp;obvious.</p>
+through the code, and sometimes the syntax or results of a function call aren't
+obvious.</p>
 <p>As a learning tool, Go provides the <a href="http://play.golang.org">Go Playground</a> -
 a web service which compiles and runs snippets of Go code within a sandbox,
 which has proven a huge boon to the community for sharing and testing solutions
-(its very popular on Stack&nbsp;Overflow).</p>
+(its very popular on Stack Overflow).</p>
 <p>The public Go playground is necessariy limited - and it would be nice to be able
-to use Go in the same way clientside, or just without internet&nbsp;access.</p>
+to use Go in the same way clientside, or just without internet access.</p>
 <p>Fortunately Rocky Bernstein pulled together an unrestricted copy of the Go
-play ground which runs as a client-side <span class="caps">HTML5</span> app. Unlike the web playground,
+play ground which runs as a client-side HTML5 app. Unlike the web playground,
 this allows unrestricted Go execution on your PC and full testing of things as
 they would work locally. The Github export is found <a href="https://github.com/rocky/go-play">here</a>.</p>
 <p>The one problem I had with this was that this version still exposed dependencies
 on the location of source files outside the executable - which for a tiny tool
 was kind of annoying. Fortunately this has been solved in Go for a long time -
 and a little fun with <a href="https://github.com/elazarl/go-bindata-assetfs">go-bindata-assetfs</a>
-yielded my own version which once built runs completely&nbsp;locally.</p>
-<p><a href="http://github.com/wrouesnel/go-play">Get it here</a>. It’s fully go-gettable too
-so <code>go get github.com/wrouesnel/go-play</code> will work&nbsp;too.</p>
+yielded my own version which once built runs completely locally.</p>
+<p><a href="http://github.com/wrouesnel/go-play">Get it here</a>. It's fully go-gettable too
+so <code>go get github.com/wrouesnel/go-play</code> will work too.</p>
+</div>
+                </div>
+            </article>
+</div>
+    
+        <ul class="pager postindexpager clearfix">
+<li class="next"><a href="index-1.html" rel="next">Older posts</a></li>
+        </ul>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML" integrity="sha384-3lJUsx1TJHt7BA4udB5KPnDrlkO8T6J6v/op7ui0BbCjvZ9WqV4Xm6DTP6kQ/iBH" crossorigin="anonymous"></script><script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$latex ','$'], ['\\(','\\)']]}});
+        </script><!--End of body content--><footer id="footer">
+            Contents © 2021         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+            
+        </footer>
+</div>
+</div>
 
-        </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/SSH%20port%20forwarding%20when%20AllowTCPForwarding%20is%20disabled/">SSH port forwarding when port fowarding is disabled with socat and nc</a></h2>
-          <div class="date"><span>07. June 2015</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><h1 id="the-problem">The&nbsp;Problem</h1>
-<p>You have a server you can <span class="caps">SSH</span> to. For whatever reason AllowTCPPortForwarding
-is disabled. You need to forward a port from it to your local&nbsp;machine.</p>
-<p>If it’s any sort of standard machine, then it probably has <code>netcat</code>. It’s less
-likely to have the far more powerful <code>socat</code> - which we’ll only need&nbsp;locally.</p>
-<p>This tiny tip servers two lessons: (1) disabling <span class="caps">SSH</span> port forwarding is not a
-serious security measure, and far more of an anoyance. And (2) since it’s pretty
-likely you still need to do whatever job you need to do, it would be nice to
-have a 1-liner which will just forward the port for&nbsp;you</p>
-<h1 id="the-solution">The&nbsp;Solution</h1>
-<pre><code>socat TCP-LISTEN:&lt;local port&gt;,reuseaddr,fork &quot;EXEC:ssh &lt;server&gt; nc localhost &lt;remote port&gt;&quot;
-</code></pre><p>It’s kind of obvious if you know socat well, but half the battle is simply
-knowing it’s&nbsp;possible.</p>
-<p>Obviously you can change localhost to also be a remote server. And
-this is really handy if you want to do debugging since socat can echo all
-data to the console for you if you&nbsp;want.</p>
-<h1 id="the-lesson">The&nbsp;Lesson</h1>
-<p>As I said at the start: if you have standard tools installed, or if your users
-can upload new tools (which, with shell access they can), and if you don’t have
-firewall rules or cgroups limitations on those accounts, then stuff like
-disabled port forwards <em>is not a security measure</em>.</p>
 
-        </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/bup%20-%20towards%20the%20perfect%20backup/">bup - towards the perfect backup</a></h2>
-          <div class="date"><span>22. June 2014</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><p>Since I discovered it, I’ve been in love with the concept behind <a href="https://github.com/bup/bup">bup</a>.</p>
-<p>bup appeals to my sense of efficiency in taking backups: backups should backup
-the absolute minimum amount of data so I can have the most versions, and then
-that frees me to use whatever level of redundancy I deem appropriate for my
-backup&nbsp;media.</p>
-<p>But more then that, the underlying technology of bup is ripe with possibility:
-the basic premise of a backup tool gives rise to the possibility of a sync tool,
-a deduplicated home directory tool, distributed repositories, archives and&nbsp;more.</p>
-<h1 id="how-it-works">how it&nbsp;works</h1>
-<p>A more complete explanation can be found on the main GitHub repository, but
-essentially bup applies rsync’s rolling-checksum (literally, the same algorithm)
-to determine file-differences, and then only backs up the differences - somewhat
-like&nbsp;rsnapshot.</p>
-<p>Unlike rsnapshot however, bup then applies deduplication of the chunks produced
-this way using <span class="caps">SHA1</span> hashes, and stores the results in the git-packfile&nbsp;format.</p>
-<p>This is both very fast (rsnapshot, conversely, is quite slow) and very&nbsp;redundant</p>
-<ul>
-<li>the Git tooling is able to read and understand a bup-repository as just a
-Git repository with a specific commit structure (you can run <code>gitk -a</code> in a
-<code>.bup</code> directory to inspect&nbsp;it).</li>
-</ul>
-<h1 id="why-its-space-efficient">why its space&nbsp;efficient</h1>
-<p>bup’s archive and rolling-checksum format mean it is very space efficient. bup
-can correctly deduplicate data that undergoes insertions, deletions, shifts
-and copies. bup deduplicates across your entire backup set, meaning the same
-file uploaded 50 times is only stored once - in fact it will only be transferred
-across the network&nbsp;once.</p>
-<p>For comparison I recently moved 180 gb of <span class="caps">ZFS</span> snapshots of the same dataset
-undergoing various daily changes into a bup archive, and successfully compacted
-it down to 50 gb. I suspect I could have gotten it smaller if I’d unpacked some
-of the archive files that have been created in that backup&nbsp;set.</p>
-<p>That is a dataset which is already deduplicated via copy-on-write semantics
-(it was not using <span class="caps">ZFS</span> deduplication because you should basically never use ZFS&nbsp;deduplication).</p>
-<h1 id="why-its-fast">why its&nbsp;fast</h1>
-<p>Git is well known as being bad at handling large binary files - it was designed
-to handle patches of source code, and makes assumptions to that effect. <code>bup</code>
-steps around this problem because it only used the Git packfile and index
-format to store data: where Git is slow, bup implements its own packfile writers
-index readers to make looking up data in Git structures&nbsp;fast.</p>
-<p>bup also uses some other tricks to do this: it will combine indexes into <code>midx</code>
-files to speed up lookups, and builds <a href="http://en.wikipedia.org/wiki/Bloom_filter">bloom filters</a> to add data (a bloom filter is a
-fast data structure based on hashes which tells you something is either
-‘probably in the data set’ or <em>definitely</em>&nbsp;not).</p>
-<h1 id="using-bup-for-windows-backups">using bup for Windows&nbsp;backups</h1>
-<p>bup is a Unix/Linux oriented tool, but in practice I’ve applied it most usefully
-at the moment to some Windows&nbsp;servers.</p>
-<p>Running bup under <a href="https://www.cygwin.com/">cygwin</a> on Windows, and is far superior to the built in Windows backup system for file-based backups. It’s best to combine it with
-the <a href="http://vscsc.sourceforge.net/">vscsc</a> tool which allows using 1-time
-snapshots to save the backup and avoid inconsistent&nbsp;state.</p>
-<p>You can see a <a href="https://gist.github.com/wrouesnel/8f0c681e4bf598176203">link to a Gist here</a> of my current favorite 
-script for this type of thing - this bash script needs to be invoked from a 
-scheduled task which runs a <a href="https://gist.github.com/wrouesnel/f5e5cc67d33db1cefdd4">batch file like this</a>.</p>
-<p>If you want to use this script on Cygwin then you need to install the <code>mail</code>
-utility for sending email, as well as rsync and&nbsp;bup.</p>
-<p>This script is reasonably complicated but it is designed to be robust against
-failures in a sensible way - and if we somehow fail running bup, to fallback to
-making tar archives - giving us an opportunity to fix a broken backup&nbsp;set.</p>
-<p>This script will work for backing up to your own remote server <em>today</em>. But, it
-was developed to work around limitations which can be fixed - and which I have
-fixed - and so the bup of tomorrow will not have&nbsp;them.</p>
-<h1 id="towards-the-perfect-backup">towards the perfect&nbsp;backup</h1>
-<p>The script above was developed for a client, and the rsync-first stage was
-designed to ensure that the most recent backup would always be directly readable
-from a Windows Samba share and not require using the command&nbsp;line.</p>
-<p>It was also designed to work around a flaw with bup’s indexing step which makes
-it difficult to use with variable paths as produced by the <code>vscsc</code> tool in cygwin.
-Although bup will work just fine, it will insist on trying to hash the entire
-backup set every time - which is slow. This can be worked around by symlinking
-the backup path in cygwin beforehand, but since we needed a readable backup
-set it was as quick to use rsync in this&nbsp;instance.</p>
-<p>But it doesn’t have to be this way. I’ve submitted several patches
-against bup which are also available in my <a href="https://github.com/wrouesnel/bup">personal development repository of bup</a> on&nbsp;GitHub.</p>
-<p>The indexing problem is fixed via <code>index-grafts</code>: modifying the bup-index to
-support representing the logical structure as it is intended to be in the bup
-repository, rather then the literal disk path structure. This allows the index
-to work as intended without any games on the filesystem, hashing only modified
-or updated&nbsp;files.</p>
-<p>The need for a directly accessible version of the backup is solved via a few
-other patches. We can modify the bup virtual-filesystems layer to support a
-dynamic view of the bup repository fairly easily, and add WebDAV support to
-the bup-web command (the <code>dynamic-vfs</code> and <code>bup-webdav</code> branches).</p>
-<p>With these changes, a bup repository can now be directly mounted as a Windows
-mapped network drive via explorers web client, and files opened and copied
-directly from the share. Any version of a backup set is then trivially 
-accessible and importantly we can simply start <code>bup-web</code> as a cygwin service
-and leave it&nbsp;running.</p>
-<p>Hopefully these patches will be incorporated into mainline bup soon (they are
-awaiting&nbsp;review).</p>
-<h1 id="so-should-i-use-it-">so should I use&nbsp;it?</h1>
-<p>Even with the things I’ve had to fix, the answer is <em>absolutely</em>. bup is by far
-the best backup tool I’ve encountered lately. For a basic Linux system it will
-work great, for manual backups it will work great, and with a little scripting
-it will work <em>great</em> for automatic backups under Windows and&nbsp;Linux.</p>
-<p>The brave can try out the cutting-edge branch on my GitHub account to test out
-the fixes in this blog-post, and if you do then posting about them to
-[<a href="mailto:bup-list@googlegroups.com">bup-list@googlegroups.com</a>[(<a href="https://groups.google.com/forum/#!forum/bup-list">https://groups.google.com/forum/#!forum/bup-list</a>) with any problems or successes or code reviews would
-help a&nbsp;lot.</p>
-
-        </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/Uninstalling%20r8168-dkms/">Quick note - uninstalling r8618-dkms</a></h2>
-          <div class="date"><span>30. January 2014</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><p>This is a quick note on something I encountered while trying to work out why my Realtek NICs are so finicky about connecting and staying connected at gigabit speeds when running&nbsp;Linux.</p>
-<p>The current hypothesis is that the <code>r8168</code> driver isn’t helping very much. So I uninstalled it - and ran into two&nbsp;problems.</p>
-<p>##Firstly
-…you need to uninstall it on Ubuntu/Debian with <code>apt-get remove --purge r8168-dkms</code> or the config files (and it’s <em>all</em> config files) won’t be properly removed, and the module will be left&nbsp;installed.</p>
-<p>##Secondly
-…you really need to make sure you’ve removed all the <code>blacklist r8169</code> entries. They can be left behind if you don’t purge configuration files, but I found I’d also left a few hanging around in the <code>/etc/modprobe.d</code> directory from earlier efforts. So a quick <code>fgrep r8169 *</code> would’ve saved me a lot of trouble and confusion as to why r8169 wasn’t being automatically&nbsp;detected.</p>
-<p>In my case it turned out I’d put a very official looking <code>blacklist-networking.conf</code> file in my modprobe.d directory. On both my&nbsp;machines.</p>
-
-          <p class="more"><a href="/articles/Uninstalling%20r8168-dkms/">more</a></p>
-        </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/Running%20Gnome%20Tracker%20on%20a%20Server/">Running Gnome Tracker on a Server</a></h2>
-          <div class="date"><span>25. January 2014</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><p>In a passing comment it was suggested to me that it would be really great if the home fileserver offered some type of web-interface to find things. We’ve been aggregating downloaded files there for a while, and there’s been attempts made at categorization but this all really falls apart when you wonder “what does ‘productivity’ mean? And does this go under ‘Linux’ or some other&nbsp;thing?”</p>
-<p>Since lately I’ve been wanting to get desktop search working on my actual desktops, via Gnome’s Tracker project and it’s tie-in to Nautilus and Nemo (possibly the subject of a future blog), it seemed logical to run it on the fileserver as an indexer for our shared directories - and then to tie some kind of web ui to&nbsp;that.</p>
-<p>Unfortunately, Tracker is very desktop orientated - there’s no easy daemon mode for running it on a headless system out-of-the-box, but with a little tweaking you <em>can</em> make it work for you quite&nbsp;easily.</p>
-<h1 id="how-to">How&nbsp;to</h1>
-<p>On my system I keep Tracker running as it’s own user under a system account. On Ubuntu you need to create this like so (using a root shell - <code>sudo -i</code>):</p>
-<pre><code class="lang-bash">$ adduser --system --shell=/bin/<span class="literal">false</span> --disabled-login --home=/var/lib/tracker tracker
-$ adduser tracker root
-</code></pre>
-<p>Since tracker uses GSettings for it’s configuration these days, you need to su into the user you just created to actually configure the directories which should be indexed. Since this is a server, you probably just have a list of them so set it somewhat like the example below. Note: you must run the dbus-launch commands in order to have a viable session bus for dconf to work with. This will also be a requirement of Tracker later&nbsp;on.</p>
-<pre><code class="lang-bash">$ su --shell /bin/bash
-$ <span class="built_in">eval</span> `dbus-launch --sh-syntax`
-$ dconf write org/freedesktop/tracker/miner/files/index-recursive-directories <span class="string">"['/path/to/my/dir/1', '/path/to/my/dir/2', '/etc/etc']"</span>
-$ <span class="built_in">kill</span> <span class="variable">$DBUS_SESSION_BUS_PID</span>
-$ <span class="built_in">exit</span>
-</code></pre>
-<p>Your Tracker user is now ready at this point. To start and stop the service, we use an <a href="/articles/Running%20Gnome%20Tracker%20on%20a%20Server/tracker.conf">Upstart script like the one below</a>:</p>
-<pre><code class="lang-sh">description <span class="string">"gnome tracker system startup script"</span>
-author <span class="string">"wrouesnel"</span>
-
-start on (<span class="built_in">local</span>-filesystems and net-device-up)
-stop on shutdown
-
-respawn
-respawn <span class="built_in">limit</span> 5 60
-
-setuid tracker
-
-script
-    <span class="built_in">chdir</span> /var/lib/tracker
-    <span class="built_in">eval</span> `dbus-launch --sh-syntax`
-    <span class="built_in">echo</span> <span class="variable">$DBUS_SESSION_BUS_PID</span> &gt; .tracker-sessionbus.pid
-    <span class="built_in">echo</span> <span class="variable">$DBUS_SESSION_BUS_ADDRESS</span> &gt; .tracker-sessionbus
-    /usr/lib/tracker/tracker-store
-end script
-
-post-start script
-    <span class="built_in">chdir</span> /var/lib/tracker
-    <span class="keyword">while</span> [ ! -e .tracker-sessionbus ]; <span class="keyword">do</span> sleep 1; <span class="keyword">done</span>
-    DBUS_SESSION_BUS_ADDRESS=$(cat .tracker-sessionbus) /usr/lib/tracker/tracker-miner-fs <span class="amp">&amp;</span>
-end script
-
-post-stop script 
-    <span class="comment"># We need to kill off the <span class="caps">DBUS</span> session here</span>
-    <span class="built_in">chdir</span> /var/lib/tracker
-    <span class="built_in">kill</span> $(cat .tracker-sessionbus.pid)
-    rm .tracker-sessionbus.pid
-    rm .tracker-sessionbus
-end script
-</code></pre>
-<p>Some things to focus on about the script: we launch and save the DBus session parameters. We’ll need these to reconnect to the session to run tracker related commands. The post-stop stanza is to kill off the DBus&nbsp;session.</p>
-<p>You do need to explicitely launch <code>tracker-miner-fs</code> in order for file indexing to work, but you don’t need to kill it explicitely - it will be automatically shutdown when Upstart kills <code>tracker-store</code>.</p>
-<p>Also note that since tracker runs as the user <code>tracker</code> it can only index files and directories which it is allowed to traverse, so check your&nbsp;permissions.</p>
-<p>You can now start Tracker as your user with <code>start tracker</code>. And stop it with <code>stop tracker</code>. Simple and&nbsp;clean.</p>
-<h1 id="using-this">Using&nbsp;this</h1>
-<p>My plan for this setup is to throw together a Node.js app on my server that will forward queries to the tracker command line client - that app will be a future post when it’s&nbsp;done.</p>
-
-        </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/Migrating%20to%20Gmail/">Migrating to Gmail</a></h2>
-          <div class="date"><span>12. November 2013</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><h1 id="why">Why</h1>
-<p>In a stitch of irony given my prior articles wrestling with a decent <span class="caps">IDLE</span> daemon for use with getmail, I’m faced with a new problem in figuring out the best way to migrate all my existing, locally hosted email to&nbsp;Gmail.</p>
-<p>This is evidently not an uncommon problem for people, presumably for largely the same reasons I’m facing: although I like having everything locally on my own server, it only works in places where (1) I live in the same place as the server and (2) where my server won’t be double-<span class="caps">NAT</span>’d so dynamic DNS can actually reach&nbsp;it.</p>
-<h1 id="how">How</h1>
-<p>My personal email has been hosted on a Dovecot <span class="caps">IMAP</span> server in a Maildir up till now. Our tool of choice for this migration will be the venerable <a href="http://offlineimap.org/">OfflineIMAP</a> utility, available on Debian-ish systems with <code>apt-get install offlineimap</code>.</p>
-
-          <p class="more"><a href="/articles/Migrating%20to%20Gmail/">more</a></p>
-        </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/A%20better%20Getmail%20IDLE%20client/">A Better Getmail IDLE client</a></h2>
-          <div class="date"><span>10. October 2013</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><h1 id="updates">Updates</h1>
-<p>(2013-10-15) And like that I’ve broken it again. Fixing the crash on <span class="caps">IMAP</span> disconnect actually broke IMAP disconnect handling.
-The problem here is that IMAPClient’s exceptions are not documented at all, so a time-based thing like IDLE requires some guessing as to what IMAPClient will handle and what you need to handle. This would all be fine if there was a way to get Gmail to boot my client after 30 seconds so I could test it&nbsp;easily.</p>
-<p>I’ve amended the code so that anytime the code would call <code>_imaplogin()</code> it explicitely dumps the IMAPClient object after trying to log it out, and recreates it. Near as I can tell this seems to be the safe way to do it, since the IMAPClient object <em>does</em> open a socket connection when created, and doesn’t necessarily re-open if you simply re-issue the login&nbsp;command.</p>
-<p>There’s an ongoing lesson here that doing anything that needs to stay up with protocol like <span class="caps">IMAP</span> is an incredible&nbsp;pain.</p>
-<p>(2013-10-14) So after 4 days of continuous usage I’m happy with this script. The most important thing it does is crash properly when it encounters a bug. I’ve tweaked the Gist a few times in response (a typo meant imaplogin didn’t recover gracefully) and added a call to <code>notify_mail</code> on exit which should’ve been there to start&nbsp;with.</p>
-<p>It’s also becoming abundantly clear that I’m way to click-happy with publishing things to this blog, so some type of interface to show my revisions is probably in the future (a long with a style&nbsp;overhaul).</p>
-<h1 id="why">Why</h1>
-<p>My previous attempt at a GetMail <span class="caps">IDLE</span> client was a huge disappointment, since imaplib2 seems to be buggy for handling long-running processes. It’s possible some magic in hard terminating the IMAP session after each IDLE termination is necessary, but it raises the question of why the idle() function in the library doesn’t immediately exit when this happens - to me that implies I could still end up with a zombie daemon that doesn’t retreive any&nbsp;mail.</p>
-<p>Thus a new project - this time based on the Python <code>imapclient</code> library. imapclient uses imaplib behind the scenes, and seems to enjoy a little bit more use then <code>imaplib2</code> so it seemed a good&nbsp;candidate.</p>
-<h1 id="the-script">The&nbsp;script</h1>
-
-          <p class="more"><a href="/articles/A%20better%20Getmail%20IDLE%20client/">more</a></p>
-        </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/Getmail%20IDLE%20Client/">A GetMail IDLE daemon script</a></h2>
-          <div class="date"><span>05. October 2013</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><h1 id="updates">Updates</h1>
-<p>Although the script in this article works, I’m having some problems with it after long-running sessions. The symptom seems to be that imaplib2 just stops processing <span class="caps">IDLE</span> session responses - it terminates and recreates them just fine, but no new mail is ever detected and thus getmail is never triggered. With 12 or so hours of usage out of the script, this seems odd as hell and probably like an imaplib2&nbsp;bug.</p>
-<p>With the amount of sunk time on this, I’m tempted to go in 1 of 2 directions: re-tool the script to simply invoke getmail’s <span class="caps">IDLE</span> functionality, and basically remove imaplib2 from the equation, or to write my own functions to read IMAP and use the IDLE&nbsp;command.</p>
-<p>Currently I’m going with option 3: turn on imaplib’s debugging to max, and see if I can spot the bug - but at the moment I can’t really recommend this particular approach to anyone since it’s just not reliable enough - though it does somewhat belie the fact that Python really doesn’t have a good <span class="caps">IMAP</span> IDLE&nbsp;library.</p>
-
-          <p class="more"><a href="/articles/Getmail%20IDLE%20Client/">more</a></p>
-        </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/Setting%20up%20sshttp/">Setting up sshttp</a></h2>
-          <div class="date"><span>27. August 2013</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><p>When I was travelling Europe I found some surprisingly restricted wi-fi hotspots in hotels. This was annoying because I use <span class="caps">SSH</span> to upload photos back home from my phone, but having not setup any tunneling helpers I just had to wait till I found a better&nbsp;one.</p>
-<p>There are a number of solutions to <span class="caps">SSH</span> tunneling, but the main thing I wanted to do was implement something which would let me run several fallbacks at once. Enter <a href="https://github.com/stealth/sshttp">sshttp</a>.</p>
-<p>sshttp is related to sslh, in the sense that they are both <span class="caps">SSH</span> connection multiplexers. The idea is that you point a web-browser at port 80, you get a web-page. You point your SSH client, and you get an SSH connection. Naive firewalls let the SSH traffic through without&nbsp;complaint.</p>
-<p>The benefit of sshttp over sslh is that it uses Linux’s <code>IP_TRANSPARENT</code> flag, which means that your <span class="caps">SSH</span> and HTTP logs all show proper source IPs, which is great for auditing and&nbsp;security.</p>
-<p>This is a blog about how I set it up for my specific server case, the instructions I used as a guide were adapted from <a href="http://blog.stalkr.net/2012/02/sshhttps-multiplexing-with-sshttp.html">here</a>.</p>
-
-          <p class="more"><a href="/articles/Setting%20up%20sshttp/">more</a></p>
-        </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/Upstart%20troubles/">Upstart script not recognized</a></h2>
-          <div class="date"><span>26. August 2013</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><p>I frequently find myself writing upstart scripts which checkout ok, but for some reason don’t get detected by the upstart daemon in the init directory, so when I run <code>start myscript</code> I get <code>unknown job</code> back. Some experimentation seems to indicate that the problem is I used gedit over <span class="caps">GVFS</span> SFTP to author a lot of these&nbsp;scripts.</p>
-<p>For something like <code>myscript.conf</code>, I find the following fixes this&nbsp;problem:</p>
-<pre><code>mv myscript.conf myscript.conf.d
-mv myscript.conf.d myscript.conf
-</code></pre><p>And then hey presto, the script works&nbsp;perfectly.</p>
-<p>Along the same lines, the <code>init-checkconf</code> utility isn’t mentioned enough for upstart debugging - my last post shows I clearly didn’t know about it. Using it is&nbsp;simple:</p>
-<pre><code>$ init-checkconf /etc/init/myscript.conf
-</code></pre><p>Note it needs to be run as a regular user. I’m often logged in as root, so sudo&nbsp;suffices:</p>
-<pre><code>$ sudo -u nobody init-checkconf /etc/init/myscript.conf
-</code></pre>
-        </section>
-        <article class="article intro"></article>
-        <header>
-          <h2><a href="/articles/Wintersmithing/">Wintersmithing</a></h2>
-          <div class="date"><span>18. August 2013</span></div>
-          <p class="author"><span class="author"><a href="mailto:w.rouesnel@gmail.com">Will Rouesnel</a></span>
-          </p>
-        </header>
-        <section class="content"><h1 id="wintersmith">Wintersmith</h1>
-<p>How to setup and use Wintersmith is covered pretty thoroughly elsewhere on the net, (namely the <a href="http://wintersmith.io/">wintersmith homepage</a>.</p>
-<p>Instead I’ll cover a few tweaks I had to do to get it running the way I wanted. To avoid being truly confusing, all the paths referenced here are relative to the site you create by running <code>wintersmith new &lt;your site dir here&gt;</code></p>
-
-          <p class="more"><a href="/articles/Wintersmithing/">more</a></p>
-        </section>
-      </div>
-    </div>
-    <footer>
-      <div class="content-wrap">
-        <div class="nav"><a href="/archive.html">« Archives</a>
-        </div>
-        <section class="about">
-        </section>
-        <section class="copy">
-          <p>&copy; 2019 Will Rouesnel &mdash; powered by&nbsp;<a href="https://github.com/jnordberg/wintersmith">Wintersmith</a>
-          </p>
-        </section>
-      </div>
-    </footer>
-  </body>
+        <script src="assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element){var i=element.getElementsByTagName('img')[0];return i===undefined?'':i.alt;}});
+    </script>
+</body>
 </html>

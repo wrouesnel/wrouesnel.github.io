@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Better Getmail IDLE client | wrouesnel_blog</title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="canonical" href="https://blog.wrouesnel.com/posts/a-better-getmail-idle-client/">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><meta name="author" content="wrouesnel">
+<link rel="prev" href="../getmail-idle-client/" title="A GetMail IDLE daemon script" type="text/html">
+<link rel="next" href="../migrating-to-gmail/" title="Migrating to Gmail" type="text/html">
+<meta property="og:site_name" content="wrouesnel_blog">
+<meta property="og:title" content="A Better Getmail IDLE client">
+<meta property="og:url" content="https://blog.wrouesnel.com/posts/a-better-getmail-idle-client/">
+<meta property="og:description" content="Updates
+(2013-10-15) And like that I've broken it again. Fixing the crash on IMAP disconnect actually broke IMAP disconnect handling.
+The problem here is that IMAPClient's exceptions are not documente">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2013-10-10T04:36:00-11:00">
+<meta property="article:tag" content="getmail">
+<meta property="article:tag" content="imap">
+<meta property="article:tag" content="imapclient">
+<meta property="article:tag" content="imaplib2">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="ubuntu">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Header and menu bar -->
+<div class="container">
+      <header class="blog-header py-3"><div class="row nbb-header align-items-center">
+          <div class="col-md-3 col-xs-2 col-sm-2" style="width: auto;">
+            <button class="navbar-toggler navbar-light bg-light nbb-navbar-toggler" type="button" data-toggle="collapse" data-target=".bs-nav-collapsible" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse bs-nav-collapsible bootblog4-search-form-holder">
+                
+            </div>
+        </div>
+          <div class="col-md-6 col-xs-10 col-sm-10 bootblog4-brand" style="width: auto;">
+            <a class="navbar-brand blog-header-logo text-dark" href="../../">
+
+            <span id="blog-title">wrouesnel_blog</span>
+        </a>
+          </div>
+            <div class="col-md-3 justify-content-end align-items-center bs-nav-collapsible collapse flex-collapse bootblog4-right-nav">
+            <nav class="navbar navbar-light bg-white"><ul class="navbar-nav bootblog4-right-nav"></ul></nav>
+</div>
+    </div>
+</header><nav class="navbar navbar-expand-md navbar-light bg-white static-top"><div class="collapse navbar-collapse bs-nav-collapsible" id="bs-navbar">
+            <ul class="navbar-nav nav-fill d-flex w-100">
+<li class="nav-item">
+<a href="../../archive.html" class="nav-link">Archive</a>
+                </li>
+<li class="nav-item">
+<a href="../../categories/" class="nav-link">Tags</a>
+                </li>
+<li class="nav-item">
+<a href="../../rss.xml" class="nav-link">RSS feed</a>
+
+                
+            </li>
+</ul>
+</div>
+<!-- /.navbar-collapse -->
+</nav>
+</div>
+
+<div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        
+        
+        
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">A Better Getmail IDLE client</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    <a class="u-url" href="../../authors/wrouesnel/">wrouesnel</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2013-10-10T04:36:00-11:00" itemprop="datePublished" title="2013-10-10 04:36">2013-10-10 04:36</time></a>
+            </p>
+            
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<h2>Updates</h2>
+<p>(2013-10-15) And like that I've broken it again. Fixing the crash on IMAP disconnect actually broke IMAP disconnect handling.
+The problem here is that IMAPClient's exceptions are not documented at all, so a time-based thing like IDLE requires some guessing as to what IMAPClient will handle and what you need to handle. This would all be fine if there was a way to get Gmail to boot my client after 30 seconds so I could test it easily.</p>
+<p>I've amended the code so that anytime the code would call <code>_imaplogin()</code> it explicitely dumps the IMAPClient object after trying to log it out, and recreates it. Near as I can tell this seems to be the safe way to do it, since the IMAPClient object <em>does</em> open a socket connection when created, and doesn't necessarily re-open if you simply re-issue the login command.</p>
+<p>There's an ongoing lesson here that doing anything that needs to stay up with protocol like IMAP is an incredible pain.</p>
+<p>(2013-10-14) So after 4 days of continuous usage I'm happy with this script. The most important thing it does is crash properly when it encounters a bug. I've tweaked the Gist a few times in response (a typo meant imaplogin didn't recover gracefully) and added a call to <code>notify_mail</code> on exit which should've been there to start with.</p>
+<p>It's also becoming abundantly clear that I'm way to click-happy with publishing things to this blog, so some type of interface to show my revisions is probably in the future (a long with a style overhaul).</p>
+<h2>Why</h2>
+<p>My previous attempt at a GetMail IDLE client was a huge disappointment, since imaplib2 seems to be buggy for handling long-running processes. It's possible some magic in hard terminating the IMAP session after each IDLE termination is necessary, but it raises the question of why the idle() function in the library doesn't immediately exit when this happens - to me that implies I could still end up with a zombie daemon that doesn't retreive any mail.</p>
+<p>Thus a new project - this time based on the Python <code>imapclient</code> library. imapclient uses imaplib behind the scenes, and seems to enjoy a little bit more use then <code>imaplib2</code> so it seemed a good candidate.</p>
+<h2>The script</h2>
+<h3>Dependencies</h3>
+<p>The script has a couple of dependencies, most easily installed with <code>pip</code>:</p>
+<pre class="code literal-block"><span></span><code>$ pip install psutil imapclient
+</code></pre>
+
+<p>Get it from <a href="https://gist.github.com/wrouesnel/6905023">a Gist here</a> - I'm currently running it on my server, and naturally I'll update this article based on how it performs as I go.</p>
+<h2>Design</h2>
+<p>The script implements a Unix daemon, and uses pidfiles to avoid concurrent executions. It's designed to be stuck in a crontab file to recover from crashes.</p>
+<p>I went purist on this project since I wanted to avoid as many additional frameworks as possible and work mostly with built-in constructs - partly as just an exercise in what can be done. At the end of the day I ended up implementing a somewhat half-baked messaging system to manage all the threads based on Queues.</p>
+<p>The main thread, being the listener for signals, creates a "manager" thread, which in turn spawns all my actual "idler" threads.</p>
+<p>Everything talks with Queue.Queue() objects, and block on the get() method which efficiently uses CPU. The actual idle() function, being blocking, runs on its own thread and posts "new mail" events back to the idler thread, which then invokes getmail.</p>
+<p>The biggest challenge was making sure exceptions were caught in all the right places - <code>imapclient</code> has no way to cleanly kill off an idle() process, so a shutdown involves causing the idle_check() call to return an exception.</p>
+<p>I kind of hacked this together as I went - the main thing I really targeted was trying to make sure failure modes caused crashes, which is hard to do with Python-threading a lot of the time. A crashed script can be restarted, a zombie script doing nothing looks like it's correctly alive.</p>
+<h2>Personal thoughts</h2>
+<p>Pure Python is not the best for this sort of thing - an evented IMAP library would definitely be better but this way I can stick with mostly single file deployment, and I don't want to write my own IMAP client at the moment.</p>
+<p>Of course IMAP is a simple enough protocol in most respects, so it's not like it would be hard but the exercise was still interesting. But if I want a new project with this, I would still like to tackle it in something like Haskell.</p>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/getmail/" rel="tag">getmail</a></li>
+            <li><a class="tag p-category" href="../../categories/imap/" rel="tag">imap</a></li>
+            <li><a class="tag p-category" href="../../categories/imapclient/" rel="tag">imapclient</a></li>
+            <li><a class="tag p-category" href="../../categories/imaplib2/" rel="tag">imaplib2</a></li>
+            <li><a class="tag p-category" href="../../categories/linux/" rel="tag">linux</a></li>
+            <li><a class="tag p-category" href="../../categories/python/" rel="tag">python</a></li>
+            <li><a class="tag p-category" href="../../categories/ubuntu/" rel="tag">ubuntu</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../getmail-idle-client/" rel="prev" title="A GetMail IDLE daemon script">Previous post</a>
+            </li>
+            <li class="next">
+                <a href="../migrating-to-gmail/" rel="next" title="Migrating to Gmail">Next post</a>
+            </li>
+        </ul></nav></aside></article><!--End of body content--><footer id="footer">
+            Contents © 2021         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+            
+        </footer>
+</div>
+</div>
+
+
+        <script src="../../assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element){var i=element.getElementsByTagName('img')[0];return i===undefined?'':i.alt;}});
+    </script>
+</body>
+</html>

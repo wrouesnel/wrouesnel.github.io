@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# " lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prometheus reverse_exporter | wrouesnel_blog</title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="canonical" href="https://blog.wrouesnel.com/posts/prometheus-reverse_exporter/">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><meta name="author" content="wrouesnel">
+<link rel="prev" href="../s4-i9505-in-2018/" title="S4-i9505 in 2018" type="text/html">
+<link rel="next" href="../securing-cockroachdb/" title="Securing CockroachDB" type="text/html">
+<meta property="og:site_name" content="wrouesnel_blog">
+<meta property="og:title" content="Prometheus reverse_exporter">
+<meta property="og:url" content="https://blog.wrouesnel.com/posts/prometheus-reverse_exporter/">
+<meta property="og:description" content='Find reverse_exporter on Github Releases
+In which I talk about something I made to solve a problem I had.
+Why
+I like to make my deployments of things as "appliance-like" as possible. I want
+them to be'>
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2018-03-29T22:13:00-11:00">
+<meta property="article:tag" content="cluster">
+<meta property="article:tag" content="metrics">
+<meta property="article:tag" content="monitoring">
+<meta property="article:tag" content="prometheus">
+<meta property="article:tag" content="proxy">
+<meta property="article:tag" content="reverse-proxy">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Header and menu bar -->
+<div class="container">
+      <header class="blog-header py-3"><div class="row nbb-header align-items-center">
+          <div class="col-md-3 col-xs-2 col-sm-2" style="width: auto;">
+            <button class="navbar-toggler navbar-light bg-light nbb-navbar-toggler" type="button" data-toggle="collapse" data-target=".bs-nav-collapsible" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse bs-nav-collapsible bootblog4-search-form-holder">
+                
+            </div>
+        </div>
+          <div class="col-md-6 col-xs-10 col-sm-10 bootblog4-brand" style="width: auto;">
+            <a class="navbar-brand blog-header-logo text-dark" href="../../">
+
+            <span id="blog-title">wrouesnel_blog</span>
+        </a>
+          </div>
+            <div class="col-md-3 justify-content-end align-items-center bs-nav-collapsible collapse flex-collapse bootblog4-right-nav">
+            <nav class="navbar navbar-light bg-white"><ul class="navbar-nav bootblog4-right-nav"></ul></nav>
+</div>
+    </div>
+</header><nav class="navbar navbar-expand-md navbar-light bg-white static-top"><div class="collapse navbar-collapse bs-nav-collapsible" id="bs-navbar">
+            <ul class="navbar-nav nav-fill d-flex w-100">
+<li class="nav-item">
+<a href="../../archive.html" class="nav-link">Archive</a>
+                </li>
+<li class="nav-item">
+<a href="../../categories/" class="nav-link">Tags</a>
+                </li>
+<li class="nav-item">
+<a href="../../rss.xml" class="nav-link">RSS feed</a>
+
+                
+            </li>
+</ul>
+</div>
+<!-- /.navbar-collapse -->
+</nav>
+</div>
+
+<div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        
+        
+        
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Prometheus reverse_exporter</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    <a class="u-url" href="../../authors/wrouesnel/">wrouesnel</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2018-03-29T22:13:00-11:00" itemprop="datePublished" title="2018-03-29 22:13">2018-03-29 22:13</time></a>
+            </p>
+            
+
+        </div>
+        
+
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<p><a href="https://github.com/wrouesnel/reverse_exporter/releases">Find reverse_exporter on Github Releases</a></p>
+<p>In which I talk about something I made to solve a problem I had.</p>
+<h2>Why</h2>
+<p>I like to make my deployments of things as "appliance-like" as possible. I want
+them to be plug-and-play, and have sensible defaults - in fact if possible I
+want to make them production-ready "out of the box".</p>
+<p>This usually involves setting up VMs or containers which include a number of
+components, or a quorum of either which do the same. </p>
+<p>To take a real example - I have a PowerDNS authoritative container which uses
+Postgres replication for a backend. These are tightly coupled components - so
+tightly that it's a lot easier to run them in the same container. PowerDNS is
+nice because it has an HTTP REST API, which leads to a great turn-key DNS 
+solution while retaining a lot of power - but it totally lacks an authentication
+layer, so we also need to throw in nginx to provide that (and maybe something
+else for auth later - for now I manage static password lists, but we might do
+LDAP or something else - who knows?)</p>
+<p>Obviously, we want to monitor all these components, and the way I like doing
+that is with Prometheus.</p>
+<h2>The Problem</h2>
+<p>Prometheus exporters provide metrics, typically on an http endpoint like <code>/metrics</code>.
+For our appliance like container, ideally, we want to replicate this experience.</p>
+<p>The individual components in it - PowerDNS, Postgres, nginx - all have their
+own exporters which provide specific metrics but also generic information about
+the exporter itself - which means we have conflicting metric names for at least
+the go-runtime specific metrics. And while we're at it we probably have a bunch
+of random glue-code we'd like to produce some metrics about, plus some SSL
+certificates we'd like to advertise expiry dates for. </p>
+<p>There's also a third factor here which is important: we don't necessarily have
+liberty to just open ports willy-nilly to support this - or we'd like to able
+to avoid it. In the space of corporations with security policies, HTTP/HTTPS on
+port 80 and 443 is easy to justify. But good luck getting another 3 ports opened
+to support monitoring - oh and you'll have to put SSL and auth on those too.</p>
+<h3>Solution 1 - separate endpoints</h3>
+<p>In our single-container example, we only have the 1 IP for the container - but
+we have nginx so we could just farm the metrics out to separate endpoints. This
+works - it's my original solution. But instead of a nice, by-convention <code>/metrics</code>
+endpoint we now have something like <code>/metrics/psql</code>, <code>/metrics/nginx</code>, <code>/metrics/pdns</code>.</p>
+<p>Which means 3 separate entries in the Prometheus config file to scrape them, and
+breaks nice features like DNS-SD to let us just discover.</p>
+<p>And it feels unclean: the PowerDNS container has a bunch of things in it, but
+they're all providing one-service - they're all one product. Shouldn't their
+metrics all be given as one endpoint?</p>
+<h3>Solution 2 - just use multiple ports</h3>
+<p>This is the Prometheus way. And it would work. But it still has some of the
+drawbacks above - we're still explicitly scraping 3 targets, and we're doing
+some slicing on the Prometheus side to try and group these sensibly - in fact
+we're requiring Prometheus to understand our architecture in detail which
+shouldn't matter.</p>
+<p>i.e. is the DNS container a single job with 3 endpoints in it, multiple jobs
+per container? The latter feels wrong again - if our database goes sideways, its
+not really a database <em>cluster</em> going down - just a single "DNS server" instance.</p>
+<p>Prometheus has the idea of an "instance" tag per scraped endpoint...we'd kind of
+like to support that.</p>
+<h2>Solution 3 - combine the exporters into one endpoint - reverse_exporter</h2>
+<p><code>reverse_exporter</code> is essentially the implementation of how we achieve this.</p>
+<p>The main thing <code>reverse_exporter</code> was designed to do is receive a scrape request,
+proxy it to a bunch of exporters listening on localhost behind it, and then
+decode the metrics they produce so it can rewrite them with unique identifier
+labels before handing them to Prometheus.</p>
+<p><em>Obviously</em> metric relabelling on Prometheus can do something like this, but in
+this case as solution designers/application developers/whatever we are, we want
+to express an opinion on how this container runs, and simplify the overhead to
+supporting it.</p>
+<p>The reason we rewrite the metrics is to allow namespace collisisions - specifically
+we want to ensure we can have multiple golang runtime metrics from Prometheus
+live side-by-side, but still be able to separate them out in our visualiazation
+tooling. We might also want to have multiples of the same application in our
+container (or maybe its something like a Kubernetes pod and we want it to be
+monitored like a single appliance). The point is: from a Prometheus perspective,
+it all comes out looking like metrics from the 1 "instance", and gets metadata
+added by Prometheus as such without any extra effort. And that's powerful - 
+because it means DNS SD or service discovery works again. And it means we can
+start to talk about cluster application policy in a sane way - "we'll monitor
+<code>/metrics</code> on port 80 or 443 for you if it's there.</p>
+<h2>Other Problems (which are solved)</h2>
+<p>There were a few other common dilemmas I wanted a "correct" solution for when
+I started playing around with <code>reverse_exporter</code> which it solves.</p>
+<p>We don't always want to write an entire exporter for Prometheus - sometimes we
+just have something tiny and fairly obvious we'd like to scrape with a text
+format script. When using the Prometheus <code>node_exporter</code> you can do this with
+the text collector, which will read <code>*.prom</code> files on every scrape - but you
+need to setup cron to periodically update these - which can be a pain, and gives
+the metrics lag.</p>
+<p>What if we want to have an on-demand script?</p>
+<p><code>reverse_exporter</code> allows this - you can specify a bash script, even allow
+arguments to be passed via URL params, and it'll execute and collect any
+metrics you write to stdout.</p>
+<p>But it also protects you from the danger of naive approach here: a possible denial
+of service from an overzealous or possibly malicious user sending a huge number
+of requests to your script. If we just spawned a process each time, we could
+quickly exhaust container or system resources. <code>reverse_exporter</code> avoids this
+problem by waterfalling the results of each execution - since Prometheus regards
+a scrape as a time-slice of state at the moment it gets results, we can protect
+the system by queuing up inbound scrapers while the script executes, and then
+sending them all the same results (provided they're happy with the wait time - 
+which Prometheus is good about).</p>
+<p>We avoid thrashing the system resources, and we can confidently let users and
+admins reload the metrics page without bringing down our container or our host.</p>
+<h2>Conclusion</h2>
+<p>This post feels a bit marketing like to me, but I am pretty excited that for me
+at least <code>reverse_exporter</code> works well.</p>
+<p>Hopefully, it proves helpful to other Prometheus users as well!</p>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/cluster/" rel="tag">cluster</a></li>
+            <li><a class="tag p-category" href="../../categories/metrics/" rel="tag">metrics</a></li>
+            <li><a class="tag p-category" href="../../categories/monitoring/" rel="tag">monitoring</a></li>
+            <li><a class="tag p-category" href="../../categories/prometheus/" rel="tag">prometheus</a></li>
+            <li><a class="tag p-category" href="../../categories/proxy/" rel="tag">proxy</a></li>
+            <li><a class="tag p-category" href="../../categories/reverse-proxy/" rel="tag">reverse-proxy</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../s4-i9505-in-2018/" rel="prev" title="S4-i9505 in 2018">Previous post</a>
+            </li>
+            <li class="next">
+                <a href="../securing-cockroachdb/" rel="next" title="Securing CockroachDB">Next post</a>
+            </li>
+        </ul></nav></aside></article><!--End of body content--><footer id="footer">
+            Contents © 2021         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+            
+        </footer>
+</div>
+</div>
+
+
+        <script src="../../assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element){var i=element.getElementsByTagName('img')[0];return i===undefined?'':i.alt;}});
+    </script>
+</body>
+</html>
