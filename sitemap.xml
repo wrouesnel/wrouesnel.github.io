@@ -10,40 +10,8 @@
   <lastmod>2021-12-09T15:00:00Z</lastmod>
  </url>
  <url>
-  <loc>https://blog.wrouesnel.com/2013/</loc>
-  <lastmod>2021-12-09T14:53:00Z</lastmod>
- </url>
- <url>
-  <loc>https://blog.wrouesnel.com/2014/</loc>
-  <lastmod>2021-12-09T14:53:00Z</lastmod>
- </url>
- <url>
-  <loc>https://blog.wrouesnel.com/2015/</loc>
-  <lastmod>2021-12-09T14:53:00Z</lastmod>
- </url>
- <url>
-  <loc>https://blog.wrouesnel.com/2016/</loc>
-  <lastmod>2021-12-09T14:53:00Z</lastmod>
- </url>
- <url>
-  <loc>https://blog.wrouesnel.com/2017/</loc>
-  <lastmod>2021-12-09T14:53:00Z</lastmod>
- </url>
- <url>
-  <loc>https://blog.wrouesnel.com/2018/</loc>
-  <lastmod>2021-12-09T14:53:00Z</lastmod>
- </url>
- <url>
-  <loc>https://blog.wrouesnel.com/2019/</loc>
-  <lastmod>2021-12-09T14:53:00Z</lastmod>
- </url>
- <url>
-  <loc>https://blog.wrouesnel.com/2021/</loc>
-  <lastmod>2021-12-09T14:53:00Z</lastmod>
- </url>
- <url>
   <loc>https://blog.wrouesnel.com/archive.html</loc>
-  <lastmod>2021-12-09T15:59:00Z</lastmod>
+  <lastmod>2022-02-03T07:46:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/authors/</loc>
@@ -59,7 +27,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/</loc>
-  <lastmod>2021-12-09T15:13:00Z</lastmod>
+  <lastmod>2022-02-03T07:46:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/3d-printing/</loc>
@@ -78,8 +46,16 @@
   <lastmod>2021-12-09T15:00:00Z</lastmod>
  </url>
  <url>
+  <loc>https://blog.wrouesnel.com/categories/automotive/</loc>
+  <lastmod>2022-02-03T07:46:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://blog.wrouesnel.com/categories/backup/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/battery/</loc>
+  <lastmod>2022-02-03T07:46:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/blogging/</loc>
@@ -198,6 +174,10 @@
   <lastmod>2021-12-09T15:13:00Z</lastmod>
  </url>
  <url>
+  <loc>https://blog.wrouesnel.com/categories/prius/</loc>
+  <lastmod>2022-02-03T07:46:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://blog.wrouesnel.com/categories/prometheus/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
@@ -279,11 +259,11 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/index-1.html</loc>
-  <lastmod>2021-12-09T15:59:00Z</lastmod>
+  <lastmod>2022-02-03T07:46:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/index-2.html</loc>
-  <lastmod>2021-12-09T15:59:00Z</lastmod>
+  <lastmod>2022-02-03T07:46:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/a-better-getmail-idle-client/</loc>
@@ -316,6 +296,10 @@
  <url>
   <loc>https://blog.wrouesnel.com/posts/quickly-configuring-modelines/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/posts/reconditioning-the-gen2-prius-battery/</loc>
+  <lastmod>2022-02-03T07:46:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/running-gnome-tracker-on-a-server/</loc>

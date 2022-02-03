@@ -58,7 +58,32 @@ bg-dark
     
     
 <div class="postindex">
-    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/using-the-go-playground-locally/" class="u-url">Using the Go playground locally</a></h1>
+    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/installing-the-latest-docker-release/" class="u-url">Installing the latest docker release</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/wrouesnel/">wrouesnel</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/installing-the-latest-docker-release/" rel="bookmark">
+            <time class="published dt-published" datetime="2015-09-12T03:54:00-10:00" itemprop="datePublished" title="2015-09-12 03:54">2015-09-12 03:54</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>Somehow the installation instructions for Docker never work for me and the
+website is <em>surprisingly</em> cagey about the manual process.</p>
+<p>It works perfectly well if you just grab the relevant bits of that script and
+run them manually, but usually fails if you let it be a bit too magical.</p>
+<p>To be fair, I probably have issues due to the mismatch of LSB release since I
+run Mint. Still though.</p>
+<p>So here's the commands for Ubuntu:</p>
+<pre class="code literal-block"><span></span><code>$ apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+$ <span class="nb">echo</span> deb https://apt.dockerproject.org/repo ubuntu-vivid main &gt; /etc/apt/sources.list.d/docker.list
+$ apt-get update <span class="o">&amp;&amp;</span> apt-get install -y docker-engine
+</code></pre>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/using-the-go-playground-locally/" class="u-url">Using the Go playground locally</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
                 <a href="authors/wrouesnel/">wrouesnel</a>
@@ -145,7 +170,7 @@ disabled port forwards <em>is not a security measure</em>.</p>
             <li class="next"><a href="index-1.html" rel="next">Older posts</a></li>
         </ul>
 <!--End of body content--><footer id="footer">
-            Contents © 2021         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            Contents © 2022         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
         </footer>
 </div>
