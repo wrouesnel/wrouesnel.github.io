@@ -58,7 +58,41 @@ bg-dark
     
     
 <div class="postindex">
-    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/installing-the-latest-docker-release/" class="u-url">Installing the latest docker release</a></h1>
+    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/quickly-configuring-modelines/" class="u-url">Quickly configuring modelines?</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/wrouesnel/">wrouesnel</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/quickly-configuring-modelines/" rel="bookmark">
+            <time class="published dt-published" datetime="2016-03-12T22:22:00-11:00" itemprop="datePublished" title="2016-03-12 22:22">2016-03-12 22:22</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<h2>Quickly configuring modelines?</h2>
+<p>Something hopefully no one should ever have to do in the far distant future,
+but since I insist on using old-hardware till it drops, it still comes up.</p>
+<p>Working from an SSH console on an XBMC box, I was trying to tune in an elusive
+1366x768 modeline for an old plasma TV.</p>
+<p>The best way to do it is with xrandr these days in a <code>~/.xprofile</code> script which
+is loaded on boot up.</p>
+<p>To quickly go through modelines I used the following shell script:</p>
+<pre class="code literal-block"><span></span><code><span class="ch">#!/bin/bash</span>
+xrandr -d :0 --output VGA-0 --mode <span class="s2">"1024x768"</span>
+xrandr -d :0 --delmode VGA-0 <span class="s2">"1360x768"</span>
+xrandr -d :0 --rmmode <span class="s2">"1360x768"</span>
+xrandr -d :0 --newmode <span class="s2">"1360x768"</span> <span class="nv">$@</span>
+xrandr -d :0 --addmode VGA-0 <span class="s2">"1360x768"</span>
+xrandr -d :0 --output VGA-0 --mode <span class="s2">"1360x768"</span>
+</code></pre>
+
+<p>Simply passing in a modeline when running it causes that modeline to be set and
+applied to the relevant output (VGA-0) in my case.</p>
+<p>i.e. <code>./tryout 84.750 1366 1480 1568 1800 768 769 776 800 -hsync +vsync</code></p>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/installing-the-latest-docker-release/" class="u-url">Installing the latest docker release</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
                 <a href="authors/wrouesnel/">wrouesnel</a>

@@ -11,7 +11,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/archive.html</loc>
-  <lastmod>2022-02-03T07:46:00Z</lastmod>
+  <lastmod>2022-03-26T03:34:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/authors/</loc>
@@ -27,7 +27,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/</loc>
-  <lastmod>2022-02-03T07:46:00Z</lastmod>
+  <lastmod>2022-03-26T03:30:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/3d-printing/</loc>
@@ -62,6 +62,10 @@
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
  <url>
+  <loc>https://blog.wrouesnel.com/categories/bubblewrap/</loc>
+  <lastmod>2022-03-26T03:30:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://blog.wrouesnel.com/categories/bup/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
@@ -72,6 +76,10 @@
  <url>
   <loc>https://blog.wrouesnel.com/categories/cockroachdb/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/containers/</loc>
+  <lastmod>2022-03-26T03:30:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/debian/</loc>
@@ -263,7 +271,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/index-2.html</loc>
-  <lastmod>2022-02-03T07:46:00Z</lastmod>
+  <lastmod>2022-02-04T03:08:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/a-better-getmail-idle-client/</loc>
@@ -302,8 +310,32 @@
   <lastmod>2022-02-03T07:46:00Z</lastmod>
  </url>
  <url>
+  <loc>https://blog.wrouesnel.com/posts/restic-backups-for-my-homeserver/</loc>
+  <lastmod>2022-02-04T03:08:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/posts/restic-backups-for-my-homeserver/listings/</loc>
+  <lastmod>2022-02-04T03:06:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/posts/restic-backups-for-my-homeserver/listings/.ipynb_checkpoints/</loc>
+  <lastmod>2022-02-04T03:06:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/posts/restic-backups-for-my-homeserver/listings/.ipynb_checkpoints/backupctl-checkpoint.py.html</loc>
+  <lastmod>2022-02-04T03:06:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/posts/restic-backups-for-my-homeserver/listings/backupctl.py.html</loc>
+  <lastmod>2022-02-04T03:06:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://blog.wrouesnel.com/posts/running-gnome-tracker-on-a-server/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/posts/running-npm-install-safely/</loc>
+  <lastmod>2022-03-26T03:30:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/s4-i9505-in-2018/</loc>
