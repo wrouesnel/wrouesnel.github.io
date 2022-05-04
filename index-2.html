@@ -58,7 +58,33 @@ bg-dark
     
     
 <div class="postindex">
-    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/quickly-configuring-modelines/" class="u-url">Quickly configuring modelines?</a></h1>
+    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/totally-static-go-builds/" class="u-url">Totally static Go builds</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/wrouesnel/">wrouesnel</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/totally-static-go-builds/" rel="bookmark">
+            <time class="published dt-published" datetime="2016-03-12T22:23:00-11:00" itemprop="datePublished" title="2016-03-12 22:23">2016-03-12 22:23</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>I wouldn't make a post on my blog just so I don't have to keep googling something
+would I? Of course I would. It's like...95% of the reason I keep this.</p>
+<p>Totally static go builds - these are <em>great</em> for running in Docker containers.
+The important part is the command line to create them - it's varied a bit, but
+the most thorough I've found is this (see this 
+<a href="https://github.com/golang/go/issues/9344">Github Issue</a>):</p>
+<pre class="code literal-block"><span></span><code><span class="nv">CGO_ENABLED</span><span class="o">=</span><span class="m">0</span> <span class="nv">GOOS</span><span class="o">=</span>linux go build -a -ldflags <span class="s1">'-extldflags "-static"'</span> .
+</code></pre>
+
+<p>This will create an "as static as possible" binary - beware linking in things
+which want glibc, since pluggable name resolvers will be a problem (which you
+can workaround in Docker quite well, but that's another question).</p>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/quickly-configuring-modelines/" class="u-url">Quickly configuring modelines?</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
                 <a href="authors/wrouesnel/">wrouesnel</a>

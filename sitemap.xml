@@ -11,7 +11,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/archive.html</loc>
-  <lastmod>2022-03-26T03:34:00Z</lastmod>
+  <lastmod>2022-05-04T01:42:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/authors/</loc>
@@ -27,7 +27,11 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/</loc>
-  <lastmod>2022-03-26T03:30:00Z</lastmod>
+  <lastmod>2022-05-04T01:42:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/2204/</loc>
+  <lastmod>2022-05-04T01:42:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/3d-printing/</loc>
@@ -82,6 +86,10 @@
   <lastmod>2022-03-26T03:30:00Z</lastmod>
  </url>
  <url>
+  <loc>https://blog.wrouesnel.com/categories/deb/</loc>
+  <lastmod>2022-05-04T01:42:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://blog.wrouesnel.com/categories/debian/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
@@ -100,6 +108,10 @@
  <url>
   <loc>https://blog.wrouesnel.com/categories/encryption/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/firefox/</loc>
+  <lastmod>2022-05-04T01:42:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/getmail/</loc>
@@ -140,6 +152,10 @@
  <url>
   <loc>https://blog.wrouesnel.com/categories/imaplib2/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/jammy/</loc>
+  <lastmod>2022-05-04T01:42:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/kernel/</loc>
@@ -226,6 +242,10 @@
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
  <url>
+  <loc>https://blog.wrouesnel.com/categories/snap/</loc>
+  <lastmod>2022-05-04T01:42:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://blog.wrouesnel.com/categories/socat/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
@@ -267,11 +287,11 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/index-1.html</loc>
-  <lastmod>2022-02-03T07:46:00Z</lastmod>
+  <lastmod>2022-05-04T01:42:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/index-2.html</loc>
-  <lastmod>2022-02-04T03:08:00Z</lastmod>
+  <lastmod>2022-05-04T01:42:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/a-better-getmail-idle-client/</loc>
@@ -280,6 +300,10 @@
  <url>
   <loc>https://blog.wrouesnel.com/posts/bup-towards-the-perfect-backup/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/posts/firefox-from-deb-on-2204/</loc>
+  <lastmod>2022-05-04T01:42:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/flashing-marlin-with-eclipse-and-avrdude/</loc>
@@ -308,26 +332,6 @@
  <url>
   <loc>https://blog.wrouesnel.com/posts/reconditioning-the-gen2-prius-battery/</loc>
   <lastmod>2022-02-03T07:46:00Z</lastmod>
- </url>
- <url>
-  <loc>https://blog.wrouesnel.com/posts/restic-backups-for-my-homeserver/</loc>
-  <lastmod>2022-02-04T03:08:00Z</lastmod>
- </url>
- <url>
-  <loc>https://blog.wrouesnel.com/posts/restic-backups-for-my-homeserver/listings/</loc>
-  <lastmod>2022-02-04T03:06:00Z</lastmod>
- </url>
- <url>
-  <loc>https://blog.wrouesnel.com/posts/restic-backups-for-my-homeserver/listings/.ipynb_checkpoints/</loc>
-  <lastmod>2022-02-04T03:06:00Z</lastmod>
- </url>
- <url>
-  <loc>https://blog.wrouesnel.com/posts/restic-backups-for-my-homeserver/listings/.ipynb_checkpoints/backupctl-checkpoint.py.html</loc>
-  <lastmod>2022-02-04T03:06:00Z</lastmod>
- </url>
- <url>
-  <loc>https://blog.wrouesnel.com/posts/restic-backups-for-my-homeserver/listings/backupctl.py.html</loc>
-  <lastmod>2022-02-04T03:06:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/running-gnome-tracker-on-a-server/</loc>
