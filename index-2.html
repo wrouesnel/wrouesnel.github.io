@@ -58,7 +58,87 @@ bg-dark
     
     
 <div class="postindex">
-    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/totally-static-go-builds/" class="u-url">Totally static Go builds</a></h1>
+    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/tracking-down-why-my-desktop-fails-every-second-resume/" class="u-url">Tracking down why my desktop fails every second resume</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/wrouesnel/">wrouesnel</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/tracking-down-why-my-desktop-fails-every-second-resume/" rel="bookmark">
+            <time class="published dt-published" datetime="2016-11-03T00:00:00+11:00" itemprop="datePublished" title="2016-11-03 00:00">2016-11-03 00:00</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<h2>Collecting a thread to pull on...</h2>
+<p>Had an interesting problem for a while now - my desktop under linux would
+<em>mostly</em> suspend and resume just fine, except when it didn't. This is annoying
+as I'm the type of person who likes to leave a big dev environment running and
+come back to it.</p>
+<p>Power management problems are the worst type of problems to debug in many ways,
+so documenting any progress I made was fairly important.</p>
+<p>The Ubuntu guide to kernel suspend is the most useful one I found:
+<a href="https://wiki.ubuntu.com/DebuggingKernelSuspend">https://wiki.ubuntu.com/DebuggingKernelSuspend</a></p>
+<p>And the important bit is this action:</p>
+<pre class="code literal-block"><span></span><code>sync &amp;&amp; echo 1 &gt; /sys/power/pm_trace &amp;&amp; pm-suspend
+</code></pre>
+
+<p>This does some kernel magic which encodes suspend/resume progress into the
+systems RTC clock via a hash, which allows - if things freeze - to reboot and
+grab the point at which they did. You have about 3 minutes to do so after the
+next boot before the data vanishes and you grab it from <code>dmesg</code>.</p>
+<p>This led to an immediate reproduction - suspend-&gt;resume worked the first time,
+and then hung my system on the second time. So it works, but something gets
+corrupted through the process and we need to (hopefully) just reset it on 
+resume to avoid the problem.</p>
+<pre class="code literal-block"><span></span><code>$ dmesg <span class="p">|</span> grep -A10 Magic
+<span class="o">[</span>    <span class="m">3</span>.607642<span class="o">]</span>   Magic number: <span class="m">0</span>:474:178
+<span class="o">[</span>    <span class="m">3</span>.625900<span class="o">]</span>   <span class="nb">hash</span> matches /build/linux-B4zRAA/linux-4.8.0/drivers/base/power/main.c:1070
+<span class="o">[</span>    <span class="m">3</span>.644583<span class="o">]</span> acpi device:0e: <span class="nb">hash</span> matches
+<span class="o">[</span>    <span class="m">3</span>.663313<span class="o">]</span>  platform: <span class="nb">hash</span> matches
+</code></pre>
+
+<p>That's the easy part. What the hell does it mean?</p>
+<h2>Goto the Source</h2>
+<p>We get a source line out of that request, and we're running an ubuntu kernel
+which has a convenient source package we can grab. So let's get that so we can
+account for the Ubuntu packages:</p>
+<pre class="code literal-block"><span></span><code>$ <span class="nb">cd</span> ~/tmp
+$ uname -a
+Linux will-desktop <span class="m">4</span>.8.0-19-generic <span class="c1">#21-Ubuntu SMP Thu Sep 29 19:39:23 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux</span>
+$ apt-get <span class="nb">source</span> linux-image-4.8.0-19-generic-generic
+</code></pre>
+
+<p>Which leads to this:</p>
+<pre class="code literal-block"><span></span><code><span class="nv">static</span> <span class="nv">void</span> <span class="nv">async_suspend_noirq</span><span class="ss">(</span><span class="nv">void</span> <span class="o">*</span><span class="nv">data</span>, <span class="nv">async_cookie_t</span> <span class="nv">cookie</span><span class="ss">)</span>
+{
+    <span class="nv">struct</span> <span class="nv">device</span> <span class="o">*</span><span class="nv">dev</span> <span class="o">=</span> <span class="ss">(</span><span class="nv">struct</span> <span class="nv">device</span> <span class="o">*</span><span class="ss">)</span><span class="nv">data</span><span class="c1">;</span>
+    <span class="nv">int</span> <span class="nv">error</span><span class="c1">;</span>
+
+    <span class="nv">error</span> <span class="o">=</span> <span class="nv">__device_suspend_noirq</span><span class="ss">(</span><span class="nv">dev</span>, <span class="nv">pm_transition</span>, <span class="nv">true</span><span class="ss">)</span><span class="c1">;</span>
+    <span class="k">if</span> <span class="ss">(</span><span class="nv">error</span><span class="ss">)</span> {
+        <span class="nv">dpm_save_failed_dev</span><span class="ss">(</span><span class="nv">dev_name</span><span class="ss">(</span><span class="nv">dev</span><span class="ss">))</span><span class="c1">;</span>
+        <span class="nv">pm_dev_err</span><span class="ss">(</span><span class="nv">dev</span>, <span class="nv">pm_transition</span>, <span class="s2">"</span><span class="s"> async</span><span class="s2">"</span>, <span class="nv">error</span><span class="ss">)</span><span class="c1">;</span>
+    }
+
+    <span class="nv">put_device</span><span class="ss">(</span><span class="nv">dev</span><span class="ss">)</span><span class="c1">;</span>
+}
+</code></pre>
+
+<p>So the error line we're getting puts right on that <code>if (error)</code> line which
+hopefully means this is just some device failure we can add a PM script for.</p>
+<p>From <code>dmesg</code> above we've got two more things to look at - whatever <code>acpi_device:0e</code>
+is and the <code>platform</code> driver for. Some googling shows that this puts us into
+the category of very annoying problems: we're not even successfully getting into
+the resume code, so the failure on the second resume happens very early.
+<a href="https://lkml.org/lkml/2016/7/14/160">https://lkml.org/lkml/2016/7/14/160</a></p>
+<h2>Time to rebuild the kernel...</h2>
+<p>Which is often less work then it sounds, but judging from that LKML link it's
+pretty much the only lead we have to go on since we don't have a Thinkpad but
+the problem is probably suspiciously similar.</p>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/totally-static-go-builds/" class="u-url">Totally static Go builds</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
                 <a href="authors/wrouesnel/">wrouesnel</a>

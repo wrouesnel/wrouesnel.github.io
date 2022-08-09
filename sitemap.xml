@@ -11,7 +11,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/archive.html</loc>
-  <lastmod>2022-05-04T01:42:00Z</lastmod>
+  <lastmod>2022-08-09T00:13:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/authors/</loc>
@@ -27,7 +27,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/</loc>
-  <lastmod>2022-05-04T01:42:00Z</lastmod>
+  <lastmod>2022-08-08T23:48:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/2204/</loc>
@@ -96,6 +96,10 @@
  <url>
   <loc>https://blog.wrouesnel.com/categories/debugging/</loc>
   <lastmod>2021-12-09T15:13:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/development/</loc>
+  <lastmod>2022-08-08T23:48:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/docker/</loc>
@@ -190,6 +194,14 @@
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
  <url>
+  <loc>https://blog.wrouesnel.com/categories/openssh/</loc>
+  <lastmod>2022-08-08T23:48:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/patch/</loc>
+  <lastmod>2022-08-08T23:48:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://blog.wrouesnel.com/categories/port-forwarding/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
@@ -254,6 +266,10 @@
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
  <url>
+  <loc>https://blog.wrouesnel.com/categories/ssh/</loc>
+  <lastmod>2022-08-08T23:48:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://blog.wrouesnel.com/categories/sshttp/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
@@ -291,7 +307,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/index-2.html</loc>
-  <lastmod>2022-05-04T01:42:00Z</lastmod>
+  <lastmod>2022-08-08T23:48:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/a-better-getmail-idle-client/</loc>
@@ -316,6 +332,10 @@
  <url>
   <loc>https://blog.wrouesnel.com/posts/installing-the-latest-docker-release/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/posts/log-openssh-public-keys-from-failed-logins/</loc>
+  <lastmod>2022-08-08T23:48:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/migrating-to-gmail/</loc>
