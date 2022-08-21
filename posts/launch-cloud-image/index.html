@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html prefix="
+og: http://ogp.me/ns# article: http://ogp.me/ns/article#
+" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Easy Ephemeral Virtual Machines with libvirt | wrouesnel_blog</title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="canonical" href="https://blog.wrouesnel.com/posts/launch-cloud-image/">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><link rel="stylesheet" href="../../assets/css/wrouesnel_blog-theme.css">
+<meta name="author" content="Will Rouesnel">
+<link rel="prev" href="../log-openssh-public-keys-from-failed-logins/" title="Log OpenSSH public keys from failed logins" type="text/html">
+<meta property="og:site_name" content="wrouesnel_blog">
+<meta property="og:title" content="Easy Ephemeral Virtual Machines with libvirt">
+<meta property="og:url" content="https://blog.wrouesnel.com/posts/launch-cloud-image/">
+<meta property="og:description" content="The Situation¶At a previous job I was finally fed up with docker containers: generally speaking I was always working to setup whole systems or test whole system stuff, and docker containers - even whe">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2022-08-21T11:11:40+10:00">
+<meta property="article:tag" content="containers">
+<meta property="article:tag" content="kvmboot">
+<meta property="article:tag" content="libvirt">
+<meta property="article:tag" content="virtualization">
+<meta property="article:tag" content="vm">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-expand-md static-top mb-4
+navbar-dark
+bg-dark
+"><div class="container">
+<!-- This keeps the margins nice -->
+        <a class="navbar-brand" href="../../">
+
+            <span id="blog-title">wrouesnel_blog</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="bs-navbar">
+            <ul class="navbar-nav mr-auto">
+<li class="nav-item">
+<a href="../../archive.html" class="nav-link">Archive</a>
+                </li>
+<li class="nav-item">
+<a href="../../categories/" class="nav-link">Tags</a>
+
+                
+            </li>
+</ul>
+<ul class="navbar-nav navbar-right"></ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Easy Ephemeral Virtual Machines with libvirt</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    <a class="u-url" href="../../authors/will-rouesnel/">Will Rouesnel</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2022-08-21T11:11:40+10:00" itemprop="datePublished" title="2022-08-21 11:11">2022-08-21 11:11</time></a>
+            </p>
+            
+        </div>
+        
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="The-Situation">The Situation<a class="anchor-link" href="#The-Situation">¶</a>
+</h2>
+<p>At a previous job I was finally fed up with docker containers: generally speaking I was always working to setup whole systems or test whole system stuff, and docker containers - even when suitable - don't look anything like a whole system.</p>
+<p>While Vagrant does exist, there was always something slightly "off" about the feeling of using it - it did what you want, but had a lot of opinions on it.</p>
+<p>So the question I asked myself was, what was I actually wanting to do?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="What-we-want-to-do">What we want to do<a class="anchor-link" href="#What-we-want-to-do">¶</a>
+</h2>
+<p>Since this was a job specific issue, the thing I wanted to do was boot cloud-specific environments quickly in a way which would let me deploy the codebase as it ran in the cloud. The company had since simply moved to launching cloud VM instances for this on AWS, but ultimately this left holes in the experience - i.e. try getting access to the disk of a cloud VM - on my local machine I can just mount it directly, or dive in with <a href="https://www.wxhexeditor.org/">wxHexEditor</a> if I really want to - on the cloud I get to spend some time trying to security manage an instance into the right environment, attaching EBS volumes and...just a lot of <em>not the current problem</em>.</p>
+<p>So: the problem I wanted to solve is, given a cloud-init compatible disk image, give myself a command line parameter which would provision and boot the machine with sensible defaults, and give me an SSH login for it that would just work.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="The-Solution">The Solution<a class="anchor-link" href="#The-Solution">¶</a>
+</h2>
+<p>What I ended up pulling together to do this is called <a href="https://github.com/wrouesnel/kvmboot">kvmboot</a> and for me at least works pretty nicely. It has also accidentally become my repository for build recipes to get various flavors of Windows VMs kicked out in a non-annoying state as quickly as possible - the result of the job I took <em>after</em> the original inspiration.</p>
+<p>The environment currently works on Ubuntu (what I'm running at home) and should work on Fedora (what I was running when I developed it - hence the SELinux workarounds in the repository).</p>
+<p>What it is is pretty simple - <code>launch-cloud-image</code> is a large bash script which spits out an opinionated take on a reasonable <a href="https://libvirt.org/">libvirt</a>. libvirt ships with a number of tools to accomplish things like this, but no real set of instructions to produce something as useful as I've found this customization - of course that might just be me.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Usage">Usage<a class="anchor-link" href="#Usage">¶</a>
+</h2>
+<p>The basic usage I have for it today is setting up Amazon AMI provisioning scripts. Amazong provide a downloadable version of <a href="https://cdn.amazonlinux.com/os-images/2.0.20220316.0/kvm/">Amazon Linux 2 for KVM</a>, and <code>launch-cloud-image</code> makes using it very easy: -</p>
+<div class="highlight"><pre><span></span>kvmboot $ <span class="nb">time</span> ./launch-cloud-image --ram 2G --video amzn2-kvm-2.0.20210813.1-x86_64.xfs.gpt.qcow2 blogtest
+
+xorriso <span class="m">1</span>.5.2 : RockRidge filesystem manipulator, libburnia project.
+
+Drive current: -outdev <span class="s1">'/tmp/lci.blogtest.userdata.3dQylgsKb.iso'</span>
+Media current: stdio file, overwriteable
+Media status : is blank
+Media summary: <span class="m">0</span> sessions, <span class="m">0</span> data blocks, <span class="m">0</span> data, <span class="m">51</span>.0g free
+xorriso : NOTE : -blank as_needed: no need <span class="k">for</span> action detected
+xorriso : WARNING : -volid text does not comply to ISO <span class="m">9660</span> / ECMA <span class="m">119</span> rules
+xorriso : UPDATE :      <span class="m">12</span> files added <span class="k">in</span> <span class="m">1</span> seconds
+Added to ISO image: directory <span class="s1">'/'</span><span class="o">=</span><span class="s1">'/tmp/lci.blogtest.userdata.kq9RDblTKJ'</span>
+ISO image produced: <span class="m">41</span> sectors
+Written to medium : <span class="m">192</span> sectors at LBA <span class="m">32</span>
+Writing to <span class="s1">'/tmp/lci.blogtest.userdata.3dQylgsKb.iso'</span> completed successfully.
+
+xorriso : NOTE : Re-assessing -outdev <span class="s1">'/tmp/lci.blogtest.userdata.3dQylgsKb.iso'</span>
+xorriso : NOTE : Loading ISO image tree from LBA <span class="m">0</span>
+xorriso : UPDATE :      <span class="m">12</span> nodes <span class="nb">read</span> <span class="k">in</span> <span class="m">1</span> seconds
+Drive current: -dev <span class="s1">'/tmp/lci.blogtest.userdata.3dQylgsKb.iso'</span>
+Media current: stdio file, overwriteable
+Media status : is written , is appendable
+Media summary: <span class="m">1</span> session, <span class="m">41</span> data blocks, <span class="m">82</span>.0k data, <span class="m">51</span>.0g free
+Volume id    : <span class="s1">'config-2'</span>
+User Login: will
+Root disk path: /home/will/.local/share/libvirt/images/lci.blogtest.root.qcow2
+ISO file path: /home/will/.local/share/libvirt/images/lci.blogtest.userdata.3dQylgsKb.iso
+Virtual machine created as: blogtest
+blogtest.default.libvirt : will : aedeebootahnouD7Meig
+
+real    0m16.764s
+user    0m0.326s
+sys 0m0.077s
+</pre></div>
+<p>16 seconds isn't bad from nothing to what I'd get an in EC2 VM - and since I have SSH access I can jump right into using Ansible or something else to provision that machine. Or just alias it so I can kick one up quickly to try silly things.</p>
+<div class="highlight"><pre><span></span>kvmboot $ ssh will@blogtest.default.libvirt
+
+       __<span class="p">|</span>  __<span class="p">|</span>_  <span class="o">)</span>
+       _<span class="p">|</span>  <span class="o">(</span>     /   Amazon Linux <span class="m">2</span> AMI
+      ___<span class="p">|</span><span class="se">\_</span>__<span class="p">|</span>___<span class="p">|</span>
+
+https://aws.amazon.com/amazon-linux-2/
+<span class="m">19</span> package<span class="o">(</span>s<span class="o">)</span> needed <span class="k">for</span> security, out of <span class="m">59</span> available
+Run <span class="s2">"sudo yum update"</span> to apply all updates.
+<span class="o">[</span>will@blogtest ~<span class="o">]</span>$ <span class="c1"># and then you try stuff here</span>
+</pre></div>
+<p>What's nice is that this is absolutely standard libvirt. It appears in <code>virt-manager</code>, you can play around with it using all the standard virt-manager commands and management. It'll work with remote libvirtd's if you have them, but it's a super-convenient way to use a barebones VM environment - about as easy as doing <code>docker run -it ubuntu bash</code> or something similar, but with way more isolation.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="But-it-also-works-for-Windows!">But it also works for Windows!<a class="anchor-link" href="#But-it-also-works-for-Windows!">¶</a>
+</h2>
+<p>This was the real joy of this solution: when I stumbled into a bunch of Windows provisioning, I'd never had a good solution. But it turns out <code>launch-cloud-image</code> (I should probably rename it <code>kvmboot</code> like the repo) actually works really well for this use case. By the addition of an installation mode, and some support scripting to build the automatic installation disk images, it can in fact support the whole lifecycle to go from "Windows ISO" to "cloud-initable Windows image" to "Windows workstation with all the cruft removed".</p>
+<p>As a result the repository itself has grown a lot of my research into how to easily get usable Windows environments, but it does work and it works great - with Windows 10 we can automate the SSH installation and have it drop you straight into Powershell, ready for provisioning.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">¶</a>
+</h2>
+<p>I use this script <em>all the time</em>. It's the fastest way I know to get VM environments up which look like the type of cloud instance machines you would be using in the public cloud, and the dnsmasq integration and naming makes them super easy to work with while being standard, boring libvirt - no magic.</p>
+
+</div>
+</div>
+</div>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/containers/" rel="tag">containers</a></li>
+            <li><a class="tag p-category" href="../../categories/kvmboot/" rel="tag">kvmboot</a></li>
+            <li><a class="tag p-category" href="../../categories/libvirt/" rel="tag">libvirt</a></li>
+            <li><a class="tag p-category" href="../../categories/virtualization/" rel="tag">virtualization</a></li>
+            <li><a class="tag p-category" href="../../categories/vm/" rel="tag">vm</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../log-openssh-public-keys-from-failed-logins/" rel="prev" title="Log OpenSSH public keys from failed logins">Previous post</a>
+            </li>
+        </ul></nav></aside><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML" integrity="sha384-3lJUsx1TJHt7BA4udB5KPnDrlkO8T6J6v/op7ui0BbCjvZ9WqV4Xm6DTP6kQ/iBH" crossorigin="anonymous"></script><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+    },
+    displayAlign: 'center', // Change this to 'left' if you want left-aligned equations.
+    "HTML-CSS": {
+        styles: {'.MathJax_Display': {"margin": 0}}
+    }
+});
+</script></article><!--End of body content--><footer id="footer">
+            Contents © 2022         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+        <script src="../../assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element){var i=element.getElementsByTagName('img')[0];return i===undefined?'':i.alt;}});
+    </script>
+</body>
+</html>

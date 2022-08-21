@@ -11,7 +11,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/archive.html</loc>
-  <lastmod>2022-08-09T00:13:00Z</lastmod>
+  <lastmod>2022-08-21T11:22:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/authors/</loc>
@@ -27,7 +27,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/</loc>
-  <lastmod>2022-08-08T23:48:00Z</lastmod>
+  <lastmod>2022-08-21T11:17:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/2204/</loc>
@@ -166,6 +166,14 @@
   <lastmod>2021-12-09T15:13:00Z</lastmod>
  </url>
  <url>
+  <loc>https://blog.wrouesnel.com/categories/kvmboot/</loc>
+  <lastmod>2022-08-21T11:17:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/libvirt/</loc>
+  <lastmod>2022-08-21T11:17:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://blog.wrouesnel.com/categories/linux/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
@@ -290,6 +298,14 @@
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
  <url>
+  <loc>https://blog.wrouesnel.com/categories/virtualization/</loc>
+  <lastmod>2022-08-21T11:17:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/vm/</loc>
+  <lastmod>2022-08-21T11:17:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://blog.wrouesnel.com/categories/wintersmith/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
@@ -307,7 +323,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/index-2.html</loc>
-  <lastmod>2022-08-08T23:48:00Z</lastmod>
+  <lastmod>2022-08-21T11:17:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/a-better-getmail-idle-client/</loc>
@@ -332,6 +348,10 @@
  <url>
   <loc>https://blog.wrouesnel.com/posts/installing-the-latest-docker-release/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/posts/launch-cloud-image/</loc>
+  <lastmod>2022-08-21T11:17:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/log-openssh-public-keys-from-failed-logins/</loc>

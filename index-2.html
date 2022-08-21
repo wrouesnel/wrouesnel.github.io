@@ -58,7 +58,75 @@ bg-dark
     
     
 <div class="postindex">
-    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/tracking-down-why-my-desktop-fails-every-second-resume/" class="u-url">Tracking down why my desktop fails every second resume</a></h1>
+    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/structuring-my-go-projects/" class="u-url">Structuring my Go projects</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/wrouesnel/">wrouesnel</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/structuring-my-go-projects/" rel="bookmark">
+            <time class="published dt-published" datetime="2017-12-21T21:52:00-11:00" itemprop="datePublished" title="2017-12-21 21:52">2017-12-21 21:52</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>Recently I've been maintaining a Github repository to serve as a generic
+template for my Golang projects, and its been working rather well for me.</p>
+<p>The repository is here: <a href="https://github.com/wrouesnel/self-contained-go-project">Self-contained Go Project</a></p>
+<p>The basic idea is that using this template, you can setup a Go project with
+vendored dependencies not just for the main project but also for every tool
+used in building and linting it (with the exception of <code>make</code>, <code>git</code> and a 
+working Golang install). </p>
+<pre class="code literal-block"><span></span><code>go get &lt;my project&gt;
+<span class="nb">cd</span> <span class="nv">$GOPATH</span>/src/&lt;my project&gt;
+make
+</code></pre>
+
+<p>does a production build.</p>
+<h2>How to Use It</h2>
+<p>Out of the box (i.e. <code>git clone https://github.com/wrouesnel/self-contained-go-project.git</code>)
+on a Linux machine it should be all setup to go. I've made some effort to try
+and remove Linux specific things from it, but since I don't run Mac OS or
+Windows for Go development it's probably not working too well there.</p>
+<p>Essentially, it'll build multi-platform, CGO-less binaries for any <code>main</code>
+package you place in a folder underneath the <code>cmd</code> directory. Running <code>make binary</code>
+will build all current commands for your current platform and symlink them into
+the root folder, while running <code>make release</code> will build all binaries and then
+create tarballs with the name and version in the <code>release</code> directory.</p>
+<p>It also includes bevy of other CI-friendly commands - namely <code>make style</code> which
+checks for <code>gofmt</code> and <code>goimports</code> formatting and <code>make lint</code> which runs 
+<a href="https://github.com/alecthomas/gometalinter">gometalinter</a> against the entire
+project.</p>
+<h2>Philosophy</h2>
+<p>Just looking at the commands, the main thing accomplished is a lot of use of
+<code>make</code>. It's practically used for ergonomics more then utility to some level
+since <code>make</code> is a familiar "build whatever this is" command in the Unix world.</p>
+<p>But, importantly, <code>make</code> is used <em>correctly</em> - build dependencies are expressed
+and managed in a form it understands so it only rebuilds as necessary.</p>
+<p>But there is more important element, and that is not just that there is a 
+Makefile but that the repository for the project, through <code>govendor</code>ing includes
+not just the code but also the linting and checking tools needed to build it,
+and a mechanism to update them all.</p>
+<p>Under the <code>tools</code> directory we have a secondary <code>Makefile</code> which is called from
+the top-level and is reposible for managing the tools. By running <code>make update</code>
+here we can <code>go get</code> a new version of <code>gometalinter</code>, extract the list of tools
+it runs, then automatically have them updated and installed inside the source
+directory and made available to the top level <code>Makefile</code> to use to run CI tasks.</p>
+<p>This combines to make project management <em>extremely</em> ergonomic in my opinion,
+and avoids dragging a heavier tool like <code>Docker</code> into the mix (which often means
+some uncontrolled external dependencies).</p>
+<p>Basically: you check in everything your project needs to be built and run and
+tested into the one Git repository, because storage is cheap but your time is
+not and external dependencies can't be trusted to always exist.</p>
+<h2>Conclusion</h2>
+<p>It's not the be all and end all - in build tooling there never is one, but I'm
+thusfar really happy with how this basic structure has turned out as I've
+evolved it and it's proven relatively easy to extend when I need to (i.e.
+adding more testing levels, building web assets as well with npm and including
+them in the go-binary etc.)</p>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/tracking-down-why-my-desktop-fails-every-second-resume/" class="u-url">Tracking down why my desktop fails every second resume</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
                 <a href="authors/wrouesnel/">wrouesnel</a>
