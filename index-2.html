@@ -58,7 +58,39 @@ bg-dark
     
     
 <div class="postindex">
-    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/structuring-my-go-projects/" class="u-url">Structuring my Go projects</a></h1>
+    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/s4-i9505-in-2018/" class="u-url">S4-i9505 in 2018</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/wrouesnel/">wrouesnel</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/s4-i9505-in-2018/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-01-23T23:20:00-11:00" itemprop="datePublished" title="2018-01-23 23:20">2018-01-23 23:20</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>Some notes on running a Samsung Galaxy S4 i9505 in Australia in 2018</p>
+<p>My first high end phone, still perfectly capable of everything I need from a
+smart phone and now dirt cheap on ebay so I'm basically going to keep buying
+them till there's no more to be had (or someone releases a Spectre-immune CPU
+phone I guess now).</p>
+<p>Baseband: XXUGNG8
+I upgraded the baseband a bunch of times including to some alleged Telstra OTA
+packages, and found I lost wifi. The actual modem and APN-HLOS don't seem to
+matter much but...the XXUGNG8 bootloader and related files are vitally
+important to getting sound to work.</p>
+<p>OS: Lineage OS
+Loved Cyanogenmod, like seeing it continued. There's a patch to the SELinux
+config needed on newer android to allow the proximity sensor to calibrate
+properly - the symptom is an apparent freeze when making/receiving calls and
+its to do with SELinux only allowing the phone to use the default prox-sensor
+thresholds - which if your phone meets them, great - if not - then it will
+appear broken.</p>
+<p>I'm hoping to get this patched in the upstream <a href="https://review.lineageos.org/#/c/201533/">soon</a>.</p>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/structuring-my-go-projects/" class="u-url">Structuring my Go projects</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
                 <a href="authors/wrouesnel/">wrouesnel</a>
