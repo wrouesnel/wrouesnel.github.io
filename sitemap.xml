@@ -11,7 +11,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/archive.html</loc>
-  <lastmod>2022-10-22T02:52:00Z</lastmod>
+  <lastmod>2022-10-22T10:18:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/authors/</loc>
@@ -27,7 +27,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/</loc>
-  <lastmod>2022-10-22T02:52:00Z</lastmod>
+  <lastmod>2022-10-22T10:15:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/2204/</loc>
@@ -118,6 +118,10 @@
   <lastmod>2022-05-04T01:42:00Z</lastmod>
  </url>
  <url>
+  <loc>https://blog.wrouesnel.com/categories/g815/</loc>
+  <lastmod>2022-10-22T10:15:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://blog.wrouesnel.com/categories/getmail/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
@@ -162,6 +166,10 @@
   <lastmod>2022-05-04T01:42:00Z</lastmod>
  </url>
  <url>
+  <loc>https://blog.wrouesnel.com/categories/k740/</loc>
+  <lastmod>2022-10-22T10:15:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://blog.wrouesnel.com/categories/kernel/</loc>
   <lastmod>2021-12-09T15:13:00Z</lastmod>
  </url>
@@ -180,6 +188,10 @@
  <url>
   <loc>https://blog.wrouesnel.com/categories/linux/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/logitech/</loc>
+  <lastmod>2022-10-22T10:15:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/marlin/</loc>
@@ -371,7 +383,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/logitech-g815-impressions/</loc>
-  <lastmod>2022-10-22T02:52:00Z</lastmod>
+  <lastmod>2022-10-22T10:16:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/migrating-to-gmail/</loc>
