@@ -11,7 +11,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/archive.html</loc>
-  <lastmod>2022-10-22T10:18:00Z</lastmod>
+  <lastmod>2023-01-17T14:21:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/authors/</loc>
@@ -27,7 +27,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/</loc>
-  <lastmod>2022-10-22T10:15:00Z</lastmod>
+  <lastmod>2023-01-17T14:21:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/2204/</loc>
@@ -210,6 +210,10 @@
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
  <url>
+  <loc>https://blog.wrouesnel.com/categories/neal/</loc>
+  <lastmod>2023-01-17T14:21:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://blog.wrouesnel.com/categories/netcat/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
@@ -270,6 +274,10 @@
   <lastmod>2021-12-09T15:00:00Z</lastmod>
  </url>
  <url>
+  <loc>https://blog.wrouesnel.com/categories/reupload/</loc>
+  <lastmod>2023-01-17T14:21:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://blog.wrouesnel.com/categories/reverse-proxy/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
@@ -284,6 +292,10 @@
  <url>
   <loc>https://blog.wrouesnel.com/categories/security/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/short-story/</loc>
+  <lastmod>2023-01-17T14:21:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/snap/</loc>
@@ -308,6 +320,10 @@
  <url>
   <loc>https://blog.wrouesnel.com/categories/static-site-generators/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/stephenson/</loc>
+  <lastmod>2023-01-17T14:21:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/tracker/</loc>
@@ -343,11 +359,11 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/index-1.html</loc>
-  <lastmod>2022-05-04T01:42:00Z</lastmod>
+  <lastmod>2023-01-17T14:21:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/index-2.html</loc>
-  <lastmod>2022-10-22T02:52:00Z</lastmod>
+  <lastmod>2023-01-17T14:21:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/a-better-getmail-idle-client/</loc>
@@ -372,6 +388,10 @@
  <url>
   <loc>https://blog.wrouesnel.com/posts/installing-the-latest-docker-release/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/posts/jipi-and-the-paranoid-chip/</loc>
+  <lastmod>2023-01-17T14:21:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/launch-cloud-image/</loc>
