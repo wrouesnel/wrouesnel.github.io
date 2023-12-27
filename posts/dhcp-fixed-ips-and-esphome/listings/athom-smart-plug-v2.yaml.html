@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html prefix="
+og: http://ogp.me/ns# article: http://ogp.me/ns/article#
+" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="athom-smart-plug-v2.yaml">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>athom-smart-plug-v2.yaml | wrouesnel_blog</title>
+<link href="../../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link href="../../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="../../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="canonical" href="https://blog.wrouesnel.com/posts/dhcp-fixed-ips-and-esphome/listings/athom-smart-plug-v2.yaml.html">
+<!--[if lt IE 9]><script src="../../../assets/js/html5.js"></script><![endif]--><link rel="stylesheet" href="../../../assets/css/wrouesnel_blog-theme.css">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-expand-md static-top mb-4
+navbar-dark
+bg-dark
+"><div class="container">
+<!-- This keeps the margins nice -->
+        <a class="navbar-brand" href="../../../">
+
+            <span id="blog-title">wrouesnel_blog</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="bs-navbar">
+            <ul class="navbar-nav mr-auto">
+<li class="nav-item">
+<a href="../../../archive.html" class="nav-link">Archive</a>
+                </li>
+<li class="nav-item">
+<a href="../../../categories/" class="nav-link">Tags</a>
+
+                
+            </li>
+</ul>
+<ul class="navbar-nav navbar-right"></ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        
+<nav class="breadcrumbs"><ul class="breadcrumb">
+<li class="breadcrumb-item"><a href="../../">posts</a></li>
+                <li class="breadcrumb-item"><a href="../">dhcp-fixed-ips-and-esphome</a></li>
+                <li class="breadcrumb-item"><a href=".">listings</a></li>
+                <li class="breadcrumb-item active">athom-smart-plug-v2.yaml</li>
+</ul></nav><h1>athom-smart-plug-v2.yaml
+        <small><a href="athom-smart-plug-v2.yaml">(Source)</a></small>
+    </h1>
+    <div class="code"><table class="codetable">
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-1"><code data-line-number="  1"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-1" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-1"></a><span class="nt">substitutions</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-2"><code data-line-number="  2"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-2" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-2"></a>  <span class="nt">name</span><span class="p">:</span> <span class="s">"athom-smart-plug-v2"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-3"><code data-line-number="  3"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-3" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-3"></a>  <span class="nt">friendly_name</span><span class="p">:</span> <span class="s">"Smart</span><span class="nv"> </span><span class="s">Plug</span><span class="nv"> </span><span class="s">V2"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-4"><code data-line-number="  4"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-4" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-4"></a>  <span class="nt">room</span><span class="p">:</span> <span class="s">""</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-5"><code data-line-number="  5"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-5" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-5"></a>  <span class="nt">device_description</span><span class="p">:</span> <span class="s">"athom</span><span class="nv"> </span><span class="s">smart</span><span class="nv"> </span><span class="s">plug</span><span class="nv"> </span><span class="s">v2"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-6"><code data-line-number="  6"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-6" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-6"></a>  <span class="nt">project_name</span><span class="p">:</span> <span class="s">"Athom</span><span class="nv"> </span><span class="s">Technology.Smart</span><span class="nv"> </span><span class="s">Plug</span><span class="nv"> </span><span class="s">V2"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-7"><code data-line-number="  7"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-7" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-7"></a>  <span class="nt">project_version</span><span class="p">:</span> <span class="s">"2.0"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-8"><code data-line-number="  8"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-8" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-8"></a>  <span class="nt">relay_restore_mode</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">RESTORE_DEFAULT_OFF</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-9"><code data-line-number="  9"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-9" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-9"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-10"><code data-line-number=" 10"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-10" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-10"></a><span class="nt">esphome</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-11"><code data-line-number=" 11"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-11" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-11"></a>  <span class="nt">name</span><span class="p">:</span> <span class="s">"${name}"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-12"><code data-line-number=" 12"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-12" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-12"></a>  <span class="nt">friendly_name</span><span class="p">:</span> <span class="s">"${friendly_name}"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-13"><code data-line-number=" 13"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-13" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-13"></a>  <span class="nt">name_add_mac_suffix</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-14"><code data-line-number=" 14"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-14" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-14"></a>  <span class="nt">project</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-15"><code data-line-number=" 15"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-15" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-15"></a>    <span class="nt">name</span><span class="p">:</span> <span class="s">"${project_name}"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-16"><code data-line-number=" 16"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-16" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-16"></a>    <span class="nt">version</span><span class="p">:</span> <span class="s">"${project_version}"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-17"><code data-line-number=" 17"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-17" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-17"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-18"><code data-line-number=" 18"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-18" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-18"></a><span class="nt">esp8266</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-19"><code data-line-number=" 19"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-19" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-19"></a>  <span class="nt">board</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">esp8285</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-20"><code data-line-number=" 20"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-20" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-20"></a>  <span class="nt">restore_from_flash</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-21"><code data-line-number=" 21"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-21" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-21"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-22"><code data-line-number=" 22"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-22" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-22"></a><span class="nt">preferences</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-23"><code data-line-number=" 23"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-23" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-23"></a>  <span class="nt">flash_write_interval</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1min</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-24"><code data-line-number=" 24"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-24" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-24"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-25"><code data-line-number=" 25"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-25" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-25"></a><span class="nt">api</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-26"><code data-line-number=" 26"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-26" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-26"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-27"><code data-line-number=" 27"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-27" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-27"></a><span class="nt">ota</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-28"><code data-line-number=" 28"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-28" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-28"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-29"><code data-line-number=" 29"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-29" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-29"></a><span class="nt">logger</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-30"><code data-line-number=" 30"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-30" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-30"></a>  <span class="nt">baud_rate</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-31"><code data-line-number=" 31"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-31" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-31"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-32"><code data-line-number=" 32"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-32" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-32"></a><span class="nt">mdns</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-33"><code data-line-number=" 33"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-33" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-33"></a>  <span class="nt">disabled</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-34"><code data-line-number=" 34"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-34" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-34"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-35"><code data-line-number=" 35"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-35" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-35"></a><span class="nt">web_server</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-36"><code data-line-number=" 36"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-36" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-36"></a>  <span class="nt">port</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">80</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-37"><code data-line-number=" 37"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-37" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-37"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-38"><code data-line-number=" 38"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-38" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-38"></a><span class="nt">wifi</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-39"><code data-line-number=" 39"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-39" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-39"></a>  <span class="nt">ap</span><span class="p">:</span> <span class="p p-Indicator">{}</span> <span class="c1"># This spawns an AP with the device name and mac address with no password.</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-40"><code data-line-number=" 40"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-40" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-40"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-41"><code data-line-number=" 41"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-41" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-41"></a><span class="nt">captive_portal</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-42"><code data-line-number=" 42"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-42" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-42"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-43"><code data-line-number=" 43"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-43" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-43"></a><span class="nt">dashboard_import</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-44"><code data-line-number=" 44"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-44" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-44"></a>  <span class="nt">package_import_url</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">github://athom-tech/athom-configs/athom-smart-plug-v2.yaml</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-45"><code data-line-number=" 45"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-45" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-45"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-46"><code data-line-number=" 46"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-46" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-46"></a><span class="nt">uart</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-47"><code data-line-number=" 47"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-47" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-47"></a>  <span class="nt">rx_pin</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">RX</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-48"><code data-line-number=" 48"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-48" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-48"></a>  <span class="nt">baud_rate</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">4800</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-49"><code data-line-number=" 49"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-49" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-49"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-50"><code data-line-number=" 50"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-50" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-50"></a><span class="nt">globals</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-51"><code data-line-number=" 51"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-51" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-51"></a>  <span class="p p-Indicator">-</span> <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">total_energy</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-52"><code data-line-number=" 52"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-52" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-52"></a>    <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">float</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-53"><code data-line-number=" 53"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-53" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-53"></a>    <span class="nt">restore_value</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">yes</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-54"><code data-line-number=" 54"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-54" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-54"></a>    <span class="nt">initial_value</span><span class="p">:</span> <span class="s">'0.0'</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-55"><code data-line-number=" 55"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-55" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-55"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-56"><code data-line-number=" 56"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-56" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-56"></a><span class="nt">binary_sensor</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-57"><code data-line-number=" 57"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-57" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-57"></a>  <span class="p p-Indicator">-</span> <span class="nt">platform</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">status</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-58"><code data-line-number=" 58"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-58" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-58"></a>    <span class="nt">name</span><span class="p">:</span> <span class="s">"Status"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-59"><code data-line-number=" 59"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-59" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-59"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-60"><code data-line-number=" 60"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-60" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-60"></a>  <span class="p p-Indicator">-</span> <span class="nt">platform</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gpio</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-61"><code data-line-number=" 61"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-61" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-61"></a>    <span class="nt">pin</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-62"><code data-line-number=" 62"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-62" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-62"></a>      <span class="nt">number</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">5</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-63"><code data-line-number=" 63"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-63" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-63"></a>      <span class="nt">mode</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">INPUT_PULLUP</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-64"><code data-line-number=" 64"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-64" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-64"></a>      <span class="nt">inverted</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-65"><code data-line-number=" 65"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-65" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-65"></a>    <span class="nt">name</span><span class="p">:</span> <span class="s">"Power</span><span class="nv"> </span><span class="s">Button"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-66"><code data-line-number=" 66"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-66" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-66"></a>    <span class="nt">disabled_by_default</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-67"><code data-line-number=" 67"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-67" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-67"></a>    <span class="nt">on_multi_click</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-68"><code data-line-number=" 68"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-68" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-68"></a>      <span class="p p-Indicator">-</span> <span class="nt">timing</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-69"><code data-line-number=" 69"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-69" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-69"></a>          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ON for at most 1s</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-70"><code data-line-number=" 70"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-70" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-70"></a>          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">OFF for at least 0.2s</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-71"><code data-line-number=" 71"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-71" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-71"></a>        <span class="nt">then</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-72"><code data-line-number=" 72"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-72" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-72"></a>          <span class="p p-Indicator">-</span> <span class="nt">switch.toggle</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">relay</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-73"><code data-line-number=" 73"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-73" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-73"></a>      <span class="p p-Indicator">-</span> <span class="nt">timing</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-74"><code data-line-number=" 74"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-74" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-74"></a>          <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">ON for at least 4s</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-75"><code data-line-number=" 75"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-75" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-75"></a>        <span class="nt">then</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-76"><code data-line-number=" 76"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-76" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-76"></a>          <span class="p p-Indicator">-</span> <span class="nt">button.press</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Reset</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-77"><code data-line-number=" 77"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-77" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-77"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-78"><code data-line-number=" 78"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-78" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-78"></a><span class="nt">sensor</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-79"><code data-line-number=" 79"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-79" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-79"></a>  <span class="p p-Indicator">-</span> <span class="nt">platform</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">uptime</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-80"><code data-line-number=" 80"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-80" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-80"></a>    <span class="nt">name</span><span class="p">:</span> <span class="s">"Uptime</span><span class="nv"> </span><span class="s">Sensor"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-81"><code data-line-number=" 81"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-81" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-81"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-82"><code data-line-number=" 82"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-82" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-82"></a>  <span class="p p-Indicator">-</span> <span class="nt">platform</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">wifi_signal</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-83"><code data-line-number=" 83"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-83" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-83"></a>    <span class="nt">name</span><span class="p">:</span> <span class="s">"WiFi</span><span class="nv"> </span><span class="s">Signal"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-84"><code data-line-number=" 84"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-84" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-84"></a>    <span class="nt">update_interval</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">60s</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-85"><code data-line-number=" 85"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-85" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-85"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-86"><code data-line-number=" 86"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-86" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-86"></a>  <span class="p p-Indicator">-</span> <span class="nt">platform</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cse7766</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-87"><code data-line-number=" 87"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-87" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-87"></a>    <span class="nt">update_interval</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10s</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-88"><code data-line-number=" 88"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-88" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-88"></a>    <span class="nt">current</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-89"><code data-line-number=" 89"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-89" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-89"></a>      <span class="nt">name</span><span class="p">:</span> <span class="s">"Current"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-90"><code data-line-number=" 90"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-90" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-90"></a>      <span class="nt">filters</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-91"><code data-line-number=" 91"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-91" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-91"></a>          <span class="p p-Indicator">-</span> <span class="nt">lambda</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">if (x &lt; 0.060) return 0.0; else return x;</span>   <span class="c1">#For the chip will report less than 3w power when no load is connected</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-92"><code data-line-number=" 92"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-92" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-92"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-93"><code data-line-number=" 93"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-93" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-93"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-94"><code data-line-number=" 94"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-94" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-94"></a>    <span class="nt">voltage</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-95"><code data-line-number=" 95"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-95" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-95"></a>      <span class="nt">name</span><span class="p">:</span> <span class="s">"Voltage"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-96"><code data-line-number=" 96"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-96" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-96"></a>    <span class="nt">power</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-97"><code data-line-number=" 97"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-97" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-97"></a>      <span class="nt">name</span><span class="p">:</span> <span class="s">"Power"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-98"><code data-line-number=" 98"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-98" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-98"></a>      <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">power_sensor</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-99"><code data-line-number=" 99"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-99" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-99"></a>      <span class="nt">filters</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-100"><code data-line-number="100"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-100" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-100"></a>          <span class="p p-Indicator">-</span> <span class="nt">lambda</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">if (x &lt; 3.0) return 0.0; else return x;</span>    <span class="c1">#For the chip will report less than 3w power when no load is connected</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-101"><code data-line-number="101"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-101" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-101"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-102"><code data-line-number="102"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-102" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-102"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-103"><code data-line-number="103"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-103" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-103"></a>    <span class="nt">energy</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-104"><code data-line-number="104"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-104" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-104"></a>      <span class="nt">name</span><span class="p">:</span> <span class="s">"Energy"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-105"><code data-line-number="105"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-105" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-105"></a>      <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">energy</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-106"><code data-line-number="106"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-106" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-106"></a>      <span class="nt">unit_of_measurement</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">kWh</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-107"><code data-line-number="107"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-107" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-107"></a>      <span class="nt">filters</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-108"><code data-line-number="108"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-108" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-108"></a>        <span class="c1"># Multiplication factor from W to kW is 0.001</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-109"><code data-line-number="109"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-109" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-109"></a>        <span class="p p-Indicator">-</span> <span class="nt">multiply</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.001</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-110"><code data-line-number="110"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-110" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-110"></a>      <span class="nt">on_value</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-111"><code data-line-number="111"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-111" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-111"></a>        <span class="nt">then</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-112"><code data-line-number="112"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-112" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-112"></a>          <span class="p p-Indicator">-</span> <span class="nt">lambda</span><span class="p">:</span> <span class="p p-Indicator">|-</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-113"><code data-line-number="113"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-113" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-113"></a>              <span class="no">static float previous_energy_value = 0.0;</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-114"><code data-line-number="114"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-114" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-114"></a>              <span class="no">float current_energy_value = id(energy).state;</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-115"><code data-line-number="115"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-115" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-115"></a>              <span class="no">id(total_energy) += current_energy_value - previous_energy_value;</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-116"><code data-line-number="116"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-116" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-116"></a>              <span class="no">previous_energy_value = current_energy_value;</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-117"><code data-line-number="117"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-117" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-117"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-118"><code data-line-number="118"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-118" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-118"></a>  <span class="p p-Indicator">-</span> <span class="nt">platform</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">template</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-119"><code data-line-number="119"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-119" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-119"></a>    <span class="nt">name</span><span class="p">:</span> <span class="s">"Total</span><span class="nv"> </span><span class="s">Energy"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-120"><code data-line-number="120"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-120" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-120"></a>    <span class="nt">unit_of_measurement</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">kWh</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-121"><code data-line-number="121"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-121" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-121"></a>    <span class="nt">device_class</span><span class="p">:</span> <span class="s">"energy"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-122"><code data-line-number="122"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-122" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-122"></a>    <span class="nt">state_class</span><span class="p">:</span> <span class="s">"total_increasing"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-123"><code data-line-number="123"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-123" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-123"></a>    <span class="nt">icon</span><span class="p">:</span> <span class="s">"mdi:lightning-bolt"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-124"><code data-line-number="124"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-124" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-124"></a>    <span class="nt">accuracy_decimals</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-125"><code data-line-number="125"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-125" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-125"></a>    <span class="nt">lambda</span><span class="p">:</span> <span class="p p-Indicator">|-</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-126"><code data-line-number="126"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-126" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-126"></a>      <span class="no">return id(total_energy);</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-127"><code data-line-number="127"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-127" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-127"></a>    <span class="nt">update_interval</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10s</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-128"><code data-line-number="128"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-128" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-128"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-129"><code data-line-number="129"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-129" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-129"></a>  <span class="p p-Indicator">-</span> <span class="nt">platform</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">total_daily_energy</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-130"><code data-line-number="130"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-130" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-130"></a>    <span class="nt">name</span><span class="p">:</span> <span class="s">"Total</span><span class="nv"> </span><span class="s">Daily</span><span class="nv"> </span><span class="s">Energy"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-131"><code data-line-number="131"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-131" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-131"></a>    <span class="nt">restore</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-132"><code data-line-number="132"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-132" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-132"></a>    <span class="nt">power_id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">power_sensor</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-133"><code data-line-number="133"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-133" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-133"></a>    <span class="nt">unit_of_measurement</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">kWh</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-134"><code data-line-number="134"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-134" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-134"></a>    <span class="nt">accuracy_decimals</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">3</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-135"><code data-line-number="135"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-135" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-135"></a>    <span class="nt">filters</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-136"><code data-line-number="136"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-136" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-136"></a>      <span class="p p-Indicator">-</span> <span class="nt">multiply</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0.001</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-137"><code data-line-number="137"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-137" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-137"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-138"><code data-line-number="138"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-138" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-138"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-139"><code data-line-number="139"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-139" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-139"></a><span class="nt">button</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-140"><code data-line-number="140"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-140" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-140"></a>  <span class="p p-Indicator">-</span> <span class="nt">platform</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">factory_reset</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-141"><code data-line-number="141"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-141" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-141"></a>    <span class="nt">name</span><span class="p">:</span> <span class="s">"Restart</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">Factory</span><span class="nv"> </span><span class="s">Default</span><span class="nv"> </span><span class="s">Settings"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-142"><code data-line-number="142"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-142" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-142"></a>    <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">Reset</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-143"><code data-line-number="143"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-143" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-143"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-144"><code data-line-number="144"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-144" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-144"></a>  <span class="p p-Indicator">-</span> <span class="nt">platform</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">safe_mode</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-145"><code data-line-number="145"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-145" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-145"></a>    <span class="nt">name</span><span class="p">:</span> <span class="s">"Safe</span><span class="nv"> </span><span class="s">Mode"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-146"><code data-line-number="146"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-146" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-146"></a>    <span class="nt">internal</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">false</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-147"><code data-line-number="147"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-147" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-147"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-148"><code data-line-number="148"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-148" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-148"></a><span class="nt">switch</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-149"><code data-line-number="149"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-149" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-149"></a>  <span class="p p-Indicator">-</span> <span class="nt">platform</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">gpio</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-150"><code data-line-number="150"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-150" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-150"></a>    <span class="nt">name</span><span class="p">:</span> <span class="s">"${friendly_name}"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-151"><code data-line-number="151"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-151" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-151"></a>    <span class="nt">pin</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">GPIO12</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-152"><code data-line-number="152"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-152" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-152"></a>    <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">relay</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-153"><code data-line-number="153"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-153" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-153"></a>    <span class="nt">restore_mode</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">${relay_restore_mode}</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-154"><code data-line-number="154"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-154" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-154"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-155"><code data-line-number="155"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-155" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-155"></a><span class="nt">light</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-156"><code data-line-number="156"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-156" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-156"></a>  <span class="p p-Indicator">-</span> <span class="nt">platform</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">status_led</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-157"><code data-line-number="157"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-157" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-157"></a>    <span class="nt">name</span><span class="p">:</span> <span class="s">"Status</span><span class="nv"> </span><span class="s">LED"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-158"><code data-line-number="158"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-158" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-158"></a>    <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">blue_led</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-159"><code data-line-number="159"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-159" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-159"></a>    <span class="nt">disabled_by_default</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-160"><code data-line-number="160"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-160" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-160"></a>    <span class="nt">pin</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-161"><code data-line-number="161"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-161" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-161"></a>      <span class="nt">inverted</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-162"><code data-line-number="162"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-162" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-162"></a>      <span class="nt">number</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">GPIO13</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-163"><code data-line-number="163"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-163" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-163"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-164"><code data-line-number="164"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-164" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-164"></a><span class="nt">text_sensor</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-165"><code data-line-number="165"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-165" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-165"></a>  <span class="p p-Indicator">-</span> <span class="nt">platform</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">wifi_info</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-166"><code data-line-number="166"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-166" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-166"></a>    <span class="nt">ip_address</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-167"><code data-line-number="167"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-167" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-167"></a>      <span class="nt">name</span><span class="p">:</span> <span class="s">"IP</span><span class="nv"> </span><span class="s">Address"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-168"><code data-line-number="168"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-168" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-168"></a>    <span class="nt">ssid</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-169"><code data-line-number="169"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-169" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-169"></a>      <span class="nt">name</span><span class="p">:</span> <span class="s">"Connected</span><span class="nv"> </span><span class="s">SSID"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-170"><code data-line-number="170"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-170" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-170"></a>    <span class="nt">mac_address</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-171"><code data-line-number="171"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-171" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-171"></a>      <span class="nt">name</span><span class="p">:</span> <span class="s">"Mac</span><span class="nv"> </span><span class="s">Address"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-172"><code data-line-number="172"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-172" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-172"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-173"><code data-line-number="173"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-173" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-173"></a><span class="nt">time</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-174"><code data-line-number="174"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-174" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-174"></a>  <span class="p p-Indicator">-</span> <span class="nt">platform</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sntp</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-175"><code data-line-number="175"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-175" name="homewilldocumentsbloggingwrouesnel_blogpostsdhcp-fixed-ips-and-esphomelistingsathom-smart-plug-v2yaml-175"></a>    <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">sntp_time</span>
+</code></td>
+</tr>
+</table></div>
+        <!--End of body content-->
+
+        <footer id="footer">
+            Contents © 2023         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+        <script src="../../../assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element){var i=element.getElementsByTagName('img')[0];return i===undefined?'':i.alt;}});
+    </script>
+</body>
+</html>

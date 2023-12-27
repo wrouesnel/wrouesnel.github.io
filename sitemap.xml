@@ -11,7 +11,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/archive.html</loc>
-  <lastmod>2023-01-17T14:21:00Z</lastmod>
+  <lastmod>2023-12-27T10:34:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/authors/</loc>
@@ -27,7 +27,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/</loc>
-  <lastmod>2023-01-17T14:21:00Z</lastmod>
+  <lastmod>2023-12-27T10:34:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/2204/</loc>
@@ -102,6 +102,10 @@
   <lastmod>2022-08-08T23:48:00Z</lastmod>
  </url>
  <url>
+  <loc>https://blog.wrouesnel.com/categories/dhcp/</loc>
+  <lastmod>2023-12-27T10:34:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://blog.wrouesnel.com/categories/docker/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
@@ -114,8 +118,16 @@
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
  <url>
+  <loc>https://blog.wrouesnel.com/categories/esphome/</loc>
+  <lastmod>2023-12-27T10:34:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://blog.wrouesnel.com/categories/firefox/</loc>
   <lastmod>2022-05-04T01:42:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/fixed-ip/</loc>
+  <lastmod>2023-12-27T10:34:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/g815/</loc>
@@ -144,6 +156,14 @@
  <url>
   <loc>https://blog.wrouesnel.com/categories/golang/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/ha/</loc>
+  <lastmod>2023-12-27T10:34:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/home-assistant/</loc>
+  <lastmod>2023-12-27T10:34:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/i9505/</loc>
@@ -363,7 +383,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/index-2.html</loc>
-  <lastmod>2023-01-17T14:21:00Z</lastmod>
+  <lastmod>2023-12-27T10:34:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/a-better-getmail-idle-client/</loc>
@@ -372,6 +392,22 @@
  <url>
   <loc>https://blog.wrouesnel.com/posts/bup-towards-the-perfect-backup/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/posts/dhcp-fixed-ips-and-esphome/</loc>
+  <lastmod>2023-12-27T10:34:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/posts/dhcp-fixed-ips-and-esphome/listings/</loc>
+  <lastmod>2023-12-27T10:34:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/posts/dhcp-fixed-ips-and-esphome/listings/.common-athom-smart-plug-v2.yaml.html</loc>
+  <lastmod>2023-12-27T10:34:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/posts/dhcp-fixed-ips-and-esphome/listings/athom-smart-plug-v2.yaml.html</loc>
+  <lastmod>2023-12-27T10:34:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/firefox-from-deb-on-2204/</loc>
