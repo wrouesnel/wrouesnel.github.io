@@ -7,11 +7,11 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>https://blog.wrouesnel.com/</loc>
-  <lastmod>2021-12-09T15:00:00Z</lastmod>
+  <lastmod>2024-04-25T11:56:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/archive.html</loc>
-  <lastmod>2023-12-27T10:34:00Z</lastmod>
+  <lastmod>2024-04-25T23:45:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/authors/</loc>
@@ -27,7 +27,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/</loc>
-  <lastmod>2023-12-27T10:34:00Z</lastmod>
+  <lastmod>2024-04-25T11:56:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/2204/</loc>
@@ -116,6 +116,10 @@
  <url>
   <loc>https://blog.wrouesnel.com/categories/encryption/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/enums/</loc>
+  <lastmod>2024-04-25T11:56:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/esphome/</loc>
@@ -326,6 +330,10 @@
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
  <url>
+  <loc>https://blog.wrouesnel.com/categories/sqlalchemy/</loc>
+  <lastmod>2024-04-25T11:56:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://blog.wrouesnel.com/categories/ssh-tunneling/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
@@ -379,11 +387,15 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/index-1.html</loc>
-  <lastmod>2023-01-17T14:21:00Z</lastmod>
+  <lastmod>2024-04-25T11:55:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/index-2.html</loc>
-  <lastmod>2023-12-27T10:34:00Z</lastmod>
+  <lastmod>2024-04-25T11:56:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/index-3.html</loc>
+  <lastmod>2024-04-25T11:56:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/a-better-getmail-idle-client/</loc>
@@ -403,11 +415,11 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/dhcp-fixed-ips-and-esphome/listings/.common-athom-smart-plug-v2.yaml.html</loc>
-  <lastmod>2023-12-27T10:34:00Z</lastmod>
+  <lastmod>2024-04-25T23:45:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/dhcp-fixed-ips-and-esphome/listings/athom-smart-plug-v2.yaml.html</loc>
-  <lastmod>2023-12-27T10:34:00Z</lastmod>
+  <lastmod>2024-04-25T23:45:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/firefox-from-deb-on-2204/</loc>
@@ -458,6 +470,10 @@
   <lastmod>2022-02-03T07:46:00Z</lastmod>
  </url>
  <url>
+  <loc>https://blog.wrouesnel.com/posts/restic-backups-for-my-homeserver/</loc>
+  <lastmod>2024-04-25T11:56:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://blog.wrouesnel.com/posts/running-gnome-tracker-on-a-server/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
  </url>
@@ -480,6 +496,18 @@
  <url>
   <loc>https://blog.wrouesnel.com/posts/setting-up-sshttp/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/posts/sqlalchemy-enums-careful-what-goes-into-the-database/</loc>
+  <lastmod>2024-04-25T23:45:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/posts/sqlalchemy-enums-careful-what-goes-into-the-database/listings/</loc>
+  <lastmod>2024-04-25T23:45:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/posts/sqlalchemy-enums-careful-what-goes-into-the-database/listings/sqlalchemy-enums.py.html</loc>
+  <lastmod>2024-04-25T23:47:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/ssh-port-forwarding-when-allowtcpforwarding-is-disabled/</loc>

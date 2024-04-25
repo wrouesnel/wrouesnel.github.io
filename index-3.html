@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html prefix="
+og: http://ogp.me/ns# article: http://ogp.me/ns/article#
+" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="negating information entropy">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>wrouesnel_blog (old posts, page 3) | wrouesnel_blog</title>
+<link href="assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link href="assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="canonical" href="https://blog.wrouesnel.com/index-3.html">
+<link rel="prev" href="." type="text/html">
+<link rel="next" href="index-2.html" type="text/html">
+<!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="stylesheet" href="assets/css/wrouesnel_blog-theme.css">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-expand-md static-top mb-4
+navbar-dark
+bg-dark
+"><div class="container">
+<!-- This keeps the margins nice -->
+        <a class="navbar-brand" href=".">
+
+            <span id="blog-title">wrouesnel_blog</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="bs-navbar">
+            <ul class="navbar-nav mr-auto">
+<li class="nav-item">
+<a href="archive.html" class="nav-link">Archive</a>
+                </li>
+<li class="nav-item">
+<a href="categories/" class="nav-link">Tags</a>
+
+                
+            </li>
+</ul>
+<ul class="navbar-nav navbar-right"></ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        
+    
+    
+<div class="postindex">
+    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/setting-a-separate-pattern-lock-and-encryption-password-on-android/" class="u-url">Setting a separate encryption password and pattern lock on Android</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/wrouesnel/">wrouesnel</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/setting-a-separate-pattern-lock-and-encryption-password-on-android/" rel="bookmark">
+            <time class="published dt-published" datetime="2019-03-24T01:56:00-11:00" itemprop="datePublished" title="2019-03-24 01:56">2019-03-24 01:56</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>If you run an older version of LineageOS (14.1 or so) then by using the cryptfs
+utility you can separate your devices pattern lock and boot password.</p>
+<p>This is something you want to do. While state-of-the-art for security is going
+to belong to Apple for the forseeable future, practical security for the every
+day user can be achieved (sort of) in Android by ensuring that the password to
+decrypt your devices storage from a cold boot is much more complicated then the
+online pattern lock.</p>
+<p>A human sitting there trying it is unlikely to break the pattern lock (or 
+will actually power off the phone). Whereas someone looking to go farming your
+device for personal data might try to image it and break it offline.</p>
+<p>For peace of mind then, we want to know that if the device is powered off,
+they're unlikely to break the initial login password.</p>
+<p>Irritatingly, LineageOS makes this difficult.</p>
+<p>Thankfully (if you trust the author) the <a href="https://play.google.com/store/apps/details?id=org.nick.cryptfs.passwdmanager&amp;hl=en">cryptfs</a> 
+tool makes this easy...provided you know how to convert a pattern lock key into
+a password to do it.</p>
+<h2>3x3 Patterns</h2>
+<p>Look around the net and 3x3 patterns don't have a clear translation table.</p>
+<p>However, there's not too many possibilities - and in fact the basic translation
+is left to right, top to bottom, you get:</p>
+<pre class="code literal-block"><span></span><code><span class="mf">1</span> <span class="mf">2</span> <span class="mf">3</span>
+<span class="mf">4</span> <span class="mf">5</span> <span class="mf">6</span>
+<span class="mf">7</span> <span class="mf">8</span> <span class="mf">9</span>
+</code></pre>
+
+<p>When using cryptfs, just convert your pattern to numbers using the above table.
+Simple right?</p>
+<p>But I use a 4x4 pattern. What then?</p>
+<h2>4x4 Patterns</h2>
+<p>Always look at the code and think about it. Someone on <a href="https://android.stackexchange.com/questions/83854/is-there-a-way-to-map-translate-a-pattern-lock-to-a-numeric-pin">StackOverflow</a> did - but
+the code is not correct for current LineageOS.</p>
+<p>The real function in LineageOS is this:</p>
+<pre class="code literal-block"><span></span><code><span class="w">    </span><span class="cm">/**</span>
+<span class="cm">     * Serialize a pattern.</span>
+<span class="cm">     * @param pattern The pattern.</span>
+<span class="cm">     * @return The pattern in string form.</span>
+<span class="cm">     */</span><span class="w"></span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">patternToString</span><span class="p">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">LockPatternView</span><span class="p">.</span><span class="n">Cell</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pattern</span><span class="p">,</span><span class="w"> </span><span class="n">byte</span><span class="w"> </span><span class="n">gridSize</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pattern</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">null</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="ss">""</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="n">final</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="n">patternSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pattern</span><span class="p">.</span><span class="k">size</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="n">LockPatternView</span><span class="p">.</span><span class="n">Cell</span><span class="p">.</span><span class="n">updateSize</span><span class="p">(</span><span class="n">gridSize</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">byte</span><span class="err">[]</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">byte</span><span class="o">[</span><span class="n">patternSize</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="nc">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">patternSize</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">            </span><span class="n">LockPatternView</span><span class="p">.</span><span class="n">Cell</span><span class="w"> </span><span class="n">cell</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pattern</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="n">i</span><span class="p">);</span><span class="w"></span>
+<span class="w">            </span><span class="n">res</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">byte</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n">cell</span><span class="p">.</span><span class="n">getRow</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">gridSize</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cell</span><span class="p">.</span><span class="n">getColumn</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">'1'</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="err">}</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">String</span><span class="p">(</span><span class="n">res</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+</code></pre>
+
+<p>Found in the file <code>frameworks/base/core/java/com/android/internal/widget/LockPatternUtils.java</code>
+in the Android source tree.</p>
+<p>The important line is here - <code>res[i] = (byte) (cell.getRow() * gridSize + cell.getColumn() + '1');</code></p>
+<p>The key being the <code>'1'</code> - what's happening is that the pattern lock is converted
+to an offset from ASCII <code>1</code>, which actually converts to the (byte) number <code>49</code>.</p>
+<p>But the final conversion is just mapping the whole byte sequence to characters - 
+so higher number patterns are just offsets into the ASCII lookup table past <code>1</code>.</p>
+<p>So for a 4x4 grid this gives us the following translation table:</p>
+<pre class="code literal-block"><span></span><code><span class="mf">1</span> <span class="mf">2</span> <span class="mf">3</span> <span class="mf">4</span>
+<span class="mf">5</span> <span class="mf">6</span> <span class="mf">7</span> <span class="mf">8</span>
+<span class="mf">9</span> <span class="p">:</span> <span class="p">;</span> <span class="o">&lt;</span>
+<span class="o">=</span> <span class="o">&gt;</span> <span class="err">?</span> <span class="err">@</span>
+</code></pre>
+
+<h2>5x5 Pattern</h2>
+<p>Here's the pattern following the above for a 5x5 code if you use it:</p>
+<pre class="code literal-block"><span></span><code><span class="mf">1</span> <span class="mf">2</span> <span class="mf">3</span> <span class="mf">4</span> <span class="mf">5</span>
+<span class="mf">6</span> <span class="mf">7</span> <span class="mf">8</span> <span class="mf">9</span> <span class="p">:</span>
+<span class="p">;</span> <span class="o">&lt;</span> <span class="o">=</span> <span class="o">&gt;</span> <span class="err">?</span>
+<span class="err">@</span> <span class="n">A</span> <span class="n">B</span> <span class="n">C</span> <span class="n">D</span>
+</code></pre>
+</div>
+    </div>
+    </article>
+</div>
+        <ul class="pager postindexpager clearfix">
+<li class="previous"><a href="." rel="prev">Newer posts</a></li>
+            <li class="next"><a href="index-2.html" rel="next">Older posts</a></li>
+        </ul>
+<!--End of body content--><footer id="footer">
+            Contents © 2024         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+        <script src="assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element){var i=element.getElementsByTagName('img')[0];return i===undefined?'':i.alt;}});
+    </script>
+</body>
+</html>

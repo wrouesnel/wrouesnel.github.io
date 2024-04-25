@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html prefix="
+og: http://ogp.me/ns# article: http://ogp.me/ns/article#
+" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="sqlalchemy-enums.py">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>sqlalchemy-enums.py | wrouesnel_blog</title>
+<link href="../../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link href="../../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="../../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="canonical" href="https://blog.wrouesnel.com/posts/sqlalchemy-enums-careful-what-goes-into-the-database/listings/sqlalchemy-enums.py.html">
+<!--[if lt IE 9]><script src="../../../assets/js/html5.js"></script><![endif]--><link rel="stylesheet" href="../../../assets/css/wrouesnel_blog-theme.css">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-expand-md static-top mb-4
+navbar-dark
+bg-dark
+"><div class="container">
+<!-- This keeps the margins nice -->
+        <a class="navbar-brand" href="../../../">
+
+            <span id="blog-title">wrouesnel_blog</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="bs-navbar">
+            <ul class="navbar-nav mr-auto">
+<li class="nav-item">
+<a href="../../../archive.html" class="nav-link">Archive</a>
+                </li>
+<li class="nav-item">
+<a href="../../../categories/" class="nav-link">Tags</a>
+
+                
+            </li>
+</ul>
+<ul class="navbar-nav navbar-right"></ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        
+<nav class="breadcrumbs"><ul class="breadcrumb">
+<li class="breadcrumb-item"><a href="../../">posts</a></li>
+                <li class="breadcrumb-item"><a href="../">sqlalchemy-enums-careful-what-goes-into-the-database</a></li>
+                <li class="breadcrumb-item"><a href=".">listings</a></li>
+                <li class="breadcrumb-item active">sqlalchemy-enums.py</li>
+</ul></nav><h1>sqlalchemy-enums.py
+        <small><a href="sqlalchemy-enums.py">(Source)</a></small>
+    </h1>
+    <div class="code"><table class="codetable">
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-1"><code data-line-number=" 1"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-1" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-1"></a><span class="ch">#!/usr/bin/env python</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-2"><code data-line-number=" 2"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-2" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-2"></a><span class="c1"># sqlalchemy-enums.py</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-3"><code data-line-number=" 3"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-3" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-3"></a><span class="c1"># Note: you need to at least install `pip install sqlalchemy` for this to work.</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-4"><code data-line-number=" 4"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-4" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-4"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-5"><code data-line-number=" 5"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-5" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-5"></a><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-6"><code data-line-number=" 6"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-6" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-6"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-7"><code data-line-number=" 7"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-7" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-7"></a><span class="kn">import</span> <span class="nn">sqlalchemy</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-8"><code data-line-number=" 8"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-8" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-8"></a><span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">Mapped</span><span class="p">,</span> <span class="n">DeclarativeBase</span><span class="p">,</span> <span class="n">Session</span><span class="p">,</span> <span class="n">mapped_column</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-9"><code data-line-number=" 9"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-9" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-9"></a><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span><span class="p">,</span> <span class="n">select</span><span class="p">,</span> <span class="n">text</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-10"><code data-line-number="10"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-10" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-10"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-11"><code data-line-number="11"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-11" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-11"></a><span class="kn">import</span> <span class="nn">typing</span> <span class="k">as</span> <span class="nn">t</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-12"><code data-line-number="12"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-12" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-12"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-13"><code data-line-number="13"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-13" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-13"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-14"><code data-line-number="14"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-14" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-14"></a><span class="k">class</span> <span class="nc">EnumWithUnknown</span><span class="p">(</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-15"><code data-line-number="15"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-15" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-15"></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">enums</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">Any</span><span class="p">):</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-16"><code data-line-number="16"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-16" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-16"></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">enums</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-17"><code data-line-number="17"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-17" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-17"></a>        <span class="c1"># SQLAlchemy sets the _adapted_from keyword argument sometimes, which contains a reference to the original type - but won't include</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-18"><code data-line-number="18"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-18" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-18"></a>        <span class="c1"># original keyword arguments, so we need to handle that here.</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-19"><code data-line-number="19"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-19" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-19"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_unknown_value</span> <span class="o">=</span> <span class="p">(</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-20"><code data-line-number="20"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-20" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-20"></a>            <span class="n">kw</span><span class="p">[</span><span class="s2">"_adapted_from"</span><span class="p">]</span><span class="o">.</span><span class="n">_unknown_value</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-21"><code data-line-number="21"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-21" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-21"></a>            <span class="k">if</span> <span class="s2">"_adapted_from"</span> <span class="ow">in</span> <span class="n">kw</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-22"><code data-line-number="22"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-22" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-22"></a>            <span class="k">else</span> <span class="n">kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"unknown_value"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-23"><code data-line-number="23"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-23" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-23"></a>        <span class="p">)</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-24"><code data-line-number="24"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-24" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-24"></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknown_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-25"><code data-line-number="25"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-25" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-25"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"unknown_value should be a member of the enum"</span><span class="p">)</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-26"><code data-line-number="26"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-26" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-26"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-27"><code data-line-number="27"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-27" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-27"></a>    <span class="c1"># This is the function which resolves the object for the DB value</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-28"><code data-line-number="28"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-28" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-28"></a>    <span class="k">def</span> <span class="nf">_object_value_for_elem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elem</span><span class="p">):</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-29"><code data-line-number="29"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-29" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-29"></a>        <span class="k">try</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-30"><code data-line-number="30"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-30" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-30"></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_object_lookup</span><span class="p">[</span><span class="n">elem</span><span class="p">]</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-31"><code data-line-number="31"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-31" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-31"></a>        <span class="k">except</span> <span class="ne">LookupError</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-32"><code data-line-number="32"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-32" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-32"></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknown_value</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-33"><code data-line-number="33"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-33" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-33"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-34"><code data-line-number="34"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-34" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-34"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-35"><code data-line-number="35"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-35" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-35"></a><span class="k">class</span> <span class="nc">Color</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-36"><code data-line-number="36"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-36" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-36"></a>    <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="s2">"unknown"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-37"><code data-line-number="37"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-37" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-37"></a>    <span class="n">LEGACY_RED</span> <span class="o">=</span> <span class="s2">"red"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-38"><code data-line-number="38"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-38" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-38"></a>    <span class="n">GREEN</span> <span class="o">=</span> <span class="s2">"green"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-39"><code data-line-number="39"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-39" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-39"></a>    <span class="n">BLUE</span> <span class="o">=</span> <span class="s2">"blue"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-40"><code data-line-number="40"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-40" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-40"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-41"><code data-line-number="41"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-41" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-41"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-42"><code data-line-number="42"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-42" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-42"></a><span class="k">class</span> <span class="nc">Base</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">):</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-43"><code data-line-number="43"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-43" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-43"></a>    <span class="k">pass</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-44"><code data-line-number="44"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-44" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-44"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-45"><code data-line-number="45"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-45" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-45"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-46"><code data-line-number="46"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-46" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-46"></a><span class="k">class</span> <span class="nc">TestTable</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-47"><code data-line-number="47"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-47" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-47"></a>    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">"test_table"</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-48"><code data-line-number="48"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-48" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-48"></a>    <span class="nb">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-49"><code data-line-number="49"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-49" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-49"></a>    <span class="n">value</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Color</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-50"><code data-line-number="50"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-50" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-50"></a>        <span class="n">EnumWithUnknown</span><span class="p">(</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-51"><code data-line-number="51"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-51" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-51"></a>            <span class="n">Color</span><span class="p">,</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-52"><code data-line-number="52"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-52" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-52"></a>            <span class="n">values_callable</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">t</span><span class="p">],</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-53"><code data-line-number="53"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-53" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-53"></a>            <span class="n">unknown_value</span><span class="o">=</span><span class="n">Color</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">,</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-54"><code data-line-number="54"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-54" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-54"></a>        <span class="p">)</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-55"><code data-line-number="55"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-55" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-55"></a>    <span class="p">)</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-56"><code data-line-number="56"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-56" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-56"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-57"><code data-line-number="57"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-57" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-57"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-58"><code data-line-number="58"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-58" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-58"></a><span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s2">"sqlite://"</span><span class="p">)</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-59"><code data-line-number="59"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-59" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-59"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-60"><code data-line-number="60"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-60" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-60"></a><span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-61"><code data-line-number="61"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-61" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-61"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-62"><code data-line-number="62"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-62" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-62"></a><span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-63"><code data-line-number="63"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-63" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-63"></a>    <span class="c1"># Create normal values</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-64"><code data-line-number="64"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-64" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-64"></a>    <span class="k">for</span> <span class="n">enum_item</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Color</span><span class="o">.</span><span class="n">LEGACY_RED</span><span class="p">,</span> <span class="n">Color</span><span class="o">.</span><span class="n">GREEN</span><span class="p">,</span> <span class="n">Color</span><span class="o">.</span><span class="n">BLUE</span><span class="p">]:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-65"><code data-line-number="65"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-65" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-65"></a>        <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">TestTable</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">enum_item</span><span class="p">))</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-66"><code data-line-number="66"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-66" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-66"></a>    <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-67"><code data-line-number="67"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-67" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-67"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-68"><code data-line-number="68"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-68" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-68"></a><span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-69"><code data-line-number="69"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-69" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-69"></a>    <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">TestTable</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">"reed"</span><span class="p">))</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-70"><code data-line-number="70"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-70" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-70"></a>    <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-71"><code data-line-number="71"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-71" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-71"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-72"><code data-line-number="72"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-72" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-72"></a><span class="c1"># Now try and read the values back</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-73"><code data-line-number="73"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-73" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-73"></a><span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-74"><code data-line-number="74"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-74" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-74"></a>    <span class="n">records</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">TestTable</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-75"><code data-line-number="75"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-75" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-75"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"We restored the following values in code..."</span><span class="p">)</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-76"><code data-line-number="76"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-76" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-76"></a>    <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-77"><code data-line-number="77"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-77" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-77"></a>        <span class="nb">print</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-78"><code data-line-number="78"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-78" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-78"></a>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-79"><code data-line-number="79"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-79" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-79"></a><span class="nb">print</span><span class="p">(</span><span class="s2">"But the underlying table contains..."</span><span class="p">)</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-80"><code data-line-number="80"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-80" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-80"></a><span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+</code></td>
+</tr>
+<tr>
+<td class="linenos linenodiv"><a href="#homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-81"><code data-line-number="81"></code></a></td>
+<td class="code"><code><a id="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-81" name="homewilldocumentsbloggingwrouesnel_blogpostssqlalchemy-enums-careful-what-goes-into-the-databaselistingssqlalchemy-enumspy-81"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="s2">"SELECT * FROM test_table;"</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+</code></td>
+</tr>
+</table></div>
+        <!--End of body content-->
+
+        <footer id="footer">
+            Contents © 2024         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+        <script src="../../../assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element){var i=element.getElementsByTagName('img')[0];return i===undefined?'':i.alt;}});
+    </script>
+</body>
+</html>

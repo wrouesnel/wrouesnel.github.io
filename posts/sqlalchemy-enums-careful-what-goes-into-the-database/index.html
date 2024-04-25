@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html prefix="
+og: http://ogp.me/ns# article: http://ogp.me/ns/article#
+" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SQLAlchemy Enums - Careful what goes into the database | wrouesnel_blog</title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="canonical" href="https://blog.wrouesnel.com/posts/sqlalchemy-enums-careful-what-goes-into-the-database/">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><link rel="stylesheet" href="../../assets/css/wrouesnel_blog-theme.css">
+<meta name="author" content="Will Rouesnel">
+<link rel="prev" href="../dhcp-fixed-ips-and-esphome/" title="DHCP Fixed IPs and ESPHome" type="text/html">
+<meta property="og:site_name" content="wrouesnel_blog">
+<meta property="og:title" content="SQLAlchemy Enums - Careful what goes into the database">
+<meta property="og:url" content="https://blog.wrouesnel.com/posts/sqlalchemy-enums-careful-what-goes-into-the-database/">
+<meta property="og:description" content="The Situation¶SQLAlchemy is an obvious choice when you need to throw together anything dealing with databases in Python. There might be other options, there might be faster options, but if you need it">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2024-04-25T11:54:23+10:00">
+<meta property="article:tag" content="enums">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="sqlalchemy">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-expand-md static-top mb-4
+navbar-dark
+bg-dark
+"><div class="container">
+<!-- This keeps the margins nice -->
+        <a class="navbar-brand" href="../../">
+
+            <span id="blog-title">wrouesnel_blog</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="bs-navbar">
+            <ul class="navbar-nav mr-auto">
+<li class="nav-item">
+<a href="../../archive.html" class="nav-link">Archive</a>
+                </li>
+<li class="nav-item">
+<a href="../../categories/" class="nav-link">Tags</a>
+
+                
+            </li>
+</ul>
+<ul class="navbar-nav navbar-right"></ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">SQLAlchemy Enums - Careful what goes into the database</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    <a class="u-url" href="../../authors/will-rouesnel/">Will Rouesnel</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2024-04-25T11:54:23+10:00" itemprop="datePublished" title="2024-04-25 11:54">2024-04-25 11:54</time></a>
+            </p>
+            
+        </div>
+        
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="The-Situation">The Situation<a class="anchor-link" href="#The-Situation">¶</a>
+</h2>
+<p>SQLAlchemy is an obvious choice when you need to throw together anything dealing with databases in Python. There might be other options, there might be faster options, but if you need it done then SQLAlchemy will do it for you pretty well and very ergonomically.</p>
+<p>The problem I ran into recently is dealing with <a href="https://docs.python.org/3/library/enum.html">Python enums</a> recently. Or more specifically: I had a user input problem which obviously turned into an enum application side - I had a limited set of inputs I wanted to allow, because those were what we supported - and I didn't want strings all through my code testing for values.</p>
+<p>So on the client side it's obvious: check if the string matches an enum value, and use that. The enum would look something like below:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+
+<span class="k">class</span> <span class="nc">Color</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">RED</span> <span class="o">=</span> <span class="s2">"red"</span>
+    <span class="n">GREEN</span> <span class="o">=</span> <span class="s2">"green"</span>
+    <span class="n">BLUE</span> <span class="o">=</span> <span class="s2">"blue"</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now from this, we have our second problem: storing this in the database. We want to not do work here - that's we're using SQLAlchemy, so we can have our commmon problems handled. And so, SQLAlchemy helps us - <a href="https://docs.sqlalchemy.org/en/20/orm/declarative_tables.html#using-python-enum-or-pep-586-literal-types-in-the-type-map">here's automatic enum type handling for us</a>.</p>
+<p>Easy - so our model using the declarative syntax, and typehints can be written as follows:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">sqlalchemy</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.orm</span> <span class="kn">import</span> <span class="n">Mapped</span><span class="p">,</span> <span class="n">DeclarativeBase</span><span class="p">,</span> <span class="n">Session</span><span class="p">,</span> <span class="n">mapped_column</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span><span class="p">,</span> <span class="n">select</span><span class="p">,</span> <span class="n">text</span>
+
+<span class="k">class</span> <span class="nc">Base</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">TestTable</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">"test_table"</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">value</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Color</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This is essentially identical to the documentation we see above. And, if we run this in a sample program - it works!</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s2">"sqlite://"</span><span class="p">)</span>
+
+<span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+    <span class="c1"># Create normal values</span>
+    <span class="k">for</span> <span class="n">enum_item</span> <span class="ow">in</span> <span class="n">Color</span><span class="p">:</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">TestTable</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">enum_item</span><span class="p">))</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+<span class="c1"># Now try and read the values back</span>
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+    <span class="n">records</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">TestTable</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Color.RED
+Color.GREEN
+Color.BLUE
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Right? We stored some enum's to the database and retreived them in simple elegant code. This is exactly what we want...right?</p>
+<p>But the question is...what did we actually store? Let's extend the program to do a raw query to read back that table...</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">text</span>
+
+<span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="s2">"SELECT * FROM test_table;"</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[(1, 'RED'), (2, 'GREEN'), (3, 'BLUE')]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Notice the tuples: the second column, we see "RED", "GREEN" and "BLUE"...but our enum defines our colors as RED is "red". What's going on? And is something wrong here?</p>
+<p>Depending how you view the situation, yes, but also no - but it's likely this isn't what you wanted either.</p>
+<p>The primary reason to use SQLAlchemy enum types is to take advantage of something like PostgreSQL supporting native enum types in the database. Everywhere else in SQLAlchemy, when we define a python class - like we do with <code>TestTable</code> above - we're not defining a Python object, we're defining a Python object which is describing the database objects we want and how they'll behave.</p>
+<p>And so long as we're using things that come from SQLAlchemy - and under-the-hood SQLAlchemy is converting that <code>enum.Enum</code> to <code>sqlalchemy.Enum</code> - then this makes complete sense. The enum we declare is declaring what values we store, and what data value they map too...in the sense that we might use the data elsewhere, in our application. Basically our database will hold the symbolic value <code>RED</code> and we interpret that as meaning <code>"red"</code> - but we reserve the right to change that interpretation.</p>
+<p>But if we're coming at this from a Python application perspective - i.e. the reason we made an enum - we likely have a different view of the problem. We're thinking "we want the data to look a particular way, and then to refer to it symbolically in code which we might change" - i.e. the immutable element is the data, the value, of the enum - because that's what we'll present to the user, but not what we want to have all over the application.</p>
+<p>In isolation these are separate problems, but automatic enum handling makes the boundary here fuzzy: because while the database is defined in our code, from one perspective, it's also external to it - i.e. we may be writing code which is meant to simply interface with and understand a database not under our control. Basically, the <code>enum.Enum</code> object feels like it's us saying "this is how we'll interpret the external world" and not us saying "this is what the database looks like".</p>
+<p>And in that case then, our view of what the enum is is probably more like "the enum is the internal symbolic representation of how we plan to consume database values" - i.e. we expect to map <code>"red"</code> to <code>Color.RED</code> from the database. Rather then reading the database and interpreting <code>RED</code> as "red".</p>
+<p>Nobodies wrong - but you probably have your assumptions going into this (I know I did...but it compiled, it worked, and I never questioned it - and so long as I'm the sole owner, who cares right?)</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="The-Problem">The Problem<a class="anchor-link" href="#The-Problem">¶</a>
+</h2>
+<p>There are a few problems though with this interpretation. One is obvious: we're a simple, apparently safe refactor away from ruining our database schema and we might be aware of it. In the above, naive interpretation, changing <code>Color.RED</code> to <code>Color.LEGACY_RED</code> for example, is implying that <code>RED</code> is no longer a valid value in the database - which if we think of the enum as an application mapping to an external interface is something which might make sense.</p>
+<p>This is the sort of change which crops up all the time. We <em>know</em> the string <code>"red"</code> is out there, hardcoded and compiled into a bunch of old systems so we can't just go and change a color name in the database. Or we're doing rolling deployments and we need consistency of values - or share the database or any number of other complex environment concerns. Either way: we want to avoid needlessly updating the database value - changing our code, but not an apparent variable constant - should be safe.</p>
+<p>However we're not storing the data we think we are. We expected "red", "green" and "blue" and got "RED", "GREEN" and "BLUE". It's worth noting that the SQLAlchemy documentation leads you astray like this, since the second example showing using <code>typing.Literal</code> for the mapping uses the string assignments from the first (and neither shows a sample table result which makes it obvious on a quick read).</p>
+<p>If we change a name in this enum, then the result is actually bad if we've used it anywhere - we stop being able to read models out of this table at all. So if we do the following:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Color</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">LEGACY_RED</span> <span class="o">=</span> <span class="s2">"red"</span>
+    <span class="n">GREEN</span> <span class="o">=</span> <span class="s2">"green"</span>
+    <span class="n">BLUE</span> <span class="o">=</span> <span class="s2">"blue"</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Then try to read the models we've created, it won't work - in fact we can't read any part of that table anymore (this post is written as a Jupyter notebook so the redefinition below is needed to setup the SQLAlchemy model again)</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [8]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Base</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">TestTable</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">"test_table"</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">value</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Color</span><span class="p">]</span>
+
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+    <span class="n">records</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">TestTable</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">KeyError</span>                                  Traceback (most recent call last)
+<span class="ansi-green-fg">~/.local/lib/python3.10/site-packages/sqlalchemy/sql/sqltypes.py</span> in <span class="ansi-cyan-fg">_object_value_for_elem</span><span class="ansi-blue-fg">(self, elem)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1608</span>         <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">-&gt; 1609</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_object_lookup<span class="ansi-blue-fg">[</span>elem<span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">   1610</span>         <span class="ansi-green-fg">except</span> KeyError <span class="ansi-green-fg">as</span> err<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">KeyError</span>: 'RED'
+
+The above exception was the direct cause of the following exception:
+
+<span class="ansi-red-fg">LookupError</span>                               Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_69447/1820198460.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      8</span> 
+<span class="ansi-green-intense-fg ansi-bold">      9</span> <span class="ansi-green-fg">with</span> Session<span class="ansi-blue-fg">(</span>engine<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">as</span> session<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 10</span><span class="ansi-red-fg">     </span>records <span class="ansi-blue-fg">=</span> session<span class="ansi-blue-fg">.</span>scalars<span class="ansi-blue-fg">(</span>select<span class="ansi-blue-fg">(</span>TestTable<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>all<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     11</span>     <span class="ansi-green-fg">for</span> record <span class="ansi-green-fg">in</span> records<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     12</span>         print<span class="ansi-blue-fg">(</span>record<span class="ansi-blue-fg">.</span>value<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/.local/lib/python3.10/site-packages/sqlalchemy/engine/result.py</span> in <span class="ansi-cyan-fg">all</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1767</span> 
+<span class="ansi-green-intense-fg ansi-bold">   1768</span>         """
+<span class="ansi-green-fg">-&gt; 1769</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_allrows<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1770</span> 
+<span class="ansi-green-intense-fg ansi-bold">   1771</span>     <span class="ansi-green-fg">def</span> __iter__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-&gt;</span> Iterator<span class="ansi-blue-fg">[</span>_R<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/.local/lib/python3.10/site-packages/sqlalchemy/engine/result.py</span> in <span class="ansi-cyan-fg">_allrows</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    546</span>         make_row <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_row_getter
+<span class="ansi-green-intense-fg ansi-bold">    547</span> 
+<span class="ansi-green-fg">--&gt; 548</span><span class="ansi-red-fg">         </span>rows <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_fetchall_impl<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    549</span>         made_rows<span class="ansi-blue-fg">:</span> List<span class="ansi-blue-fg">[</span>_InterimRowType<span class="ansi-blue-fg">[</span>_R<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">    550</span>         <span class="ansi-green-fg">if</span> make_row<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/.local/lib/python3.10/site-packages/sqlalchemy/engine/result.py</span> in <span class="ansi-cyan-fg">_fetchall_impl</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1674</span> 
+<span class="ansi-green-intense-fg ansi-bold">   1675</span>     <span class="ansi-green-fg">def</span> _fetchall_impl<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-&gt;</span> List<span class="ansi-blue-fg">[</span>_InterimRowType<span class="ansi-blue-fg">[</span>Row<span class="ansi-blue-fg">[</span>Any<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">-&gt; 1676</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_real_result<span class="ansi-blue-fg">.</span>_fetchall_impl<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1677</span> 
+<span class="ansi-green-intense-fg ansi-bold">   1678</span>     def _fetchmany_impl(
+
+<span class="ansi-green-fg">~/.local/lib/python3.10/site-packages/sqlalchemy/engine/result.py</span> in <span class="ansi-cyan-fg">_fetchall_impl</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2268</span>             self<span class="ansi-blue-fg">.</span>_raise_hard_closed<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2269</span>         <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">-&gt; 2270</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">return</span> list<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>iterator<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2271</span>         <span class="ansi-green-fg">finally</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   2272</span>             self<span class="ansi-blue-fg">.</span>_soft_close<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/.local/lib/python3.10/site-packages/sqlalchemy/orm/loading.py</span> in <span class="ansi-cyan-fg">chunks</span><span class="ansi-blue-fg">(size)</span>
+<span class="ansi-green-intense-fg ansi-bold">    217</span>                     <span class="ansi-green-fg">break</span>
+<span class="ansi-green-intense-fg ansi-bold">    218</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 219</span><span class="ansi-red-fg">                 </span>fetch <span class="ansi-blue-fg">=</span> cursor<span class="ansi-blue-fg">.</span>_raw_all_rows<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    220</span> 
+<span class="ansi-green-intense-fg ansi-bold">    221</span>             <span class="ansi-green-fg">if</span> single_entity<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/.local/lib/python3.10/site-packages/sqlalchemy/engine/result.py</span> in <span class="ansi-cyan-fg">_raw_all_rows</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    539</span>         <span class="ansi-green-fg">assert</span> make_row <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">not</span> <span class="ansi-green-fg">None</span>
+<span class="ansi-green-intense-fg ansi-bold">    540</span>         rows <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_fetchall_impl<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 541</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> <span class="ansi-blue-fg">[</span>make_row<span class="ansi-blue-fg">(</span>row<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> row <span class="ansi-green-fg">in</span> rows<span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">    542</span> 
+<span class="ansi-green-intense-fg ansi-bold">    543</span>     <span class="ansi-green-fg">def</span> _allrows<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-&gt;</span> List<span class="ansi-blue-fg">[</span>_R<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/.local/lib/python3.10/site-packages/sqlalchemy/engine/result.py</span> in <span class="ansi-cyan-fg">&lt;listcomp&gt;</span><span class="ansi-blue-fg">(.0)</span>
+<span class="ansi-green-intense-fg ansi-bold">    539</span>         <span class="ansi-green-fg">assert</span> make_row <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">not</span> <span class="ansi-green-fg">None</span>
+<span class="ansi-green-intense-fg ansi-bold">    540</span>         rows <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_fetchall_impl<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 541</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> <span class="ansi-blue-fg">[</span>make_row<span class="ansi-blue-fg">(</span>row<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> row <span class="ansi-green-fg">in</span> rows<span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">    542</span> 
+<span class="ansi-green-intense-fg ansi-bold">    543</span>     <span class="ansi-green-fg">def</span> _allrows<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-&gt;</span> List<span class="ansi-blue-fg">[</span>_R<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">lib/sqlalchemy/cyextension/resultproxy.pyx</span> in <span class="ansi-cyan-fg">sqlalchemy.cyextension.resultproxy.BaseRow.__init__</span><span class="ansi-blue-fg">()</span>
+
+<span class="ansi-green-fg">lib/sqlalchemy/cyextension/resultproxy.pyx</span> in <span class="ansi-cyan-fg">sqlalchemy.cyextension.resultproxy._apply_processors</span><span class="ansi-blue-fg">()</span>
+
+<span class="ansi-green-fg">~/.local/lib/python3.10/site-packages/sqlalchemy/sql/sqltypes.py</span> in <span class="ansi-cyan-fg">process</span><span class="ansi-blue-fg">(value)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1727</span>                 value <span class="ansi-blue-fg">=</span> parent_processor<span class="ansi-blue-fg">(</span>value<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1728</span> 
+<span class="ansi-green-fg">-&gt; 1729</span><span class="ansi-red-fg">             </span>value <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_object_value_for_elem<span class="ansi-blue-fg">(</span>value<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1730</span>             <span class="ansi-green-fg">return</span> value
+<span class="ansi-green-intense-fg ansi-bold">   1731</span> 
+
+<span class="ansi-green-fg">~/.local/lib/python3.10/site-packages/sqlalchemy/sql/sqltypes.py</span> in <span class="ansi-cyan-fg">_object_value_for_elem</span><span class="ansi-blue-fg">(self, elem)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1609</span>             <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_object_lookup<span class="ansi-blue-fg">[</span>elem<span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">   1610</span>         <span class="ansi-green-fg">except</span> KeyError <span class="ansi-green-fg">as</span> err<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">-&gt; 1611</span><span class="ansi-red-fg">             raise LookupError(
+</span><span class="ansi-green-intense-fg ansi-bold">   1612</span>                 <span class="ansi-blue-fg">"'%s' is not among the defined enum values. "</span>
+<span class="ansi-green-intense-fg ansi-bold">   1613</span>                 <span class="ansi-blue-fg">"Enum name: %s. Possible values: %s"</span>
+
+<span class="ansi-red-fg">LookupError</span>: 'RED' is not among the defined enum values. Enum name: color. Possible values: LEGACY_RED, GREEN, BLUE</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Even though we did a proper refactor, we can no longer read this table - in fact we can't even read part of it without using raw SQL and giving up on our models entirely. Obviously if we were writing an application, we've just broken all our queries - but not because we messed anything up, but because we thought we were making a code change when in reality we were making a data change.</p>
+<p>This behavior also makes it pretty much impossible to handle externally managed schemas or existing schemas - we don't really want our enum to have to follow someone else's data scheme, even if they're well behaved.</p>
+<p>Finally it also hightlights another danger we've walked into: what if we try to read this column, and there are values there we <em>don't</em> recognize? We would also get the same error - in this case, <code>RED</code> is unknown because we removed it. But if a new version of our application comes along and has inserted <code>ORANGE</code> then we'd also have the same problem - we've lost backwards and forwards compatibility, in a way which doesn't necessarily show up easily. There's just no easy way to deal with these <code>LookupError</code> validation problems when we're loading large chunks of models - they happen at the wrong part of the stack</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="The-Solution">The Solution<a class="anchor-link" href="#The-Solution">¶</a>
+</h2>
+<p>Doing the obvious thing here got us a working applications with a bunch of technical footguns - which is unfortunate, but it does work. There are plenty of situations where we'd never encounter these though - although many more where we might. So what should we do instead?</p>
+<p>To get the behavior we expected when we used an enum we can do the following in our model definition:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [11]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Base</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">TestTable</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">"test_table"</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">value</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Color</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="n">Color</span><span class="p">,</span> <span class="n">values_callable</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="p">[</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">t</span> <span class="p">]))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Notice the <code>values_callable</code> parameter. The order returned here should be the order our enum returns (and it is - it's simply passed our Enum object) - and returns the list of values which should be assigned in the database for it. In this case we simply do a Python string conversion of the enum value (which will just return the literal string - but if you were doing something ill-advised like mixing in numbers, then this makes it sensible for the DB).</p>
+<p>When we run this with a new database, we now see that we get what we expected in the underlying table:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [13]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s2">"sqlite://"</span><span class="p">)</span>
+
+<span class="n">Base</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+    <span class="c1"># Create normal values</span>
+    <span class="k">for</span> <span class="n">enum_item</span> <span class="ow">in</span> <span class="n">Color</span><span class="p">:</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">TestTable</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">enum_item</span><span class="p">))</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+<span class="c1"># Now try and read the values back</span>
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+    <span class="n">records</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">TestTable</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"We restored the following values in code..."</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"But the underlying table contains..."</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">engine</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span> <span class="k">as</span> <span class="n">conn</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="s2">"SELECT * FROM test_table;"</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">())</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>We restored the following values in code...
+Color.LEGACY_RED
+Color.GREEN
+Color.BLUE
+But the underlying table contains...
+[(1, 'red'), (2, 'green'), (3, 'blue')]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Perfect. Now if we're connecting to an external database, or a schema we don't control, everything works great. But what about when we have unknown values? What happens then? Well we haven't fixed that, but we're much less likely to encounter it by accident now. Of course it's worth noting, SQLAlchemy also doesn't validate the inputs we put into this model against the enum before we write it either. So if we do this, then we're back to it not working:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [15]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">TestTable</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">"reed"</span><span class="p">))</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [16]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Now try and read the values back</span>
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+    <span class="n">records</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">TestTable</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"We restored the following values in code..."</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">KeyError</span>                                  Traceback (most recent call last)
+<span class="ansi-green-fg">~/.local/lib/python3.10/site-packages/sqlalchemy/sql/sqltypes.py</span> in <span class="ansi-cyan-fg">_object_value_for_elem</span><span class="ansi-blue-fg">(self, elem)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1608</span>         <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">-&gt; 1609</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_object_lookup<span class="ansi-blue-fg">[</span>elem<span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">   1610</span>         <span class="ansi-green-fg">except</span> KeyError <span class="ansi-green-fg">as</span> err<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">KeyError</span>: 'reed'
+
+The above exception was the direct cause of the following exception:
+
+<span class="ansi-red-fg">LookupError</span>                               Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_69447/3460624042.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># Now try and read the values back</span>
+<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-green-fg">with</span> Session<span class="ansi-blue-fg">(</span>engine<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">as</span> session<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">----&gt; 3</span><span class="ansi-red-fg">     </span>records <span class="ansi-blue-fg">=</span> session<span class="ansi-blue-fg">.</span>scalars<span class="ansi-blue-fg">(</span>select<span class="ansi-blue-fg">(</span>TestTable<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">.</span>all<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span>     print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">"We restored the following values in code..."</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span>     <span class="ansi-green-fg">for</span> record <span class="ansi-green-fg">in</span> records<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/.local/lib/python3.10/site-packages/sqlalchemy/engine/result.py</span> in <span class="ansi-cyan-fg">all</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1767</span> 
+<span class="ansi-green-intense-fg ansi-bold">   1768</span>         """
+<span class="ansi-green-fg">-&gt; 1769</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_allrows<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1770</span> 
+<span class="ansi-green-intense-fg ansi-bold">   1771</span>     <span class="ansi-green-fg">def</span> __iter__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-&gt;</span> Iterator<span class="ansi-blue-fg">[</span>_R<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/.local/lib/python3.10/site-packages/sqlalchemy/engine/result.py</span> in <span class="ansi-cyan-fg">_allrows</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    546</span>         make_row <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_row_getter
+<span class="ansi-green-intense-fg ansi-bold">    547</span> 
+<span class="ansi-green-fg">--&gt; 548</span><span class="ansi-red-fg">         </span>rows <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_fetchall_impl<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    549</span>         made_rows<span class="ansi-blue-fg">:</span> List<span class="ansi-blue-fg">[</span>_InterimRowType<span class="ansi-blue-fg">[</span>_R<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">    550</span>         <span class="ansi-green-fg">if</span> make_row<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/.local/lib/python3.10/site-packages/sqlalchemy/engine/result.py</span> in <span class="ansi-cyan-fg">_fetchall_impl</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1674</span> 
+<span class="ansi-green-intense-fg ansi-bold">   1675</span>     <span class="ansi-green-fg">def</span> _fetchall_impl<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-&gt;</span> List<span class="ansi-blue-fg">[</span>_InterimRowType<span class="ansi-blue-fg">[</span>Row<span class="ansi-blue-fg">[</span>Any<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">-&gt; 1676</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_real_result<span class="ansi-blue-fg">.</span>_fetchall_impl<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1677</span> 
+<span class="ansi-green-intense-fg ansi-bold">   1678</span>     def _fetchmany_impl(
+
+<span class="ansi-green-fg">~/.local/lib/python3.10/site-packages/sqlalchemy/engine/result.py</span> in <span class="ansi-cyan-fg">_fetchall_impl</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2268</span>             self<span class="ansi-blue-fg">.</span>_raise_hard_closed<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2269</span>         <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">-&gt; 2270</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">return</span> list<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>iterator<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2271</span>         <span class="ansi-green-fg">finally</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   2272</span>             self<span class="ansi-blue-fg">.</span>_soft_close<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/.local/lib/python3.10/site-packages/sqlalchemy/orm/loading.py</span> in <span class="ansi-cyan-fg">chunks</span><span class="ansi-blue-fg">(size)</span>
+<span class="ansi-green-intense-fg ansi-bold">    217</span>                     <span class="ansi-green-fg">break</span>
+<span class="ansi-green-intense-fg ansi-bold">    218</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 219</span><span class="ansi-red-fg">                 </span>fetch <span class="ansi-blue-fg">=</span> cursor<span class="ansi-blue-fg">.</span>_raw_all_rows<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    220</span> 
+<span class="ansi-green-intense-fg ansi-bold">    221</span>             <span class="ansi-green-fg">if</span> single_entity<span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/.local/lib/python3.10/site-packages/sqlalchemy/engine/result.py</span> in <span class="ansi-cyan-fg">_raw_all_rows</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    539</span>         <span class="ansi-green-fg">assert</span> make_row <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">not</span> <span class="ansi-green-fg">None</span>
+<span class="ansi-green-intense-fg ansi-bold">    540</span>         rows <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_fetchall_impl<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 541</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> <span class="ansi-blue-fg">[</span>make_row<span class="ansi-blue-fg">(</span>row<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> row <span class="ansi-green-fg">in</span> rows<span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">    542</span> 
+<span class="ansi-green-intense-fg ansi-bold">    543</span>     <span class="ansi-green-fg">def</span> _allrows<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-&gt;</span> List<span class="ansi-blue-fg">[</span>_R<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/.local/lib/python3.10/site-packages/sqlalchemy/engine/result.py</span> in <span class="ansi-cyan-fg">&lt;listcomp&gt;</span><span class="ansi-blue-fg">(.0)</span>
+<span class="ansi-green-intense-fg ansi-bold">    539</span>         <span class="ansi-green-fg">assert</span> make_row <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">not</span> <span class="ansi-green-fg">None</span>
+<span class="ansi-green-intense-fg ansi-bold">    540</span>         rows <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_fetchall_impl<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 541</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> <span class="ansi-blue-fg">[</span>make_row<span class="ansi-blue-fg">(</span>row<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> row <span class="ansi-green-fg">in</span> rows<span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">    542</span> 
+<span class="ansi-green-intense-fg ansi-bold">    543</span>     <span class="ansi-green-fg">def</span> _allrows<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-&gt;</span> List<span class="ansi-blue-fg">[</span>_R<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">lib/sqlalchemy/cyextension/resultproxy.pyx</span> in <span class="ansi-cyan-fg">sqlalchemy.cyextension.resultproxy.BaseRow.__init__</span><span class="ansi-blue-fg">()</span>
+
+<span class="ansi-green-fg">lib/sqlalchemy/cyextension/resultproxy.pyx</span> in <span class="ansi-cyan-fg">sqlalchemy.cyextension.resultproxy._apply_processors</span><span class="ansi-blue-fg">()</span>
+
+<span class="ansi-green-fg">~/.local/lib/python3.10/site-packages/sqlalchemy/sql/sqltypes.py</span> in <span class="ansi-cyan-fg">process</span><span class="ansi-blue-fg">(value)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1727</span>                 value <span class="ansi-blue-fg">=</span> parent_processor<span class="ansi-blue-fg">(</span>value<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1728</span> 
+<span class="ansi-green-fg">-&gt; 1729</span><span class="ansi-red-fg">             </span>value <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_object_value_for_elem<span class="ansi-blue-fg">(</span>value<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1730</span>             <span class="ansi-green-fg">return</span> value
+<span class="ansi-green-intense-fg ansi-bold">   1731</span> 
+
+<span class="ansi-green-fg">~/.local/lib/python3.10/site-packages/sqlalchemy/sql/sqltypes.py</span> in <span class="ansi-cyan-fg">_object_value_for_elem</span><span class="ansi-blue-fg">(self, elem)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1609</span>             <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>_object_lookup<span class="ansi-blue-fg">[</span>elem<span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">   1610</span>         <span class="ansi-green-fg">except</span> KeyError <span class="ansi-green-fg">as</span> err<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">-&gt; 1611</span><span class="ansi-red-fg">             raise LookupError(
+</span><span class="ansi-green-intense-fg ansi-bold">   1612</span>                 <span class="ansi-blue-fg">"'%s' is not among the defined enum values. "</span>
+<span class="ansi-green-intense-fg ansi-bold">   1613</span>                 <span class="ansi-blue-fg">"Enum name: %s. Possible values: %s"</span>
+
+<span class="ansi-red-fg">LookupError</span>: 'reed' is not among the defined enum values. Enum name: color. Possible values: red, green, blue</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Broken again.</p>
+<p>So how do we fix this?</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Handling-Unknown-Values">Handling Unknown Values<a class="anchor-link" href="#Handling-Unknown-Values">¶</a>
+</h3>
+<p>All the cases we've seen of LookupErrors are essentially a problem that we have no unknown value handler - ultimately in all applications where the value <em>could</em> change - which I would argue should always be considered to be all of them - we in fact should have had an option which specified handling an unknown one.</p>
+<p>At this point we need to subclass the SQLAlchemy Enum type, and specify that directly - which do like so:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [25]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">typing</span> <span class="k">as</span> <span class="nn">t</span>
+
+<span class="k">class</span> <span class="nc">EnumWithUnknown</span><span class="p">(</span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">enums</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">Any</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">enums</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+        <span class="c1"># SQLAlchemy sets the _adapted_from keyword argument sometimes, which contains a reference to the original type - but won't include</span>
+        <span class="c1"># original keyword arguments, so we need to handle that here.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unknown_value</span> <span class="o">=</span> <span class="n">kw</span><span class="p">[</span><span class="s2">"_adapted_from"</span><span class="p">]</span><span class="o">.</span><span class="n">_unknown_value</span> <span class="k">if</span> <span class="s2">"_adapted_from"</span> <span class="ow">in</span> <span class="n">kw</span> <span class="k">else</span> <span class="n">kw</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"unknown_value"</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknown_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"unknown_value should be a member of the enum"</span><span class="p">)</span>
+    
+    <span class="c1"># This is the function which resolves the object for the DB value</span>
+    <span class="k">def</span> <span class="nf">_object_value_for_elem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elem</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_object_lookup</span><span class="p">[</span><span class="n">elem</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">LookupError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unknown_value</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>And then we can use this type like follows:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [26]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Color</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="s2">"unknown"</span>
+    <span class="n">LEGACY_RED</span> <span class="o">=</span> <span class="s2">"red"</span>
+    <span class="n">GREEN</span> <span class="o">=</span> <span class="s2">"green"</span>
+    <span class="n">BLUE</span> <span class="o">=</span> <span class="s2">"blue"</span>
+
+<span class="k">class</span> <span class="nc">Base</span><span class="p">(</span><span class="n">DeclarativeBase</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">TestTable</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">"test_table"</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">value</span><span class="p">:</span> <span class="n">Mapped</span><span class="p">[</span><span class="n">Color</span><span class="p">]</span> <span class="o">=</span> <span class="n">mapped_column</span><span class="p">(</span><span class="n">EnumWithUnknown</span><span class="p">(</span><span class="n">Color</span><span class="p">,</span> <span class="n">values_callable</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="p">[</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">t</span> <span class="p">],</span> 
+                                                         <span class="n">unknown_value</span><span class="o">=</span><span class="n">Color</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">))</span>
+    
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's run that against the database we just inserted <code>reed</code> into:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [27]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Now try and read the values back</span>
+<span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+    <span class="n">records</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">scalars</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">TestTable</span><span class="p">))</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"We restored the following values in code..."</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>We restored the following values in code...
+Color.LEGACY_RED
+Color.GREEN
+Color.BLUE
+Color.UNKNOWN
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>And fixed! We obviously have changed our application logic, but this is now much safer and code which will work as we expect it too in all circumstances.</p>
+<p>From a practical perspective we've had to expand our design space to assume indeterminate colors can exist - which might be awkward, but the trade-off is robustness: our application logic can now choose how it handles "unknown" - we could crash if we wanted, but we can also choose just to ignore those records we don't understand or display them as "unknown" and prevent user interaction or whatever else we want.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Discussion">Discussion<a class="anchor-link" href="#Discussion">¶</a>
+</h2>
+<p>This is an interesting case where in my opinion the "default" design isn't what you would want, but the logic for it is actually sound. SQLAlchemy models <em>define databases</em> - they are principally built on assuming you are describing the actual state of a database, with constraints provided by a database - i.e. in a database with first-class enumeration support, some of the tripwires here just wouldn't work without a schema upgrade.</p>
+<p>Conversely, if you did a schema upgrade, your old applications still wouldn't know how to parse new values unless you did everything perfectly in lockstep - which in my experience isn't reality.</p>
+<p>Basically it's an interesting case where everything is justifiably right, but leaves some design footguns lying around which might be a bit of a surprise (hence this post). The kicker for me is the effect on using <code>session.scalar</code> calls to return models - since unless we're querying more specifically, having unknown values we can't handle in tables leads to being unable to list any elements on the table ergonomically.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Conclusions">Conclusions<a class="anchor-link" href="#Conclusions">¶</a>
+</h2>
+<p>Think carefully before using automagic enum methods in SQLAlchemy. What you want to do <em>now</em> is likely subtly wrong, and while there's a simple and elegant way to use <code>enum.Enum</code> with SQLAlchemy, the magic will give you working code quickly but with potentially nasty problems from subtle bugs or data mismatches later.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Listings">Listings<a class="anchor-link" href="#Listings">¶</a>
+</h2>
+<p>The full listing for the code samples here can also be found <a href="listings/sqlalchemy-enums.py.html">here</a>.</p>
+
+</div>
+</div>
+</div>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/enums/" rel="tag">enums</a></li>
+            <li><a class="tag p-category" href="../../categories/python/" rel="tag">python</a></li>
+            <li><a class="tag p-category" href="../../categories/sqlalchemy/" rel="tag">sqlalchemy</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../dhcp-fixed-ips-and-esphome/" rel="prev" title="DHCP Fixed IPs and ESPHome">Previous post</a>
+            </li>
+        </ul></nav></aside><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML" integrity="sha384-3lJUsx1TJHt7BA4udB5KPnDrlkO8T6J6v/op7ui0BbCjvZ9WqV4Xm6DTP6kQ/iBH" crossorigin="anonymous"></script><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+    },
+    displayAlign: 'center', // Change this to 'left' if you want left-aligned equations.
+    "HTML-CSS": {
+        styles: {'.MathJax_Display': {"margin": 0}}
+    }
+});
+</script></article><!--End of body content--><footer id="footer">
+            Contents © 2024         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+        <script src="../../assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element){var i=element.getElementsByTagName('img')[0];return i===undefined?'':i.alt;}});
+    </script>
+</body>
+</html>
