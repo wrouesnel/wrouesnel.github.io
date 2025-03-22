@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html prefix="
+og: http://ogp.me/ns# article: http://ogp.me/ns/article#
+" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Patching Ubuntu Packages with dgit and pbuilder | wrouesnel_blog</title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="canonical" href="https://blog.wrouesnel.com/posts/patching-ubuntu-packages/">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><link rel="stylesheet" href="../../assets/css/wrouesnel_blog-theme.css">
+<meta name="author" content="Will Rouesnel">
+<link rel="prev" href="../tpm-secured-gpg-keys/" title="TPM Secured GPG Keys which never touch the hard disk" type="text/html">
+<meta property="og:site_name" content="wrouesnel_blog">
+<meta property="og:title" content="Patching Ubuntu Packages with dgit and pbuilder">
+<meta property="og:url" content="https://blog.wrouesnel.com/posts/patching-ubuntu-packages/">
+<meta property="og:description" content='The Situation¶What I want from my open-source operating system (Ubuntu) is a sensible way to make "many eyes make all bugs shallow" a reality. At least for the obvious stuff - like the UI.
+To this end'>
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2025-03-23T09:57:07+11:00">
+<meta property="article:tag" content="building">
+<meta property="article:tag" content="deb">
+<meta property="article:tag" content="development">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="packaging">
+<meta property="article:tag" content="ppa">
+<meta property="article:tag" content="ubuntu">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-expand-md static-top mb-4
+navbar-dark
+bg-dark
+"><div class="container">
+<!-- This keeps the margins nice -->
+        <a class="navbar-brand" href="../../">
+
+            <span id="blog-title">wrouesnel_blog</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="bs-navbar">
+            <ul class="navbar-nav mr-auto">
+<li class="nav-item">
+<a href="../../archive.html" class="nav-link">Archive</a>
+                </li>
+<li class="nav-item">
+<a href="../../categories/" class="nav-link">Tags</a>
+
+                
+            </li>
+</ul>
+<ul class="navbar-nav navbar-right"></ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Patching Ubuntu Packages with dgit and pbuilder</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    <a class="u-url" href="../../authors/will-rouesnel/">Will Rouesnel</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2025-03-23T09:57:07+11:00" itemprop="datePublished" title="2025-03-23 09:57">2025-03-23 09:57</time></a>
+            </p>
+            
+        </div>
+        
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div class="cell border-box-sizing text_cell rendered" id="cell-id=147d40e0">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="The-Situation">The Situation<a class="anchor-link" href="#The-Situation">¶</a>
+</h2>
+<p>What I want from my open-source operating system (Ubuntu) is a sensible way to make "many eyes make all bugs shallow" a reality. At least for the obvious stuff - like the UI.</p>
+<p>To this end I need a couple of things:</p>
+<ul>
+<li>the ability to get the source code</li>
+<li>the ability to build and <em>package</em> the code</li>
+<li>the ability to install that package onto my own system safely to test it - and uninstall it and revert back to the regular package if I cannot.</li>
+<li>the ability to upstream my changes</li>
+</ul>
+<p>This is, in my experience, <em>hard</em> with Ubuntu - or at least certainly not a streamlined process like I believe it should be.</p>
+<p>Fortunately the situation today is a lot better then it was, but there are <em>many</em> false starts out there on the web. In this post I am recreating the notes and code which I used to do this again recently, along with the justifications why. There <em>are</em> obvious shortcomings, that aren't easy to fill (namely, rootless Podman should mean I can do this all without sudo except for the final <code>sudo apt upgrade</code> - but that's not the case today, not flexibly).</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=7619651f">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Problem">Problem<a class="anchor-link" href="#Problem">¶</a>
+</h2>
+<p>Our problem is that we want to be able to pull the source code of a given package - easily. We may need to pull the code of <em>several</em> packages so we can patch one, and rebuild many against it - so things we build need to become available to the next builds.</p>
+<p>And we'd like to be able to track this in source control, and public PPAs from it if it proves useful. Because it's just the thing to do.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=ada57edc">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Tools">Tools<a class="anchor-link" href="#Tools">¶</a>
+</h3>
+<p>You will need the following:</p>
+<ul>
+<li><code>dgit</code></li>
+<li><code>pbuilder</code></li>
+<li><code>devscripts</code></li>
+</ul>
+<div class="highlight"><pre><span></span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>dgit<span class="w"> </span>pbuilder<span class="w"> </span>devscripts
+</pre></div>
+<p><code>dgit</code> is the real magic in this process - it takes a bunch of things which <em>should</em> be possible but are not talked about extensively online and makes them automated, and well documented - the dgit man pages are <em>excellent</em>.</p>
+<p>The second part of this mix is <code>pbuilder</code>. <code>pbuilder</code> has a lot of variants, but when you get right down to it I've found that basic <code>pbuilder</code> is the easiest to get running: the tooling for things like <code>cowbuilder</code> <code>qemubuilder</code> and <code>dbocker</code> all tend to feel either under-developed (<code>dbocker</code>) or have limitations which limit easy usage (<code>qemubuilder</code> can't use bind mounts, so what we're doing here won't work.)</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=b002d8d6">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Setting-up-pbuilder">Setting up pbuilder<a class="anchor-link" href="#Setting-up-pbuilder">¶</a>
+</h3>
+<p>Getting pbuilder working smoothly on your system is key to making this a pleasant experience. Anyone can, with some effort, somehow get a package to build - but doing it in a way where you can get your patched code running quickly, and restore it just as easily is the key to making it accessible.</p>
+<p>Testing environments are good and all, but for the "I just need this one feature" sort of user patch of system-level or networking software (in my case NetworkManager), it's too much work for too little reward and tends not to properly fix the problem. The hacker spirit needs a duct-taped proof before it's productionized (and for bugs the question is "have you fixed it in the circumstance - your system - where it comes up").</p>
+<p>My solution for setting up pbuilder is in <a href="https://github.com/wrouesnel/wrouesnel-pbuilder">this Github repository here (by me)</a>.</p>
+<p>In short, <code>./setup-pbuilder-repo</code> here will install a <code>.pbuilderrc</code> file plus a bunch of hook scripts, and setup a local repository for apt with a signing key marked as <code>pbuilder-repo</code>. This is the standard chroot based classic pbuilder - there is some support for trying to use qemubuilder or cowbuilder, but in my experience both of these created more problems then they solved. Something clever <em>could</em> be done here, but for the time and effort you could also just run a full Ubuntu VM and do your building there - our goal is packaging, not reinventing containerization.</p>
+<p>Simply clone the repository, run <code>./setup-pbuilder-repo</code> and then run <code>sudo pbuilder create</code> to setup a local repository.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=b4629314">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Building-a-local-package-which-upgrades-the-existing-one">Building a local package which upgrades the existing one<a class="anchor-link" href="#Building-a-local-package-which-upgrades-the-existing-one">¶</a>
+</h3>
+<p>With the <code>pbuilder</code> environment setup, the process for building a new version of a local package looks like this (pretty much from the <code>dgit-user</code> page):</p>
+<p>Increment the version numbers by the amount needed (and write a new commit log):</p>
+<div class="highlight"><pre><span></span>gbp<span class="w"> </span>dch<span class="w"> </span>-S<span class="w"> </span>--local<span class="w"> </span>wrouesnel<span class="w"> </span>--since<span class="o">=</span>dgit/dgit/jammy<span class="w"> </span>--ignore-branch<span class="w"> </span>--commit
+</pre></div>
+<p>Build with our pbuilder setup:</p>
+<div class="highlight"><pre><span></span>dgit<span class="w"> </span>pbuilder
+</pre></div>
+<p>If you get a message like:</p>
+<pre><code>Format `3.0 (quilt)', need to check/update patch stack
+Would remove .idea/.gitignore
+Would remove .idea/misc.xml
+Would remove .idea/vcs.xml
+Would remove configure~
+Would remove install-sh~
+
+dgit: error: tree contains uncommitted files (NB dgit didn't run rules clean)
+dgit: If this is just missing .gitignore entries, use a different clean
+dgit: mode, eg --clean=dpkg-source,no-check (-wdn/-wddn) to ignore them
+dgit: or --clean=git (-wg/-wgf) to use `git clean' instead.
+</code></pre>
+<p>then as noted dgit is telling you the answer - you have extraneous files (common if like me you used a Jetbrains IDE to browse and edit). Run <code>git --reset hard</code> to get rid of fluff (modified autotools files usually) and then run:</p>
+<pre><code>dgit --clean=dpkg-source,no-check pbuilder
+</code></pre>
+<p>to build while ignoring anything extra.</p>
+<p>If you're just building binaries for your local system, then with this setup this is enough. After the build you can
+<code>apt upgrade</code> and your new build will be installed.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=42766e6f">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Setting-up-a-PPA">Setting up a PPA<a class="anchor-link" href="#Setting-up-a-PPA">¶</a>
+</h3>
+<p>For ease of use (or if you're doing this because you want to apply it to a cluster) then first build and sign a source package:</p>
+<p>First you'll want to declare a release for the version of your OS (I use Ubuntu so these will be Ubuntu specific):</p>
+<div class="highlight"><pre><span></span>gbp<span class="w"> </span>dch<span class="w"> </span>-R<span class="w"> </span>--local<span class="w"> </span>wrouesnel<span class="w"> </span>--since<span class="o">=</span>dgit/dgit/jammy<span class="w"> </span>--ignore-branch<span class="w"> </span>--commit
+</pre></div>
+<p>This lets you edit the changelog (on my system despite my efforts dch is convinced it should use my old email address from somewhere and I cannot figure out from where). Note that I had a lot of trouble getting a perfectly clean history out of git automatically with <code>gbp</code> here - it liked to pick up it's own changelog commits as things it wanted to include - I assume I'm using it wrong somehow, but documentation on other tools is tricky.</p>
+<p>Then, you want to build a signed source package for your changelog:</p>
+<div class="highlight"><pre><span></span>dgit<span class="w"> </span>--clean<span class="o">=</span>dpkg-source,no-check<span class="w"> </span>-k<span class="si">${</span><span class="nv">PPA_SIGNING_KEYID</span><span class="si">}</span><span class="w"> </span>build<span class="w"> </span>-S
+</pre></div>
+<p>where <code>${PPA_SIGNING_KEYID}</code> is the key ID you registered with Launchpad.</p>
+<p>Then just push it to the PPA:</p>
+<div class="highlight"><pre><span></span>dput<span class="w"> </span>ppa:<span class="si">${</span><span class="nv">PPA_NAME</span><span class="si">}</span><span class="w"> </span>&lt;your<span class="w"> </span>package.changes<span class="w"> </span>file&gt;
+</pre></div>
+<p>If <code>dput</code> complains about missing or incorrect signatures (I had an issue with missing signatures despite the gbp commands above) then it's easily fixed by running the <code>debsign</code> command on the <code>*.dsc</code> and <code>*.changes</code> files:</p>
+<div class="highlight"><pre><span></span>debsign<span class="w"> </span>-k<span class="si">${</span><span class="nv">PPA_SIGNING_KEYID</span><span class="si">}</span><span class="w"> </span>&lt;your<span class="w"> </span>package<span class="w"> </span>name&gt;.dsc
+debsign<span class="w"> </span>-k<span class="si">${</span><span class="nv">PPA_SIGNING_KEYID</span><span class="si">}</span><span class="w"> </span>&lt;your<span class="w"> </span>package<span class="w"> </span>name&gt;_source.changes
+</pre></div>
+<p>This will either sign it in place, or detect a signature and ask if you want to replace it (which is useful if you missigned initially). Then just retry the <code>dput</code> upload.</p>
+</div>
+</div>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/building/" rel="tag">building</a></li>
+            <li><a class="tag p-category" href="../../categories/deb/" rel="tag">deb</a></li>
+            <li><a class="tag p-category" href="../../categories/development/" rel="tag">development</a></li>
+            <li><a class="tag p-category" href="../../categories/linux/" rel="tag">linux</a></li>
+            <li><a class="tag p-category" href="../../categories/packaging/" rel="tag">packaging</a></li>
+            <li><a class="tag p-category" href="../../categories/ppa/" rel="tag">ppa</a></li>
+            <li><a class="tag p-category" href="../../categories/ubuntu/" rel="tag">ubuntu</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../tpm-secured-gpg-keys/" rel="prev" title="TPM Secured GPG Keys which never touch the hard disk">Previous post</a>
+            </li>
+        </ul></nav></aside><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML" integrity="sha384-3lJUsx1TJHt7BA4udB5KPnDrlkO8T6J6v/op7ui0BbCjvZ9WqV4Xm6DTP6kQ/iBH" crossorigin="anonymous"></script><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+    },
+    displayAlign: 'center', // Change this to 'left' if you want left-aligned equations.
+    "HTML-CSS": {
+        styles: {'.MathJax_Display': {"margin": 0}}
+    }
+});
+</script></article><!--End of body content--><footer id="footer">
+            Contents © 2025         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+        <script src="../../assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element){var i=element.getElementsByTagName('img')[0];return i===undefined?'':i.alt;}});
+    </script>
+</body>
+</html>

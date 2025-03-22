@@ -11,7 +11,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/archive.html</loc>
-  <lastmod>2025-03-22T11:56:00Z</lastmod>
+  <lastmod>2025-03-22T23:31:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/authors/</loc>
@@ -27,7 +27,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/</loc>
-  <lastmod>2025-03-22T11:52:00Z</lastmod>
+  <lastmod>2025-03-22T23:31:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/2204/</loc>
@@ -68,6 +68,10 @@
  <url>
   <loc>https://blog.wrouesnel.com/categories/bubblewrap/</loc>
   <lastmod>2022-03-26T03:30:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/building/</loc>
+  <lastmod>2025-03-22T23:31:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/bup/</loc>
@@ -262,6 +266,10 @@
   <lastmod>2022-08-08T23:48:00Z</lastmod>
  </url>
  <url>
+  <loc>https://blog.wrouesnel.com/categories/packaging/</loc>
+  <lastmod>2025-03-22T23:31:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://blog.wrouesnel.com/categories/patch/</loc>
   <lastmod>2022-08-08T23:48:00Z</lastmod>
  </url>
@@ -276,6 +284,10 @@
  <url>
   <loc>https://blog.wrouesnel.com/categories/power-management/</loc>
   <lastmod>2021-12-09T15:13:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/categories/ppa/</loc>
+  <lastmod>2025-03-22T23:31:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/categories/prius/</loc>
@@ -407,7 +419,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/index-3.html</loc>
-  <lastmod>2025-03-22T11:52:00Z</lastmod>
+  <lastmod>2025-03-22T23:31:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/a-better-getmail-idle-client/</loc>
@@ -427,11 +439,11 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/dhcp-fixed-ips-and-esphome/listings/.common-athom-smart-plug-v2.yaml.html</loc>
-  <lastmod>2025-03-22T11:52:00Z</lastmod>
+  <lastmod>2025-03-22T23:31:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/dhcp-fixed-ips-and-esphome/listings/athom-smart-plug-v2.yaml.html</loc>
-  <lastmod>2025-03-22T11:52:00Z</lastmod>
+  <lastmod>2025-03-22T23:31:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/firefox-from-deb-on-2204/</loc>
@@ -468,6 +480,10 @@
  <url>
   <loc>https://blog.wrouesnel.com/posts/migrating-to-gmail/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/posts/patching-ubuntu-packages/</loc>
+  <lastmod>2025-03-22T23:31:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/prometheus-reverse_exporter/</loc>
@@ -519,7 +535,7 @@
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/sqlalchemy-enums-careful-what-goes-into-the-database/listings/sqlalchemy-enums.py.html</loc>
-  <lastmod>2025-03-22T11:52:00Z</lastmod>
+  <lastmod>2025-03-22T23:31:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/ssh-port-forwarding-when-allowtcpforwarding-is-disabled/</loc>
@@ -536,6 +552,10 @@
  <url>
   <loc>https://blog.wrouesnel.com/posts/totally-static-go-builds/</loc>
   <lastmod>2021-12-09T14:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://blog.wrouesnel.com/posts/tpm-secured-gpg-keys/</loc>
+  <lastmod>2025-03-22T23:31:00Z</lastmod>
  </url>
  <url>
   <loc>https://blog.wrouesnel.com/posts/tpm-secured-gpg-keys/listings/</loc>
