@@ -69,8 +69,7 @@ bg-dark
             </p>
         </div>
     </header><div class="e-content entry-content">
-    <div>
-<p>So I just lost about 16 hours to this, and I haven't even been able to
+    <p>So I just lost about 16 hours to this, and I haven't even been able to
 evaluate whether it'll work for me. On the one hand I suppose I could've not
 secured anything, but personally I feel you want to know what the production
 configuration looks like before you evaluate (and in my case, I like to default
@@ -93,14 +92,14 @@ initialize the cluster - but none of the nodes will connect to each other.</p>
 <h2>The Solution</h2>
 <p>So there you have it - with <code>makecerts</code> the line I needed for the test docker-compose
 file was:</p>
-<pre class="code literal-block"><span></span><code>makecerts --O<span class="o">=</span>cockroach --CN<span class="o">=</span>generated <span class="se">\</span>
-    <span class="nv">172_20_0_1</span><span class="o">=</span>node,172.20.0.1,localhost,127.0.0.1 <span class="se">\</span>
-    <span class="nv">172_20_0_2</span><span class="o">=</span>node,172.20.0.2,localhost,127.0.0.1 <span class="se">\</span>
-    <span class="nv">172_20_0_3</span><span class="o">=</span>node,172.20.0.3,localhost,127.0.0.1 <span class="se">\</span>
-    <span class="nv">172_20_0_4</span><span class="o">=</span>node,172.20.0.4,localhost,127.0.0.1 <span class="se">\</span>
-    <span class="nv">172_20_0_5</span><span class="o">=</span>node,172.20.0.5,localhost,127.0.0.1 <span class="se">\</span>
-    root
-</code></pre>
+<div class="code"><pre class="code literal-block">makecerts<span class="w"> </span>--O<span class="o">=</span>cockroach<span class="w"> </span>--CN<span class="o">=</span>generated<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="nv">172_20_0_1</span><span class="o">=</span>node,172.20.0.1,localhost,127.0.0.1<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="nv">172_20_0_2</span><span class="o">=</span>node,172.20.0.2,localhost,127.0.0.1<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="nv">172_20_0_3</span><span class="o">=</span>node,172.20.0.3,localhost,127.0.0.1<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="nv">172_20_0_4</span><span class="o">=</span>node,172.20.0.4,localhost,127.0.0.1<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="nv">172_20_0_5</span><span class="o">=</span>node,172.20.0.5,localhost,127.0.0.1<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>root
+</pre></div>
 
 <p>Note on how this works: this command above is saying "generate 
 172_20_0_1.crt and 172_20_0_1.pem for the certificate and key respectively,
@@ -109,98 +108,98 @@ all common-separated values."</p>
 <p>Since <code>makecerts</code> is simple minded it also just signs the cert for all 
 use-cases - it's very much a testing tool.</p>
 <p>The final docker-compose I used to get this started was:</p>
-<pre class="code literal-block"><span></span><code><span class="nt">version</span><span class="p">:</span> <span class="s">'2'</span>
+<div class="code"><pre class="code literal-block"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">'2'</span>
 
 <span class="nt">networks</span><span class="p">:</span>
-  <span class="nt">roachnet</span><span class="p">:</span>
-    <span class="nt">driver</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bridge</span>
-    <span class="nt">ipam</span><span class="p">:</span>
-      <span class="nt">driver</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">default</span>
-      <span class="nt">config</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="nt">subnet</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.20.0.0/24</span>
-        <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.20.0.254</span>
+<span class="w">  </span><span class="nt">roachnet</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bridge</span>
+<span class="w">    </span><span class="nt">ipam</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="w">      </span><span class="nt">config</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">172.20.0.0/24</span>
+<span class="w">        </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">172.20.0.254</span>
 
 <span class="nt">services</span><span class="p">:</span>
-  <span class="nt">roach1</span><span class="p">:</span>
-    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
-    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.1 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
-    <span class="nt">volumes</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./roach1:/cockroach/cockroach-data</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_1.crt:/certs/node.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_1.pem:/certs/node.key</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
-    <span class="nt">networks</span><span class="p">:</span>
-      <span class="nt">roachnet</span><span class="p">:</span>
-        <span class="nt">ipv4_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.20.0.1</span>
+<span class="w">  </span><span class="nt">roach1</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.1 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./roach1:/cockroach/cockroach-data</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./172_20_0_1.crt:/certs/node.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./172_20_0_1.pem:/certs/node.key</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">roachnet</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">ipv4_address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">172.20.0.1</span>
 
-  <span class="nt">roach2</span><span class="p">:</span>
-    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
-    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.2 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
-    <span class="nt">volumes</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./roach2:/cockroach/cockroach-data</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_2.crt:/certs/node.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_2.pem:/certs/node.key</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
-    <span class="nt">networks</span><span class="p">:</span>
-      <span class="nt">roachnet</span><span class="p">:</span>
-        <span class="nt">ipv4_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.20.0.2</span>
+<span class="w">  </span><span class="nt">roach2</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.2 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./roach2:/cockroach/cockroach-data</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./172_20_0_2.crt:/certs/node.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./172_20_0_2.pem:/certs/node.key</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">roachnet</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">ipv4_address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">172.20.0.2</span>
 
-  <span class="nt">roach3</span><span class="p">:</span>
-    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
-    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.3 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
-    <span class="nt">volumes</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./roach3:/cockroach/cockroach-data</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_3.crt:/certs/node.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_3.pem:/certs/node.key</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
-    <span class="nt">networks</span><span class="p">:</span>
-      <span class="nt">roachnet</span><span class="p">:</span>
-        <span class="nt">ipv4_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.20.0.3</span>
+<span class="w">  </span><span class="nt">roach3</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.3 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./roach3:/cockroach/cockroach-data</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./172_20_0_3.crt:/certs/node.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./172_20_0_3.pem:/certs/node.key</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">roachnet</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">ipv4_address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">172.20.0.3</span>
 
-  <span class="nt">roach4</span><span class="p">:</span>
-    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
-    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.4 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
-    <span class="nt">volumes</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./roach4:/cockroach/cockroach-data</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_4.crt:/certs/node.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_4.pem:/certs/node.key</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
-    <span class="nt">networks</span><span class="p">:</span>
-      <span class="nt">roachnet</span><span class="p">:</span>
-        <span class="nt">ipv4_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.20.0.4</span>
+<span class="w">  </span><span class="nt">roach4</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.4 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./roach4:/cockroach/cockroach-data</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./172_20_0_4.crt:/certs/node.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./172_20_0_4.pem:/certs/node.key</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">roachnet</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">ipv4_address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">172.20.0.4</span>
 
-  <span class="nt">roach5</span><span class="p">:</span>
-    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
-    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.5 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
-    <span class="nt">volumes</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./roach5:/cockroach/cockroach-data</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_5.crt:/certs/node.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_5.pem:/certs/node.key</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
-    <span class="nt">networks</span><span class="p">:</span>
-      <span class="nt">roachnet</span><span class="p">:</span>
-        <span class="nt">ipv4_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.20.0.5</span>
-</code></pre>
+<span class="w">  </span><span class="nt">roach5</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.5 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./roach5:/cockroach/cockroach-data</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./172_20_0_5.crt:/certs/node.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./172_20_0_5.pem:/certs/node.key</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">roachnet</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">ipv4_address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">172.20.0.5</span>
+</pre></div>
 
 <p>and you need to run a once-off init phase to start the cluster:</p>
-<pre class="code literal-block"><span></span><code><span class="ch">#!/bin/bash</span>
-docker-compose <span class="nb">exec</span> roach1 ./cockroach init --certs-dir<span class="o">=</span>/certs/ --host<span class="o">=</span><span class="m">172</span>.20.0.1
-</code></pre>
+<div class="code"><pre class="code literal-block"><span class="ch">#!/bin/bash</span>
+docker-compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>roach1<span class="w"> </span>./cockroach<span class="w"> </span>init<span class="w"> </span>--certs-dir<span class="o">=</span>/certs/<span class="w"> </span>--host<span class="o">=</span><span class="m">172</span>.20.0.1
+</pre></div>
 
 <h2>A final note - why does makecerts exist?</h2>
 <p>I really want to like <code>cfssl</code>, but it still just seems like too much typing for
@@ -209,7 +208,6 @@ whereas the goal with <code>makecerts</code> was to make it as easy as possible 
 TLS certs for test cases on the desktop and thus force myself to always turn
 TLS on when developing - since obviously I'm always going to be using it in
 production, so I should test with it.</p>
-</div>
     </div>
     </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/prometheus-reverse_exporter/" class="u-url">Prometheus reverse_exporter</a></h1>
         <div class="metadata">
@@ -222,8 +220,7 @@ production, so I should test with it.</p>
             </p>
         </div>
     </header><div class="e-content entry-content">
-    <div>
-<p><a href="https://github.com/wrouesnel/reverse_exporter/releases">Find reverse_exporter on Github Releases</a></p>
+    <p><a href="https://github.com/wrouesnel/reverse_exporter/releases">Find reverse_exporter on Github Releases</a></p>
 <p>In which I talk about something I made to solve a problem I had.</p>
 <h2>Why</h2>
 <p>I like to make my deployments of things as "appliance-like" as possible. I want
@@ -325,7 +322,6 @@ admins reload the metrics page without bringing down our container or our host.<
 <p>This post feels a bit marketing like to me, but I am pretty excited that for me
 at least <code>reverse_exporter</code> works well.</p>
 <p>Hopefully, it proves helpful to other Prometheus users as well!</p>
-</div>
     </div>
     </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/s4-i9505-in-2018/" class="u-url">S4-i9505 in 2018</a></h1>
         <div class="metadata">
@@ -338,8 +334,7 @@ at least <code>reverse_exporter</code> works well.</p>
             </p>
         </div>
     </header><div class="e-content entry-content">
-    <div>
-<p>Some notes on running a Samsung Galaxy S4 i9505 in Australia in 2018</p>
+    <p>Some notes on running a Samsung Galaxy S4 i9505 in Australia in 2018</p>
 <p>My first high end phone, still perfectly capable of everything I need from a
 smart phone and now dirt cheap on ebay so I'm basically going to keep buying
 them till there's no more to be had (or someone releases a Spectre-immune CPU
@@ -357,7 +352,6 @@ its to do with SELinux only allowing the phone to use the default prox-sensor
 thresholds - which if your phone meets them, great - if not - then it will
 appear broken.</p>
 <p>I'm hoping to get this patched in the upstream <a href="https://review.lineageos.org/#/c/201533/">soon</a>.</p>
-</div>
     </div>
     </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/structuring-my-go-projects/" class="u-url">Structuring my Go projects</a></h1>
         <div class="metadata">
@@ -370,18 +364,17 @@ appear broken.</p>
             </p>
         </div>
     </header><div class="e-content entry-content">
-    <div>
-<p>Recently I've been maintaining a Github repository to serve as a generic
+    <p>Recently I've been maintaining a Github repository to serve as a generic
 template for my Golang projects, and its been working rather well for me.</p>
 <p>The repository is here: <a href="https://github.com/wrouesnel/self-contained-go-project">Self-contained Go Project</a></p>
 <p>The basic idea is that using this template, you can setup a Go project with
 vendored dependencies not just for the main project but also for every tool
 used in building and linting it (with the exception of <code>make</code>, <code>git</code> and a 
 working Golang install). </p>
-<pre class="code literal-block"><span></span><code>go get &lt;my project&gt;
-<span class="nb">cd</span> <span class="nv">$GOPATH</span>/src/&lt;my project&gt;
+<div class="code"><pre class="code literal-block">go<span class="w"> </span>get<span class="w"> </span>&lt;my<span class="w"> </span>project&gt;
+<span class="nb">cd</span><span class="w"> </span><span class="nv">$GOPATH</span>/src/&lt;my<span class="w"> </span>project&gt;
 make
-</code></pre>
+</pre></div>
 
 <p>does a production build.</p>
 <h2>How to Use It</h2>
@@ -425,7 +418,6 @@ thusfar really happy with how this basic structure has turned out as I've
 evolved it and it's proven relatively easy to extend when I need to (i.e.
 adding more testing levels, building web assets as well with npm and including
 them in the go-binary etc.)</p>
-</div>
     </div>
     </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/tracking-down-why-my-desktop-fails-every-second-resume/" class="u-url">Tracking down why my desktop fails every second resume</a></h1>
         <div class="metadata">
@@ -438,8 +430,7 @@ them in the go-binary etc.)</p>
             </p>
         </div>
     </header><div class="e-content entry-content">
-    <div>
-<h2>Collecting a thread to pull on...</h2>
+    <h2>Collecting a thread to pull on...</h2>
 <p>Had an interesting problem for a while now - my desktop under linux would
 <em>mostly</em> suspend and resume just fine, except when it didn't. This is annoying
 as I'm the type of person who likes to leave a big dev environment running and
@@ -449,8 +440,8 @@ so documenting any progress I made was fairly important.</p>
 <p>The Ubuntu guide to kernel suspend is the most useful one I found:
 <a href="https://wiki.ubuntu.com/DebuggingKernelSuspend">https://wiki.ubuntu.com/DebuggingKernelSuspend</a></p>
 <p>And the important bit is this action:</p>
-<pre class="code literal-block"><span></span><code>sync &amp;&amp; echo 1 &gt; /sys/power/pm_trace &amp;&amp; pm-suspend
-</code></pre>
+<div class="code"><pre class="code literal-block">sync &amp;&amp; echo 1 &gt; /sys/power/pm_trace &amp;&amp; pm-suspend
+</pre></div>
 
 <p>This does some kernel magic which encodes suspend/resume progress into the
 systems RTC clock via a hash, which allows - if things freeze - to reboot and
@@ -460,39 +451,39 @@ next boot before the data vanishes and you grab it from <code>dmesg</code>.</p>
 and then hung my system on the second time. So it works, but something gets
 corrupted through the process and we need to (hopefully) just reset it on 
 resume to avoid the problem.</p>
-<pre class="code literal-block"><span></span><code>$ dmesg <span class="p">|</span> grep -A10 Magic
-<span class="o">[</span>    <span class="m">3</span>.607642<span class="o">]</span>   Magic number: <span class="m">0</span>:474:178
-<span class="o">[</span>    <span class="m">3</span>.625900<span class="o">]</span>   <span class="nb">hash</span> matches /build/linux-B4zRAA/linux-4.8.0/drivers/base/power/main.c:1070
-<span class="o">[</span>    <span class="m">3</span>.644583<span class="o">]</span> acpi device:0e: <span class="nb">hash</span> matches
-<span class="o">[</span>    <span class="m">3</span>.663313<span class="o">]</span>  platform: <span class="nb">hash</span> matches
-</code></pre>
+<div class="code"><pre class="code literal-block">$<span class="w"> </span>dmesg<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-A10<span class="w"> </span>Magic
+<span class="o">[</span><span class="w">    </span><span class="m">3</span>.607642<span class="o">]</span><span class="w">   </span>Magic<span class="w"> </span>number:<span class="w"> </span><span class="m">0</span>:474:178
+<span class="o">[</span><span class="w">    </span><span class="m">3</span>.625900<span class="o">]</span><span class="w">   </span><span class="nb">hash</span><span class="w"> </span>matches<span class="w"> </span>/build/linux-B4zRAA/linux-4.8.0/drivers/base/power/main.c:1070
+<span class="o">[</span><span class="w">    </span><span class="m">3</span>.644583<span class="o">]</span><span class="w"> </span>acpi<span class="w"> </span>device:0e:<span class="w"> </span><span class="nb">hash</span><span class="w"> </span>matches
+<span class="o">[</span><span class="w">    </span><span class="m">3</span>.663313<span class="o">]</span><span class="w">  </span>platform:<span class="w"> </span><span class="nb">hash</span><span class="w"> </span>matches
+</pre></div>
 
 <p>That's the easy part. What the hell does it mean?</p>
 <h2>Goto the Source</h2>
 <p>We get a source line out of that request, and we're running an ubuntu kernel
 which has a convenient source package we can grab. So let's get that so we can
 account for the Ubuntu packages:</p>
-<pre class="code literal-block"><span></span><code>$ <span class="nb">cd</span> ~/tmp
-$ uname -a
-Linux will-desktop <span class="m">4</span>.8.0-19-generic <span class="c1">#21-Ubuntu SMP Thu Sep 29 19:39:23 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux</span>
-$ apt-get <span class="nb">source</span> linux-image-4.8.0-19-generic-generic
-</code></pre>
+<div class="code"><pre class="code literal-block">$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/tmp
+$<span class="w"> </span>uname<span class="w"> </span>-a
+Linux<span class="w"> </span>will-desktop<span class="w"> </span><span class="m">4</span>.8.0-19-generic<span class="w"> </span><span class="c1">#21-Ubuntu SMP Thu Sep 29 19:39:23 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux</span>
+$<span class="w"> </span>apt-get<span class="w"> </span><span class="nb">source</span><span class="w"> </span>linux-image-4.8.0-19-generic-generic
+</pre></div>
 
 <p>Which leads to this:</p>
-<pre class="code literal-block"><span></span><code><span class="nv">static</span> <span class="nv">void</span> <span class="nv">async_suspend_noirq</span><span class="ss">(</span><span class="nv">void</span> <span class="o">*</span><span class="nv">data</span>, <span class="nv">async_cookie_t</span> <span class="nv">cookie</span><span class="ss">)</span>
+<div class="code"><pre class="code literal-block">static void async_suspend_noirq(void *data, async_cookie_t cookie)
 {
-    <span class="nv">struct</span> <span class="nv">device</span> <span class="o">*</span><span class="nv">dev</span> <span class="o">=</span> <span class="ss">(</span><span class="nv">struct</span> <span class="nv">device</span> <span class="o">*</span><span class="ss">)</span><span class="nv">data</span><span class="c1">;</span>
-    <span class="nv">int</span> <span class="nv">error</span><span class="c1">;</span>
+    struct device <span class="gs">*dev = (struct device *</span>)data;
+    int error;
 
-    <span class="nv">error</span> <span class="o">=</span> <span class="nv">__device_suspend_noirq</span><span class="ss">(</span><span class="nv">dev</span>, <span class="nv">pm_transition</span>, <span class="nv">true</span><span class="ss">)</span><span class="c1">;</span>
-    <span class="k">if</span> <span class="ss">(</span><span class="nv">error</span><span class="ss">)</span> {
-        <span class="nv">dpm_save_failed_dev</span><span class="ss">(</span><span class="nv">dev_name</span><span class="ss">(</span><span class="nv">dev</span><span class="ss">))</span><span class="c1">;</span>
-        <span class="nv">pm_dev_err</span><span class="ss">(</span><span class="nv">dev</span>, <span class="nv">pm_transition</span>, <span class="s2">"</span><span class="s"> async</span><span class="s2">"</span>, <span class="nv">error</span><span class="ss">)</span><span class="c1">;</span>
+    error = __device_suspend_noirq(dev, pm_transition, true);
+    if (error) {
+        dpm_save_failed_dev(dev_name(dev));
+        pm_dev_err(dev, pm_transition, " async", error);
     }
 
-    <span class="nv">put_device</span><span class="ss">(</span><span class="nv">dev</span><span class="ss">)</span><span class="c1">;</span>
+    put_device(dev);
 }
-</code></pre>
+</pre></div>
 
 <p>So the error line we're getting puts right on that <code>if (error)</code> line which
 hopefully means this is just some device failure we can add a PM script for.</p>
@@ -505,7 +496,6 @@ the resume code, so the failure on the second resume happens very early.
 <p>Which is often less work then it sounds, but judging from that LKML link it's
 pretty much the only lead we have to go on since we don't have a Thinkpad but
 the problem is probably suspiciously similar.</p>
-</div>
     </div>
     </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/totally-static-go-builds/" class="u-url">Totally static Go builds</a></h1>
         <div class="metadata">
@@ -518,20 +508,18 @@ the problem is probably suspiciously similar.</p>
             </p>
         </div>
     </header><div class="e-content entry-content">
-    <div>
-<p>I wouldn't make a post on my blog just so I don't have to keep googling something
+    <p>I wouldn't make a post on my blog just so I don't have to keep googling something
 would I? Of course I would. It's like...95% of the reason I keep this.</p>
 <p>Totally static go builds - these are <em>great</em> for running in Docker containers.
 The important part is the command line to create them - it's varied a bit, but
 the most thorough I've found is this (see this 
 <a href="https://github.com/golang/go/issues/9344">Github Issue</a>):</p>
-<pre class="code literal-block"><span></span><code><span class="nv">CGO_ENABLED</span><span class="o">=</span><span class="m">0</span> <span class="nv">GOOS</span><span class="o">=</span>linux go build -a -ldflags <span class="s1">'-extldflags "-static"'</span> .
-</code></pre>
+<div class="code"><pre class="code literal-block"><span class="nv">CGO_ENABLED</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="nv">GOOS</span><span class="o">=</span>linux<span class="w"> </span>go<span class="w"> </span>build<span class="w"> </span>-a<span class="w"> </span>-ldflags<span class="w"> </span><span class="s1">'-extldflags "-static"'</span><span class="w"> </span>.
+</pre></div>
 
 <p>This will create an "as static as possible" binary - beware linking in things
 which want glibc, since pluggable name resolvers will be a problem (which you
 can workaround in Docker quite well, but that's another question).</p>
-</div>
     </div>
     </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/quickly-configuring-modelines/" class="u-url">Quickly configuring modelines?</a></h1>
         <div class="metadata">
@@ -544,8 +532,7 @@ can workaround in Docker quite well, but that's another question).</p>
             </p>
         </div>
     </header><div class="e-content entry-content">
-    <div>
-<h2>Quickly configuring modelines?</h2>
+    <h2>Quickly configuring modelines?</h2>
 <p>Something hopefully no one should ever have to do in the far distant future,
 but since I insist on using old-hardware till it drops, it still comes up.</p>
 <p>Working from an SSH console on an XBMC box, I was trying to tune in an elusive
@@ -553,19 +540,18 @@ but since I insist on using old-hardware till it drops, it still comes up.</p>
 <p>The best way to do it is with xrandr these days in a <code>~/.xprofile</code> script which
 is loaded on boot up.</p>
 <p>To quickly go through modelines I used the following shell script:</p>
-<pre class="code literal-block"><span></span><code><span class="ch">#!/bin/bash</span>
-xrandr -d :0 --output VGA-0 --mode <span class="s2">"1024x768"</span>
-xrandr -d :0 --delmode VGA-0 <span class="s2">"1360x768"</span>
-xrandr -d :0 --rmmode <span class="s2">"1360x768"</span>
-xrandr -d :0 --newmode <span class="s2">"1360x768"</span> <span class="nv">$@</span>
-xrandr -d :0 --addmode VGA-0 <span class="s2">"1360x768"</span>
-xrandr -d :0 --output VGA-0 --mode <span class="s2">"1360x768"</span>
-</code></pre>
+<div class="code"><pre class="code literal-block"><span class="ch">#!/bin/bash</span>
+xrandr<span class="w"> </span>-d<span class="w"> </span>:0<span class="w"> </span>--output<span class="w"> </span>VGA-0<span class="w"> </span>--mode<span class="w"> </span><span class="s2">"1024x768"</span>
+xrandr<span class="w"> </span>-d<span class="w"> </span>:0<span class="w"> </span>--delmode<span class="w"> </span>VGA-0<span class="w"> </span><span class="s2">"1360x768"</span>
+xrandr<span class="w"> </span>-d<span class="w"> </span>:0<span class="w"> </span>--rmmode<span class="w"> </span><span class="s2">"1360x768"</span>
+xrandr<span class="w"> </span>-d<span class="w"> </span>:0<span class="w"> </span>--newmode<span class="w"> </span><span class="s2">"1360x768"</span><span class="w"> </span><span class="nv">$@</span>
+xrandr<span class="w"> </span>-d<span class="w"> </span>:0<span class="w"> </span>--addmode<span class="w"> </span>VGA-0<span class="w"> </span><span class="s2">"1360x768"</span>
+xrandr<span class="w"> </span>-d<span class="w"> </span>:0<span class="w"> </span>--output<span class="w"> </span>VGA-0<span class="w"> </span>--mode<span class="w"> </span><span class="s2">"1360x768"</span>
+</pre></div>
 
 <p>Simply passing in a modeline when running it causes that modeline to be set and
 applied to the relevant output (VGA-0) in my case.</p>
 <p>i.e. <code>./tryout 84.750 1366 1480 1568 1800 768 769 776 800 -hsync +vsync</code></p>
-</div>
     </div>
     </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/installing-the-latest-docker-release/" class="u-url">Installing the latest docker release</a></h1>
         <div class="metadata">
@@ -578,19 +564,17 @@ applied to the relevant output (VGA-0) in my case.</p>
             </p>
         </div>
     </header><div class="e-content entry-content">
-    <div>
-<p>Somehow the installation instructions for Docker never work for me and the
+    <p>Somehow the installation instructions for Docker never work for me and the
 website is <em>surprisingly</em> cagey about the manual process.</p>
 <p>It works perfectly well if you just grab the relevant bits of that script and
 run them manually, but usually fails if you let it be a bit too magical.</p>
 <p>To be fair, I probably have issues due to the mismatch of LSB release since I
 run Mint. Still though.</p>
 <p>So here's the commands for Ubuntu:</p>
-<pre class="code literal-block"><span></span><code>$ apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
-$ <span class="nb">echo</span> deb https://apt.dockerproject.org/repo ubuntu-vivid main &gt; /etc/apt/sources.list.d/docker.list
-$ apt-get update <span class="o">&amp;&amp;</span> apt-get install -y docker-engine
-</code></pre>
-</div>
+<div class="code"><pre class="code literal-block">$<span class="w"> </span>apt-key<span class="w"> </span>adv<span class="w"> </span>--keyserver<span class="w"> </span>hkp://p80.pool.sks-keyservers.net:80<span class="w"> </span>--recv-keys<span class="w"> </span>58118E89F3A912897C070ADBF76221572C52609D
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>deb<span class="w"> </span>https://apt.dockerproject.org/repo<span class="w"> </span>ubuntu-vivid<span class="w"> </span>main<span class="w"> </span>&gt;<span class="w"> </span>/etc/apt/sources.list.d/docker.list
+$<span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>docker-engine
+</pre></div>
     </div>
     </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/using-the-go-playground-locally/" class="u-url">Using the Go playground locally</a></h1>
         <div class="metadata">
@@ -603,8 +587,7 @@ $ apt-get update <span class="o">&amp;&amp;</span> apt-get install -y docker-eng
             </p>
         </div>
     </header><div class="e-content entry-content">
-    <div>
-<h2>Summary</h2>
+    <h2>Summary</h2>
 <p>I modified Rocky Bernsteins go-play to compile with go-assetfs and run from a
 single executable. <a href="https://github.com/wrouesnel/go-play">Get it here!</a></p>
 <h2>Why and How</h2>
@@ -633,7 +616,6 @@ and a little fun with <a href="https://github.com/elazarl/go-bindata-assetfs">go
 yielded my own version which once built runs completely locally.</p>
 <p><a href="http://github.com/wrouesnel/go-play">Get it here</a>. It's fully go-gettable too
 so <code>go get github.com/wrouesnel/go-play</code> will work too.</p>
-</div>
     </div>
     </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/ssh-port-forwarding-when-allowtcpforwarding-is-disabled/" class="u-url">SSH port forwarding when port fowarding is disabled with socat and nc</a></h1>
         <div class="metadata">
@@ -646,8 +628,7 @@ so <code>go get github.com/wrouesnel/go-play</code> will work too.</p>
             </p>
         </div>
     </header><div class="e-content entry-content">
-    <div>
-<h2>The Problem</h2>
+    <h2>The Problem</h2>
 <p>You have a server you can SSH to. For whatever reason AllowTCPPortForwarding
 is disabled. You need to forward a port from it to your local machine.</p>
 <p>If it's any sort of standard machine, then it probably has <code>netcat</code>. It's less
@@ -657,8 +638,8 @@ serious security measure, and far more of an anoyance. And (2) since it's pretty
 likely you still need to do whatever job you need to do, it would be nice to
 have a 1-liner which will just forward the port for you</p>
 <h2>The Solution</h2>
-<pre class="code literal-block"><span></span><code><span class="nv">socat</span> <span class="nv">TCP</span><span class="o">-</span><span class="nv">LISTEN</span>:<span class="o">&lt;</span><span class="nv">local</span> <span class="nv">port</span><span class="o">&gt;</span>,<span class="nv">reuseaddr</span>,<span class="nv">fork</span> <span class="s2">"</span><span class="s">EXEC:ssh &lt;server&gt; nc localhost &lt;remote port&gt;</span><span class="s2">"</span>
-</code></pre>
+<div class="code"><pre class="code literal-block"><span class="nx">socat</span><span class="w"> </span><span class="nx">TCP</span><span class="o">-</span><span class="nx">LISTEN</span><span class="p">:&lt;</span><span class="nx">local</span><span class="w"> </span><span class="nx">port</span><span class="p">&gt;,</span><span class="nx">reuseaddr</span><span class="p">,</span><span class="nx">fork</span><span class="w"> </span><span class="s">"EXEC:ssh &lt;server&gt; nc localhost &lt;remote port&gt;"</span>
+</pre></div>
 
 <p>It's kind of obvious if you know socat well, but half the battle is simply
 knowing it's possible.</p>
@@ -670,7 +651,6 @@ data to the console for you if you want.</p>
 can upload new tools (which, with shell access they can), and if you don't have
 firewall rules or cgroups limitations on those accounts, then stuff like
 disabled port forwards <em>is not a security measure</em>.</p>
-</div>
     </div>
     </article>
 </div>
@@ -679,7 +659,7 @@ disabled port forwards <em>is not a security measure</em>.</p>
             <li class="next"><a href="index-1.html" rel="next">Older posts</a></li>
         </ul>
 <!--End of body content--><footer id="footer">
-            Contents © 2024         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            Contents © 2025         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
         </footer>
 </div>

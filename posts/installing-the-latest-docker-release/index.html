@@ -80,19 +80,17 @@ bg-dark
         </div>
         
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div>
-<p>Somehow the installation instructions for Docker never work for me and the
+    <p>Somehow the installation instructions for Docker never work for me and the
 website is <em>surprisingly</em> cagey about the manual process.</p>
 <p>It works perfectly well if you just grab the relevant bits of that script and
 run them manually, but usually fails if you let it be a bit too magical.</p>
 <p>To be fair, I probably have issues due to the mismatch of LSB release since I
 run Mint. Still though.</p>
 <p>So here's the commands for Ubuntu:</p>
-<pre class="code literal-block"><span></span><code>$ apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
-$ <span class="nb">echo</span> deb https://apt.dockerproject.org/repo ubuntu-vivid main &gt; /etc/apt/sources.list.d/docker.list
-$ apt-get update <span class="o">&amp;&amp;</span> apt-get install -y docker-engine
-</code></pre>
-</div>
+<div class="code"><pre class="code literal-block">$<span class="w"> </span>apt-key<span class="w"> </span>adv<span class="w"> </span>--keyserver<span class="w"> </span>hkp://p80.pool.sks-keyservers.net:80<span class="w"> </span>--recv-keys<span class="w"> </span>58118E89F3A912897C070ADBF76221572C52609D
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>deb<span class="w"> </span>https://apt.dockerproject.org/repo<span class="w"> </span>ubuntu-vivid<span class="w"> </span>main<span class="w"> </span>&gt;<span class="w"> </span>/etc/apt/sources.list.d/docker.list
+$<span class="w"> </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>docker-engine
+</pre></div>
     </div>
     <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
 <li><a class="tag p-category" href="../../categories/debian/" rel="tag">debian</a></li>
@@ -107,7 +105,7 @@ $ apt-get update <span class="o">&amp;&amp;</span> apt-get install -y docker-eng
                 <a href="../quickly-configuring-modelines/" rel="next" title="Quickly configuring modelines?">Next post</a>
             </li>
         </ul></nav></aside></article><!--End of body content--><footer id="footer">
-            Contents © 2024         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            Contents © 2025         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
         </footer>
 </div>

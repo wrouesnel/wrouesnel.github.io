@@ -80,8 +80,7 @@ bg-dark
         </div>
         
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div>
-<h2>Why</h2>
+    <h2>Why</h2>
 <p>In a stitch of irony given my prior articles wrestling with a decent IDLE daemon for use with getmail, I'm faced with a new problem in figuring out the best way to migrate all my existing, locally hosted email to Gmail.</p>
 <p>This is evidently not an uncommon problem for people, presumably for largely the same reasons I'm facing: although I like having everything locally on my own server, it only works in places where (1) I live in the same place as the server and (2) where my server won't be double-NAT'd so dynamic DNS can actually reach it.</p>
 <h2>How</h2>
@@ -91,42 +90,42 @@ bg-dark
 <p>I suspect you could work around this by uploading to a subdirectory, and then moving everything out of the subdirectory (sub-tag?) on Gmail, but didn't try it.</p>
 <h3>Configuration file</h3>
 <p>In your home directory (I did this on my home server since 7gb of email takes a long time to upload over ADSL) you need to create an <code>.offlineimaprc</code> file. For an IMAP -&gt; IMAP transfer, it has a structure something like this:</p>
-<pre class="code literal-block"><span></span><code><span class="k">[general]</span>
-<span class="na">accounts</span> <span class="o">=</span> <span class="s">Gmail-wrouesnel</span>
+<div class="code"><pre class="code literal-block"><span class="k">[general]</span>
+<span class="na">accounts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">Gmail-wrouesnel</span>
 
 <span class="c1"># Gmail max attachment size - you'll get errors otherwise.</span>
-<span class="na">maxsize</span> <span class="o">=</span> <span class="s">25000000</span>
-<span class="na">socktimeout</span> <span class="o">=</span> <span class="s">600</span>
+<span class="na">maxsize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">25000000</span>
+<span class="na">socktimeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">600</span>
 
 <span class="k">[Account Gmail-wrouesnel]</span>
 <span class="c1"># Note the ordering - Gmail is the 'local' folder.</span>
-<span class="na">remoterepository</span> <span class="o">=</span> <span class="s">Local</span>
-<span class="na">localrepository</span> <span class="o">=</span> <span class="s">Gmail</span>
+<span class="na">remoterepository</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">Local</span>
+<span class="na">localrepository</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">Gmail</span>
 
 <span class="k">[Repository Local]</span>
-<span class="na">type</span> <span class="o">=</span> <span class="s">IMAP</span>
+<span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">IMAP</span>
 <span class="c1"># This ensures we only do a 1-way transfer. If you want to do 2-way then you need a</span>
 <span class="c1"># rule to exclude the Gmail [All Mail] folder.</span>
-<span class="na">readonly</span> <span class="o">=</span> <span class="s">True</span>
-<span class="na">remotehost</span> <span class="o">=</span> <span class="s">localhost</span>
-<span class="na">remoteuser</span> <span class="o">=</span> <span class="s">&lt;local user&gt;</span>
-<span class="na">remotepass</span> <span class="o">=</span> <span class="s">&lt;local password&gt;</span>
-<span class="na">ssl</span> <span class="o">=</span> <span class="s">yes</span>
+<span class="na">readonly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">True</span>
+<span class="na">remotehost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">localhost</span>
+<span class="na">remoteuser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&lt;local user&gt;</span>
+<span class="na">remotepass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&lt;local password&gt;</span>
+<span class="na">ssl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">yes</span>
 <span class="c1"># I use SSL so this is needed - let it throw an error, then copy the hash back.</span>
-<span class="na">cert_fingerprint</span> <span class="o">=</span> <span class="s">60571343279e7f43ee95000762f5fcd54ad24816</span>
-<span class="na">sep</span> <span class="o">=</span> <span class="s">.</span>
-<span class="na">subscribedonly</span> <span class="o">=</span> <span class="s">no</span>
+<span class="na">cert_fingerprint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">60571343279e7f43ee95000762f5fcd54ad24816</span>
+<span class="na">sep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">.</span>
+<span class="na">subscribedonly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">no</span>
 
 <span class="k">[Repository Gmail]</span>
-<span class="na">type</span> <span class="o">=</span> <span class="s">IMAP</span>
-<span class="na">ssl</span> <span class="o">=</span> <span class="s">yes</span>
-<span class="na">remotehost</span> <span class="o">=</span> <span class="s">imap.googlemail.com</span>
-<span class="na">remoteuser</span> <span class="o">=</span> <span class="s">&lt;gmail user&gt;</span>
-<span class="na">remotepass</span> <span class="o">=</span> <span class="s">&lt;gmail password&gt;</span>
-<span class="na">sslcacertfile</span> <span class="o">=</span> <span class="s">/etc/ssl/certs/ca-certificates.crt</span>
-<span class="na">sep</span> <span class="o">=</span> <span class="s">/</span>
-<span class="na">subscribedonly</span> <span class="o">=</span> <span class="s">no</span>
-</code></pre>
+<span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">IMAP</span>
+<span class="na">ssl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">yes</span>
+<span class="na">remotehost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">imap.googlemail.com</span>
+<span class="na">remoteuser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&lt;gmail user&gt;</span>
+<span class="na">remotepass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&lt;gmail password&gt;</span>
+<span class="na">sslcacertfile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/etc/ssl/certs/ca-certificates.crt</span>
+<span class="na">sep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/</span>
+<span class="na">subscribedonly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">no</span>
+</pre></div>
 
 <h3>Running</h3>
 <p>Test the process first with <code>offlineimap --dry-run</code> to check that things are going to turn out roughly how you expect. Then execute <code>offlineimap</code> to start the process. I really recommend doing this in a byobu or screen session, or at least with the <code>nohup</code> utility since a connection drop will cause offlineimap to abort.</p>
@@ -134,7 +133,6 @@ bg-dark
 <h2>Personal thoughts</h2>
 <p>This seems to be the most painless way to upload old email to Gmail. In my case, the move is prompted by a real life move where my 24TB server won't be coming with me. I followed up some options for moving my email system, for example to a Docker image for $5 a month for 20gb, but at the end of the day had to face the fact that there was a perfectly capable free-alternative available and it would just be throwing money away. Everything already operates through my Gmail accounts anyway, so it's not like there's a security concern there and when it comes to email you either use GPG or you're doing nothing anyway.</p>
 <p>It's worth the observation here that the same process used for the migration can also be used for a local backup, which is a system I will most definitely be using in the future. OfflineIMAP can write Maildir natively, so there's no need to use an IMAP server locally for that, and helpfully solves the "what if Gmail suddenly disappears problem" (more likely from a power failure then anything else, but my email is important to me).</p>
-</div>
     </div>
     <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
 <li><a class="tag p-category" href="../../categories/email/" rel="tag">email</a></li>
@@ -150,7 +148,7 @@ bg-dark
                 <a href="../running-gnome-tracker-on-a-server/" rel="next" title="Running Gnome Tracker on a Server">Next post</a>
             </li>
         </ul></nav></aside></article><!--End of body content--><footer id="footer">
-            Contents © 2024         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            Contents © 2025         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
         </footer>
 </div>

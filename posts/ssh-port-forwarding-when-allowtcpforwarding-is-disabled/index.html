@@ -81,8 +81,7 @@ bg-dark
         </div>
         
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div>
-<h2>The Problem</h2>
+    <h2>The Problem</h2>
 <p>You have a server you can SSH to. For whatever reason AllowTCPPortForwarding
 is disabled. You need to forward a port from it to your local machine.</p>
 <p>If it's any sort of standard machine, then it probably has <code>netcat</code>. It's less
@@ -92,8 +91,8 @@ serious security measure, and far more of an anoyance. And (2) since it's pretty
 likely you still need to do whatever job you need to do, it would be nice to
 have a 1-liner which will just forward the port for you</p>
 <h2>The Solution</h2>
-<pre class="code literal-block"><span></span><code><span class="nv">socat</span> <span class="nv">TCP</span><span class="o">-</span><span class="nv">LISTEN</span>:<span class="o">&lt;</span><span class="nv">local</span> <span class="nv">port</span><span class="o">&gt;</span>,<span class="nv">reuseaddr</span>,<span class="nv">fork</span> <span class="s2">"</span><span class="s">EXEC:ssh &lt;server&gt; nc localhost &lt;remote port&gt;</span><span class="s2">"</span>
-</code></pre>
+<div class="code"><pre class="code literal-block"><span class="nx">socat</span><span class="w"> </span><span class="nx">TCP</span><span class="o">-</span><span class="nx">LISTEN</span><span class="p">:&lt;</span><span class="nx">local</span><span class="w"> </span><span class="nx">port</span><span class="p">&gt;,</span><span class="nx">reuseaddr</span><span class="p">,</span><span class="nx">fork</span><span class="w"> </span><span class="s">"EXEC:ssh &lt;server&gt; nc localhost &lt;remote port&gt;"</span>
+</pre></div>
 
 <p>It's kind of obvious if you know socat well, but half the battle is simply
 knowing it's possible.</p>
@@ -105,7 +104,6 @@ data to the console for you if you want.</p>
 can upload new tools (which, with shell access they can), and if you don't have
 firewall rules or cgroups limitations on those accounts, then stuff like
 disabled port forwards <em>is not a security measure</em>.</p>
-</div>
     </div>
     <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
 <li><a class="tag p-category" href="../../categories/netcat/" rel="tag">netcat</a></li>
@@ -120,7 +118,7 @@ disabled port forwards <em>is not a security measure</em>.</p>
                 <a href="../using-the-go-playground-locally/" rel="next" title="Using the Go playground locally">Next post</a>
             </li>
         </ul></nav></aside></article><!--End of body content--><footer id="footer">
-            Contents © 2024         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            Contents © 2025         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
         </footer>
 </div>

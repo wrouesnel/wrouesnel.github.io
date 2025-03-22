@@ -68,8 +68,7 @@ bg-dark
             </p>
         </div>
     </header><div class="e-content entry-content">
-    <div>
-<p>Since I discovered it, I've been in love with the concept behind <a href="https://github.com/bup/bup">bup</a>.</p>
+    <p>Since I discovered it, I've been in love with the concept behind <a href="https://github.com/bup/bup">bup</a>.</p>
 <p>bup appeals to my sense of efficiency in taking backups: backups should backup
 the absolute minimum amount of data so I can have the most versions, and then
 that frees me to use whatever level of redundancy I deem appropriate for my
@@ -165,7 +164,6 @@ it will work <em>great</em> for automatic backups under Windows and Linux.</p>
 the fixes in this blog-post, and if you do then posting about them to
 [bup-list@googlegroups.com[(https://groups.google.com/forum/#!forum/bup-list) with any problems or successes or code reviews would
 help a lot.</p>
-</div>
     </div>
     </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/flashing-marlin-with-eclipse-and-avrdude/" class="u-url">Flashing Marlin with Eclipse and AVR Dude</a></h1>
         <div class="metadata">
@@ -178,8 +176,7 @@ help a lot.</p>
             </p>
         </div>
     </header><div class="e-content entry-content">
-    <div>
-<h2>Intro</h2>
+    <h2>Intro</h2>
 <p>3D printing is still very much in the hobbyist stage, and I am a tinkerer at heart. So flashing my printer's firmware is a basic operation - in fact it has to be a basic operation, since most configuration changes are baked into the firmware.</p>
 <p>But, I run my printer at 250000 baud rate over USB. This is an excellent choice for printing since the error rate from the serial line on the Arduino is basically 0, and it's faster to boot. Excellent for rapid G-code sending.</p>
 <p>But it can make reprogramming using the standard Arduino IDE a bit of a pain, and by and large I don't like the standard Arduino IDE.</p>
@@ -194,7 +191,6 @@ help a lot.</p>
 <p>It's worth noting that by creating a custom <code>boards.txt</code> configuration it might be possible to accomplish this in the Arduino IDE as well, but Eclipse is a much easier to use dev-environment for big Arduino projects (like 3D printer firmwares) that I don't really have any inclination to avoid it in the future (plus is generalizes out to non-Arduino AVR programming nicely).</p>
 <h2>Going further</h2>
 <p>This is just a short "I did this a few minutes ago note". In the future I'll detail my Arduino Eclipse workspace, to add to the signal to noise ratio on that subject.</p>
-</div>
     </div>
     </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/uninstalling-r8168-dkms/" class="u-url">Quick note - uninstalling r8618-dkms</a></h1>
         <div class="metadata">
@@ -207,8 +203,7 @@ help a lot.</p>
             </p>
         </div>
     </header><div class="e-content entry-content">
-    <div>
-<p>This is a quick note on something I encountered while trying to work out why my Realtek NICs are so finicky about connecting and staying connected at gigabit speeds when running Linux.</p>
+    <p>This is a quick note on something I encountered while trying to work out why my Realtek NICs are so finicky about connecting and staying connected at gigabit speeds when running Linux.</p>
 <p>The current hypothesis is that the <code>r8168</code> driver isn't helping very much. So I uninstalled it - and ran into two problems.</p>
 <h3>Firstly</h3>
 <p>...you need to uninstall it on Ubuntu/Debian with <code>apt-get remove --purge r8168-dkms</code> or the config files (and it's <em>all</em> config files) won't be properly removed, and the module will be left installed.</p>
@@ -217,7 +212,6 @@ help a lot.</p>
 <p>In my case it turned out I'd put a very official looking <code>blacklist-networking.conf</code> file in my modprobe.d directory. On both my machines.</p>
 <h3>Something about Realtek NICs?</h3>
 <p>If I find an answer I'll surely provide updates, but needless to say there's no rthyme or reason to when they do or do not work, other then they consistently don't work on kernel 3.11 with the r8168 driver it seems.</p>
-</div>
     </div>
     </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/running-gnome-tracker-on-a-server/" class="u-url">Running Gnome Tracker on a Server</a></h1>
         <div class="metadata">
@@ -230,58 +224,57 @@ help a lot.</p>
             </p>
         </div>
     </header><div class="e-content entry-content">
-    <div>
-<p>In a passing comment it was suggested to me that it would be really great if the home fileserver offered some type of web-interface to find things. We've been aggregating downloaded files there for a while, and there's been attempts made at categorization but this all really falls apart when you wonder "what does 'productivity' mean? And does this go under 'Linux' or some other thing?"</p>
+    <p>In a passing comment it was suggested to me that it would be really great if the home fileserver offered some type of web-interface to find things. We've been aggregating downloaded files there for a while, and there's been attempts made at categorization but this all really falls apart when you wonder "what does 'productivity' mean? And does this go under 'Linux' or some other thing?"</p>
 <p>Since lately I've been wanting to get desktop search working on my actual desktops, via Gnome's Tracker project and it's tie-in to Nautilus and Nemo (possibly the subject of a future blog), it seemed logical to run it on the fileserver as an indexer for our shared directories - and then to tie some kind of web ui to that.</p>
 <p>Unfortunately, Tracker is very desktop orientated - there's no easy daemon mode for running it on a headless system out-of-the-box, but with a little tweaking you <em>can</em> make it work for you quite easily.</p>
 <h2>How to</h2>
 <p>On my system I keep Tracker running as it's own user under a system account. On Ubuntu you need to create this like so (using a root shell - <code>sudo -i</code>):</p>
-<pre class="code literal-block"><span></span><code>$ adduser --system --shell<span class="o">=</span>/bin/false --disabled-login --home<span class="o">=</span>/var/lib/tracker tracker
-$ adduser tracker root
-</code></pre>
+<div class="code"><pre class="code literal-block">$<span class="w"> </span>adduser<span class="w"> </span>--system<span class="w"> </span>--shell<span class="o">=</span>/bin/false<span class="w"> </span>--disabled-login<span class="w"> </span>--home<span class="o">=</span>/var/lib/tracker<span class="w"> </span>tracker
+$<span class="w"> </span>adduser<span class="w"> </span>tracker<span class="w"> </span>root
+</pre></div>
 
 <p>Since tracker uses GSettings for it's configuration these days, you need to su into the user you just created to actually configure the directories which should be indexed. Since this is a server, you probably just have a list of them so set it somewhat like the example below. Note: you must run the dbus-launch commands in order to have a viable session bus for dconf to work with. This will also be a requirement of Tracker later on.</p>
-<pre class="code literal-block"><span></span><code>$ su --shell /bin/bash
-$ <span class="nb">eval</span> <span class="sb">`</span>dbus-launch --sh-syntax<span class="sb">`</span>
-$ dconf write org/freedesktop/tracker/miner/files/index-recursive-directories <span class="s2">"['/path/to/my/dir/1', '/path/to/my/dir/2', '/etc/etc']"</span>
-$ <span class="nb">kill</span> <span class="nv">$DBUS_SESSION_BUS_PID</span>
-$ <span class="nb">exit</span>
-</code></pre>
+<div class="code"><pre class="code literal-block">$<span class="w"> </span>su<span class="w"> </span>--shell<span class="w"> </span>/bin/bash
+$<span class="w"> </span><span class="nb">eval</span><span class="w"> </span><span class="sb">`</span>dbus-launch<span class="w"> </span>--sh-syntax<span class="sb">`</span>
+$<span class="w"> </span>dconf<span class="w"> </span>write<span class="w"> </span>org/freedesktop/tracker/miner/files/index-recursive-directories<span class="w"> </span><span class="s2">"['/path/to/my/dir/1', '/path/to/my/dir/2', '/etc/etc']"</span>
+$<span class="w"> </span><span class="nb">kill</span><span class="w"> </span><span class="nv">$DBUS_SESSION_BUS_PID</span>
+$<span class="w"> </span><span class="nb">exit</span>
+</pre></div>
 
 <p>Your Tracker user is now ready at this point. To start and stop the service, we use an <a href="posts/running-gnome-tracker-on-a-server/files/tracker.conf">Upstart script like the one below</a>:</p>
-<pre class="code literal-block"><span></span><code>description <span class="s2">"gnome tracker system startup script"</span>
-author <span class="s2">"wrouesnel"</span>
+<div class="code"><pre class="code literal-block">description<span class="w"> </span><span class="s2">"gnome tracker system startup script"</span>
+author<span class="w"> </span><span class="s2">"wrouesnel"</span>
 
-start on <span class="o">(</span>local-filesystems and net-device-up<span class="o">)</span>
-stop on shutdown
+start<span class="w"> </span>on<span class="w"> </span><span class="o">(</span>local-filesystems<span class="w"> </span>and<span class="w"> </span>net-device-up<span class="o">)</span>
+stop<span class="w"> </span>on<span class="w"> </span>shutdown
 
 respawn
-respawn limit <span class="m">5</span> <span class="m">60</span>
+respawn<span class="w"> </span>limit<span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="m">60</span>
 
-setuid tracker
+setuid<span class="w"> </span>tracker
 
 script
-    chdir /var/lib/tracker
-    <span class="nb">eval</span> <span class="sb">`</span>dbus-launch --sh-syntax<span class="sb">`</span>
-    <span class="nb">echo</span> <span class="nv">$DBUS_SESSION_BUS_PID</span> &gt; .tracker-sessionbus.pid
-    <span class="nb">echo</span> <span class="nv">$DBUS_SESSION_BUS_ADDRESS</span> &gt; .tracker-sessionbus
-    /usr/lib/tracker/tracker-store
-end script
+<span class="w">    </span>chdir<span class="w"> </span>/var/lib/tracker
+<span class="w">    </span><span class="nb">eval</span><span class="w"> </span><span class="sb">`</span>dbus-launch<span class="w"> </span>--sh-syntax<span class="sb">`</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$DBUS_SESSION_BUS_PID</span><span class="w"> </span>&gt;<span class="w"> </span>.tracker-sessionbus.pid
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$DBUS_SESSION_BUS_ADDRESS</span><span class="w"> </span>&gt;<span class="w"> </span>.tracker-sessionbus
+<span class="w">    </span>/usr/lib/tracker/tracker-store
+end<span class="w"> </span>script
 
-post-start script
-    chdir /var/lib/tracker
-    <span class="k">while</span> <span class="o">[</span> ! -e .tracker-sessionbus <span class="o">]</span><span class="p">;</span> <span class="k">do</span> sleep <span class="m">1</span><span class="p">;</span> <span class="k">done</span>
-    <span class="nv">DBUS_SESSION_BUS_ADDRESS</span><span class="o">=</span><span class="k">$(</span>cat .tracker-sessionbus<span class="k">)</span> /usr/lib/tracker/tracker-miner-fs <span class="p">&amp;</span>
-end script
+post-start<span class="w"> </span>script
+<span class="w">    </span>chdir<span class="w"> </span>/var/lib/tracker
+<span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-e<span class="w"> </span>.tracker-sessionbus<span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span>sleep<span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="k">done</span>
+<span class="w">    </span><span class="nv">DBUS_SESSION_BUS_ADDRESS</span><span class="o">=</span><span class="k">$(</span>cat<span class="w"> </span>.tracker-sessionbus<span class="k">)</span><span class="w"> </span>/usr/lib/tracker/tracker-miner-fs<span class="w"> </span><span class="p">&amp;</span>
+end<span class="w"> </span>script
 
-post-stop script 
-    <span class="c1"># We need to kill off the DBUS session here</span>
-    chdir /var/lib/tracker
-    <span class="nb">kill</span> <span class="k">$(</span>cat .tracker-sessionbus.pid<span class="k">)</span>
-    rm .tracker-sessionbus.pid
-    rm .tracker-sessionbus
-end script
-</code></pre>
+post-stop<span class="w"> </span>script<span class="w"> </span>
+<span class="w">    </span><span class="c1"># We need to kill off the DBUS session here</span>
+<span class="w">    </span>chdir<span class="w"> </span>/var/lib/tracker
+<span class="w">    </span><span class="nb">kill</span><span class="w"> </span><span class="k">$(</span>cat<span class="w"> </span>.tracker-sessionbus.pid<span class="k">)</span>
+<span class="w">    </span>rm<span class="w"> </span>.tracker-sessionbus.pid
+<span class="w">    </span>rm<span class="w"> </span>.tracker-sessionbus
+end<span class="w"> </span>script
+</pre></div>
 
 <p>Some things to focus on about the script: we launch and save the DBus session parameters. We'll need these to reconnect to the session to run tracker related commands. The post-stop stanza is to kill off the DBus session.</p>
 <p>You do need to explicitely launch <code>tracker-miner-fs</code> in order for file indexing to work, but you don't need to kill it explicitely - it will be automatically shutdown when Upstart kills <code>tracker-store</code>.</p>
@@ -289,7 +282,6 @@ end script
 <p>You can now start Tracker as your user with <code>start tracker</code>. And stop it with <code>stop tracker</code>. Simple and clean.</p>
 <h2>Using this</h2>
 <p>My plan for this setup is to throw together a Node.js app on my server that will forward queries to the tracker command line client - that app will be a future post when it's done.</p>
-</div>
     </div>
     </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/migrating-to-gmail/" class="u-url">Migrating to Gmail</a></h1>
         <div class="metadata">
@@ -302,8 +294,7 @@ end script
             </p>
         </div>
     </header><div class="e-content entry-content">
-    <div>
-<h2>Why</h2>
+    <h2>Why</h2>
 <p>In a stitch of irony given my prior articles wrestling with a decent IDLE daemon for use with getmail, I'm faced with a new problem in figuring out the best way to migrate all my existing, locally hosted email to Gmail.</p>
 <p>This is evidently not an uncommon problem for people, presumably for largely the same reasons I'm facing: although I like having everything locally on my own server, it only works in places where (1) I live in the same place as the server and (2) where my server won't be double-NAT'd so dynamic DNS can actually reach it.</p>
 <h2>How</h2>
@@ -313,42 +304,42 @@ end script
 <p>I suspect you could work around this by uploading to a subdirectory, and then moving everything out of the subdirectory (sub-tag?) on Gmail, but didn't try it.</p>
 <h3>Configuration file</h3>
 <p>In your home directory (I did this on my home server since 7gb of email takes a long time to upload over ADSL) you need to create an <code>.offlineimaprc</code> file. For an IMAP -&gt; IMAP transfer, it has a structure something like this:</p>
-<pre class="code literal-block"><span></span><code><span class="k">[general]</span>
-<span class="na">accounts</span> <span class="o">=</span> <span class="s">Gmail-wrouesnel</span>
+<div class="code"><pre class="code literal-block"><span class="k">[general]</span>
+<span class="na">accounts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">Gmail-wrouesnel</span>
 
 <span class="c1"># Gmail max attachment size - you'll get errors otherwise.</span>
-<span class="na">maxsize</span> <span class="o">=</span> <span class="s">25000000</span>
-<span class="na">socktimeout</span> <span class="o">=</span> <span class="s">600</span>
+<span class="na">maxsize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">25000000</span>
+<span class="na">socktimeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">600</span>
 
 <span class="k">[Account Gmail-wrouesnel]</span>
 <span class="c1"># Note the ordering - Gmail is the 'local' folder.</span>
-<span class="na">remoterepository</span> <span class="o">=</span> <span class="s">Local</span>
-<span class="na">localrepository</span> <span class="o">=</span> <span class="s">Gmail</span>
+<span class="na">remoterepository</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">Local</span>
+<span class="na">localrepository</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">Gmail</span>
 
 <span class="k">[Repository Local]</span>
-<span class="na">type</span> <span class="o">=</span> <span class="s">IMAP</span>
+<span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">IMAP</span>
 <span class="c1"># This ensures we only do a 1-way transfer. If you want to do 2-way then you need a</span>
 <span class="c1"># rule to exclude the Gmail [All Mail] folder.</span>
-<span class="na">readonly</span> <span class="o">=</span> <span class="s">True</span>
-<span class="na">remotehost</span> <span class="o">=</span> <span class="s">localhost</span>
-<span class="na">remoteuser</span> <span class="o">=</span> <span class="s">&lt;local user&gt;</span>
-<span class="na">remotepass</span> <span class="o">=</span> <span class="s">&lt;local password&gt;</span>
-<span class="na">ssl</span> <span class="o">=</span> <span class="s">yes</span>
+<span class="na">readonly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">True</span>
+<span class="na">remotehost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">localhost</span>
+<span class="na">remoteuser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&lt;local user&gt;</span>
+<span class="na">remotepass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&lt;local password&gt;</span>
+<span class="na">ssl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">yes</span>
 <span class="c1"># I use SSL so this is needed - let it throw an error, then copy the hash back.</span>
-<span class="na">cert_fingerprint</span> <span class="o">=</span> <span class="s">60571343279e7f43ee95000762f5fcd54ad24816</span>
-<span class="na">sep</span> <span class="o">=</span> <span class="s">.</span>
-<span class="na">subscribedonly</span> <span class="o">=</span> <span class="s">no</span>
+<span class="na">cert_fingerprint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">60571343279e7f43ee95000762f5fcd54ad24816</span>
+<span class="na">sep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">.</span>
+<span class="na">subscribedonly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">no</span>
 
 <span class="k">[Repository Gmail]</span>
-<span class="na">type</span> <span class="o">=</span> <span class="s">IMAP</span>
-<span class="na">ssl</span> <span class="o">=</span> <span class="s">yes</span>
-<span class="na">remotehost</span> <span class="o">=</span> <span class="s">imap.googlemail.com</span>
-<span class="na">remoteuser</span> <span class="o">=</span> <span class="s">&lt;gmail user&gt;</span>
-<span class="na">remotepass</span> <span class="o">=</span> <span class="s">&lt;gmail password&gt;</span>
-<span class="na">sslcacertfile</span> <span class="o">=</span> <span class="s">/etc/ssl/certs/ca-certificates.crt</span>
-<span class="na">sep</span> <span class="o">=</span> <span class="s">/</span>
-<span class="na">subscribedonly</span> <span class="o">=</span> <span class="s">no</span>
-</code></pre>
+<span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">IMAP</span>
+<span class="na">ssl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">yes</span>
+<span class="na">remotehost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">imap.googlemail.com</span>
+<span class="na">remoteuser</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&lt;gmail user&gt;</span>
+<span class="na">remotepass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&lt;gmail password&gt;</span>
+<span class="na">sslcacertfile</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/etc/ssl/certs/ca-certificates.crt</span>
+<span class="na">sep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">/</span>
+<span class="na">subscribedonly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">no</span>
+</pre></div>
 
 <h3>Running</h3>
 <p>Test the process first with <code>offlineimap --dry-run</code> to check that things are going to turn out roughly how you expect. Then execute <code>offlineimap</code> to start the process. I really recommend doing this in a byobu or screen session, or at least with the <code>nohup</code> utility since a connection drop will cause offlineimap to abort.</p>
@@ -356,7 +347,6 @@ end script
 <h2>Personal thoughts</h2>
 <p>This seems to be the most painless way to upload old email to Gmail. In my case, the move is prompted by a real life move where my 24TB server won't be coming with me. I followed up some options for moving my email system, for example to a Docker image for $5 a month for 20gb, but at the end of the day had to face the fact that there was a perfectly capable free-alternative available and it would just be throwing money away. Everything already operates through my Gmail accounts anyway, so it's not like there's a security concern there and when it comes to email you either use GPG or you're doing nothing anyway.</p>
 <p>It's worth the observation here that the same process used for the migration can also be used for a local backup, which is a system I will most definitely be using in the future. OfflineIMAP can write Maildir natively, so there's no need to use an IMAP server locally for that, and helpfully solves the "what if Gmail suddenly disappears problem" (more likely from a power failure then anything else, but my email is important to me).</p>
-</div>
     </div>
     </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/a-better-getmail-idle-client/" class="u-url">A Better Getmail IDLE client</a></h1>
         <div class="metadata">
@@ -369,8 +359,7 @@ end script
             </p>
         </div>
     </header><div class="e-content entry-content">
-    <div>
-<h2>Updates</h2>
+    <h2>Updates</h2>
 <p>(2013-10-15) And like that I've broken it again. Fixing the crash on IMAP disconnect actually broke IMAP disconnect handling.
 The problem here is that IMAPClient's exceptions are not documented at all, so a time-based thing like IDLE requires some guessing as to what IMAPClient will handle and what you need to handle. This would all be fine if there was a way to get Gmail to boot my client after 30 seconds so I could test it easily.</p>
 <p>I've amended the code so that anytime the code would call <code>_imaplogin()</code> it explicitely dumps the IMAPClient object after trying to log it out, and recreates it. Near as I can tell this seems to be the safe way to do it, since the IMAPClient object <em>does</em> open a socket connection when created, and doesn't necessarily re-open if you simply re-issue the login command.</p>
@@ -383,8 +372,8 @@ The problem here is that IMAPClient's exceptions are not documented at all, so a
 <h2>The script</h2>
 <h3>Dependencies</h3>
 <p>The script has a couple of dependencies, most easily installed with <code>pip</code>:</p>
-<pre class="code literal-block"><span></span><code>$ pip install psutil imapclient
-</code></pre>
+<div class="code"><pre class="code literal-block">$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>psutil<span class="w"> </span>imapclient
+</pre></div>
 
 <p>Get it from <a href="https://gist.github.com/wrouesnel/6905023">a Gist here</a> - I'm currently running it on my server, and naturally I'll update this article based on how it performs as I go.</p>
 <h2>Design</h2>
@@ -397,7 +386,6 @@ The problem here is that IMAPClient's exceptions are not documented at all, so a
 <h2>Personal thoughts</h2>
 <p>Pure Python is not the best for this sort of thing - an evented IMAP library would definitely be better but this way I can stick with mostly single file deployment, and I don't want to write my own IMAP client at the moment.</p>
 <p>Of course IMAP is a simple enough protocol in most respects, so it's not like it would be hard but the exercise was still interesting. But if I want a new project with this, I would still like to tackle it in something like Haskell.</p>
-</div>
     </div>
     </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/getmail-idle-client/" class="u-url">A GetMail IDLE daemon script</a></h1>
         <div class="metadata">
@@ -410,8 +398,7 @@ The problem here is that IMAPClient's exceptions are not documented at all, so a
             </p>
         </div>
     </header><div class="e-content entry-content">
-    <div>
-<h2>Updates</h2>
+    <h2>Updates</h2>
 <p>Although the script in this article works, I'm having some problems with it after long-running sessions. The symptom seems to be that imaplib2 just stops processing IDLE session responses - it terminates and recreates them just fine, but no new mail is ever detected and thus getmail is never triggered. With 12 or so hours of usage out of the script, this seems odd as hell and probably like an imaplib2 bug.</p>
 <p>With the amount of sunk time on this, I'm tempted to go in 1 of 2 directions: re-tool the script to simply invoke getmail's IDLE functionality, and basically remove imaplib2 from the equation, or to write my own functions to read IMAP and use the IDLE command.</p>
 <p>Currently I'm going with option 3: turn on imaplib's debugging to max, and see if I can spot the bug - but at the moment I can't really recommend this particular approach to anyone since it's just not reliable enough - though it does somewhat belie the fact that Python really doesn't have a good IMAP IDLE library.</p>
@@ -430,36 +417,35 @@ The problem here is that IMAPClient's exceptions are not documented at all, so a
 <p>Though when all things are considered, I didn't improve things all that much but using a single-overwatch thread to reset the IDLE call on each object is simpler to handle (although I don't present it that way IMO). But the important thing is it works.</p>
 <h3>Download</h3>
 <p>The script is quite long so grab it from the <a href="https://gist.github.com/wrouesnel/6829044">Gist</a>. It has a few dependencies, best installed with <code>pip</code></p>
-<pre class="code literal-block"><span></span><code>$ pip install imaplib2 psutil
-</code></pre>
+<div class="code"><pre class="code literal-block">$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>imaplib2<span class="w"> </span>psutil
+</pre></div>
 
-<pre class="code literal-block"><span></span><code>$./getmail-idler.py -h
-usage: getmail-idler.py <span class="o">[</span>-h<span class="o">]</span> <span class="o">[</span>-r GETMAILRC<span class="o">]</span> <span class="o">[</span>--pid-file PIDFILE<span class="o">]</span> <span class="o">[</span>--verbose<span class="o">]</span>
-                        <span class="o">[</span>--daemonize<span class="o">]</span> <span class="o">[</span>--logfile LOGFILE<span class="o">]</span>
+<div class="code"><pre class="code literal-block">$./getmail-idler.py<span class="w"> </span>-h
+usage:<span class="w"> </span>getmail-idler.py<span class="w"> </span><span class="o">[</span>-h<span class="o">]</span><span class="w"> </span><span class="o">[</span>-r<span class="w"> </span>GETMAILRC<span class="o">]</span><span class="w"> </span><span class="o">[</span>--pid-file<span class="w"> </span>PIDFILE<span class="o">]</span><span class="w"> </span><span class="o">[</span>--verbose<span class="o">]</span>
+<span class="w">                        </span><span class="o">[</span>--daemonize<span class="o">]</span><span class="w"> </span><span class="o">[</span>--logfile<span class="w"> </span>LOGFILE<span class="o">]</span>
 
-optional arguments:
-  -h, --help            show this <span class="nb">help</span> message and <span class="nb">exit</span>
-  -r GETMAILRC          getmail configuration file to use <span class="o">(</span>can specify more
-                        <span class="k">then</span> once<span class="o">)</span>
-  --pid-file PIDFILE, -p PIDFILE
-                        pidfile to use <span class="k">for</span> process limiting
-  --verbose, -v         <span class="nb">set</span> output verbosity
-  --daemonize           should process daemonize?
-  --logfile LOGFILE     file to redirect log output too <span class="o">(</span>useful <span class="k">for</span> daemon
-                        mode<span class="o">)</span>
-</code></pre>
+optional<span class="w"> </span>arguments:
+<span class="w">  </span>-h,<span class="w"> </span>--help<span class="w">            </span>show<span class="w"> </span>this<span class="w"> </span><span class="nb">help</span><span class="w"> </span>message<span class="w"> </span>and<span class="w"> </span><span class="nb">exit</span>
+<span class="w">  </span>-r<span class="w"> </span>GETMAILRC<span class="w">          </span>getmail<span class="w"> </span>configuration<span class="w"> </span>file<span class="w"> </span>to<span class="w"> </span>use<span class="w"> </span><span class="o">(</span>can<span class="w"> </span>specify<span class="w"> </span>more
+<span class="w">                        </span><span class="k">then</span><span class="w"> </span>once<span class="o">)</span>
+<span class="w">  </span>--pid-file<span class="w"> </span>PIDFILE,<span class="w"> </span>-p<span class="w"> </span>PIDFILE
+<span class="w">                        </span>pidfile<span class="w"> </span>to<span class="w"> </span>use<span class="w"> </span><span class="k">for</span><span class="w"> </span>process<span class="w"> </span>limiting
+<span class="w">  </span>--verbose,<span class="w"> </span>-v<span class="w">         </span><span class="nb">set</span><span class="w"> </span>output<span class="w"> </span>verbosity
+<span class="w">  </span>--daemonize<span class="w">           </span>should<span class="w"> </span>process<span class="w"> </span>daemonize?
+<span class="w">  </span>--logfile<span class="w"> </span>LOGFILE<span class="w">     </span>file<span class="w"> </span>to<span class="w"> </span>redirect<span class="w"> </span>log<span class="w"> </span>output<span class="w"> </span>too<span class="w"> </span><span class="o">(</span>useful<span class="w"> </span><span class="k">for</span><span class="w"> </span>daemon
+<span class="w">                        </span>mode<span class="o">)</span>
+</pre></div>
 
 <p>It uses a comprehensive argparse interface, the most important parameter is <code>-r</code>. This is exactly like the getmail -r command, and accepts files in the same format - though it doesn't search the same locations although it will search <code>$HOME/.getmail/</code>.</p>
 <p>Currently it only handles IMAPSSL, which you should be using anyway though it should be easy to hack it to fix this I just have no incentive too at the moment.</p>
 <p>Currently I use this with a cronjob set to every minute or 5 minutes - with verbose logging (<code>-vv</code>) it won't produce output until it forks into a daemon. This means if it crashes (and I've tried to make it crash reliably) cron will restart it on the next round, and it'll email a tracelog (hopefully).</p>
 <p>My current crontab using this script:</p>
-<pre class="code literal-block"><span></span><code>* * * * * /home/will/bin/getmail-idler.py -r config1.getmailrc -r config2.getmailrc -r config3.getmailrc -r config4.getmailrc -r config5.getmailrc --pid-file /tmp/will-getmail-idler.pid --logfile .getmail-idler.log -vv --daemonize
-</code></pre>
+<div class="code"><pre class="code literal-block">*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>/home/will/bin/getmail-idler.py<span class="w"> </span>-r<span class="w"> </span>config1.getmailrc<span class="w"> </span>-r<span class="w"> </span>config2.getmailrc<span class="w"> </span>-r<span class="w"> </span>config3.getmailrc<span class="w"> </span>-r<span class="w"> </span>config4.getmailrc<span class="w"> </span>-r<span class="w"> </span>config5.getmailrc<span class="w"> </span>--pid-file<span class="w"> </span>/tmp/will-getmail-idler.pid<span class="w"> </span>--logfile<span class="w"> </span>.getmail-idler.log<span class="w"> </span>-vv<span class="w"> </span>--daemonize
+</pre></div>
 
 <h2>Personal thoughts</h2>
 <p>I'm pretty pleased with how this turned out (edit: see updates section at the top on how that's changed - I'm happy with the script, less happy with imaplib2) since it was a great exercise for me in learning some new things about Python. That said, compared to something like NodeJS, I feel with the write library this would've been faster in a language with great eventing support, rather then Python's weird middle-ground of "not quite parallel" threads. But, I keep coming back to the language, and the demo-code I used <a href="http://blog.timstoop.nl/2009/03/11/python-imap-idle-with-imaplib2/">here</a> was Python so it must be doing something right.</p>
 <p>I'll probably keep refining this if I run into problems - though if it doesn't actually stop working, then I'll leave it alone since the whole self-hosted email thing's biggest downside is when your listener dies and you stop getting email - that's the problem I've really tried to solve here - IDLE PUSH email functionality, and highly visible notifications when something is wrong.</p>
-</div>
     </div>
     </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/setting-up-sshttp/" class="u-url">Setting up sshttp</a></h1>
         <div class="metadata">
@@ -472,8 +458,7 @@ optional arguments:
             </p>
         </div>
     </header><div class="e-content entry-content">
-    <div>
-<p>When I was travelling Europe I found some surprisingly restricted wi-fi hotspots in hotels. This was annoying because I use SSH to upload photos back home from my phone, but having not setup any tunneling helpers I just had to wait till I found a better one.</p>
+    <p>When I was travelling Europe I found some surprisingly restricted wi-fi hotspots in hotels. This was annoying because I use SSH to upload photos back home from my phone, but having not setup any tunneling helpers I just had to wait till I found a better one.</p>
 <p>There are a number of solutions to SSH tunneling, but the main thing I wanted to do was implement something which would let me run several fallbacks at once. Enter <a href="https://github.com/stealth/sshttp">sshttp</a>.</p>
 <p>sshttp is related to sslh, in the sense that they are both SSH connection multiplexers. The idea is that you point a web-browser at port 80, you get a web-page. You point your SSH client, and you get an SSH connection. Naive firewalls let the SSH traffic through without complaint.</p>
 <p>The benefit of sshttp over sslh is that it uses Linux's <code>IP_TRANSPARENT</code> flag, which means that your SSH and HTTP logs all show proper source IPs, which is great for auditing and security.</p>
@@ -483,114 +468,114 @@ optional arguments:
 <p>The idea is that sshttp is my first firewall punching fallback, and then I can install some sneakier options on the web-side of sshttp (topic for a future blog). I also wanted sshttp to be nicely integrated with upstart in case I wanted to add more daemons/redirects in the future.</p>
 <h3>Installing sshttp</h3>
 <p>There's no deb package available, so installation is from github and then I copy it manually to /usr/local/sbin:</p>
-<pre class="code literal-block"><span></span><code>$ git clone https://github.com/stealth/sshttp
-$ <span class="nb">cd</span> sshttp
-$ make
-$ sudo cp sshttpd /usr/local/sbin
-</code></pre>
+<div class="code"><pre class="code literal-block">$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/stealth/sshttp
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>sshttp
+$<span class="w"> </span>make
+$<span class="w"> </span>sudo<span class="w"> </span>cp<span class="w"> </span>sshttpd<span class="w"> </span>/usr/local/sbin
+</pre></div>
 
 <h3>Upstart Script</h3>
 <p>I settled on the following upstart script for sshttp (adapted from my favorite nodeJS launching script):</p>
-<pre class="code literal-block"><span></span><code><span class="c1"># sshttpd launcher</span>
+<div class="code"><pre class="code literal-block"><span class="c1"># sshttpd launcher</span>
 <span class="c1"># note: this at minimum needs an iptables configuration which allows the</span>
 <span class="c1"># outside ports you're requesting through.</span>
 
-description <span class="s2">"sshttpd server upstart script"</span>
-author <span class="s2">"will rouesnel"</span>
+description<span class="w"> </span><span class="s2">"sshttpd server upstart script"</span>
+author<span class="w"> </span><span class="s2">"will rouesnel"</span>
 
-start on <span class="o">(</span>local-filesystems and net-device-up<span class="o">)</span>
-stop on shutdown
+start<span class="w"> </span>on<span class="w"> </span><span class="o">(</span>local-filesystems<span class="w"> </span>and<span class="w"> </span>net-device-up<span class="o">)</span>
+stop<span class="w"> </span>on<span class="w"> </span>shutdown
 
-instance <span class="s2">"sshttpd - </span><span class="nv">$NAME</span><span class="s2">"</span>
-expect daemon
+instance<span class="w"> </span><span class="s2">"sshttpd - </span><span class="nv">$NAME</span><span class="s2">"</span>
+expect<span class="w"> </span>daemon
 
 <span class="c1">#respawn</span>
 <span class="c1">#respawn limit 5 60</span>
 
-pre-start script
-    <span class="c1"># Check script exists</span>
-    <span class="k">if</span> <span class="o">[</span> ! -e /etc/sshttp.d/<span class="nv">$NAME</span>.conf <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-        <span class="k">return</span> <span class="m">1</span>
-    <span class="k">fi</span>
-    . /etc/sshttp.d/<span class="nv">$NAME</span>.conf
+pre-start<span class="w"> </span>script
+<span class="w">    </span><span class="c1"># Check script exists</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-e<span class="w"> </span>/etc/sshttp.d/<span class="nv">$NAME</span>.conf<span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="m">1</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="w">    </span>.<span class="w"> </span>/etc/sshttp.d/<span class="nv">$NAME</span>.conf
 
-    <span class="c1"># Clear up any old rules this instance may have left around from an</span>
-    <span class="c1"># unclean shutdown</span>
-    iptables -t mangle -D OUTPUT -p tcp --sport <span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span> -j sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
-    iptables -t mangle -D OUTPUT -p tcp --sport <span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span> -j sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
-    iptables -t mangle -D PREROUTING -p tcp --sport <span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span> -m socket -j sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
-    iptables -t mangle -D PREROUTING -p tcp --sport <span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span> -m socket -j sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
+<span class="w">    </span><span class="c1"># Clear up any old rules this instance may have left around from an</span>
+<span class="w">    </span><span class="c1"># unclean shutdown</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-D<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span><span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-D<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span><span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-D<span class="w"> </span>PREROUTING<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span><span class="w"> </span>-m<span class="w"> </span>socket<span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-D<span class="w"> </span>PREROUTING<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span><span class="w"> </span>-m<span class="w"> </span>socket<span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
 
-    iptables -t mangle -F sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
-    iptables -X sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-F<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="w">    </span>iptables<span class="w"> </span>-X<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
 
-    <span class="c1"># Add routing rules</span>
-    <span class="k">if</span> ! ip rule show <span class="p">|</span> grep -q <span class="s2">"lookup </span><span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span><span class="s2">"</span><span class="p">;</span> <span class="k">then</span>
-        ip rule add fwmark <span class="si">${</span><span class="nv">MARK</span><span class="si">}</span> lookup <span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span>
-    <span class="k">fi</span>
+<span class="w">    </span><span class="c1"># Add routing rules</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span>!<span class="w"> </span>ip<span class="w"> </span>rule<span class="w"> </span>show<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-q<span class="w"> </span><span class="s2">"lookup </span><span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span><span class="s2">"</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span>ip<span class="w"> </span>rule<span class="w"> </span>add<span class="w"> </span>fwmark<span class="w"> </span><span class="si">${</span><span class="nv">MARK</span><span class="si">}</span><span class="w"> </span>lookup<span class="w"> </span><span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span>
+<span class="w">    </span><span class="k">fi</span>
 
-    <span class="k">if</span> ! ip route show table <span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span> <span class="p">|</span> grep -q <span class="s2">"default"</span><span class="p">;</span> <span class="k">then</span>
-        ip route add <span class="nb">local</span> <span class="m">0</span>.0.0.0/0 dev lo table <span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span>
-    <span class="k">fi</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span>!<span class="w"> </span>ip<span class="w"> </span>route<span class="w"> </span>show<span class="w"> </span>table<span class="w"> </span><span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-q<span class="w"> </span><span class="s2">"default"</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span>ip<span class="w"> </span>route<span class="w"> </span>add<span class="w"> </span><span class="nb">local</span><span class="w"> </span><span class="m">0</span>.0.0.0/0<span class="w"> </span>dev<span class="w"> </span>lo<span class="w"> </span>table<span class="w"> </span><span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span>
+<span class="w">    </span><span class="k">fi</span>
 
-    <span class="c1"># Add iptables mangle rule chain for this instance</span>
-    iptables -t mangle -N sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
-    iptables -t mangle -A sshttpd-<span class="nv">$NAME</span> -j MARK --set-mark <span class="si">${</span><span class="nv">MARK</span><span class="si">}</span>
-    iptables -t mangle -A sshttpd-<span class="nv">$NAME</span> -j ACCEPT
+<span class="w">    </span><span class="c1"># Add iptables mangle rule chain for this instance</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-N<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-A<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span>-j<span class="w"> </span>MARK<span class="w"> </span>--set-mark<span class="w"> </span><span class="si">${</span><span class="nv">MARK</span><span class="si">}</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-A<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span>-j<span class="w"> </span>ACCEPT
 
-    <span class="c1"># Add the output and prerouting rules</span>
-    iptables -t mangle -A OUTPUT -p tcp --sport <span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span> -j sshttpd-<span class="nv">$NAME</span>
-    iptables -t mangle -A OUTPUT -p tcp --sport <span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span> -j sshttpd-<span class="nv">$NAME</span>
-    iptables -t mangle -A PREROUTING -p tcp --sport <span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span> -m socket -j sshttpd-<span class="nv">$NAME</span>
-    iptables -t mangle -A PREROUTING -p tcp --sport <span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span> -m socket -j sshttpd-<span class="nv">$NAME</span>
-end script
+<span class="w">    </span><span class="c1"># Add the output and prerouting rules</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-A<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span><span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-A<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span><span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-A<span class="w"> </span>PREROUTING<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span><span class="w"> </span>-m<span class="w"> </span>socket<span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-A<span class="w"> </span>PREROUTING<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span><span class="w"> </span>-m<span class="w"> </span>socket<span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span>
+end<span class="w"> </span>script
 
 <span class="c1"># the daemon</span>
 script
-    . /etc/sshttp.d/<span class="nv">$NAME</span>.conf
+<span class="w">    </span>.<span class="w"> </span>/etc/sshttp.d/<span class="nv">$NAME</span>.conf
 
-    /usr/local/sbin/sshttpd -n <span class="m">1</span> -S <span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span> -H <span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span> -L<span class="si">${</span><span class="nv">LISTEN_PORT</span><span class="si">}</span> -U nobody -R /var/empty &gt;&gt; <span class="si">${</span><span class="nv">LOG_PATH</span><span class="si">}</span> <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
-end script
+<span class="w">    </span>/usr/local/sbin/sshttpd<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span>-S<span class="w"> </span><span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span><span class="w"> </span>-H<span class="w"> </span><span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span><span class="w"> </span>-L<span class="si">${</span><span class="nv">LISTEN_PORT</span><span class="si">}</span><span class="w"> </span>-U<span class="w"> </span>nobody<span class="w"> </span>-R<span class="w"> </span>/var/empty<span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="si">${</span><span class="nv">LOG_PATH</span><span class="si">}</span><span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+end<span class="w"> </span>script
 
-post-stop script
-    . /etc/sshttp.d/<span class="nv">$NAME</span>.conf
+post-stop<span class="w"> </span>script
+<span class="w">    </span>.<span class="w"> </span>/etc/sshttp.d/<span class="nv">$NAME</span>.conf
 
-    <span class="c1"># Try and leave a clean environment</span>
-    iptables -t mangle -D OUTPUT -p tcp --sport <span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span> -j sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
-    iptables -t mangle -D OUTPUT -p tcp --sport <span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span> -j sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
-    iptables -t mangle -D PREROUTING -p tcp --sport <span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span> -m socket -j sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
-    iptables -t mangle -D PREROUTING -p tcp --sport <span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span> -m socket -j sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
+<span class="w">    </span><span class="c1"># Try and leave a clean environment</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-D<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span><span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-D<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span><span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-D<span class="w"> </span>PREROUTING<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span><span class="w"> </span>-m<span class="w"> </span>socket<span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-D<span class="w"> </span>PREROUTING<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span><span class="w"> </span>-m<span class="w"> </span>socket<span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
 
-    iptables -t mangle -F sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
-    iptables -X sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-F<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="w">    </span>iptables<span class="w"> </span>-X<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
 
-    <span class="c1"># Remove routing rules</span>
-    <span class="k">if</span> ip rule show <span class="p">|</span> grep -q <span class="s2">"lookup </span><span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span><span class="s2">"</span><span class="p">;</span> <span class="k">then</span>
-        ip rule del fwmark <span class="si">${</span><span class="nv">MARK</span><span class="si">}</span> lookup <span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span>
-    <span class="k">fi</span>
-    <span class="k">if</span> ip route show table <span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span> <span class="p">|</span> grep -q <span class="s2">"default"</span><span class="p">;</span> <span class="k">then</span>
-        ip route del <span class="nb">local</span> <span class="m">0</span>.0.0.0/0 dev lo table <span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span>
-    <span class="k">fi</span>
+<span class="w">    </span><span class="c1"># Remove routing rules</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span>ip<span class="w"> </span>rule<span class="w"> </span>show<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-q<span class="w"> </span><span class="s2">"lookup </span><span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span><span class="s2">"</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span>ip<span class="w"> </span>rule<span class="w"> </span>del<span class="w"> </span>fwmark<span class="w"> </span><span class="si">${</span><span class="nv">MARK</span><span class="si">}</span><span class="w"> </span>lookup<span class="w"> </span><span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span>ip<span class="w"> </span>route<span class="w"> </span>show<span class="w"> </span>table<span class="w"> </span><span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-q<span class="w"> </span><span class="s2">"default"</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span>ip<span class="w"> </span>route<span class="w"> </span>del<span class="w"> </span><span class="nb">local</span><span class="w"> </span><span class="m">0</span>.0.0.0/0<span class="w"> </span>dev<span class="w"> </span>lo<span class="w"> </span>table<span class="w"> </span><span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span>
+<span class="w">    </span><span class="k">fi</span>
 
-    <span class="c1"># Let sysadmin know we went down for some reason.</span>
-    cat <span class="si">${</span><span class="nv">LOG_PATH</span><span class="si">}</span> <span class="p">|</span> mail -s <span class="s2">"sshttpd - </span><span class="nv">$NAME</span><span class="s2"> process killed."</span> root
-end script
-</code></pre>
+<span class="w">    </span><span class="c1"># Let sysadmin know we went down for some reason.</span>
+<span class="w">    </span>cat<span class="w"> </span><span class="si">${</span><span class="nv">LOG_PATH</span><span class="si">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>mail<span class="w"> </span>-s<span class="w"> </span><span class="s2">"sshttpd - </span><span class="nv">$NAME</span><span class="s2"> process killed."</span><span class="w"> </span>root
+end<span class="w"> </span>script
+</pre></div>
 
 <p>This script nicely sets up and tears down the bits of iptables mangling and routing infrastructure needed for sshttp, and neatly creates chains for different sshttp instances based on configuration files. It'll only launch a single instance, so launching them all on boot is handled by this <a href="https://gist.github.com/wrouesnel/6341544">upstart script</a>.</p>
 <p>To use this script, you need an /etc/sshttp.d directory:</p>
-<pre class="code literal-block"><span></span><code>$ sudo mkdir /etc/sshttp.d
-</code></pre>
+<div class="code"><pre class="code literal-block">$<span class="w"> </span>sudo<span class="w"> </span>mkdir<span class="w"> </span>/etc/sshttp.d
+</pre></div>
 
 <p>and a configuration file like the following, with a <code>*.conf</code> extension:</p>
-<pre class="code literal-block"><span></span><code>$ cat /etc/sshttp.d/http.conf
+<div class="code"><pre class="code literal-block">$<span class="w"> </span>cat<span class="w"> </span>/etc/sshttp.d/http.conf
 <span class="nv">SSH_PORT</span><span class="o">=</span><span class="m">22022</span>
 <span class="nv">HTTP_PORT</span><span class="o">=</span><span class="m">20080</span>
 <span class="nv">LISTEN_PORT</span><span class="o">=</span><span class="m">20081</span>
 <span class="nv">MARK</span><span class="o">=</span><span class="m">1</span>
 <span class="nv">TABLE</span><span class="o">=</span><span class="m">22080</span>
 <span class="nv">LOG_PATH</span><span class="o">=</span>/var/log/sshttp.log
-</code></pre>
+</pre></div>
 
 <p><code>LISTEN_PORT</code> is your sshttp port. It's 20081 because we're going to use iptables to forward port 80 to 20081 (to accomodate nginx - more on this later). <code>SSH_PORT</code> is an extra SSH port for openssh - so we have both 22 and 22022 open as SSH ports since 22022 can't be publically accessible (and we'd like 22 to be publically accessible).</p>
 <p><code>HTTP_PORT</code> is the port your web-server is listening on, for the same reasons as the <code>SSH_PORT</code>. <code>MARK</code> is the connection marker the daemon looks for - it has to be unique for each one. <code>TABLE</code> is the route table used for look ups - I think. This value can be anything - I think.</p>
@@ -601,15 +586,14 @@ end script
 <p>This means I can happily keep setting up private internal servers on port 80 on my server withou futzing around with bind IPs, and instead can put anything I want to serve externally onto port 20080 as per the configuration file above.</p>
 <p>I like <a href="http://www.fwbuilder.org/">Firewall Builder</a> at the moment for my configuration (although I'm thinking a shell script might be better practice in future).</p>
 <p>The relevant IP tables lines if you were doing it manually would be something like</p>
-<pre class="code literal-block"><span></span><code>iptables -t nat -A PREROUTING -i ppp0 -p tcp -m tcp -d &lt;your external ip&gt; --dport <span class="m">80</span> -j REDIRECT --to-ports <span class="m">20081</span>
-</code></pre>
+<div class="code"><pre class="code literal-block">iptables<span class="w"> </span>-t<span class="w"> </span>nat<span class="w"> </span>-A<span class="w"> </span>PREROUTING<span class="w"> </span>-i<span class="w"> </span>ppp0<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>-m<span class="w"> </span>tcp<span class="w"> </span>-d<span class="w"> </span>&lt;your<span class="w"> </span>external<span class="w"> </span>ip&gt;<span class="w"> </span>--dport<span class="w"> </span><span class="m">80</span><span class="w"> </span>-j<span class="w"> </span>REDIRECT<span class="w"> </span>--to-ports<span class="w"> </span><span class="m">20081</span>
+</pre></div>
 
 <p>Configuring iptables like this is covered fantastically elsewhere so I won't go into it here.</p>
 <p>But with this redirect, externally port 80 now goes to sshttp, which then redirects it to either SSH or to the specific external application I want to serve over HTTP on port 20080.</p>
 <h3>Conclusion</h3>
 <p>At the moment with this setup I just have nginx serving 404s back on my sshttp server ports. But the real benefit is, I can turn those into secure proxy's to use with something like <a href="http://pwet.fr/man/linux/commandes/corkscrew">corkscrew</a> or <a href="http://proxytunnel.sourceforge.net/">proxytunnel</a>.</p>
 <p>Or I can go further - use <a href="http://www.nocrew.org/software/httptunnel.html">httptunnel</a> to tunnel TCP over GET and POST connections (my actual intent) on the public facing HTTP ports. Or do both - each method has it's trade-offs, so we can just step down till we find one which works!</p>
-</div>
     </div>
     </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/upstart-troubles/" class="u-url">Upstart script not recognized</a></h1>
         <div class="metadata">
@@ -622,22 +606,20 @@ end script
             </p>
         </div>
     </header><div class="e-content entry-content">
-    <div>
-<p>I frequently find myself writing upstart scripts which checkout ok, but for some reason don't get detected by the upstart daemon in the init directory, so when I run <code>start myscript</code> I get <code>unknown job</code> back. Some experimentation seems to indicate that the problem is I used gedit over GVFS SFTP to author a lot of these scripts.</p>
+    <p>I frequently find myself writing upstart scripts which checkout ok, but for some reason don't get detected by the upstart daemon in the init directory, so when I run <code>start myscript</code> I get <code>unknown job</code> back. Some experimentation seems to indicate that the problem is I used gedit over GVFS SFTP to author a lot of these scripts.</p>
 <p>For something like <code>myscript.conf</code>, I find the following fixes this problem:</p>
-<pre class="code literal-block"><span></span><code>mv myscript.conf myscript.conf.d
+<div class="code"><pre class="code literal-block">mv myscript.conf myscript.conf.d
 mv myscript.conf.d myscript.conf
-</code></pre>
+</pre></div>
 
 <p>And then hey presto, the script works perfectly.</p>
 <p>Along the same lines, the <code>init-checkconf</code> utility isn't mentioned enough for upstart debugging - my last post shows I clearly didn't know about it. Using it is simple:</p>
-<pre class="code literal-block"><span></span><code>$ init-checkconf /etc/init/myscript.conf
-</code></pre>
+<div class="code"><pre class="code literal-block">$<span class="w"> </span>init-checkconf<span class="w"> </span>/etc/init/myscript.conf
+</pre></div>
 
 <p>Note it needs to be run as a regular user. I'm often logged in as root, so sudo suffices:</p>
-<pre class="code literal-block"><span></span><code>$ sudo -u nobody init-checkconf /etc/init/myscript.conf
-</code></pre>
-</div>
+<div class="code"><pre class="code literal-block">$<span class="w"> </span>sudo<span class="w"> </span>-u<span class="w"> </span>nobody<span class="w"> </span>init-checkconf<span class="w"> </span>/etc/init/myscript.conf
+</pre></div>
     </div>
     </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/wintersmithing/" class="u-url">Wintersmithing</a></h1>
         <div class="metadata">
@@ -650,145 +632,144 @@ mv myscript.conf.d myscript.conf
             </p>
         </div>
     </header><div class="e-content entry-content">
-    <div>
-<h2>Wintersmith</h2>
+    <h2>Wintersmith</h2>
 <p>How to setup and use Wintersmith is covered pretty thoroughly elsewhere on the net, (namely the <a href="http://wintersmith.io/">wintersmith homepage</a>.</p>
 <p>Instead I'll cover a few tweaks I had to do to get it running the way I wanted. To avoid being truly confusing, all the paths referenced here are relative to the site you create by running <code>wintersmith new &lt;your site dir here&gt;</code></p>
 <h3>LiveReload plugin</h3>
 <p>There's a Wintersmith LiveReload plugin available which makes previewing your site with <code>wintersmith preview</code> very easy - it's great for editing or setting up CSS.</p>
 <p>Installing the LiveReload plugin on Linux Mint (which I run) can be done with <code>sudo npm install -g wintersmith-livereload</code></p>
 <p>You need to then add the path to your <code>config.json</code> file under "plugins" e.g. for this blog:</p>
-<pre class="code literal-block"><span></span><code><span class="p">{</span>
-  <span class="s2">"locals"</span><span class="o">:</span> <span class="p">{</span>
-    <span class="s2">"url"</span><span class="o">:</span> <span class="s2">"http://localhost:8080"</span><span class="p">,</span>
-    <span class="s2">"name"</span><span class="o">:</span> <span class="s2">"wrouesnel_blog"</span><span class="p">,</span>
-    <span class="s2">"owner"</span><span class="o">:</span> <span class="s2">"Will Rouesnel"</span><span class="p">,</span>
-    <span class="s2">"description"</span><span class="o">:</span> <span class="s2">"negating information entropy"</span>
-  <span class="p">},</span>
-  <span class="s2">"plugins"</span><span class="o">:</span> <span class="p">[</span>
-    <span class="s2">"./plugins/paginator.coffee"</span><span class="p">,</span>
-    <span class="s2">"wintersmith-stylus"</span><span class="p">,</span>
-    <span class="s2">"wintersmith-livereload"</span>
-  <span class="p">],</span>
-  <span class="s2">"require"</span><span class="o">:</span> <span class="p">{</span>
-    <span class="s2">"moment"</span><span class="o">:</span> <span class="s2">"moment"</span><span class="p">,</span>
-    <span class="s2">"_"</span><span class="o">:</span> <span class="s2">"underscore"</span><span class="p">,</span>
-    <span class="s2">"typogr"</span><span class="o">:</span> <span class="s2">"typogr"</span>
-  <span class="p">},</span>
-  <span class="s2">"jade"</span><span class="o">:</span> <span class="p">{</span>
-    <span class="s2">"pretty"</span><span class="o">:</span> <span class="kc">true</span>
-  <span class="p">},</span>
-  <span class="s2">"markdown"</span><span class="o">:</span> <span class="p">{</span>
-    <span class="s2">"smartLists"</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
-    <span class="s2">"smartypants"</span><span class="o">:</span> <span class="kc">true</span>
-  <span class="p">},</span>
-  <span class="s2">"paginator"</span><span class="o">:</span> <span class="p">{</span>
-    <span class="s2">"perPage"</span><span class="o">:</span> <span class="mf">20</span>
-  <span class="p">}</span>
+<div class="code"><pre class="code literal-block"><span class="p">{</span>
+<span class="w">  </span><span class="s2">"locals"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">"url"</span><span class="o">:</span><span class="w"> </span><span class="s2">"http://localhost:8080"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"name"</span><span class="o">:</span><span class="w"> </span><span class="s2">"wrouesnel_blog"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"owner"</span><span class="o">:</span><span class="w"> </span><span class="s2">"Will Rouesnel"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"description"</span><span class="o">:</span><span class="w"> </span><span class="s2">"negating information entropy"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="s2">"plugins"</span><span class="o">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">"./plugins/paginator.coffee"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"wintersmith-stylus"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"wintersmith-livereload"</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="s2">"require"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">"moment"</span><span class="o">:</span><span class="w"> </span><span class="s2">"moment"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"_"</span><span class="o">:</span><span class="w"> </span><span class="s2">"underscore"</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"typogr"</span><span class="o">:</span><span class="w"> </span><span class="s2">"typogr"</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="s2">"jade"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">"pretty"</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="s2">"markdown"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">"smartLists"</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">"smartypants"</span><span class="o">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="s2">"paginator"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">"perPage"</span><span class="o">:</span><span class="w"> </span><span class="mf">20</span>
+<span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
-</code></pre>
+</pre></div>
 
 <p>You then want to insert the line:</p>
-<pre class="code literal-block"><span></span><code><span class="o">!</span><span class="p">{</span> <span class="n">env</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">livereload</span><span class="p">()</span> <span class="p">}</span>
-</code></pre>
+<div class="code"><pre class="code literal-block"><span class="o">!</span><span class="p">{</span><span class="w"> </span><span class="n">env</span><span class="o">.</span><span class="n">helpers</span><span class="o">.</span><span class="n">livereload</span><span class="p">()</span><span class="w"> </span><span class="p">}</span>
+</pre></div>
 
 <p>into the <code>templates/layout.jade</code> file - giving you something like the following at the top of the file</p>
-<pre class="code literal-block"><span></span><code><span class="nn">!!! 5</span>
+<div class="code"><pre class="code literal-block"><span class="nn">!!! 5</span>
 <span class="nt">block</span> vars
-  <span class="p">-</span> <span class="kd">var</span> <span class="n">bodyclass</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="w">  </span><span class="p">-</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="n">bodyclass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
 <span class="nt">html</span>(<span class="na">lang=</span><span class="s">'en'</span>)
-  <span class="nt">head</span>
-    <span class="nt">block</span> head
-      <span class="nt">meta</span>(<span class="na">charset=</span><span class="s">'utf-8'</span>)
-      <span class="nt">meta</span>(<span class="na">http-equiv=</span><span class="s">'X-UA-Compatible'</span><span class="err">,</span> <span class="na">content=</span><span class="s">'IE=edge,chrome=1'</span>)
-      <span class="nt">meta</span>(<span class="na">name=</span><span class="s">'viewport'</span><span class="err">,</span> <span class="na">content=</span><span class="s">'width=device-width'</span>)
-      <span class="err">!{ </span><span class="nt">env</span><span class="nc">.helpers.livereload</span>() }
-      <span class="nt">script</span>(<span class="na">type=</span><span class="s">'text/javascript'</span>).
-</code></pre>
+<span class="w">  </span><span class="nt">head</span>
+<span class="w">    </span><span class="nt">block</span> head
+<span class="w">      </span><span class="nt">meta</span>(<span class="na">charset=</span><span class="s">'utf-8'</span>)
+<span class="w">      </span><span class="nt">meta</span>(<span class="na">http-equiv=</span><span class="s">'X-UA-Compatible'</span><span class="err">,</span> <span class="na">content=</span><span class="s">'IE=edge,chrome=1'</span>)
+<span class="w">      </span><span class="nt">meta</span>(<span class="na">name=</span><span class="s">'viewport'</span><span class="err">,</span> <span class="na">content=</span><span class="s">'width=device-width'</span>)
+<span class="w">      </span><span class="err">!{ </span><span class="nt">env</span><span class="nc">.helpers.livereload</span>() }
+<span class="w">      </span><span class="nt">script</span>(<span class="na">type=</span><span class="s">'text/javascript'</span>).
+</pre></div>
 
 <p>I also add a script section with <a href="http://www.google.com/analytics/">Google Analytics</a> to layout.jade because I'm vain like that:</p>
-<pre class="code literal-block"><span></span><code><span class="nn">!!! 5</span>
+<div class="code"><pre class="code literal-block"><span class="nn">!!! 5</span>
 <span class="nt">block</span> vars
-  <span class="p">-</span> <span class="kd">var</span> <span class="n">bodyclass</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+<span class="w">  </span><span class="p">-</span><span class="w"> </span><span class="kd">var</span><span class="w"> </span><span class="n">bodyclass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
 <span class="nt">html</span>(<span class="na">lang=</span><span class="s">'en'</span>)
-  <span class="nt">head</span>
-    <span class="nt">block</span> head
-      <span class="nt">meta</span>(<span class="na">charset=</span><span class="s">'utf-8'</span>)
-      <span class="nt">meta</span>(<span class="na">http-equiv=</span><span class="s">'X-UA-Compatible'</span><span class="err">,</span> <span class="na">content=</span><span class="s">'IE=edge,chrome=1'</span>)
-      <span class="nt">meta</span>(<span class="na">name=</span><span class="s">'viewport'</span><span class="err">,</span> <span class="na">content=</span><span class="s">'width=device-width'</span>)
-      <span class="err">!{ </span><span class="nt">env</span><span class="nc">.helpers.livereload</span>() }
-      <span class="nt">script</span>(<span class="na">type=</span><span class="s">'text/javascript'</span>).
-        <span class="c">// google analytics</span>
-        <span class="err">(</span><span class="nt">function</span>(<span class="na">i</span><span class="err">,</span><span class="na">s</span><span class="err">,</span><span class="na">o</span><span class="err">,</span><span class="na">g</span><span class="err">,</span><span class="na">r</span><span class="err">,</span><span class="na">a</span><span class="err">,</span><span class="na">m</span>){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        <span class="err">(</span><span class="nt">i</span><span class="p">[</span><span class="n">r</span><span class="p">]</span><span class="nc">.q</span><span class="p">=</span><span class="n">i</span><span class="p">[</span><span class="n">r</span><span class="p">].</span><span class="n">q</span><span class="o">||</span><span class="p">[]).</span><span class="n">push</span><span class="p">(</span><span class="n">arguments</span><span class="p">)},</span><span class="n">i</span><span class="p">[</span><span class="n">r</span><span class="p">].</span><span class="n">l</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="k">new</span> <span class="nc">Date</span><span class="p">();</span><span class="n">a</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">createElement</span><span class="p">(</span><span class="n">o</span><span class="p">),</span>
-        <span class="nt">m</span><span class="p">=</span><span class="n">s</span><span class="p">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="n">o</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span><span class="n">a</span><span class="p">.</span><span class="n">async</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">a</span><span class="p">.</span><span class="n">src</span><span class="o">=</span><span class="n">g</span><span class="p">;</span><span class="n">m</span><span class="p">.</span><span class="n">parentNode</span><span class="p">.</span><span class="n">insertBefore</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">m</span><span class="p">)</span>
-        <span class="err">})(</span><span class="nt">window</span>,document,'script','//www.google-analytics.com/analytics.js','ga');
+<span class="w">  </span><span class="nt">head</span>
+<span class="w">    </span><span class="nt">block</span> head
+<span class="w">      </span><span class="nt">meta</span>(<span class="na">charset=</span><span class="s">'utf-8'</span>)
+<span class="w">      </span><span class="nt">meta</span>(<span class="na">http-equiv=</span><span class="s">'X-UA-Compatible'</span><span class="err">,</span> <span class="na">content=</span><span class="s">'IE=edge,chrome=1'</span>)
+<span class="w">      </span><span class="nt">meta</span>(<span class="na">name=</span><span class="s">'viewport'</span><span class="err">,</span> <span class="na">content=</span><span class="s">'width=device-width'</span>)
+<span class="w">      </span><span class="err">!{ </span><span class="nt">env</span><span class="nc">.helpers.livereload</span>() }
+<span class="w">      </span><span class="nt">script</span>(<span class="na">type=</span><span class="s">'text/javascript'</span>).
+<span class="w">        </span><span class="c">// google analytics</span>
+<span class="w">        </span><span class="err">(</span><span class="nt">function</span>(<span class="na">i</span><span class="err">,</span><span class="na">s</span><span class="err">,</span><span class="na">o</span><span class="err">,</span><span class="na">g</span><span class="err">,</span><span class="na">r</span><span class="err">,</span><span class="na">a</span><span class="err">,</span><span class="na">m</span>){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+<span class="w">        </span><span class="err">(</span><span class="nt">i</span><span class="p">[</span><span class="n">r</span><span class="p">]</span><span class="nc">.q</span><span class="p">=</span><span class="n">i</span><span class="p">[</span><span class="n">r</span><span class="p">].</span><span class="n">q</span><span class="o">||</span><span class="p">[]).</span><span class="n">push</span><span class="p">(</span><span class="n">arguments</span><span class="p">)},</span><span class="n">i</span><span class="p">[</span><span class="n">r</span><span class="p">].</span><span class="n">l</span><span class="o">=</span><span class="mi">1</span><span class="o">*</span><span class="k">new</span><span class="w"> </span><span class="nc">Date</span><span class="p">();</span><span class="n">a</span><span class="o">=</span><span class="n">s</span><span class="p">.</span><span class="n">createElement</span><span class="p">(</span><span class="n">o</span><span class="p">),</span>
+<span class="w">        </span><span class="nt">m</span><span class="p">=</span><span class="n">s</span><span class="p">.</span><span class="n">getElementsByTagName</span><span class="p">(</span><span class="n">o</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span><span class="n">a</span><span class="p">.</span><span class="n">async</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="n">a</span><span class="p">.</span><span class="n">src</span><span class="o">=</span><span class="n">g</span><span class="p">;</span><span class="n">m</span><span class="p">.</span><span class="n">parentNode</span><span class="p">.</span><span class="n">insertBefore</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">m</span><span class="p">)</span>
+<span class="w">        </span><span class="err">})(</span><span class="nt">window</span>,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        <span class="nt">ga</span>(<span class="err">'</span><span class="na">create</span><span class="err">',</span> <span class="err">'</span><span class="na">UA-43235370-1</span><span class="err">',</span> <span class="err">'</span><span class="na">wrouesnel</span><span class="err">.</span><span class="na">github</span><span class="err">.</span><span class="na">io</span><span class="err">'</span>);
-        <span class="nt">ga</span>(<span class="err">'</span><span class="na">send</span><span class="err">',</span> <span class="err">'</span><span class="na">pageview</span><span class="err">'</span>);
-</code></pre>
+<span class="w">        </span><span class="nt">ga</span>(<span class="err">'</span><span class="na">create</span><span class="err">',</span> <span class="err">'</span><span class="na">UA-43235370-1</span><span class="err">',</span> <span class="err">'</span><span class="na">wrouesnel</span><span class="err">.</span><span class="na">github</span><span class="err">.</span><span class="na">io</span><span class="err">'</span>);
+<span class="w">        </span><span class="nt">ga</span>(<span class="err">'</span><span class="na">send</span><span class="err">',</span> <span class="err">'</span><span class="na">pageview</span><span class="err">'</span>);
+</pre></div>
 
 <p><strong>The glitch</strong>: Running <code>wintersmith preview</code> with these changes you'll find it doesn't work when trying to browse to the main index.html page with something like "env is undefined". This is <a href="https://github.com/jnordberg/wintersmith/issues/141">a glitch in paginator which has been fixed upstream</a> but not in wintersmith@2.0.5 in npm. </p>
 <p>To fix it I just copied <a href="https://github.com/jnordberg/wintersmith/commit/b959b35b9b153fb7ddbaa37533800777473b5a17.diff">the commit patch</a> manually into my local copy of <code>plugins/paginator.coffee</code> : </p>
-<pre class="code literal-block"><span></span><code><span class="gh">diff --git a/examples/blog/plugins/paginator.coffee b/examples/blog/plugins/paginator.coffee</span>
+<div class="code"><pre class="code literal-block"><span class="gh">diff --git a/examples/blog/plugins/paginator.coffee b/examples/blog/plugins/paginator.coffee</span>
 <span class="gh">index b8e9032..19098d5 100644</span>
 <span class="gd">--- a/examples/blog/plugins/paginator.coffee</span>
 <span class="gi">+++ b/examples/blog/plugins/paginator.coffee</span>
 <span class="gu">@@ -43,7 +43,7 @@ module.exports = (env, callback) -&gt;</span>
-         return callback new Error "unknown paginator template '#{ options.template }'"
+<span class="w"> </span>        return callback new Error "unknown paginator template '#{ options.template }'"
 
-       # setup the template context
+<span class="w"> </span>      # setup the template context
 <span class="gd">-      ctx = {contents, @articles, @prevPage, @nextPage}</span>
 <span class="gi">+      ctx = {env, contents, @articles, @prevPage, @nextPage}</span>
 
-       # extend the template context with the enviroment locals
-       env.utils.extend ctx, locals
-</code></pre>
+<span class="w"> </span>      # extend the template context with the enviroment locals
+<span class="w"> </span>      env.utils.extend ctx, locals
+</pre></div>
 
 <h3>Show most recent article in the index</h3>
 <p>By default Wintersmith shows short summaries of articles on your <code>index.html</code> page. I can't decide whether or not I like this behavior yet, but until I do what I wanted was to always have my index show my most recent post.</p>
 <p>To do this, we take advantage of Jade's iteration and if/then functionality to modify <code>template/index.jade</code>.</p>
 <p>As of this article my index.jade looks as follows:</p>
-<pre class="code literal-block"><span></span><code><span class="nt">extends</span> layout
+<div class="code"><pre class="code literal-block"><span class="nt">extends</span> layout
 
 <span class="nt">block</span> content
-  <span class="nt">include</span> author
-  <span class="nt">each</span> article, num in articles
-    <span class="nt">if</span> num === 0
-      <span class="c">// First article - render in full</span>
-      <span class="nt">article</span><span class="nc">.article.intro</span>
-      <span class="nt">header</span>
-        <span class="nt">h1</span><span class="nc">.indexfullarticle</span>
-          <span class="nt">a</span>(<span class="na">href=</span><span class="nv">article</span><span class="err">.</span><span class="na">url</span>)<span class="p">=</span> <span class="n">article</span><span class="p">.</span><span class="n">title</span>
-        <span class="nt">div</span><span class="nc">.date</span>
-          <span class="nt">span</span><span class="p">=</span> <span class="n">moment</span><span class="p">(</span><span class="n">article</span><span class="p">.</span><span class="n">date</span><span class="p">).</span><span class="n">format</span><span class="p">(</span><span class="ss">'DD</span><span class="p">.</span> <span class="nc">MMMM</span> <span class="nc">YYYY</span><span class="err">'</span><span class="p">)</span>
-        <span class="nt">p</span><span class="nc">.author</span>
-            <span class="nt">mixin</span> author(article.metadata.author)
-      <span class="nt">section</span><span class="nc">.content</span><span class="p">!=</span> <span class="n">typogr</span><span class="p">(</span><span class="n">article</span><span class="p">.</span><span class="n">html</span><span class="p">).</span><span class="n">typogrify</span><span class="p">()</span>
-    <span class="nt">else</span>
-      <span class="nt">article</span><span class="nc">.article.intro</span>
-      <span class="nt">header</span>
-        <span class="nt">h2</span>
-          <span class="nt">a</span>(<span class="na">href=</span><span class="nv">article</span><span class="err">.</span><span class="na">url</span>)<span class="p">=</span> <span class="n">article</span><span class="p">.</span><span class="n">title</span>
-        <span class="nt">div</span><span class="nc">.date</span>
-          <span class="nt">span</span><span class="p">=</span> <span class="n">moment</span><span class="p">(</span><span class="n">article</span><span class="p">.</span><span class="n">date</span><span class="p">).</span><span class="n">format</span><span class="p">(</span><span class="ss">'DD</span><span class="p">.</span> <span class="nc">MMMM</span> <span class="nc">YYYY</span><span class="err">'</span><span class="p">)</span>
-        <span class="nt">p</span><span class="nc">.author</span>
-            <span class="nt">mixin</span> author(article.metadata.author)
-      <span class="nt">section</span><span class="nc">.content</span>
-        <span class="err">!{ </span><span class="nt">typogr</span>(<span class="na">article</span><span class="err">.</span><span class="na">intro</span>)<span class="nc">.typogrify</span>() }
-        <span class="nt">if</span> article.hasMore
-          <span class="nt">p</span><span class="nc">.more</span>
-            <span class="nt">a</span>(<span class="na">href=</span><span class="nv">article</span><span class="err">.</span><span class="na">url</span>) more
+<span class="w">  </span><span class="nt">include</span> author
+<span class="w">  </span><span class="nt">each</span> article, num in articles
+<span class="w">    </span><span class="nt">if</span> num === 0
+<span class="w">      </span><span class="c">// First article - render in full</span>
+<span class="w">      </span><span class="nt">article</span><span class="nc">.article.intro</span>
+<span class="w">      </span><span class="nt">header</span>
+<span class="w">        </span><span class="nt">h1</span><span class="nc">.indexfullarticle</span>
+<span class="w">          </span><span class="nt">a</span>(<span class="na">href=</span><span class="nv">article</span><span class="err">.</span><span class="na">url</span>)<span class="p">=</span><span class="w"> </span><span class="n">article</span><span class="p">.</span><span class="n">title</span>
+<span class="w">        </span><span class="nt">div</span><span class="nc">.date</span>
+<span class="w">          </span><span class="nt">span</span><span class="p">=</span><span class="w"> </span><span class="n">moment</span><span class="p">(</span><span class="n">article</span><span class="p">.</span><span class="n">date</span><span class="p">).</span><span class="n">format</span><span class="p">(</span><span class="ss">'DD</span><span class="p">.</span><span class="w"> </span><span class="nc">MMMM</span><span class="w"> </span><span class="nc">YYYY</span><span class="err">'</span><span class="p">)</span>
+<span class="w">        </span><span class="nt">p</span><span class="nc">.author</span>
+<span class="w">            </span><span class="nt">mixin</span> author(article.metadata.author)
+<span class="w">      </span><span class="nt">section</span><span class="nc">.content</span><span class="p">!=</span><span class="w"> </span><span class="n">typogr</span><span class="p">(</span><span class="n">article</span><span class="p">.</span><span class="n">html</span><span class="p">).</span><span class="n">typogrify</span><span class="p">()</span>
+<span class="w">    </span><span class="nt">else</span>
+<span class="w">      </span><span class="nt">article</span><span class="nc">.article.intro</span>
+<span class="w">      </span><span class="nt">header</span>
+<span class="w">        </span><span class="nt">h2</span>
+<span class="w">          </span><span class="nt">a</span>(<span class="na">href=</span><span class="nv">article</span><span class="err">.</span><span class="na">url</span>)<span class="p">=</span><span class="w"> </span><span class="n">article</span><span class="p">.</span><span class="n">title</span>
+<span class="w">        </span><span class="nt">div</span><span class="nc">.date</span>
+<span class="w">          </span><span class="nt">span</span><span class="p">=</span><span class="w"> </span><span class="n">moment</span><span class="p">(</span><span class="n">article</span><span class="p">.</span><span class="n">date</span><span class="p">).</span><span class="n">format</span><span class="p">(</span><span class="ss">'DD</span><span class="p">.</span><span class="w"> </span><span class="nc">MMMM</span><span class="w"> </span><span class="nc">YYYY</span><span class="err">'</span><span class="p">)</span>
+<span class="w">        </span><span class="nt">p</span><span class="nc">.author</span>
+<span class="w">            </span><span class="nt">mixin</span> author(article.metadata.author)
+<span class="w">      </span><span class="nt">section</span><span class="nc">.content</span>
+<span class="w">        </span><span class="err">!{ </span><span class="nt">typogr</span>(<span class="na">article</span><span class="err">.</span><span class="na">intro</span>)<span class="nc">.typogrify</span>() }
+<span class="w">        </span><span class="nt">if</span> article.hasMore
+<span class="w">          </span><span class="nt">p</span><span class="nc">.more</span>
+<span class="w">            </span><span class="nt">a</span>(<span class="na">href=</span><span class="nv">article</span><span class="err">.</span><span class="na">url</span>) more
 
 <span class="nt">block</span> prepend footer
-  <span class="nt">div</span><span class="nc">.nav</span>
-    <span class="nt">if</span> prevPage
-      <span class="nt">a</span>(<span class="na">href=</span><span class="nv">prevPage</span><span class="err">.</span><span class="na">url</span>) « Newer
-    <span class="nt">else</span>
-      <span class="nt">a</span>(<span class="na">href=</span><span class="s">'/archive.html'</span>) « Archives
-    <span class="nt">if</span> nextPage
-      <span class="nt">a</span>(<span class="na">href=</span><span class="nv">nextPage</span><span class="err">.</span><span class="na">url</span>) Next page »
-</code></pre>
+<span class="w">  </span><span class="nt">div</span><span class="nc">.nav</span>
+<span class="w">    </span><span class="nt">if</span> prevPage
+<span class="w">      </span><span class="nt">a</span>(<span class="na">href=</span><span class="nv">prevPage</span><span class="err">.</span><span class="na">url</span>) « Newer
+<span class="w">    </span><span class="nt">else</span>
+<span class="w">      </span><span class="nt">a</span>(<span class="na">href=</span><span class="s">'/archive.html'</span>) « Archives
+<span class="w">    </span><span class="nt">if</span> nextPage
+<span class="w">      </span><span class="nt">a</span>(<span class="na">href=</span><span class="nv">nextPage</span><span class="err">.</span><span class="na">url</span>) Next page »
+</pre></div>
 
 <p>There might be a better way to do this, but for me, for now it works. Basically Jade's iterators will provide an iteration number if you add a variable name for it (<code>num</code> in this case) - and the articles are chronological by default. So 0 is always the most recent.</p>
 <p>From there I just duplicate some code fro <code>template/article.jade</code> to have it render the full article in <code>section.content</code> - which is <code>article.html</code>, rather then just the intro section - which is <code>article.intro</code>.</p>
@@ -797,65 +778,65 @@ mv myscript.conf.d myscript.conf
 <p>This site is hosted on Github pages, but they have no support for Wintersmith - so it's necessary to manually build the static content and upload that. <code>make</code> is more then capable of handling this task, and while we're at it it's a decent tool to automate housekeeping - in particular I wanted my article metadata to be automatically tagged with a date if the date field was blank.</p>
 <h3>Automatic date tagging</h3>
 <p>After banging my head with awk or sed one-liners (which probably can be done) I came to my senses and wrote a bash script to do this for me.</p>
-<pre class="code literal-block"><span></span><code><span class="ch">#!/bin/bash</span>
+<div class="code"><pre class="code literal-block"><span class="ch">#!/bin/bash</span>
 
-find contents -name <span class="s1">'*.md'</span> <span class="p">|</span> <span class="k">while</span> <span class="nb">read</span> markdownfile<span class="p">;</span> <span class="k">do</span>
-    <span class="nv">datemeta</span><span class="o">=</span><span class="k">$(</span>cat <span class="nv">$markdownfile</span> <span class="p">|</span> grep -m1 date: <span class="k">)</span>
-    <span class="nv">datestamp</span><span class="o">=</span><span class="k">$(</span>cat <span class="nv">$markdownfile</span> <span class="p">|</span> grep -m1 date: <span class="p">|</span> cut -d<span class="s1">' '</span> -f2<span class="k">)</span>
+find<span class="w"> </span>contents<span class="w"> </span>-name<span class="w"> </span><span class="s1">'*.md'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>markdownfile<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="nv">datemeta</span><span class="o">=</span><span class="k">$(</span>cat<span class="w"> </span><span class="nv">$markdownfile</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-m1<span class="w"> </span>date:<span class="w"> </span><span class="k">)</span>
+<span class="w">    </span><span class="nv">datestamp</span><span class="o">=</span><span class="k">$(</span>cat<span class="w"> </span><span class="nv">$markdownfile</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-m1<span class="w"> </span>date:<span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="s1">' '</span><span class="w"> </span>-f2<span class="k">)</span>
 
-    <span class="k">if</span> <span class="o">[</span> ! -z <span class="s2">"</span><span class="nv">$datemeta</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-        <span class="k">if</span> <span class="o">[</span> -z <span class="s2">"</span><span class="nv">$datestamp</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-            <span class="c1"># generate a datestamp entry and replace the field with sed</span>
-            <span class="nb">echo</span> <span class="s2">"Date stamping unstamped article </span><span class="nv">$markdownfile</span><span class="s2">"</span>
-            <span class="nv">datestamp</span><span class="o">=</span><span class="k">$(</span>date <span class="s1">'+%Y-%m-%d %H:%M GMT%z'</span><span class="k">)</span>
-            sed -i <span class="s2">"s/date:\ .*/date: </span><span class="nv">$datestamp</span><span class="s2">/"</span> <span class="s2">"</span><span class="nv">$markdownfile</span><span class="s2">"</span>
-        <span class="k">fi</span>
-    <span class="k">fi</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-z<span class="w"> </span><span class="s2">"</span><span class="nv">$datemeta</span><span class="s2">"</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-z<span class="w"> </span><span class="s2">"</span><span class="nv">$datestamp</span><span class="s2">"</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">            </span><span class="c1"># generate a datestamp entry and replace the field with sed</span>
+<span class="w">            </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"Date stamping unstamped article </span><span class="nv">$markdownfile</span><span class="s2">"</span>
+<span class="w">            </span><span class="nv">datestamp</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span><span class="s1">'+%Y-%m-%d %H:%M GMT%z'</span><span class="k">)</span>
+<span class="w">            </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">"s/date:\ .*/date: </span><span class="nv">$datestamp</span><span class="s2">/"</span><span class="w"> </span><span class="s2">"</span><span class="nv">$markdownfile</span><span class="s2">"</span>
+<span class="w">        </span><span class="k">fi</span>
+<span class="w">    </span><span class="k">fi</span>
 <span class="k">done</span>
-</code></pre>
+</pre></div>
 
 <h3>Git Submodules</h3>
 <p>Since I use Git to manage the blog, but GitHub Pages uses a git repo to represent the finished blog, it's necessary on my local machine to somehow have two repositories - one representing the Wintersmith site in source form, and one representing the GitHub Pages site after it's rendered.</p>
 <p>I do this by treating the <code>build/</code> directory of my Wintersmith site as a Git submodule. Git won't checkout an empty repo, so you need to create a full repo somewhere and then push it to your normal storage (in my case my private server, but it could be somewhere else on GitHub):</p>
-<pre class="code literal-block"><span></span><code>$ mkdir build
-$ <span class="nb">cd</span> build
-$ git init
-$ git remote add origin ssh://will@myserver/~/wrouesnel.github.io~build.git
-$ touch .gitignore
-$ git add *
-$ git commit
-$ git push master
-</code></pre>
+<div class="code"><pre class="code literal-block">$<span class="w"> </span>mkdir<span class="w"> </span>build
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build
+$<span class="w"> </span>git<span class="w"> </span>init
+$<span class="w"> </span>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>ssh://will@myserver/~/wrouesnel.github.io~build.git
+$<span class="w"> </span>touch<span class="w"> </span>.gitignore
+$<span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>*
+$<span class="w"> </span>git<span class="w"> </span>commit
+$<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>master
+</pre></div>
 
 <p>At this point you can delete the build/ directory you just created. It's not needed any more. Then it can be imported as a submodule to the main Wintersmith repo. We also need to add a remote for pushing output to Github:</p>
-<pre class="code literal-block"><span></span><code>$ <span class="nb">cd</span> your_wintersmith_repo
-$ git submodule add ssh://will@myserver/~/wrouesnel.github.io~build.git build
-$ <span class="nb">cd</span> build
-$ git remote add github git@github.com:wrouesnel/wrouesnel.github.io.git
-</code></pre>
+<div class="code"><pre class="code literal-block">$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>your_wintersmith_repo
+$<span class="w"> </span>git<span class="w"> </span>submodule<span class="w"> </span>add<span class="w"> </span>ssh://will@myserver/~/wrouesnel.github.io~build.git<span class="w"> </span>build
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>build
+$<span class="w"> </span>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>github<span class="w"> </span>git@github.com:wrouesnel/wrouesnel.github.io.git
+</pre></div>
 
 <p>And after all that effort your module is imported and ready to participate in the build process.</p>
 <h3>Putting the makefile together</h3>
 <p>The final makefile looks something like this:</p>
-<pre class="code literal-block"><span></span><code><span class="c"># Makefile to deploy the blog</span>
+<div class="code"><pre class="code literal-block"><span class="c"># Makefile to deploy the blog</span>
 
 <span class="c"># Search article markdown for "date" metadata that is unset and set it.</span>
-<span class="nf">date</span><span class="o">:</span> 
-    ./add-date-stamps.bsh
+<span class="nf">date</span><span class="o">:</span><span class="w"> </span>
+<span class="w">    </span>./add-date-stamps.bsh
 
 <span class="c"># Draft's are pushed to my private server</span>
-<span class="nf">draft</span><span class="o">:</span> <span class="n">date</span>
-    wintersmith build
-    <span class="nb">cd</span> build<span class="p">;</span> git add *<span class="p">;</span> git commit -m <span class="s2">"draft"</span> <span class="p">;</span> <span class="se">\</span>
-    git push origin
+<span class="nf">draft</span><span class="o">:</span><span class="w"> </span><span class="n">date</span>
+<span class="w">    </span>wintersmith<span class="w"> </span>build
+<span class="w">    </span><span class="nb">cd</span><span class="w"> </span>build<span class="p">;</span><span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>*<span class="p">;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"draft"</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>git<span class="w"> </span>push<span class="w"> </span>origin
 
 <span class="c"># Publish makes a draft, but then pushes to GitHub.</span>
-<span class="nf">publish</span><span class="o">:</span> <span class="n">draft</span>
-    <span class="nb">cd</span> build<span class="p">;</span> git commit -m <span class="s2">"published to github"</span><span class="p">;</span> <span class="se">\</span>
-    git push github master
+<span class="nf">publish</span><span class="o">:</span><span class="w"> </span><span class="n">draft</span>
+<span class="w">    </span><span class="nb">cd</span><span class="w"> </span>build<span class="p">;</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">"published to github"</span><span class="p">;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>git<span class="w"> </span>push<span class="w"> </span>github<span class="w"> </span>master
 
-<span class="nf">.PHONY</span><span class="o">:</span> <span class="n">date</span> <span class="n">draft</span> <span class="n">publish</span>
-</code></pre>
+<span class="nf">.PHONY</span><span class="o">:</span><span class="w"> </span><span class="n">date</span> <span class="n">draft</span> <span class="n">publish</span>
+</pre></div>
 
 <p>The workflow is that I can call <code>make draft</code> which builds the site and commits the build to my private repo which just tracks draft sites elsewhere, and then <code>make publish</code> for when I want things to go live.</p>
 <p>There are obviously other ways this could work - for example, I could use post-commit hooks on the server to push to Github Pages, but the idea here is that provided I can access the the wintersmith repository, everything else can be rebuilt.</p>
@@ -866,7 +847,6 @@ $ git remote add github git@github.com:wrouesnel/wrouesnel.github.io.git
 <p>At the same time services like <a href="posts/wintersmithing/www.tumblr.com">tumblr</a> never quite seemed <em>for</em> me - it skirts the line between microblogging and blogging and it's relationship with markdown and code didn't gel for me. A deluge of social networking features is also not what I wanted.</p>
 <p>With Github pages offering free static site hosting, I initially looked at Jekyll as an SSG for putting something together. But Jekyll is written in Ruby, and at the moment I'm on a node.js kick so I really wanted something in that direction. Hence Wintersmith - simple, easy to use, and written in something that I'm inclinded to hack-on but with enough features out of the box (code highlighting in particular) to not feel onerous.</p>
 <p>So far I'm really liking the static site model - it's simple, secure and easy to store, manage and keep in a nice neat git repository. Guess I'll see how it goes.</p>
-</div>
     </div>
     </article>
 </div>
@@ -874,7 +854,7 @@ $ git remote add github git@github.com:wrouesnel/wrouesnel.github.io.git
 <li class="previous"><a href="index-2.html" rel="prev">Newer posts</a></li>
         </ul>
 <!--End of body content--><footer id="footer">
-            Contents © 2024         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            Contents © 2025         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
         </footer>
 </div>

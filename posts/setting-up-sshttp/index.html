@@ -78,8 +78,7 @@ bg-dark
         </div>
         
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div>
-<p>When I was travelling Europe I found some surprisingly restricted wi-fi hotspots in hotels. This was annoying because I use SSH to upload photos back home from my phone, but having not setup any tunneling helpers I just had to wait till I found a better one.</p>
+    <p>When I was travelling Europe I found some surprisingly restricted wi-fi hotspots in hotels. This was annoying because I use SSH to upload photos back home from my phone, but having not setup any tunneling helpers I just had to wait till I found a better one.</p>
 <p>There are a number of solutions to SSH tunneling, but the main thing I wanted to do was implement something which would let me run several fallbacks at once. Enter <a href="https://github.com/stealth/sshttp">sshttp</a>.</p>
 <p>sshttp is related to sslh, in the sense that they are both SSH connection multiplexers. The idea is that you point a web-browser at port 80, you get a web-page. You point your SSH client, and you get an SSH connection. Naive firewalls let the SSH traffic through without complaint.</p>
 <p>The benefit of sshttp over sslh is that it uses Linux's <code>IP_TRANSPARENT</code> flag, which means that your SSH and HTTP logs all show proper source IPs, which is great for auditing and security.</p>
@@ -89,114 +88,114 @@ bg-dark
 <p>The idea is that sshttp is my first firewall punching fallback, and then I can install some sneakier options on the web-side of sshttp (topic for a future blog). I also wanted sshttp to be nicely integrated with upstart in case I wanted to add more daemons/redirects in the future.</p>
 <h3>Installing sshttp</h3>
 <p>There's no deb package available, so installation is from github and then I copy it manually to /usr/local/sbin:</p>
-<pre class="code literal-block"><span></span><code>$ git clone https://github.com/stealth/sshttp
-$ <span class="nb">cd</span> sshttp
-$ make
-$ sudo cp sshttpd /usr/local/sbin
-</code></pre>
+<div class="code"><pre class="code literal-block">$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/stealth/sshttp
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>sshttp
+$<span class="w"> </span>make
+$<span class="w"> </span>sudo<span class="w"> </span>cp<span class="w"> </span>sshttpd<span class="w"> </span>/usr/local/sbin
+</pre></div>
 
 <h3>Upstart Script</h3>
 <p>I settled on the following upstart script for sshttp (adapted from my favorite nodeJS launching script):</p>
-<pre class="code literal-block"><span></span><code><span class="c1"># sshttpd launcher</span>
+<div class="code"><pre class="code literal-block"><span class="c1"># sshttpd launcher</span>
 <span class="c1"># note: this at minimum needs an iptables configuration which allows the</span>
 <span class="c1"># outside ports you're requesting through.</span>
 
-description <span class="s2">"sshttpd server upstart script"</span>
-author <span class="s2">"will rouesnel"</span>
+description<span class="w"> </span><span class="s2">"sshttpd server upstart script"</span>
+author<span class="w"> </span><span class="s2">"will rouesnel"</span>
 
-start on <span class="o">(</span>local-filesystems and net-device-up<span class="o">)</span>
-stop on shutdown
+start<span class="w"> </span>on<span class="w"> </span><span class="o">(</span>local-filesystems<span class="w"> </span>and<span class="w"> </span>net-device-up<span class="o">)</span>
+stop<span class="w"> </span>on<span class="w"> </span>shutdown
 
-instance <span class="s2">"sshttpd - </span><span class="nv">$NAME</span><span class="s2">"</span>
-expect daemon
+instance<span class="w"> </span><span class="s2">"sshttpd - </span><span class="nv">$NAME</span><span class="s2">"</span>
+expect<span class="w"> </span>daemon
 
 <span class="c1">#respawn</span>
 <span class="c1">#respawn limit 5 60</span>
 
-pre-start script
-    <span class="c1"># Check script exists</span>
-    <span class="k">if</span> <span class="o">[</span> ! -e /etc/sshttp.d/<span class="nv">$NAME</span>.conf <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-        <span class="k">return</span> <span class="m">1</span>
-    <span class="k">fi</span>
-    . /etc/sshttp.d/<span class="nv">$NAME</span>.conf
+pre-start<span class="w"> </span>script
+<span class="w">    </span><span class="c1"># Check script exists</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-e<span class="w"> </span>/etc/sshttp.d/<span class="nv">$NAME</span>.conf<span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="m">1</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="w">    </span>.<span class="w"> </span>/etc/sshttp.d/<span class="nv">$NAME</span>.conf
 
-    <span class="c1"># Clear up any old rules this instance may have left around from an</span>
-    <span class="c1"># unclean shutdown</span>
-    iptables -t mangle -D OUTPUT -p tcp --sport <span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span> -j sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
-    iptables -t mangle -D OUTPUT -p tcp --sport <span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span> -j sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
-    iptables -t mangle -D PREROUTING -p tcp --sport <span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span> -m socket -j sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
-    iptables -t mangle -D PREROUTING -p tcp --sport <span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span> -m socket -j sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
+<span class="w">    </span><span class="c1"># Clear up any old rules this instance may have left around from an</span>
+<span class="w">    </span><span class="c1"># unclean shutdown</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-D<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span><span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-D<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span><span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-D<span class="w"> </span>PREROUTING<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span><span class="w"> </span>-m<span class="w"> </span>socket<span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-D<span class="w"> </span>PREROUTING<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span><span class="w"> </span>-m<span class="w"> </span>socket<span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
 
-    iptables -t mangle -F sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
-    iptables -X sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-F<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="w">    </span>iptables<span class="w"> </span>-X<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
 
-    <span class="c1"># Add routing rules</span>
-    <span class="k">if</span> ! ip rule show <span class="p">|</span> grep -q <span class="s2">"lookup </span><span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span><span class="s2">"</span><span class="p">;</span> <span class="k">then</span>
-        ip rule add fwmark <span class="si">${</span><span class="nv">MARK</span><span class="si">}</span> lookup <span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span>
-    <span class="k">fi</span>
+<span class="w">    </span><span class="c1"># Add routing rules</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span>!<span class="w"> </span>ip<span class="w"> </span>rule<span class="w"> </span>show<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-q<span class="w"> </span><span class="s2">"lookup </span><span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span><span class="s2">"</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span>ip<span class="w"> </span>rule<span class="w"> </span>add<span class="w"> </span>fwmark<span class="w"> </span><span class="si">${</span><span class="nv">MARK</span><span class="si">}</span><span class="w"> </span>lookup<span class="w"> </span><span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span>
+<span class="w">    </span><span class="k">fi</span>
 
-    <span class="k">if</span> ! ip route show table <span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span> <span class="p">|</span> grep -q <span class="s2">"default"</span><span class="p">;</span> <span class="k">then</span>
-        ip route add <span class="nb">local</span> <span class="m">0</span>.0.0.0/0 dev lo table <span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span>
-    <span class="k">fi</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span>!<span class="w"> </span>ip<span class="w"> </span>route<span class="w"> </span>show<span class="w"> </span>table<span class="w"> </span><span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-q<span class="w"> </span><span class="s2">"default"</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span>ip<span class="w"> </span>route<span class="w"> </span>add<span class="w"> </span><span class="nb">local</span><span class="w"> </span><span class="m">0</span>.0.0.0/0<span class="w"> </span>dev<span class="w"> </span>lo<span class="w"> </span>table<span class="w"> </span><span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span>
+<span class="w">    </span><span class="k">fi</span>
 
-    <span class="c1"># Add iptables mangle rule chain for this instance</span>
-    iptables -t mangle -N sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
-    iptables -t mangle -A sshttpd-<span class="nv">$NAME</span> -j MARK --set-mark <span class="si">${</span><span class="nv">MARK</span><span class="si">}</span>
-    iptables -t mangle -A sshttpd-<span class="nv">$NAME</span> -j ACCEPT
+<span class="w">    </span><span class="c1"># Add iptables mangle rule chain for this instance</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-N<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-A<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span>-j<span class="w"> </span>MARK<span class="w"> </span>--set-mark<span class="w"> </span><span class="si">${</span><span class="nv">MARK</span><span class="si">}</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-A<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span>-j<span class="w"> </span>ACCEPT
 
-    <span class="c1"># Add the output and prerouting rules</span>
-    iptables -t mangle -A OUTPUT -p tcp --sport <span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span> -j sshttpd-<span class="nv">$NAME</span>
-    iptables -t mangle -A OUTPUT -p tcp --sport <span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span> -j sshttpd-<span class="nv">$NAME</span>
-    iptables -t mangle -A PREROUTING -p tcp --sport <span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span> -m socket -j sshttpd-<span class="nv">$NAME</span>
-    iptables -t mangle -A PREROUTING -p tcp --sport <span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span> -m socket -j sshttpd-<span class="nv">$NAME</span>
-end script
+<span class="w">    </span><span class="c1"># Add the output and prerouting rules</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-A<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span><span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-A<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span><span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-A<span class="w"> </span>PREROUTING<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span><span class="w"> </span>-m<span class="w"> </span>socket<span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-A<span class="w"> </span>PREROUTING<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span><span class="w"> </span>-m<span class="w"> </span>socket<span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span>
+end<span class="w"> </span>script
 
 <span class="c1"># the daemon</span>
 script
-    . /etc/sshttp.d/<span class="nv">$NAME</span>.conf
+<span class="w">    </span>.<span class="w"> </span>/etc/sshttp.d/<span class="nv">$NAME</span>.conf
 
-    /usr/local/sbin/sshttpd -n <span class="m">1</span> -S <span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span> -H <span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span> -L<span class="si">${</span><span class="nv">LISTEN_PORT</span><span class="si">}</span> -U nobody -R /var/empty &gt;&gt; <span class="si">${</span><span class="nv">LOG_PATH</span><span class="si">}</span> <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
-end script
+<span class="w">    </span>/usr/local/sbin/sshttpd<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span>-S<span class="w"> </span><span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span><span class="w"> </span>-H<span class="w"> </span><span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span><span class="w"> </span>-L<span class="si">${</span><span class="nv">LISTEN_PORT</span><span class="si">}</span><span class="w"> </span>-U<span class="w"> </span>nobody<span class="w"> </span>-R<span class="w"> </span>/var/empty<span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="si">${</span><span class="nv">LOG_PATH</span><span class="si">}</span><span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+end<span class="w"> </span>script
 
-post-stop script
-    . /etc/sshttp.d/<span class="nv">$NAME</span>.conf
+post-stop<span class="w"> </span>script
+<span class="w">    </span>.<span class="w"> </span>/etc/sshttp.d/<span class="nv">$NAME</span>.conf
 
-    <span class="c1"># Try and leave a clean environment</span>
-    iptables -t mangle -D OUTPUT -p tcp --sport <span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span> -j sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
-    iptables -t mangle -D OUTPUT -p tcp --sport <span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span> -j sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
-    iptables -t mangle -D PREROUTING -p tcp --sport <span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span> -m socket -j sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
-    iptables -t mangle -D PREROUTING -p tcp --sport <span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span> -m socket -j sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
+<span class="w">    </span><span class="c1"># Try and leave a clean environment</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-D<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span><span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-D<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span><span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-D<span class="w"> </span>PREROUTING<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">SSH_PORT</span><span class="si">}</span><span class="w"> </span>-m<span class="w"> </span>socket<span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-D<span class="w"> </span>PREROUTING<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--sport<span class="w"> </span><span class="si">${</span><span class="nv">HTTP_PORT</span><span class="si">}</span><span class="w"> </span>-m<span class="w"> </span>socket<span class="w"> </span>-j<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
 
-    iptables -t mangle -F sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
-    iptables -X sshttpd-<span class="nv">$NAME</span> <span class="o">||</span> <span class="nb">true</span>
+<span class="w">    </span>iptables<span class="w"> </span>-t<span class="w"> </span>mangle<span class="w"> </span>-F<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+<span class="w">    </span>iptables<span class="w"> </span>-X<span class="w"> </span>sshttpd-<span class="nv">$NAME</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
 
-    <span class="c1"># Remove routing rules</span>
-    <span class="k">if</span> ip rule show <span class="p">|</span> grep -q <span class="s2">"lookup </span><span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span><span class="s2">"</span><span class="p">;</span> <span class="k">then</span>
-        ip rule del fwmark <span class="si">${</span><span class="nv">MARK</span><span class="si">}</span> lookup <span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span>
-    <span class="k">fi</span>
-    <span class="k">if</span> ip route show table <span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span> <span class="p">|</span> grep -q <span class="s2">"default"</span><span class="p">;</span> <span class="k">then</span>
-        ip route del <span class="nb">local</span> <span class="m">0</span>.0.0.0/0 dev lo table <span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span>
-    <span class="k">fi</span>
+<span class="w">    </span><span class="c1"># Remove routing rules</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span>ip<span class="w"> </span>rule<span class="w"> </span>show<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-q<span class="w"> </span><span class="s2">"lookup </span><span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span><span class="s2">"</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span>ip<span class="w"> </span>rule<span class="w"> </span>del<span class="w"> </span>fwmark<span class="w"> </span><span class="si">${</span><span class="nv">MARK</span><span class="si">}</span><span class="w"> </span>lookup<span class="w"> </span><span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span>ip<span class="w"> </span>route<span class="w"> </span>show<span class="w"> </span>table<span class="w"> </span><span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-q<span class="w"> </span><span class="s2">"default"</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span>ip<span class="w"> </span>route<span class="w"> </span>del<span class="w"> </span><span class="nb">local</span><span class="w"> </span><span class="m">0</span>.0.0.0/0<span class="w"> </span>dev<span class="w"> </span>lo<span class="w"> </span>table<span class="w"> </span><span class="si">${</span><span class="nv">TABLE</span><span class="si">}</span>
+<span class="w">    </span><span class="k">fi</span>
 
-    <span class="c1"># Let sysadmin know we went down for some reason.</span>
-    cat <span class="si">${</span><span class="nv">LOG_PATH</span><span class="si">}</span> <span class="p">|</span> mail -s <span class="s2">"sshttpd - </span><span class="nv">$NAME</span><span class="s2"> process killed."</span> root
-end script
-</code></pre>
+<span class="w">    </span><span class="c1"># Let sysadmin know we went down for some reason.</span>
+<span class="w">    </span>cat<span class="w"> </span><span class="si">${</span><span class="nv">LOG_PATH</span><span class="si">}</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>mail<span class="w"> </span>-s<span class="w"> </span><span class="s2">"sshttpd - </span><span class="nv">$NAME</span><span class="s2"> process killed."</span><span class="w"> </span>root
+end<span class="w"> </span>script
+</pre></div>
 
 <p>This script nicely sets up and tears down the bits of iptables mangling and routing infrastructure needed for sshttp, and neatly creates chains for different sshttp instances based on configuration files. It'll only launch a single instance, so launching them all on boot is handled by this <a href="https://gist.github.com/wrouesnel/6341544">upstart script</a>.</p>
 <p>To use this script, you need an /etc/sshttp.d directory:</p>
-<pre class="code literal-block"><span></span><code>$ sudo mkdir /etc/sshttp.d
-</code></pre>
+<div class="code"><pre class="code literal-block">$<span class="w"> </span>sudo<span class="w"> </span>mkdir<span class="w"> </span>/etc/sshttp.d
+</pre></div>
 
 <p>and a configuration file like the following, with a <code>*.conf</code> extension:</p>
-<pre class="code literal-block"><span></span><code>$ cat /etc/sshttp.d/http.conf
+<div class="code"><pre class="code literal-block">$<span class="w"> </span>cat<span class="w"> </span>/etc/sshttp.d/http.conf
 <span class="nv">SSH_PORT</span><span class="o">=</span><span class="m">22022</span>
 <span class="nv">HTTP_PORT</span><span class="o">=</span><span class="m">20080</span>
 <span class="nv">LISTEN_PORT</span><span class="o">=</span><span class="m">20081</span>
 <span class="nv">MARK</span><span class="o">=</span><span class="m">1</span>
 <span class="nv">TABLE</span><span class="o">=</span><span class="m">22080</span>
 <span class="nv">LOG_PATH</span><span class="o">=</span>/var/log/sshttp.log
-</code></pre>
+</pre></div>
 
 <p><code>LISTEN_PORT</code> is your sshttp port. It's 20081 because we're going to use iptables to forward port 80 to 20081 (to accomodate nginx - more on this later). <code>SSH_PORT</code> is an extra SSH port for openssh - so we have both 22 and 22022 open as SSH ports since 22022 can't be publically accessible (and we'd like 22 to be publically accessible).</p>
 <p><code>HTTP_PORT</code> is the port your web-server is listening on, for the same reasons as the <code>SSH_PORT</code>. <code>MARK</code> is the connection marker the daemon looks for - it has to be unique for each one. <code>TABLE</code> is the route table used for look ups - I think. This value can be anything - I think.</p>
@@ -207,15 +206,14 @@ end script
 <p>This means I can happily keep setting up private internal servers on port 80 on my server withou futzing around with bind IPs, and instead can put anything I want to serve externally onto port 20080 as per the configuration file above.</p>
 <p>I like <a href="http://www.fwbuilder.org/">Firewall Builder</a> at the moment for my configuration (although I'm thinking a shell script might be better practice in future).</p>
 <p>The relevant IP tables lines if you were doing it manually would be something like</p>
-<pre class="code literal-block"><span></span><code>iptables -t nat -A PREROUTING -i ppp0 -p tcp -m tcp -d &lt;your external ip&gt; --dport <span class="m">80</span> -j REDIRECT --to-ports <span class="m">20081</span>
-</code></pre>
+<div class="code"><pre class="code literal-block">iptables<span class="w"> </span>-t<span class="w"> </span>nat<span class="w"> </span>-A<span class="w"> </span>PREROUTING<span class="w"> </span>-i<span class="w"> </span>ppp0<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>-m<span class="w"> </span>tcp<span class="w"> </span>-d<span class="w"> </span>&lt;your<span class="w"> </span>external<span class="w"> </span>ip&gt;<span class="w"> </span>--dport<span class="w"> </span><span class="m">80</span><span class="w"> </span>-j<span class="w"> </span>REDIRECT<span class="w"> </span>--to-ports<span class="w"> </span><span class="m">20081</span>
+</pre></div>
 
 <p>Configuring iptables like this is covered fantastically elsewhere so I won't go into it here.</p>
 <p>But with this redirect, externally port 80 now goes to sshttp, which then redirects it to either SSH or to the specific external application I want to serve over HTTP on port 20080.</p>
 <h3>Conclusion</h3>
 <p>At the moment with this setup I just have nginx serving 404s back on my sshttp server ports. But the real benefit is, I can turn those into secure proxy's to use with something like <a href="http://pwet.fr/man/linux/commandes/corkscrew">corkscrew</a> or <a href="http://proxytunnel.sourceforge.net/">proxytunnel</a>.</p>
 <p>Or I can go further - use <a href="http://www.nocrew.org/software/httptunnel.html">httptunnel</a> to tunnel TCP over GET and POST connections (my actual intent) on the public facing HTTP ports. Or do both - each method has it's trade-offs, so we can just step down till we find one which works!</p>
-</div>
     </div>
     <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
 <li><a class="tag p-category" href="../../categories/ssh-tunneling/" rel="tag">ssh tunneling</a></li>
@@ -230,7 +228,7 @@ end script
                 <a href="../getmail-idle-client/" rel="next" title="A GetMail IDLE daemon script">Next post</a>
             </li>
         </ul></nav></aside></article><!--End of body content--><footer id="footer">
-            Contents © 2024         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            Contents © 2025         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
         </footer>
 </div>

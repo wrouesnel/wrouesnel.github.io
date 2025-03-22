@@ -28,7 +28,7 @@ Pretty common right? What can go wrong?
 What about this:
 curl -L https://our-new-thing.xyz/install ">
 <meta property="og:type" content="article">
-<meta property="article:published_time" content="2022-03-26T03:30:06+11:00">
+<meta property="article:published_time" content="2022-03-26T14:30:06+11:00">
 <meta property="article:tag" content="bubblewrap">
 <meta property="article:tag" content="containers">
 <meta property="article:tag" content="security">
@@ -80,14 +80,13 @@ bg-dark
             </span></p>
             <p class="dateline">
             <a href="." rel="bookmark">
-            <time class="published dt-published" datetime="2022-03-26T03:30:06+11:00" itemprop="datePublished" title="2022-03-26 03:30">2022-03-26 03:30</time></a>
+            <time class="published dt-published" datetime="2022-03-26T14:30:06+11:00" itemprop="datePublished" title="2022-03-26 14:30">2022-03-26 14:30</time></a>
             </p>
             
         </div>
         
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div>
-<div class="cell border-box-sizing text_cell rendered">
+    <div class="cell border-box-sizing text_cell rendered" id="cell-id=c70dea2c-5723-4e43-8bc3-842f96961405">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -95,22 +94,21 @@ bg-dark
 <h2 id="Situation">Situation<a class="anchor-link" href="#Situation">¶</a>
 </h2>
 <p>You do this:</p>
-<div class="highlight"><pre><span></span>$ git clone https://some.site/git/some.repo.git
-$ <span class="nb">cd</span> some.repo
-$ npm install
+<div class="highlight"><pre><span></span>$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://some.site/git/some.repo.git
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>some.repo
+$<span class="w"> </span>npm<span class="w"> </span>install
 </pre></div>
 <p>Pretty common right? What can go wrong?</p>
 <p>What about this:</p>
-<div class="highlight"><pre><span></span>curl -L https://our-new-thing.xyz/install <span class="p">|</span> bash
+<div class="highlight"><pre><span></span>curl<span class="w"> </span>-L<span class="w"> </span>https://our-new-thing.xyz/install<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash
 </pre></div>
 <p>This looks a little unsafe. Who would recommend it? Well it's still <a href="https://phoenixnap.com/kb/install-pip-mac">one of the ways to install pip</a> in unfamiliar environments. Or <a href="https://doc.rust-lang.org/cargo/getting-started/installation.html">Rust</a>.</p>
 <p>Now installing from these places is safe: why? Because they're trusted. There's huge reputational defense going on. But the reality is that for a lot of tools - npm being a big offender, pip too - there's all sorts of ways that while <code>sudo</code> and user permissions will protect your system from going down, your data - <code>$HOME</code> and the like - basically all the <em>important</em> things on your system - are exposed.</p>
 <p>This is key: you are <em>always</em> running as "superuser" of your data. In fact your entire operating environment - <code>systemctl --user</code> provides a very useful and complete way to schedule tasks and persistent daemons for your entire user session. There's a lot of power and persistence there.</p>
-
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=c3380a4f-25fa-4099-9914-5e5d0ffc6633">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -119,11 +117,10 @@ $ npm install
 </h2>
 <p>There's two competing demands here: it's pretty easy to build isolated environments when you feel like you're under attac, but it takes time - time you don't really want to commit to the problem. It's inconvenient - which is basically the currency we trade when it comes to security.</p>
 <p>But the convenience&lt;-&gt;security exchange rate is <em>not</em> fixed. It has a floor price, but if we can build more convenient tools, then we can protect ourselves against some threats for almost no cost.</p>
-
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=d8a30810">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -132,11 +129,10 @@ $ npm install
 </h2>
 <p>What we want to do is find a safe way to do something like <code>npm install</code> and not be damaged by anything which might get run by it. For our purposes, damage is data destruction or corruption beyond a sensible scope.</p>
 <p>We also want this to light weight: this should be a momentary "that looks unsafe" sort of intervention, not "let me plan out by secure dev environment".</p>
-
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=c8b55d83">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -152,73 +148,72 @@ $ npm install
 <span class="c1"># See: https://stackoverflow.com/questions/59895/how-to-get-the-source-directory-of-a-bash-script-from-within-the-script-itself</span>
 <span class="c1"># Note: you can't refactor this out: its at the top of every script so the scripts can find their includes.</span>
 <span class="nv">SOURCE</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">BASH_SOURCE</span><span class="p">[0]</span><span class="si">}</span><span class="s2">"</span>
-<span class="k">while</span> <span class="o">[</span> -h <span class="s2">"</span><span class="nv">$SOURCE</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">do</span> <span class="c1"># resolve $SOURCE until the file is no longer a symlink</span>
-  <span class="nv">DIR</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span> <span class="nb">cd</span> -P <span class="s2">"</span><span class="k">$(</span> dirname <span class="s2">"</span><span class="nv">$SOURCE</span><span class="s2">"</span> <span class="k">)</span><span class="s2">"</span> &gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="nb">pwd</span> <span class="k">)</span><span class="s2">"</span>
-  <span class="nv">SOURCE</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>readlink <span class="s2">"</span><span class="nv">$SOURCE</span><span class="s2">"</span><span class="k">)</span><span class="s2">"</span>
-  <span class="o">[[</span> <span class="nv">$SOURCE</span> !<span class="o">=</span> /* <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="nv">SOURCE</span><span class="o">=</span><span class="s2">"</span><span class="nv">$DIR</span><span class="s2">/</span><span class="nv">$SOURCE</span><span class="s2">"</span> <span class="c1"># if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located</span>
+<span class="k">while</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-h<span class="w"> </span><span class="s2">"</span><span class="nv">$SOURCE</span><span class="s2">"</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="c1"># resolve $SOURCE until the file is no longer a symlink</span>
+<span class="w">  </span><span class="nv">DIR</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>-P<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="w"> </span>dirname<span class="w"> </span><span class="s2">"</span><span class="nv">$SOURCE</span><span class="s2">"</span><span class="w"> </span><span class="k">)</span><span class="s2">"</span><span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">pwd</span><span class="w"> </span><span class="k">)</span><span class="s2">"</span>
+<span class="w">  </span><span class="nv">SOURCE</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>readlink<span class="w"> </span><span class="s2">"</span><span class="nv">$SOURCE</span><span class="s2">"</span><span class="k">)</span><span class="s2">"</span>
+<span class="w">  </span><span class="o">[[</span><span class="w"> </span><span class="nv">$SOURCE</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span>/*<span class="w"> </span><span class="o">]]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nv">SOURCE</span><span class="o">=</span><span class="s2">"</span><span class="nv">$DIR</span><span class="s2">/</span><span class="nv">$SOURCE</span><span class="s2">"</span><span class="w"> </span><span class="c1"># if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located</span>
 <span class="k">done</span>
-<span class="nv">SCRIPT_DIR</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span> <span class="nb">cd</span> -P <span class="s2">"</span><span class="k">$(</span> dirname <span class="s2">"</span><span class="nv">$SOURCE</span><span class="s2">"</span> <span class="k">)</span><span class="s2">"</span> &gt;/dev/null <span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="nb">pwd</span> <span class="k">)</span><span class="s2">"</span>
+<span class="nv">SCRIPT_DIR</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>-P<span class="w"> </span><span class="s2">"</span><span class="k">$(</span><span class="w"> </span>dirname<span class="w"> </span><span class="s2">"</span><span class="nv">$SOURCE</span><span class="s2">"</span><span class="w"> </span><span class="k">)</span><span class="s2">"</span><span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">pwd</span><span class="w"> </span><span class="k">)</span><span class="s2">"</span>
 
-<span class="k">function</span> log<span class="o">()</span> <span class="o">{</span>
-  <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$*</span><span class="s2">"</span> <span class="m">1</span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+<span class="k">function</span><span class="w"> </span>log<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"</span><span class="nv">$*</span><span class="s2">"</span><span class="w"> </span><span class="m">1</span>&gt;<span class="p">&amp;</span><span class="m">2</span>
 <span class="o">}</span>
 
-<span class="k">function</span> fatal<span class="o">()</span> <span class="o">{</span>
-  <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$*</span><span class="s2">"</span> <span class="m">1</span>&gt;<span class="p">&amp;</span><span class="m">2</span>
-  <span class="nb">exit</span> <span class="m">1</span>
+<span class="k">function</span><span class="w"> </span>fatal<span class="o">()</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"</span><span class="nv">$*</span><span class="s2">"</span><span class="w"> </span><span class="m">1</span>&gt;<span class="p">&amp;</span><span class="m">2</span>
+<span class="w">  </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
 <span class="o">}</span>
 
 <span class="nv">start_dir</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">"</span>
 
-<span class="nv">bwrap</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span><span class="nb">command</span> -v bwrap<span class="k">)</span><span class="s2">"</span>
-<span class="k">if</span> <span class="o">[</span> ! -x <span class="s2">"</span><span class="nv">$bwrap</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-    fatal <span class="s2">"bubblewrap is not installed. Try running: apt install bubblewrap"</span>
+<span class="nv">bwrap</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span><span class="nb">command</span><span class="w"> </span>-v<span class="w"> </span>bwrap<span class="k">)</span><span class="s2">"</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-x<span class="w"> </span><span class="s2">"</span><span class="nv">$bwrap</span><span class="s2">"</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span>fatal<span class="w"> </span><span class="s2">"bubblewrap is not installed. Try running: apt install bubblewrap"</span>
 <span class="k">fi</span>
 
-<span class="nb">export</span> <span class="nv">PS_TAG</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>tput setaf <span class="m">14</span><span class="k">)</span><span class="s2">[safe]</span><span class="k">$(</span>tput sgr0<span class="k">)</span><span class="s2"> "</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">PS_TAG</span><span class="o">=</span><span class="s2">"</span><span class="k">$(</span>tput<span class="w"> </span>setaf<span class="w"> </span><span class="m">14</span><span class="k">)</span><span class="s2">[safe]</span><span class="k">$(</span>tput<span class="w"> </span>sgr0<span class="k">)</span><span class="s2"> "</span>
 
-<span class="nb">exec</span> <span class="s2">"</span><span class="nv">$bwrap</span><span class="s2">"</span> <span class="se">\</span>
-    --die-with-parent <span class="se">\</span>
-    --tmpfs / <span class="se">\</span>
-    --dev /dev <span class="se">\</span>
-    --proc /proc <span class="se">\</span>
-    --tmpfs /run <span class="se">\</span>
-    --mqueue /dev/mqueue <span class="se">\</span>
-    --dir /tmp <span class="se">\</span>
-    --unshare-all <span class="se">\</span>
-    --share-net <span class="se">\</span>
-    --ro-bind /bin /bin <span class="se">\</span>
-    --ro-bind /etc /etc <span class="se">\</span>
-    --ro-bind /run/resolvconf/resolv.conf /run/resolvconf/resolv.conf <span class="se">\</span>
-    --ro-bind /lib /lib <span class="se">\</span>
-    --ro-bind /lib32 /lib32 <span class="se">\</span>
-    --ro-bind /libx32 /libx32 <span class="se">\</span>
-    --ro-bind /lib64 /lib64 <span class="se">\</span>
-    --ro-bind /opt /opt <span class="se">\</span>
-    --ro-bind /sbin /sbin <span class="se">\</span>
-    --ro-bind /srv /srv <span class="se">\</span>
-    --ro-bind /sys /sys <span class="se">\</span>
-    --ro-bind /usr /usr <span class="se">\</span>
-    --ro-bind /var /var <span class="se">\</span>
-    --ro-bind /home /home <span class="se">\</span>
-    --bind <span class="s2">"</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="s2">/.npm"</span> <span class="s2">"</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="s2">/.npm"</span> <span class="se">\</span>
-    --bind <span class="s2">"</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="s2">/.cache"</span> <span class="s2">"</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="s2">/.cache"</span> <span class="se">\</span>
-    --bind <span class="s2">"</span><span class="si">${</span><span class="nv">start_dir</span><span class="si">}</span><span class="s2">"</span> <span class="s2">"</span><span class="si">${</span><span class="nv">start_dir</span><span class="si">}</span><span class="s2">"</span> <span class="se">\</span>
-    -- <span class="se">\</span>
-    <span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
+<span class="nb">exec</span><span class="w"> </span><span class="s2">"</span><span class="nv">$bwrap</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--die-with-parent<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tmpfs<span class="w"> </span>/<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--dev<span class="w"> </span>/dev<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--proc<span class="w"> </span>/proc<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tmpfs<span class="w"> </span>/run<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--mqueue<span class="w"> </span>/dev/mqueue<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--dir<span class="w"> </span>/tmp<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--unshare-all<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--share-net<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--ro-bind<span class="w"> </span>/bin<span class="w"> </span>/bin<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--ro-bind<span class="w"> </span>/etc<span class="w"> </span>/etc<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--ro-bind<span class="w"> </span>/run/resolvconf/resolv.conf<span class="w"> </span>/run/resolvconf/resolv.conf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--ro-bind<span class="w"> </span>/lib<span class="w"> </span>/lib<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--ro-bind<span class="w"> </span>/lib32<span class="w"> </span>/lib32<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--ro-bind<span class="w"> </span>/libx32<span class="w"> </span>/libx32<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--ro-bind<span class="w"> </span>/lib64<span class="w"> </span>/lib64<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--ro-bind<span class="w"> </span>/opt<span class="w"> </span>/opt<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--ro-bind<span class="w"> </span>/sbin<span class="w"> </span>/sbin<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--ro-bind<span class="w"> </span>/srv<span class="w"> </span>/srv<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--ro-bind<span class="w"> </span>/sys<span class="w"> </span>/sys<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--ro-bind<span class="w"> </span>/usr<span class="w"> </span>/usr<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--ro-bind<span class="w"> </span>/var<span class="w"> </span>/var<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--ro-bind<span class="w"> </span>/home<span class="w"> </span>/home<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--bind<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="s2">/.npm"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="s2">/.npm"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--bind<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="s2">/.cache"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span><span class="s2">/.cache"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--bind<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">start_dir</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">start_dir</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="s2">"</span><span class="nv">$@</span><span class="s2">"</span>
 </pre></div>
 <p>In addition to this script, I also have this in my <code>.bashrc</code> file to get nice shell prompts if I spawn a shell with it:</p>
-<div class="highlight"><pre><span></span><span class="k">if</span> <span class="o">[</span> ! -z <span class="s2">"</span><span class="nv">$PS_TAG</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-  <span class="nb">export</span> <span class="nv">PS1</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">PS_TAG</span><span class="si">}${</span><span class="nv">PS1</span><span class="si">}</span><span class="s2">"</span>
+<div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-z<span class="w"> </span><span class="s2">"</span><span class="nv">$PS_TAG</span><span class="s2">"</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">PS1</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">PS_TAG</span><span class="si">}${</span><span class="nv">PS1</span><span class="si">}</span><span class="s2">"</span>
 <span class="k">fi</span>
 </pre></div>
 <p>The basic structure of this invocation is that the resultant container has networking, and my full operating environment in it...just not write access to any files beyond the current user directory.</p>
 <p>This is a handy safety feature for reasons beyond a malicious NPM package - I've known more then one colleague to wipe out their home directory writing <code>make clean</code> directives.</p>
-
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=79c284c1">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -227,14 +222,13 @@ $ npm install
 </h3>
 <p>Usage could not be simpler. With the script in my <code>PATH</code> under the name <code>saferun</code>, I can isolate any command or script I'm about to run to only be able to write to the current directory with: <code>saferun ./some-shady-command</code></p>
 <p>I can also launch a protected session with <code>saferun bash</code> which gives me a prompt like:</p>
-
-<pre><code>[safe] $</code></pre>
+<pre><code>[safe] $ 
+</code></pre>
 <p>This is about as low overhead as I can imagine for providing basic filesystem protection.</p>
-
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=3ab5aaaa">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -243,8 +237,6 @@ $ npm install
 </h2>
 <p>This is not bullet-proof armor. And it certainly won't keep nosy code from poking around the rest of the filesystem. Are you 100% confident you never saved an important password to some file? I'm not. But I do normally work with a lot auxillary commands and functions around my home directory, and I like them being mostly available when doing risky things. This strikes a good balance - at the very least it limits the damage scope of running some random script you downloaded from causing real nuisance.</p>
 <p>I recommend checking out bubblewrap's full set of features to figure out what it can really do, but for something I knocked up by reading for a few hours this added a handy tool to my repository for me.</p>
-
-</div>
 </div>
 </div>
 </div>
@@ -275,7 +267,7 @@ MathJax.Hub.Config({
     }
 });
 </script></article><!--End of body content--><footer id="footer">
-            Contents © 2024         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            Contents © 2025         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
         </footer>
 </div>

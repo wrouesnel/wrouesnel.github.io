@@ -78,8 +78,7 @@ bg-dark
         </div>
         
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div>
-<p>So I just lost about 16 hours to this, and I haven't even been able to
+    <p>So I just lost about 16 hours to this, and I haven't even been able to
 evaluate whether it'll work for me. On the one hand I suppose I could've not
 secured anything, but personally I feel you want to know what the production
 configuration looks like before you evaluate (and in my case, I like to default
@@ -102,14 +101,14 @@ initialize the cluster - but none of the nodes will connect to each other.</p>
 <h2>The Solution</h2>
 <p>So there you have it - with <code>makecerts</code> the line I needed for the test docker-compose
 file was:</p>
-<pre class="code literal-block"><span></span><code>makecerts --O<span class="o">=</span>cockroach --CN<span class="o">=</span>generated <span class="se">\</span>
-    <span class="nv">172_20_0_1</span><span class="o">=</span>node,172.20.0.1,localhost,127.0.0.1 <span class="se">\</span>
-    <span class="nv">172_20_0_2</span><span class="o">=</span>node,172.20.0.2,localhost,127.0.0.1 <span class="se">\</span>
-    <span class="nv">172_20_0_3</span><span class="o">=</span>node,172.20.0.3,localhost,127.0.0.1 <span class="se">\</span>
-    <span class="nv">172_20_0_4</span><span class="o">=</span>node,172.20.0.4,localhost,127.0.0.1 <span class="se">\</span>
-    <span class="nv">172_20_0_5</span><span class="o">=</span>node,172.20.0.5,localhost,127.0.0.1 <span class="se">\</span>
-    root
-</code></pre>
+<div class="code"><pre class="code literal-block">makecerts<span class="w"> </span>--O<span class="o">=</span>cockroach<span class="w"> </span>--CN<span class="o">=</span>generated<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="nv">172_20_0_1</span><span class="o">=</span>node,172.20.0.1,localhost,127.0.0.1<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="nv">172_20_0_2</span><span class="o">=</span>node,172.20.0.2,localhost,127.0.0.1<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="nv">172_20_0_3</span><span class="o">=</span>node,172.20.0.3,localhost,127.0.0.1<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="nv">172_20_0_4</span><span class="o">=</span>node,172.20.0.4,localhost,127.0.0.1<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="nv">172_20_0_5</span><span class="o">=</span>node,172.20.0.5,localhost,127.0.0.1<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>root
+</pre></div>
 
 <p>Note on how this works: this command above is saying "generate 
 172_20_0_1.crt and 172_20_0_1.pem for the certificate and key respectively,
@@ -118,98 +117,98 @@ all common-separated values."</p>
 <p>Since <code>makecerts</code> is simple minded it also just signs the cert for all 
 use-cases - it's very much a testing tool.</p>
 <p>The final docker-compose I used to get this started was:</p>
-<pre class="code literal-block"><span></span><code><span class="nt">version</span><span class="p">:</span> <span class="s">'2'</span>
+<div class="code"><pre class="code literal-block"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">'2'</span>
 
 <span class="nt">networks</span><span class="p">:</span>
-  <span class="nt">roachnet</span><span class="p">:</span>
-    <span class="nt">driver</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bridge</span>
-    <span class="nt">ipam</span><span class="p">:</span>
-      <span class="nt">driver</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">default</span>
-      <span class="nt">config</span><span class="p">:</span>
-      <span class="p p-Indicator">-</span> <span class="nt">subnet</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.20.0.0/24</span>
-        <span class="nt">gateway</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.20.0.254</span>
+<span class="w">  </span><span class="nt">roachnet</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bridge</span>
+<span class="w">    </span><span class="nt">ipam</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="w">      </span><span class="nt">config</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">subnet</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">172.20.0.0/24</span>
+<span class="w">        </span><span class="nt">gateway</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">172.20.0.254</span>
 
 <span class="nt">services</span><span class="p">:</span>
-  <span class="nt">roach1</span><span class="p">:</span>
-    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
-    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.1 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
-    <span class="nt">volumes</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./roach1:/cockroach/cockroach-data</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_1.crt:/certs/node.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_1.pem:/certs/node.key</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
-    <span class="nt">networks</span><span class="p">:</span>
-      <span class="nt">roachnet</span><span class="p">:</span>
-        <span class="nt">ipv4_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.20.0.1</span>
+<span class="w">  </span><span class="nt">roach1</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.1 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./roach1:/cockroach/cockroach-data</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./172_20_0_1.crt:/certs/node.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./172_20_0_1.pem:/certs/node.key</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">roachnet</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">ipv4_address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">172.20.0.1</span>
 
-  <span class="nt">roach2</span><span class="p">:</span>
-    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
-    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.2 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
-    <span class="nt">volumes</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./roach2:/cockroach/cockroach-data</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_2.crt:/certs/node.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_2.pem:/certs/node.key</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
-    <span class="nt">networks</span><span class="p">:</span>
-      <span class="nt">roachnet</span><span class="p">:</span>
-        <span class="nt">ipv4_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.20.0.2</span>
+<span class="w">  </span><span class="nt">roach2</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.2 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./roach2:/cockroach/cockroach-data</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./172_20_0_2.crt:/certs/node.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./172_20_0_2.pem:/certs/node.key</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">roachnet</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">ipv4_address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">172.20.0.2</span>
 
-  <span class="nt">roach3</span><span class="p">:</span>
-    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
-    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.3 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
-    <span class="nt">volumes</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./roach3:/cockroach/cockroach-data</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_3.crt:/certs/node.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_3.pem:/certs/node.key</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
-    <span class="nt">networks</span><span class="p">:</span>
-      <span class="nt">roachnet</span><span class="p">:</span>
-        <span class="nt">ipv4_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.20.0.3</span>
+<span class="w">  </span><span class="nt">roach3</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.3 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./roach3:/cockroach/cockroach-data</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./172_20_0_3.crt:/certs/node.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./172_20_0_3.pem:/certs/node.key</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">roachnet</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">ipv4_address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">172.20.0.3</span>
 
-  <span class="nt">roach4</span><span class="p">:</span>
-    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
-    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.4 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
-    <span class="nt">volumes</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./roach4:/cockroach/cockroach-data</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_4.crt:/certs/node.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_4.pem:/certs/node.key</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
-    <span class="nt">networks</span><span class="p">:</span>
-      <span class="nt">roachnet</span><span class="p">:</span>
-        <span class="nt">ipv4_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.20.0.4</span>
+<span class="w">  </span><span class="nt">roach4</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.4 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./roach4:/cockroach/cockroach-data</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./172_20_0_4.crt:/certs/node.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./172_20_0_4.pem:/certs/node.key</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">roachnet</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">ipv4_address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">172.20.0.4</span>
 
-  <span class="nt">roach5</span><span class="p">:</span>
-    <span class="nt">image</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
-    <span class="nt">command</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.5 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
-    <span class="nt">volumes</span><span class="p">:</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./roach5:/cockroach/cockroach-data</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_5.crt:/certs/node.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./172_20_0_5.pem:/certs/node.key</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
-    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
-    <span class="nt">networks</span><span class="p">:</span>
-      <span class="nt">roachnet</span><span class="p">:</span>
-        <span class="nt">ipv4_address</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">172.20.0.5</span>
-</code></pre>
+<span class="w">  </span><span class="nt">roach5</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cockroachdb/cockroach:v2.0.1</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">start --host=172.20.0.5 --logtostderr=INFO --certs-dir=/certs --join=172.20.0.1,172.20.0.2,172.20.0.3,172.20.0.4,172.20.0.5</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./roach5:/cockroach/cockroach-data</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./172_20_0_5.crt:/certs/node.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./172_20_0_5.pem:/certs/node.key</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./root.crt:/certs/client.root.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./root.pem:/certs/client.root.key</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./generated.crt:/certs/ca.crt</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./generated.crt:/usr/local/share/ca-certificates/ca.crt</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">roachnet</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">ipv4_address</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">172.20.0.5</span>
+</pre></div>
 
 <p>and you need to run a once-off init phase to start the cluster:</p>
-<pre class="code literal-block"><span></span><code><span class="ch">#!/bin/bash</span>
-docker-compose <span class="nb">exec</span> roach1 ./cockroach init --certs-dir<span class="o">=</span>/certs/ --host<span class="o">=</span><span class="m">172</span>.20.0.1
-</code></pre>
+<div class="code"><pre class="code literal-block"><span class="ch">#!/bin/bash</span>
+docker-compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>roach1<span class="w"> </span>./cockroach<span class="w"> </span>init<span class="w"> </span>--certs-dir<span class="o">=</span>/certs/<span class="w"> </span>--host<span class="o">=</span><span class="m">172</span>.20.0.1
+</pre></div>
 
 <h2>A final note - why does makecerts exist?</h2>
 <p>I really want to like <code>cfssl</code>, but it still just seems like too much typing for
@@ -218,7 +217,6 @@ whereas the goal with <code>makecerts</code> was to make it as easy as possible 
 TLS certs for test cases on the desktop and thus force myself to always turn
 TLS on when developing - since obviously I'm always going to be using it in
 production, so I should test with it.</p>
-</div>
     </div>
     <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
 <li><a class="tag p-category" href="../../categories/cockroachdb/" rel="tag">cockroachdb</a></li>
@@ -231,7 +229,7 @@ production, so I should test with it.</p>
                 <a href="../setting-a-separate-pattern-lock-and-encryption-password-on-android/" rel="next" title="Setting a separate encryption password and pattern lock on Android">Next post</a>
             </li>
         </ul></nav></aside></article><!--End of body content--><footer id="footer">
-            Contents © 2024         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            Contents © 2025         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
         </footer>
 </div>

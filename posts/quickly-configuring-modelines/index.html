@@ -81,8 +81,7 @@ bg-dark
         </div>
         
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div>
-<h2>Quickly configuring modelines?</h2>
+    <h2>Quickly configuring modelines?</h2>
 <p>Something hopefully no one should ever have to do in the far distant future,
 but since I insist on using old-hardware till it drops, it still comes up.</p>
 <p>Working from an SSH console on an XBMC box, I was trying to tune in an elusive
@@ -90,19 +89,18 @@ but since I insist on using old-hardware till it drops, it still comes up.</p>
 <p>The best way to do it is with xrandr these days in a <code>~/.xprofile</code> script which
 is loaded on boot up.</p>
 <p>To quickly go through modelines I used the following shell script:</p>
-<pre class="code literal-block"><span></span><code><span class="ch">#!/bin/bash</span>
-xrandr -d :0 --output VGA-0 --mode <span class="s2">"1024x768"</span>
-xrandr -d :0 --delmode VGA-0 <span class="s2">"1360x768"</span>
-xrandr -d :0 --rmmode <span class="s2">"1360x768"</span>
-xrandr -d :0 --newmode <span class="s2">"1360x768"</span> <span class="nv">$@</span>
-xrandr -d :0 --addmode VGA-0 <span class="s2">"1360x768"</span>
-xrandr -d :0 --output VGA-0 --mode <span class="s2">"1360x768"</span>
-</code></pre>
+<div class="code"><pre class="code literal-block"><span class="ch">#!/bin/bash</span>
+xrandr<span class="w"> </span>-d<span class="w"> </span>:0<span class="w"> </span>--output<span class="w"> </span>VGA-0<span class="w"> </span>--mode<span class="w"> </span><span class="s2">"1024x768"</span>
+xrandr<span class="w"> </span>-d<span class="w"> </span>:0<span class="w"> </span>--delmode<span class="w"> </span>VGA-0<span class="w"> </span><span class="s2">"1360x768"</span>
+xrandr<span class="w"> </span>-d<span class="w"> </span>:0<span class="w"> </span>--rmmode<span class="w"> </span><span class="s2">"1360x768"</span>
+xrandr<span class="w"> </span>-d<span class="w"> </span>:0<span class="w"> </span>--newmode<span class="w"> </span><span class="s2">"1360x768"</span><span class="w"> </span><span class="nv">$@</span>
+xrandr<span class="w"> </span>-d<span class="w"> </span>:0<span class="w"> </span>--addmode<span class="w"> </span>VGA-0<span class="w"> </span><span class="s2">"1360x768"</span>
+xrandr<span class="w"> </span>-d<span class="w"> </span>:0<span class="w"> </span>--output<span class="w"> </span>VGA-0<span class="w"> </span>--mode<span class="w"> </span><span class="s2">"1360x768"</span>
+</pre></div>
 
 <p>Simply passing in a modeline when running it causes that modeline to be set and
 applied to the relevant output (VGA-0) in my case.</p>
 <p>i.e. <code>./tryout 84.750 1366 1480 1568 1800 768 769 776 800 -hsync +vsync</code></p>
-</div>
     </div>
     <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
 <li><a class="tag p-category" href="../../categories/oldposts/" rel="tag">oldposts</a></li>
@@ -117,7 +115,7 @@ applied to the relevant output (VGA-0) in my case.</p>
                 <a href="../totally-static-go-builds/" rel="next" title="Totally static Go builds">Next post</a>
             </li>
         </ul></nav></aside></article><!--End of body content--><footer id="footer">
-            Contents © 2024         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            Contents © 2025         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
         </footer>
 </div>

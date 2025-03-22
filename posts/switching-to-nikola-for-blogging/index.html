@@ -76,8 +76,7 @@ bg-dark
         </div>
         
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div>
-<div class="cell border-box-sizing text_cell rendered">
+    <div class="cell border-box-sizing text_cell rendered" id="cell-id=5845edeb">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -96,11 +95,10 @@ bg-dark
 </h2>
 <p>Getting the transition from "jupyter notebook" to "blog" post down to as frictionless as possible feels important. When you want to share neat stuff about code, it helps to do it right next to the neat code you just wrote.</p>
 <p>When you want to share data analysis - well that's a jupyter specialty. And when you want to show off something you're doing in your workshop, then at the very least pulling in some images with jupyter is a bit more practical and probably a lot more likely to be low enough effort that I'll do it - this last part is the bit that's definitely up in the air here.</p>
-
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=3de6c331">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -126,10 +124,10 @@ bg-dark
 <p>This is a pretty standard stanza which configures how posts are located. Importantly: the wildcard here isn't a regular glob, and all these paths act recursive searches, with the directory names winding up in our paths (i.e. <code>posts/some path with spaces/mypost.ipynb</code> winds up as <code>https://yoursite/posts/some path with spaces/mypost-name-from-metadata</code>)</p>
 <p>So what do we want to have happen?</p>
 <p>Ideally we want something like this to work:</p>
-
 <pre><code>|-my-post/- my-post.ipynb
          |- images/some-image.jpg
-         |- files/data_for_the_folder.tsv</code></pre>
+         |- files/data_for_the_folder.tsv 
+</code></pre>
 <p>and then on the output it should end up in a sensible location.</p>
 <p>We can do this by calculating all these paths at compile time in the config file, to workaround the default behavior.</p>
 <p>So for our POSTS element we use this dynamic bit of Python code:</p>
@@ -183,11 +181,10 @@ bg-dark
         <span class="k">continue</span>
     <span class="n">IMAGE_FOLDERS</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span><span class="s2">"images"</span><span class="p">)]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"posts"</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="s2">"images"</span><span class="p">)</span>
 </pre></div>
-
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=197e01b3">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -208,23 +205,22 @@ bg-dark
 <span class="n">GITHUB_COMMIT_SOURCE</span> <span class="o">=</span> <span class="kc">False</span>
 </pre></div>
 <p>and then add my Github repo as the remote named <code>publish</code> as</p>
-
-<pre><code>git remote add publish https://github.com/wrouesnel/wrouesnel.github.io.git</code></pre>
+<pre><code>git remote add publish https://github.com/wrouesnel/wrouesnel.github.io.git
+</code></pre>
 <p>and then synchronize my old blog so nikola can take it over:</p>
-
 <pre><code>git fetch publish
 git checkout master
 find -depth -delete
 git commit -m "Transition to Nikola"
-git checkout main</code></pre>
+git checkout main
+</code></pre>
 <p>and then finally just do the deploy:</p>
-
-<pre><code>nikola github_deploy</code></pre>
-
+<pre><code>nikola github_deploy
+</code></pre>
 </div>
 </div>
 </div>
-<div class="cell border-box-sizing text_cell rendered">
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=5679e47a">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
@@ -239,7 +235,6 @@ git checkout main</code></pre>
 <li>using <code>nikola new_post</code> with this system probably doesn't put the new file anywhere sensible - it would be nice if it did</li>
 <li>figure out how I want to use galleries</li>
 </ul>
-</div>
 </div>
 </div>
 </div>
@@ -264,7 +259,7 @@ MathJax.Hub.Config({
     }
 });
 </script></article><!--End of body content--><footer id="footer">
-            Contents © 2024         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            Contents © 2025         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
         </footer>
 </div>

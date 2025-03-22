@@ -79,8 +79,7 @@ bg-dark
         </div>
         
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div>
-<p>This is a quick note on something I encountered while trying to work out why my Realtek NICs are so finicky about connecting and staying connected at gigabit speeds when running Linux.</p>
+    <p>This is a quick note on something I encountered while trying to work out why my Realtek NICs are so finicky about connecting and staying connected at gigabit speeds when running Linux.</p>
 <p>The current hypothesis is that the <code>r8168</code> driver isn't helping very much. So I uninstalled it - and ran into two problems.</p>
 <h3>Firstly</h3>
 <p>...you need to uninstall it on Ubuntu/Debian with <code>apt-get remove --purge r8168-dkms</code> or the config files (and it's <em>all</em> config files) won't be properly removed, and the module will be left installed.</p>
@@ -89,7 +88,6 @@ bg-dark
 <p>In my case it turned out I'd put a very official looking <code>blacklist-networking.conf</code> file in my modprobe.d directory. On both my machines.</p>
 <h3>Something about Realtek NICs?</h3>
 <p>If I find an answer I'll surely provide updates, but needless to say there's no rthyme or reason to when they do or do not work, other then they consistently don't work on kernel 3.11 with the r8168 driver it seems.</p>
-</div>
     </div>
     <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
 <li><a class="tag p-category" href="../../categories/r8168/" rel="tag">r8168</a></li>
@@ -104,7 +102,7 @@ bg-dark
                 <a href="../flashing-marlin-with-eclipse-and-avrdude/" rel="next" title="Flashing Marlin with Eclipse and AVR Dude">Next post</a>
             </li>
         </ul></nav></aside></article><!--End of body content--><footer id="footer">
-            Contents © 2024         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            Contents © 2025         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
         </footer>
 </div>

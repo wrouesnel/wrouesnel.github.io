@@ -78,20 +78,18 @@ bg-dark
         </div>
         
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div>
-<p>I wouldn't make a post on my blog just so I don't have to keep googling something
+    <p>I wouldn't make a post on my blog just so I don't have to keep googling something
 would I? Of course I would. It's like...95% of the reason I keep this.</p>
 <p>Totally static go builds - these are <em>great</em> for running in Docker containers.
 The important part is the command line to create them - it's varied a bit, but
 the most thorough I've found is this (see this 
 <a href="https://github.com/golang/go/issues/9344">Github Issue</a>):</p>
-<pre class="code literal-block"><span></span><code><span class="nv">CGO_ENABLED</span><span class="o">=</span><span class="m">0</span> <span class="nv">GOOS</span><span class="o">=</span>linux go build -a -ldflags <span class="s1">'-extldflags "-static"'</span> .
-</code></pre>
+<div class="code"><pre class="code literal-block"><span class="nv">CGO_ENABLED</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="nv">GOOS</span><span class="o">=</span>linux<span class="w"> </span>go<span class="w"> </span>build<span class="w"> </span>-a<span class="w"> </span>-ldflags<span class="w"> </span><span class="s1">'-extldflags "-static"'</span><span class="w"> </span>.
+</pre></div>
 
 <p>This will create an "as static as possible" binary - beware linking in things
 which want glibc, since pluggable name resolvers will be a problem (which you
 can workaround in Docker quite well, but that's another question).</p>
-</div>
     </div>
     <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
 <li><a class="tag p-category" href="../../categories/golang/" rel="tag">golang</a></li>
@@ -104,7 +102,7 @@ can workaround in Docker quite well, but that's another question).</p>
                 <a href="../tracking-down-why-my-desktop-fails-every-second-resume/" rel="next" title="Tracking down why my desktop fails every second resume">Next post</a>
             </li>
         </ul></nav></aside></article><!--End of body content--><footer id="footer">
-            Contents © 2024         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            Contents © 2025         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
         </footer>
 </div>

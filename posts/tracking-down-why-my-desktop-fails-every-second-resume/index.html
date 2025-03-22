@@ -82,8 +82,7 @@ bg-dark
         </div>
         
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div>
-<h2>Collecting a thread to pull on...</h2>
+    <h2>Collecting a thread to pull on...</h2>
 <p>Had an interesting problem for a while now - my desktop under linux would
 <em>mostly</em> suspend and resume just fine, except when it didn't. This is annoying
 as I'm the type of person who likes to leave a big dev environment running and
@@ -93,8 +92,8 @@ so documenting any progress I made was fairly important.</p>
 <p>The Ubuntu guide to kernel suspend is the most useful one I found:
 <a href="https://wiki.ubuntu.com/DebuggingKernelSuspend">https://wiki.ubuntu.com/DebuggingKernelSuspend</a></p>
 <p>And the important bit is this action:</p>
-<pre class="code literal-block"><span></span><code>sync &amp;&amp; echo 1 &gt; /sys/power/pm_trace &amp;&amp; pm-suspend
-</code></pre>
+<div class="code"><pre class="code literal-block">sync &amp;&amp; echo 1 &gt; /sys/power/pm_trace &amp;&amp; pm-suspend
+</pre></div>
 
 <p>This does some kernel magic which encodes suspend/resume progress into the
 systems RTC clock via a hash, which allows - if things freeze - to reboot and
@@ -104,39 +103,39 @@ next boot before the data vanishes and you grab it from <code>dmesg</code>.</p>
 and then hung my system on the second time. So it works, but something gets
 corrupted through the process and we need to (hopefully) just reset it on 
 resume to avoid the problem.</p>
-<pre class="code literal-block"><span></span><code>$ dmesg <span class="p">|</span> grep -A10 Magic
-<span class="o">[</span>    <span class="m">3</span>.607642<span class="o">]</span>   Magic number: <span class="m">0</span>:474:178
-<span class="o">[</span>    <span class="m">3</span>.625900<span class="o">]</span>   <span class="nb">hash</span> matches /build/linux-B4zRAA/linux-4.8.0/drivers/base/power/main.c:1070
-<span class="o">[</span>    <span class="m">3</span>.644583<span class="o">]</span> acpi device:0e: <span class="nb">hash</span> matches
-<span class="o">[</span>    <span class="m">3</span>.663313<span class="o">]</span>  platform: <span class="nb">hash</span> matches
-</code></pre>
+<div class="code"><pre class="code literal-block">$<span class="w"> </span>dmesg<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-A10<span class="w"> </span>Magic
+<span class="o">[</span><span class="w">    </span><span class="m">3</span>.607642<span class="o">]</span><span class="w">   </span>Magic<span class="w"> </span>number:<span class="w"> </span><span class="m">0</span>:474:178
+<span class="o">[</span><span class="w">    </span><span class="m">3</span>.625900<span class="o">]</span><span class="w">   </span><span class="nb">hash</span><span class="w"> </span>matches<span class="w"> </span>/build/linux-B4zRAA/linux-4.8.0/drivers/base/power/main.c:1070
+<span class="o">[</span><span class="w">    </span><span class="m">3</span>.644583<span class="o">]</span><span class="w"> </span>acpi<span class="w"> </span>device:0e:<span class="w"> </span><span class="nb">hash</span><span class="w"> </span>matches
+<span class="o">[</span><span class="w">    </span><span class="m">3</span>.663313<span class="o">]</span><span class="w">  </span>platform:<span class="w"> </span><span class="nb">hash</span><span class="w"> </span>matches
+</pre></div>
 
 <p>That's the easy part. What the hell does it mean?</p>
 <h2>Goto the Source</h2>
 <p>We get a source line out of that request, and we're running an ubuntu kernel
 which has a convenient source package we can grab. So let's get that so we can
 account for the Ubuntu packages:</p>
-<pre class="code literal-block"><span></span><code>$ <span class="nb">cd</span> ~/tmp
-$ uname -a
-Linux will-desktop <span class="m">4</span>.8.0-19-generic <span class="c1">#21-Ubuntu SMP Thu Sep 29 19:39:23 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux</span>
-$ apt-get <span class="nb">source</span> linux-image-4.8.0-19-generic-generic
-</code></pre>
+<div class="code"><pre class="code literal-block">$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/tmp
+$<span class="w"> </span>uname<span class="w"> </span>-a
+Linux<span class="w"> </span>will-desktop<span class="w"> </span><span class="m">4</span>.8.0-19-generic<span class="w"> </span><span class="c1">#21-Ubuntu SMP Thu Sep 29 19:39:23 UTC 2016 x86_64 x86_64 x86_64 GNU/Linux</span>
+$<span class="w"> </span>apt-get<span class="w"> </span><span class="nb">source</span><span class="w"> </span>linux-image-4.8.0-19-generic-generic
+</pre></div>
 
 <p>Which leads to this:</p>
-<pre class="code literal-block"><span></span><code><span class="nv">static</span> <span class="nv">void</span> <span class="nv">async_suspend_noirq</span><span class="ss">(</span><span class="nv">void</span> <span class="o">*</span><span class="nv">data</span>, <span class="nv">async_cookie_t</span> <span class="nv">cookie</span><span class="ss">)</span>
+<div class="code"><pre class="code literal-block">static void async_suspend_noirq(void *data, async_cookie_t cookie)
 {
-    <span class="nv">struct</span> <span class="nv">device</span> <span class="o">*</span><span class="nv">dev</span> <span class="o">=</span> <span class="ss">(</span><span class="nv">struct</span> <span class="nv">device</span> <span class="o">*</span><span class="ss">)</span><span class="nv">data</span><span class="c1">;</span>
-    <span class="nv">int</span> <span class="nv">error</span><span class="c1">;</span>
+    struct device <span class="gs">*dev = (struct device *</span>)data;
+    int error;
 
-    <span class="nv">error</span> <span class="o">=</span> <span class="nv">__device_suspend_noirq</span><span class="ss">(</span><span class="nv">dev</span>, <span class="nv">pm_transition</span>, <span class="nv">true</span><span class="ss">)</span><span class="c1">;</span>
-    <span class="k">if</span> <span class="ss">(</span><span class="nv">error</span><span class="ss">)</span> {
-        <span class="nv">dpm_save_failed_dev</span><span class="ss">(</span><span class="nv">dev_name</span><span class="ss">(</span><span class="nv">dev</span><span class="ss">))</span><span class="c1">;</span>
-        <span class="nv">pm_dev_err</span><span class="ss">(</span><span class="nv">dev</span>, <span class="nv">pm_transition</span>, <span class="s2">"</span><span class="s"> async</span><span class="s2">"</span>, <span class="nv">error</span><span class="ss">)</span><span class="c1">;</span>
+    error = __device_suspend_noirq(dev, pm_transition, true);
+    if (error) {
+        dpm_save_failed_dev(dev_name(dev));
+        pm_dev_err(dev, pm_transition, " async", error);
     }
 
-    <span class="nv">put_device</span><span class="ss">(</span><span class="nv">dev</span><span class="ss">)</span><span class="c1">;</span>
+    put_device(dev);
 }
-</code></pre>
+</pre></div>
 
 <p>So the error line we're getting puts right on that <code>if (error)</code> line which
 hopefully means this is just some device failure we can add a PM script for.</p>
@@ -149,7 +148,6 @@ the resume code, so the failure on the second resume happens very early.
 <p>Which is often less work then it sounds, but judging from that LKML link it's
 pretty much the only lead we have to go on since we don't have a Thinkpad but
 the problem is probably suspiciously similar.</p>
-</div>
     </div>
     <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
 <li><a class="tag p-category" href="../../categories/debugging/" rel="tag">debugging</a></li>
@@ -165,7 +163,7 @@ the problem is probably suspiciously similar.</p>
                 <a href="../structuring-my-go-projects/" rel="next" title="Structuring my Go projects">Next post</a>
             </li>
         </ul></nav></aside></article><!--End of body content--><footer id="footer">
-            Contents © 2024         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            Contents © 2025         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
         </footer>
 </div>

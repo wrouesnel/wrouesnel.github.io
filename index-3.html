@@ -58,7 +58,181 @@ bg-dark
     
     
 <div class="postindex">
-    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/setting-a-separate-pattern-lock-and-encryption-password-on-android/" class="u-url">Setting a separate encryption password and pattern lock on Android</a></h1>
+    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/switching-to-nikola-for-blogging/" class="u-url">Switching to nikola for blogging</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/will-rouesnel/">Will Rouesnel</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/switching-to-nikola-for-blogging/" rel="bookmark">
+            <time class="published dt-published" datetime="2021-12-09T20:59:29+11:00" itemprop="datePublished" title="2021-12-09 20:59">2021-12-09 20:59</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div class="cell border-box-sizing text_cell rendered" id="cell-id=5845edeb">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Why?">Why?<a class="anchor-link" href="posts/switching-to-nikola-for-blogging/#Why?">¶</a>
+</h2>
+<p>The key to me for blogging is to keep it simple. This at first meant static sites that rendered nicely, and this was a function fulfilled by Wintersmith.</p>
+<h2 id="The-Problems">The Problems<a class="anchor-link" href="posts/switching-to-nikola-for-blogging/#The-Problems">¶</a>
+</h2>
+<p>The problem with Wintersmith was that it was a pure markdown solution. At the end of the day, it turned out that most of what I wanted to talk about probably had some type of interactive or graphical component to it, or I just wanted to be able to add photos and images easily.</p>
+<p>None of this is easy with pure markdown.</p>
+<h2 id="The-Solution">The Solution<a class="anchor-link" href="posts/switching-to-nikola-for-blogging/#The-Solution">¶</a>
+</h2>
+<p>The new solution for me here is Nikola which seems to hit a new sweetspot of codeability versus low friction. Specifcially it's support for posts being rendered out of jupter-lab notebooks, something that I've had just grow in usefulness.</p>
+<h2 id="Perceived-Benefits">Perceived Benefits<a class="anchor-link" href="posts/switching-to-nikola-for-blogging/#Perceived-Benefits">¶</a>
+</h2>
+<p>Getting the transition from "jupyter notebook" to "blog" post down to as frictionless as possible feels important. When you want to share neat stuff about code, it helps to do it right next to the neat code you just wrote.</p>
+<p>When you want to share data analysis - well that's a jupyter specialty. And when you want to show off something you're doing in your workshop, then at the very least pulling in some images with jupyter is a bit more practical and probably a lot more likely to be low enough effort that I'll do it - this last part is the bit that's definitely up in the air here.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=3de6c331">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Workarounds">Workarounds<a class="anchor-link" href="posts/switching-to-nikola-for-blogging/#Workarounds">¶</a>
+</h2>
+<h3 id="Keeping-media-and-posts-together">Keeping media and posts together<a class="anchor-link" href="posts/switching-to-nikola-for-blogging/#Keeping-media-and-posts-together">¶</a>
+</h3>
+<p>The first problem I ran into with Nikola is that it and I disagree on how to structure posts.</p>
+<p>Namely: out of the box Nikola has the notion of separate <code>/images</code> <code>/files</code> and <code>/posts</code> (or <code>/pages</code>) directories for determining content.</p>
+<p>I don't like this, and it has a practical downside: when working on a Jupyter notebook for a post, suppose it requires data or I'm using some tool which will do drag and drop images for me? What I'd like is to open that notebook, and just that notebook in Jupyter or VSCode and work on just that file - including how I reference data.</p>
+<p>Although <a href="https://github.com/getnikola/nikola/issues/2266">this issue</a> suggests a workaround, it has a of drawbacks. But more importantly - one of the reasons we use Nikola is it's written in Python, and better - it's main configuration file <code>conf.py</code> is itself, runnable Python.</p>
+<p>This gives us a much better solution: we can just generate our post finding logic at config time.</p>
+<p>To do this we need to find this stanza:</p>
+<div class="highlight"><pre><span></span><span class="n">POSTS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="s2">"posts/*.ipynb"</span><span class="p">,</span> <span class="s2">"posts"</span><span class="p">,</span> <span class="s2">"post.tmpl"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"posts/*.rst"</span><span class="p">,</span> <span class="s2">"posts"</span><span class="p">,</span> <span class="s2">"post.tmpl"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"posts/*.md"</span><span class="p">,</span> <span class="s2">"posts"</span><span class="p">,</span> <span class="s2">"post.tmpl"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"posts/*.txt"</span><span class="p">,</span> <span class="s2">"posts"</span><span class="p">,</span> <span class="s2">"post.tmpl"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"posts/*.html"</span><span class="p">,</span> <span class="s2">"posts"</span><span class="p">,</span> <span class="s2">"post.tmpl"</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+<p>This is a pretty standard stanza which configures how posts are located. Importantly: the wildcard here isn't a regular glob, and all these paths act recursive searches, with the directory names winding up in our paths (i.e. <code>posts/some path with spaces/mypost.ipynb</code> winds up as <code>https://yoursite/posts/some path with spaces/mypost-name-from-metadata</code>)</p>
+<p>So what do we want to have happen?</p>
+<p>Ideally we want something like this to work:</p>
+<pre><code>|-my-post/- my-post.ipynb
+         |- images/some-image.jpg
+         |- files/data_for_the_folder.tsv 
+</code></pre>
+<p>and then on the output it should end up in a sensible location.</p>
+<p>We can do this by calculating all these paths at compile time in the config file, to workaround the default behavior.</p>
+<p>So for our POSTS element we use this dynamic bit of Python code:</p>
+<div class="highlight"><pre><span></span><span class="c1"># Calculate POSTS so they must follow the convention &lt;post-name&gt;/&lt;post-name&gt;.&lt;supported extension&gt;</span>
+<span class="n">_post_exts</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"ipynb"</span><span class="p">,</span>
+    <span class="s2">"rst"</span><span class="p">,</span>
+    <span class="s2">"md"</span><span class="p">,</span>
+    <span class="s2">"txt"</span><span class="p">,</span>
+    <span class="s2">"html"</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">_posts</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">_root_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span><span class="s2">"posts"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">_root_dir</span><span class="p">):</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_root_dir</span><span class="p">,</span><span class="n">e</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">fpath</span><span class="p">):</span>
+        <span class="k">continue</span>
+    <span class="n">_postmatchers</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">"."</span><span class="o">.</span><span class="n">join</span><span class="p">((</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"posts"</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">e</span><span class="p">),</span><span class="n">ext</span><span class="p">))</span> <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="n">_post_exts</span> <span class="p">]</span>
+    <span class="n">_posts</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span> <span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="s2">"posts"</span><span class="p">,</span> <span class="s2">"post.tmpl"</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">_postmatchers</span> <span class="p">])</span>
+
+<span class="n">POSTS</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">_posts</span><span class="p">)</span>
+
+<span class="n">PAGES</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="s2">"pages/*.ipynb"</span><span class="p">,</span> <span class="s2">"posts"</span><span class="p">,</span> <span class="s2">"page.tmpl"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"pages/*.rst"</span><span class="p">,</span> <span class="s2">"pages"</span><span class="p">,</span> <span class="s2">"page.tmpl"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"pages/*.md"</span><span class="p">,</span> <span class="s2">"pages"</span><span class="p">,</span> <span class="s2">"page.tmpl"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"pages/*.txt"</span><span class="p">,</span> <span class="s2">"pages"</span><span class="p">,</span> <span class="s2">"page.tmpl"</span><span class="p">),</span>
+    <span class="p">(</span><span class="s2">"pages/*.html"</span><span class="p">,</span> <span class="s2">"pages"</span><span class="p">,</span> <span class="s2">"page.tmpl"</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+<p>Testing this - it works. It means we can keep our actual post bodies, and any supporting files, nicely organized.</p>
+<p>Now there's two additional problems: <code>images</code> and <code>files</code>. We'd like to handle <code>images</code> specially because Nikola will do automatic thumbnailing and resizing for us in our posts. They're handled lossily. Whereas <code>files</code> are not touched at all in the final output.</p>
+<p>The solution I settled on is just to move these paths to under <code>images</code> and <code>files</code> adjacent to the posts respectfully. This means is the Jupyter notebook I'm using is referencing data, it's reasonably well behaved.</p>
+<p>For files we use this config stanza:</p>
+<div class="highlight"><pre><span></span><span class="n">FILES_FOLDERS</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'files'</span><span class="p">:</span> <span class="s1">'files'</span><span class="p">}</span>
+
+<span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">_root_dir</span><span class="p">):</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_root_dir</span><span class="p">,</span><span class="n">e</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">fpath</span><span class="p">):</span>
+        <span class="k">continue</span>
+    <span class="n">FILES_FOLDERS</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span><span class="s2">"files"</span><span class="p">)]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"posts"</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="s2">"files"</span><span class="p">)</span>
+</pre></div>
+<p>and for images we use this:</p>
+<div class="highlight"><pre><span></span><span class="n">IMAGE_FOLDERS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"images"</span><span class="p">:</span> <span class="s2">"images"</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">_root_dir</span><span class="p">):</span>
+    <span class="n">fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_root_dir</span><span class="p">,</span><span class="n">e</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">fpath</span><span class="p">):</span>
+        <span class="k">continue</span>
+    <span class="n">IMAGE_FOLDERS</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span><span class="s2">"images"</span><span class="p">)]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"posts"</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="s2">"images"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=197e01b3">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Setting-up-the-publish-workflow">Setting up the publish workflow<a class="anchor-link" href="posts/switching-to-nikola-for-blogging/#Setting-up-the-publish-workflow">¶</a>
+</h3>
+<p>Nikola comes out of the box with a publishing workflow for Github pages, which is where I host this blog.</p>
+<p>Since I've switched over to running decentralized with my git repos stored in syncthing, I wanted to ensure I only pushed the content of this blog and kept the regular repo on my local systems since it leads to an easier drafting experience.</p>
+<p>I configure the github publish workflow like so in <code>conf.py</code>:</p>
+<div class="highlight"><pre><span></span><span class="n">GITHUB_SOURCE_BRANCH</span> <span class="o">=</span> <span class="s2">"src"</span>
+<span class="n">GITHUB_DEPLOY_BRANCH</span> <span class="o">=</span> <span class="s2">"master"</span>
+
+<span class="c1"># The name of the remote where you wish to push to, using github_deploy.</span>
+<span class="n">GITHUB_REMOTE_NAME</span> <span class="o">=</span> <span class="s2">"publish"</span>
+
+<span class="c1"># Whether or not github_deploy should commit to the source branch automatically</span>
+<span class="c1"># before deploying.</span>
+<span class="n">GITHUB_COMMIT_SOURCE</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+<p>and then add my Github repo as the remote named <code>publish</code> as</p>
+<pre><code>git remote add publish https://github.com/wrouesnel/wrouesnel.github.io.git
+</code></pre>
+<p>and then synchronize my old blog so nikola can take it over:</p>
+<pre><code>git fetch publish
+git checkout master
+find -depth -delete
+git commit -m "Transition to Nikola"
+git checkout main
+</code></pre>
+<p>and then finally just do the deploy:</p>
+<pre><code>nikola github_deploy
+</code></pre>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=5679e47a">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Next-Steps">Next Steps<a class="anchor-link" href="posts/switching-to-nikola-for-blogging/#Next-Steps">¶</a>
+</h2>
+<p>This isn't perfect, but it's a static site and it looks okay and that's good enough.</p>
+<p>I've got a few things I want to fix:</p>
+<ul>
+<li>presentation of jupyter notebooks - I'd like it to look seamless to "writing things in Markdown"</li>
+<li>a tag line under the blog title - the old site had it, the new one should have it.</li>
+<li>using <code>nikola new_post</code> with this system probably doesn't put the new file anywhere sensible - it would be nice if it did</li>
+<li>figure out how I want to use galleries</li>
+</ul>
+</div>
+</div>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/setting-a-separate-pattern-lock-and-encryption-password-on-android/" class="u-url">Setting a separate encryption password and pattern lock on Android</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
                 <a href="authors/wrouesnel/">wrouesnel</a>
@@ -69,8 +243,7 @@ bg-dark
             </p>
         </div>
     </header><div class="e-content entry-content">
-    <div>
-<p>If you run an older version of LineageOS (14.1 or so) then by using the cryptfs
+    <p>If you run an older version of LineageOS (14.1 or so) then by using the cryptfs
 utility you can separate your devices pattern lock and boot password.</p>
 <p>This is something you want to do. While state-of-the-art for security is going
 to belong to Apple for the forseeable future, practical security for the every
@@ -90,10 +263,10 @@ a password to do it.</p>
 <p>Look around the net and 3x3 patterns don't have a clear translation table.</p>
 <p>However, there's not too many possibilities - and in fact the basic translation
 is left to right, top to bottom, you get:</p>
-<pre class="code literal-block"><span></span><code><span class="mf">1</span> <span class="mf">2</span> <span class="mf">3</span>
-<span class="mf">4</span> <span class="mf">5</span> <span class="mf">6</span>
-<span class="mf">7</span> <span class="mf">8</span> <span class="mf">9</span>
-</code></pre>
+<div class="code"><pre class="code literal-block"><span class="mf">1</span><span class="w"> </span><span class="mf">2</span><span class="w"> </span><span class="mf">3</span>
+<span class="mf">4</span><span class="w"> </span><span class="mf">5</span><span class="w"> </span><span class="mf">6</span>
+<span class="mf">7</span><span class="w"> </span><span class="mf">8</span><span class="w"> </span><span class="mf">9</span>
+</pre></div>
 
 <p>When using cryptfs, just convert your pattern to numbers using the above table.
 Simple right?</p>
@@ -102,26 +275,26 @@ Simple right?</p>
 <p>Always look at the code and think about it. Someone on <a href="https://android.stackexchange.com/questions/83854/is-there-a-way-to-map-translate-a-pattern-lock-to-a-numeric-pin">StackOverflow</a> did - but
 the code is not correct for current LineageOS.</p>
 <p>The real function in LineageOS is this:</p>
-<pre class="code literal-block"><span></span><code><span class="w">    </span><span class="cm">/**</span>
+<div class="code"><pre class="code literal-block"><span class="w">    </span><span class="cm">/**</span>
 <span class="cm">     * Serialize a pattern.</span>
 <span class="cm">     * @param pattern The pattern.</span>
 <span class="cm">     * @return The pattern in string form.</span>
-<span class="cm">     */</span><span class="w"></span>
-<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">patternToString</span><span class="p">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">LockPatternView</span><span class="p">.</span><span class="n">Cell</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pattern</span><span class="p">,</span><span class="w"> </span><span class="n">byte</span><span class="w"> </span><span class="n">gridSize</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pattern</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">null</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="ss">""</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="err">}</span><span class="w"></span>
-<span class="w">        </span><span class="n">final</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="n">patternSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pattern</span><span class="p">.</span><span class="k">size</span><span class="p">();</span><span class="w"></span>
-<span class="w">        </span><span class="n">LockPatternView</span><span class="p">.</span><span class="n">Cell</span><span class="p">.</span><span class="n">updateSize</span><span class="p">(</span><span class="n">gridSize</span><span class="p">);</span><span class="w"></span>
+<span class="cm">     */</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">patternToString</span><span class="p">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">LockPatternView</span><span class="p">.</span><span class="n">Cell</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pattern</span><span class="p">,</span><span class="w"> </span><span class="n">byte</span><span class="w"> </span><span class="n">gridSize</span><span class="p">)</span><span class="w"> </span><span class="err">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">pattern</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="k">null</span><span class="p">)</span><span class="w"> </span><span class="err">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="ss">""</span><span class="p">;</span>
+<span class="w">        </span><span class="err">}</span>
+<span class="w">        </span><span class="n">final</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="n">patternSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pattern</span><span class="p">.</span><span class="k">size</span><span class="p">();</span>
+<span class="w">        </span><span class="n">LockPatternView</span><span class="p">.</span><span class="n">Cell</span><span class="p">.</span><span class="n">updateSize</span><span class="p">(</span><span class="n">gridSize</span><span class="p">);</span>
 
-<span class="w">        </span><span class="n">byte</span><span class="err">[]</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">byte</span><span class="o">[</span><span class="n">patternSize</span><span class="o">]</span><span class="p">;</span><span class="w"></span>
-<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="nc">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">patternSize</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
-<span class="w">            </span><span class="n">LockPatternView</span><span class="p">.</span><span class="n">Cell</span><span class="w"> </span><span class="n">cell</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pattern</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="n">i</span><span class="p">);</span><span class="w"></span>
-<span class="w">            </span><span class="n">res</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">byte</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n">cell</span><span class="p">.</span><span class="n">getRow</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">gridSize</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cell</span><span class="p">.</span><span class="n">getColumn</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">'1'</span><span class="p">);</span><span class="w"></span>
-<span class="w">        </span><span class="err">}</span><span class="w"></span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">String</span><span class="p">(</span><span class="n">res</span><span class="p">);</span><span class="w"></span>
-<span class="w">    </span><span class="err">}</span><span class="w"></span>
-</code></pre>
+<span class="w">        </span><span class="n">byte</span><span class="err">[]</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">byte</span><span class="o">[</span><span class="n">patternSize</span><span class="o">]</span><span class="p">;</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="nc">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">patternSize</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="err">{</span>
+<span class="w">            </span><span class="n">LockPatternView</span><span class="p">.</span><span class="n">Cell</span><span class="w"> </span><span class="n">cell</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pattern</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+<span class="w">            </span><span class="n">res</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">byte</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n">cell</span><span class="p">.</span><span class="n">getRow</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">gridSize</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cell</span><span class="p">.</span><span class="n">getColumn</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">'1'</span><span class="p">);</span>
+<span class="w">        </span><span class="err">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">String</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>
+<span class="w">    </span><span class="err">}</span>
+</pre></div>
 
 <p>Found in the file <code>frameworks/base/core/java/com/android/internal/widget/LockPatternUtils.java</code>
 in the Android source tree.</p>
@@ -131,20 +304,19 @@ to an offset from ASCII <code>1</code>, which actually converts to the (byte) nu
 <p>But the final conversion is just mapping the whole byte sequence to characters - 
 so higher number patterns are just offsets into the ASCII lookup table past <code>1</code>.</p>
 <p>So for a 4x4 grid this gives us the following translation table:</p>
-<pre class="code literal-block"><span></span><code><span class="mf">1</span> <span class="mf">2</span> <span class="mf">3</span> <span class="mf">4</span>
-<span class="mf">5</span> <span class="mf">6</span> <span class="mf">7</span> <span class="mf">8</span>
-<span class="mf">9</span> <span class="p">:</span> <span class="p">;</span> <span class="o">&lt;</span>
-<span class="o">=</span> <span class="o">&gt;</span> <span class="err">?</span> <span class="err">@</span>
-</code></pre>
+<div class="code"><pre class="code literal-block"><span class="mf">1</span><span class="w"> </span><span class="mf">2</span><span class="w"> </span><span class="mf">3</span><span class="w"> </span><span class="mf">4</span>
+<span class="mf">5</span><span class="w"> </span><span class="mf">6</span><span class="w"> </span><span class="mf">7</span><span class="w"> </span><span class="mf">8</span>
+<span class="mf">9</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="o">&lt;</span>
+<span class="o">=</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="err">?</span><span class="w"> </span><span class="err">@</span>
+</pre></div>
 
 <h2>5x5 Pattern</h2>
 <p>Here's the pattern following the above for a 5x5 code if you use it:</p>
-<pre class="code literal-block"><span></span><code><span class="mf">1</span> <span class="mf">2</span> <span class="mf">3</span> <span class="mf">4</span> <span class="mf">5</span>
-<span class="mf">6</span> <span class="mf">7</span> <span class="mf">8</span> <span class="mf">9</span> <span class="p">:</span>
-<span class="p">;</span> <span class="o">&lt;</span> <span class="o">=</span> <span class="o">&gt;</span> <span class="err">?</span>
-<span class="err">@</span> <span class="n">A</span> <span class="n">B</span> <span class="n">C</span> <span class="n">D</span>
-</code></pre>
-</div>
+<div class="code"><pre class="code literal-block"><span class="mf">1</span><span class="w"> </span><span class="mf">2</span><span class="w"> </span><span class="mf">3</span><span class="w"> </span><span class="mf">4</span><span class="w"> </span><span class="mf">5</span>
+<span class="mf">6</span><span class="w"> </span><span class="mf">7</span><span class="w"> </span><span class="mf">8</span><span class="w"> </span><span class="mf">9</span><span class="w"> </span><span class="p">:</span>
+<span class="p">;</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="err">?</span>
+<span class="err">@</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="n">D</span>
+</pre></div>
     </div>
     </article>
 </div>
@@ -152,8 +324,20 @@ so higher number patterns are just offsets into the ASCII lookup table past <cod
 <li class="previous"><a href="." rel="prev">Newer posts</a></li>
             <li class="next"><a href="index-2.html" rel="next">Older posts</a></li>
         </ul>
-<!--End of body content--><footer id="footer">
-            Contents © 2024         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML" integrity="sha384-3lJUsx1TJHt7BA4udB5KPnDrlkO8T6J6v/op7ui0BbCjvZ9WqV4Xm6DTP6kQ/iBH" crossorigin="anonymous"></script><script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+        processEscapes: true
+    },
+    displayAlign: 'center', // Change this to 'left' if you want left-aligned equations.
+    "HTML-CSS": {
+        styles: {'.MathJax_Display': {"margin": 0}}
+    }
+});
+</script><!--End of body content--><footer id="footer">
+            Contents © 2025         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
         </footer>
 </div>

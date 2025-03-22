@@ -77,22 +77,20 @@ bg-dark
         </div>
         
     </header><div class="e-content entry-content" itemprop="articleBody text">
-    <div>
-<p>I frequently find myself writing upstart scripts which checkout ok, but for some reason don't get detected by the upstart daemon in the init directory, so when I run <code>start myscript</code> I get <code>unknown job</code> back. Some experimentation seems to indicate that the problem is I used gedit over GVFS SFTP to author a lot of these scripts.</p>
+    <p>I frequently find myself writing upstart scripts which checkout ok, but for some reason don't get detected by the upstart daemon in the init directory, so when I run <code>start myscript</code> I get <code>unknown job</code> back. Some experimentation seems to indicate that the problem is I used gedit over GVFS SFTP to author a lot of these scripts.</p>
 <p>For something like <code>myscript.conf</code>, I find the following fixes this problem:</p>
-<pre class="code literal-block"><span></span><code>mv myscript.conf myscript.conf.d
+<div class="code"><pre class="code literal-block">mv myscript.conf myscript.conf.d
 mv myscript.conf.d myscript.conf
-</code></pre>
+</pre></div>
 
 <p>And then hey presto, the script works perfectly.</p>
 <p>Along the same lines, the <code>init-checkconf</code> utility isn't mentioned enough for upstart debugging - my last post shows I clearly didn't know about it. Using it is simple:</p>
-<pre class="code literal-block"><span></span><code>$ init-checkconf /etc/init/myscript.conf
-</code></pre>
+<div class="code"><pre class="code literal-block">$<span class="w"> </span>init-checkconf<span class="w"> </span>/etc/init/myscript.conf
+</pre></div>
 
 <p>Note it needs to be run as a regular user. I'm often logged in as root, so sudo suffices:</p>
-<pre class="code literal-block"><span></span><code>$ sudo -u nobody init-checkconf /etc/init/myscript.conf
-</code></pre>
-</div>
+<div class="code"><pre class="code literal-block">$<span class="w"> </span>sudo<span class="w"> </span>-u<span class="w"> </span>nobody<span class="w"> </span>init-checkconf<span class="w"> </span>/etc/init/myscript.conf
+</pre></div>
     </div>
     <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
 <li><a class="tag p-category" href="../../categories/ubuntu/" rel="tag">ubuntu</a></li>
@@ -106,7 +104,7 @@ mv myscript.conf.d myscript.conf
                 <a href="../setting-up-sshttp/" rel="next" title="Setting up sshttp">Next post</a>
             </li>
         </ul></nav></aside></article><!--End of body content--><footer id="footer">
-            Contents © 2024         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            Contents © 2025         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
             
         </footer>
 </div>
