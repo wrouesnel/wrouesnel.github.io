@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html prefix="
+og: http://ogp.me/ns# article: http://ogp.me/ns/article#
+" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ubuntu 24.04, Dracut and Native ZFS Encryption | wrouesnel_blog</title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/ipython.min.css" rel="stylesheet" type="text/css">
+<link href="../../assets/css/nikola_ipython.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="canonical" href="https://blog.wrouesnel.com/posts/ubuntu-2404-dracut-and-native-zfs-encryption/">
+<!--[if lt IE 9]><script src="../../assets/js/html5.js"></script><![endif]--><link rel="stylesheet" href="../../assets/css/wrouesnel_blog-theme.css">
+<meta name="author" content="Will Rouesnel">
+<link rel="prev" href="../patching-ubuntu-packages/" title="Patching Ubuntu Packages with dgit and pbuilder" type="text/html">
+<meta property="og:site_name" content="wrouesnel_blog">
+<meta property="og:title" content="Ubuntu 24.04, Dracut and Native ZFS Encryption">
+<meta property="og:url" content="https://blog.wrouesnel.com/posts/ubuntu-2404-dracut-and-native-zfs-encryption/">
+<meta property="og:description" content="Ubuntu 24.04, Dracut and Native ZFS Encryption
+The Situation
+Recently I got interested in using systemd-cryptenroll to setup automatic unlocking of my
+Ubuntu ZFS root filesystem. systemd-cryptenroll p">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2025-03-29T19:07:29+11:00">
+<meta property="article:tag" content="24.04">
+<meta property="article:tag" content="dracut">
+<meta property="article:tag" content="encryption">
+<meta property="article:tag" content="ubuntu">
+<meta property="article:tag" content="zfs">
+</head>
+<body>
+<a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+<!-- Menubar -->
+
+<nav class="navbar navbar-expand-md static-top mb-4
+navbar-dark
+bg-dark
+"><div class="container">
+<!-- This keeps the margins nice -->
+        <a class="navbar-brand" href="../../">
+
+            <span id="blog-title">wrouesnel_blog</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="bs-navbar">
+            <ul class="navbar-nav mr-auto">
+<li class="nav-item">
+<a href="../../archive.html" class="nav-link">Archive</a>
+                </li>
+<li class="nav-item">
+<a href="../../categories/" class="nav-link">Tags</a>
+
+                
+            </li>
+</ul>
+<ul class="navbar-nav navbar-right"></ul>
+</div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
+</nav><!-- End of Menubar --><div class="container" id="content" role="main">
+    <div class="body-content">
+        <!--Body content-->
+        
+<article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Ubuntu 24.04, Dracut and Native ZFS Encryption</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard p-author h-card"><span class="byline-name fn p-name" itemprop="author">
+                    <a class="u-url" href="../../authors/will-rouesnel/">Will Rouesnel</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2025-03-29T19:07:29+11:00" itemprop="datePublished" title="2025-03-29 19:07">2025-03-29 19:07</time></a>
+            </p>
+            
+        </div>
+        
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <h2>Ubuntu 24.04, Dracut and Native ZFS Encryption</h2>
+<h3>The Situation</h3>
+<p>Recently I got interested in using <code>systemd-cryptenroll</code> to setup automatic unlocking of my
+Ubuntu ZFS root filesystem. <code>systemd-cryptenroll</code> provides <a href="https://0pointer.net/blog/unlocking-luks2-volumes-with-tpm2-fido2-pkcs11-security-hardware-on-systemd-248.html">very nice support for a range of unlocking measures</a>,</p>
+<p><code>initramfs-tools</code> doesn't provide <code>systemd-cryptsetup</code>, but <code>dracut</code> does. So setting up your disks
+with <code>systemd-cryptenroll</code> just means you can't use any of the advanced unlock features like <code>tpm2</code>
+or <code>fido</code>.</p>
+<p>Ubuntu includes <code>dracut</code>, so we can just install that:</p>
+<div class="code"><pre class="code literal-block">apt install -y dracut zfs-dracut
+</pre></div>
+
+<p>And it'll work on right?</p>
+<h3>The Problem</h3>
+<p>If you just had ZFS without encryption, or had ZFS sitting over a LUKS device this would probably work.
+But it doesn't work with ZFS with native encryption, and you get dumped to the emergency shell instead.</p>
+<p>If you run <code>journalctl -a</code> and poke around, the problem becomes obvious - dracut tries to mount the ZFS root
+and fails because the file system key isn't available under <code>/run/keystore/rpool</code>.</p>
+<p>The problem is a kind of interesting sequencing issue: the <code>zfs-dracut</code> modules know how to mount a filesystem,
+and they know how to look for and wait for a key-store to become available at a mountpath...but dracut has no
+idea how or where to find and mount the LUKS-encrypted ZFS volume which Ubuntu's regular store uses to hold the
+key.</p>
+<p>Specifically: on a default out of the box Ubuntu with ZFS and native encryption install, you'll have a layout
+like this:</p>
+<div class="code"><pre class="code literal-block"><span class="n">NAME</span><span class="w">                                               </span><span class="n">USED</span><span class="w">  </span><span class="n">AVAIL</span><span class="w">  </span><span class="n">REFER</span><span class="w">  </span><span class="n">MOUNTPOINT</span>
+<span class="n">bpool</span><span class="w">                                              </span><span class="mi">167</span><span class="n">M</span><span class="w">  </span><span class="mf">1.59</span><span class="n">G</span><span class="w">    </span><span class="mi">96</span><span class="n">K</span><span class="w">  </span><span class="o">/</span><span class="n">boot</span>
+<span class="n">bpool</span><span class="o">/</span><span class="n">BOOT</span><span class="w">                                         </span><span class="mi">166</span><span class="n">M</span><span class="w">  </span><span class="mf">1.59</span><span class="n">G</span><span class="w">    </span><span class="mi">96</span><span class="n">K</span><span class="w">  </span><span class="n">none</span>
+<span class="n">bpool</span><span class="o">/</span><span class="n">BOOT</span><span class="o">/</span><span class="n">ubuntu_sqtmt2</span><span class="w">                           </span><span class="mi">166</span><span class="n">M</span><span class="w">  </span><span class="mf">1.59</span><span class="n">G</span><span class="w">  </span><span class="mf">87.4</span><span class="n">M</span><span class="w">  </span><span class="o">/</span><span class="n">boot</span>
+<span class="n">rpool</span><span class="w">                                             </span><span class="mf">4.38</span><span class="n">G</span><span class="w">  </span><span class="mf">85.2</span><span class="n">G</span><span class="w">   </span><span class="mi">192</span><span class="n">K</span><span class="w">  </span><span class="o">/</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">ROOT</span><span class="w">                                        </span><span class="mf">4.34</span><span class="n">G</span><span class="w">  </span><span class="mf">85.2</span><span class="n">G</span><span class="w">   </span><span class="mi">192</span><span class="n">K</span><span class="w">  </span><span class="n">none</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">ROOT</span><span class="o">/</span><span class="n">ubuntu_sqtmt2</span><span class="w">                          </span><span class="mf">4.34</span><span class="n">G</span><span class="w">  </span><span class="mf">85.2</span><span class="n">G</span><span class="w">  </span><span class="mf">3.12</span><span class="n">G</span><span class="w">  </span><span class="o">/</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">ROOT</span><span class="o">/</span><span class="n">ubuntu_sqtmt2</span><span class="o">/</span><span class="n">srv</span><span class="w">                       </span><span class="mi">192</span><span class="n">K</span><span class="w">  </span><span class="mf">85.2</span><span class="n">G</span><span class="w">   </span><span class="mi">192</span><span class="n">K</span><span class="w">  </span><span class="o">/</span><span class="n">srv</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">ROOT</span><span class="o">/</span><span class="n">ubuntu_sqtmt2</span><span class="o">/</span><span class="n">usr</span><span class="w">                       </span><span class="mi">656</span><span class="n">K</span><span class="w">  </span><span class="mf">85.2</span><span class="n">G</span><span class="w">   </span><span class="mi">192</span><span class="n">K</span><span class="w">  </span><span class="o">/</span><span class="n">usr</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">ROOT</span><span class="o">/</span><span class="n">ubuntu_sqtmt2</span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="w">                 </span><span class="mi">464</span><span class="n">K</span><span class="w">  </span><span class="mf">85.2</span><span class="n">G</span><span class="w">   </span><span class="mi">384</span><span class="n">K</span><span class="w">  </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">ROOT</span><span class="o">/</span><span class="n">ubuntu_sqtmt2</span><span class="o">/</span><span class="k">var</span><span class="w">                      </span><span class="mf">1.13</span><span class="n">G</span><span class="w">  </span><span class="mf">85.2</span><span class="n">G</span><span class="w">   </span><span class="mi">192</span><span class="n">K</span><span class="w">  </span><span class="o">/</span><span class="k">var</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">ROOT</span><span class="o">/</span><span class="n">ubuntu_sqtmt2</span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">games</span><span class="w">                 </span><span class="mi">192</span><span class="n">K</span><span class="w">  </span><span class="mf">85.2</span><span class="n">G</span><span class="w">   </span><span class="mi">192</span><span class="n">K</span><span class="w">  </span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">games</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">ROOT</span><span class="o">/</span><span class="n">ubuntu_sqtmt2</span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="w">                  </span><span class="mf">1.11</span><span class="n">G</span><span class="w">  </span><span class="mf">85.2</span><span class="n">G</span><span class="w">   </span><span class="mi">971</span><span class="n">M</span><span class="w">  </span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">ROOT</span><span class="o">/</span><span class="n">ubuntu_sqtmt2</span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">AccountsService</span><span class="w">   </span><span class="mi">456</span><span class="n">K</span><span class="w">  </span><span class="mf">85.2</span><span class="n">G</span><span class="w">   </span><span class="mi">268</span><span class="n">K</span><span class="w">  </span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">AccountsService</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">ROOT</span><span class="o">/</span><span class="n">ubuntu_sqtmt2</span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">NetworkManager</span><span class="w">    </span><span class="mi">472</span><span class="n">K</span><span class="w">  </span><span class="mf">85.2</span><span class="n">G</span><span class="w">   </span><span class="mi">260</span><span class="n">K</span><span class="w">  </span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">NetworkManager</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">ROOT</span><span class="o">/</span><span class="n">ubuntu_sqtmt2</span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">apt</span><span class="w">              </span><span class="mf">84.3</span><span class="n">M</span><span class="w">  </span><span class="mf">85.2</span><span class="n">G</span><span class="w">  </span><span class="mf">84.0</span><span class="n">M</span><span class="w">  </span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">apt</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">ROOT</span><span class="o">/</span><span class="n">ubuntu_sqtmt2</span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">dpkg</span><span class="w">             </span><span class="mf">83.2</span><span class="n">M</span><span class="w">  </span><span class="mf">85.2</span><span class="n">G</span><span class="w">  </span><span class="mf">59.8</span><span class="n">M</span><span class="w">  </span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">dpkg</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">ROOT</span><span class="o">/</span><span class="n">ubuntu_sqtmt2</span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="nb">log</span><span class="w">                  </span><span class="mf">16.6</span><span class="n">M</span><span class="w">  </span><span class="mf">85.2</span><span class="n">G</span><span class="w">  </span><span class="mf">15.6</span><span class="n">M</span><span class="w">  </span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="nb">log</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">ROOT</span><span class="o">/</span><span class="n">ubuntu_sqtmt2</span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">mail</span><span class="w">                  </span><span class="mi">192</span><span class="n">K</span><span class="w">  </span><span class="mf">85.2</span><span class="n">G</span><span class="w">   </span><span class="mi">192</span><span class="n">K</span><span class="w">  </span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">mail</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">ROOT</span><span class="o">/</span><span class="n">ubuntu_sqtmt2</span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">snap</span><span class="w">                 </span><span class="mf">2.22</span><span class="n">M</span><span class="w">  </span><span class="mf">85.2</span><span class="n">G</span><span class="w">  </span><span class="mf">2.22</span><span class="n">M</span><span class="w">  </span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">snap</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">ROOT</span><span class="o">/</span><span class="n">ubuntu_sqtmt2</span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">spool</span><span class="w">                 </span><span class="mi">356</span><span class="n">K</span><span class="w">  </span><span class="mf">85.2</span><span class="n">G</span><span class="w">   </span><span class="mi">252</span><span class="n">K</span><span class="w">  </span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">spool</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">ROOT</span><span class="o">/</span><span class="n">ubuntu_sqtmt2</span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">www</span><span class="w">                   </span><span class="mi">192</span><span class="n">K</span><span class="w">  </span><span class="mf">85.2</span><span class="n">G</span><span class="w">   </span><span class="mi">192</span><span class="n">K</span><span class="w">  </span><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">www</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">USERDATA</span><span class="w">                                    </span><span class="mf">11.1</span><span class="n">M</span><span class="w">  </span><span class="mf">85.2</span><span class="n">G</span><span class="w">   </span><span class="mi">192</span><span class="n">K</span><span class="w">  </span><span class="n">none</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">USERDATA</span><span class="o">/</span><span class="n">home_fxfmf6</span><span class="w">                        </span><span class="mf">3.44</span><span class="n">M</span><span class="w">  </span><span class="mf">85.2</span><span class="n">G</span><span class="w">  </span><span class="mf">3.44</span><span class="n">M</span><span class="w">  </span><span class="o">/</span><span class="n">home</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">USERDATA</span><span class="o">/</span><span class="n">root_fxfmf6</span><span class="w">                         </span><span class="mi">388</span><span class="n">K</span><span class="w">  </span><span class="mf">85.2</span><span class="n">G</span><span class="w">   </span><span class="mi">388</span><span class="n">K</span><span class="w">  </span><span class="o">/</span><span class="n">root</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">USERDATA</span><span class="o">/</span><span class="n">will_w6bp5u</span><span class="w">                        </span><span class="mf">7.14</span><span class="n">M</span><span class="w">  </span><span class="mf">85.2</span><span class="n">G</span><span class="w">  </span><span class="mf">3.73</span><span class="n">M</span><span class="w">  </span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">will</span>
+<span class="n">rpool</span><span class="o">/</span><span class="n">keystore</span><span class="w">                                    </span><span class="mf">22.5</span><span class="n">M</span><span class="w">  </span><span class="mf">85.3</span><span class="n">G</span><span class="w">  </span><span class="mf">16.5</span><span class="n">M</span><span class="w">  </span><span class="o">-</span>
+</pre></div>
+
+<p>The bottom line - this one:</p>
+<div class="code"><pre class="code literal-block">rpool/keystore                                    22.5M  85.3G  16.5M  -
+</pre></div>
+
+<p>is a ZFS volume which holds an ext4 filesystem, which has a single file in it - <code>system.key</code> which is specified
+as the encryption key for the entire <code>rpool</code> system (i.e. everywhere <em>except</em> this volume is setup this way).</p>
+<div class="code"><pre class="code literal-block">$<span class="w"> </span>zfs<span class="w"> </span>get<span class="w"> </span>keylocation<span class="w"> </span>rpool
+NAME<span class="w">   </span>PROPERTY<span class="w">     </span>VALUE<span class="w">                                  </span>SOURCE
+rpool<span class="w">  </span>keylocation<span class="w">  </span>file:///run/keystore/rpool/system.key<span class="w">  </span><span class="nb">local</span>
+</pre></div>
+
+<p>We need this path to start existing while the ZFS mount scripts are looking for it - or before.</p>
+<h3>The Solution</h3>
+<p>The only reference I could find to this bug for Ubuntu specifically was <a href="https://bugs.launchpad.net/ubuntu/+source/dracut/+bug/2070066">here</a>, 
+and I've posted this solution there too.</p>
+<p>I tried a number of approaches, but the punchline seems to be a combination of two problems:</p>
+<ol>
+<li>
+<p><code>dracut</code> doesn't include <code>/etc/crypttab</code> unless you specify <code>--host-only</code> - which under this configuration causes it
+    to then not include the LUKS decryption at all because it can't tell we'll need it.</p>
+</li>
+<li>
+<p>Even if <code>dracut</code> did include this, it can't properly detect root in <code>/etc/fstab</code>, and has no knowledge of how to
+   determine what the LUKS volume is or where it should mount it.</p>
+</li>
+</ol>
+<p>It <em>feels like</em> <code>zfs-dracut</code> should be able to solve this problem for itself - i.e. at <code>dracut</code> time if you see a ZFS
+root, check for a file-based <code>keylocation</code> parameter, and then check for the mountpoint of that, then check if the
+mountpoint is on a device which in turn is on a LUKS device - but that's a heck'in chain of causality not handled
+yet.</p>
+<p>In the mean time, the fix is to create two files:</p>
+<div class="code"><pre class="code literal-block">cat<span class="w"> </span><span class="s">&lt;&lt; EOF &gt; /etc/dracut.conf.d/00-crypttab.conf</span>
+<span class="s">install_items+=" /etc/crypttab "</span>
+<span class="s">EOF</span>
+</pre></div>
+
+<p>This forces <code>/etc/crypttab</code> into the initramfs that dracut builds. This means dracut will detect and try to mount
+whatever is in it at the time. Your <code>/etc/crypttab</code> will then need the following line:</p>
+<div class="code"><pre class="code literal-block">keystore-rpool /dev/zvol/rpool/keystore
+</pre></div>
+
+<p>If you want to use tpm or fido (as I do then it would look like):</p>
+<div class="code"><pre class="code literal-block">keystore-rpool /dev/zvol/rpool/keystore - tpm-device=auto,fido2-device=auto
+</pre></div>
+
+<p>The second file you must create tells <code>dracut</code> to force a line into the <code>/etc/fstab</code> file it creates, but it does this
+by using an undocumented feature - <code>dracut</code> has the command line <code>--mount</code> option which will do this, and that option
+is simply modifying shell variables which is how the <code>dracut.conf</code> file works. So by inspecting <code>dracut</code>'s script, we
+can see the following is the correct way to add <code>fstab</code> lines:</p>
+<div class="code"><pre class="code literal-block">cat<span class="w"> </span>&lt;&lt;<span class="w"> </span>EOF<span class="w"> </span>&gt;<span class="w"> </span>/etc/dracut.conf.d/01-keystore-rpool-mnt.conf
+<span class="nv">fstab_lines</span><span class="o">+=</span><span class="s2">" /dev/mapper/keystore-rpool /run/keystore/rpool auto "</span>
+</pre></div>
+
+<p>Whitespace and truncanting the ordering and fsck'ing numbers is mandatory.</p>
+<p>Run <code>dracut -f</code> to rebuild your initramfs and then reboot. If you have done nothing else, you should just be prompted
+by <code>systemd-cryptsetup</code> to enter your passed for <code>/run/keystore/rpool</code> and when it unlocks ZFS will mount and eveything
+will boot successfully. This is a lot faster then <code>clevis-initramfs</code> I find.</p>
+<h3>Remaining Problems</h3>
+<p>This gets you <em>most</em> of the way there, but not all the way - the problem with this approach is still a sequencing one,
+the ZFS mount scripts only wait around for you because they're expected <code>udev</code> to bring up a block device which will be
+correctly mounted. You have about 10-15 seconds with password auth before you'll get dumped to an emergency shell anyway.</p>
+<p>That seems to  be a ZFS mount script problem though - I suspect to fix it they'd have to - again - know that they're
+actually waiting on a password prompt and not just failing to mount.</p>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/2404/" rel="tag">24.04</a></li>
+            <li><a class="tag p-category" href="../../categories/dracut/" rel="tag">dracut</a></li>
+            <li><a class="tag p-category" href="../../categories/encryption/" rel="tag">encryption</a></li>
+            <li><a class="tag p-category" href="../../categories/ubuntu/" rel="tag">ubuntu</a></li>
+            <li><a class="tag p-category" href="../../categories/zfs/" rel="tag">zfs</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../patching-ubuntu-packages/" rel="prev" title="Patching Ubuntu Packages with dgit and pbuilder">Previous post</a>
+            </li>
+        </ul></nav></aside></article><!--End of body content--><footer id="footer">
+            Contents © 2025         <a href="mailto:wrouesnel@wrouesnel.com">Will Rouesnel</a> - Powered by         <a href="https://getnikola.com" rel="nofollow">Nikola</a>         
+            
+        </footer>
+</div>
+</div>
+
+        <script src="../../assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element){var i=element.getElementsByTagName('img')[0];return i===undefined?'':i.alt;}});
+    </script>
+</body>
+</html>
