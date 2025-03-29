@@ -178,6 +178,57 @@ can see the following is the correct way to add <code>fstab</code> lines:</p>
 <p>Run <code>dracut -f</code> to rebuild your initramfs and then reboot. If you have done nothing else, you should just be prompted
 by <code>systemd-cryptsetup</code> to enter your passed for <code>/run/keystore/rpool</code> and when it unlocks ZFS will mount and eveything
 will boot successfully. This is a lot faster then <code>clevis-initramfs</code> I find.</p>
+<h3>Enrolling Your TPM</h3>
+<p>Unfortunately due to the weird behavior of dracut with regards to <code>host-only</code> we also need to add another override file
+here:</p>
+<div class="code"><pre class="code literal-block">cat<span class="w"> </span>&lt;&lt;<span class="w"> </span>EOF<span class="w"> </span>&gt;<span class="w"> </span>/etc/dracut.conf.d/02-crypt-libs.conf
+<span class="nv">add_dracutmodules</span><span class="o">+=</span><span class="s2">" tpm2-tss fido2 "</span>
+</pre></div>
+
+<p>You need to run <code>dracut -f</code> <em>and</em> reboot before the next step - this is so your PCR registers will be correct.</p>
+<p>Enrolling your TPM is simple enough if it's setup - the following command is appropriate:</p>
+<div class="code"><pre class="code literal-block">systemd-cryptenroll<span class="w"> </span>--tpm2-device<span class="o">=</span>auto<span class="w"> </span>--tpm2-pcsr<span class="o">=</span><span class="m">0</span>+1+2+3+4+7+8+9+14<span class="w"> </span>/dev/zvol/rpool/keystore
+</pre></div>
+
+<p>This is IMO the minimum you should do, but it will break pretty easily (rebuilding with dracut, or a kernel upgrade)
+will disable it. From the <a href="https://uapi-group.org/specifications/specs/linux_tpm_pcr_registry/">Linux TPM PCR registry</a>.</p>
+<p>PCR's 0-7 are fairly boring system level stuff (7 is the activation of Secure Boot). But you want <code>8</code> and <code>9</code> 
+specifically since they determine if your TPM can just be bypassed - without 8 or 9, an attacker can replace your kernel,
+initramfs, or just mess with command line settings in grub and still have the TPM unlock the volume (and thus probably
+give them access to all your files).</p>
+<p>Of course if you're <em>just</em> trying to protect the hard disk against being readable once you take it out of the computer,
+sealing against the TPM is fine (in fact PCR 7 - the default, might be all you need against a not particularly determined
+attacker).</p>
+<p>This does of course leave some problems with using an initramfs at all: if the initramfs drops you into a root shell
+for any reason <em>other</em> then the TPM is unable to unlock the keys (because the initramfs has changed) then someone just
+got root access to your filesystem.</p>
+<h3>Enrolling Your YubiKey</h3>
+<p>Since your login is pretty likely to break if there's a surprise kernel upgrade, it's a good idea to also enroll a 
+hardware token. There's a little bit of a conflict here in threat-model: the TPM notionally protects us against the
+<a href="https://en.wikipedia.org/wiki/Evil_maid_attack">"evil maid" attack</a> - if someone comes in and messes with your laptop
+in a hotel room, then it'll refuse to decrypt anything...but then of course, you enter the password and run the
+compromised bootloader anyway possibly.</p>
+<p>The Yubikey enrollment (or any FIDO2 authenticator) has the same problem - they might not get your password, but who
+knows what they did by putting a signed kernel and a custom initramfs onto your system partition. Just be aware of where
+the limits are here.</p>
+<p>Enrollment is the same as before - plug in your token, and run:</p>
+<div class="code"><pre class="code literal-block">systemd-cryptenroll --fido2-device=auto /dev/zvol/rpool/keystore
+</pre></div>
+
+<p>Then follow the prompts. In my case:</p>
+<div class="code"><pre class="code literal-block">$#$<span class="w"> </span><span class="nv">systemd</span><span class="o">-</span><span class="nv">cryptenroll</span><span class="w"> </span><span class="o">--</span><span class="nv">fido2</span><span class="o">-</span><span class="nv">device</span><span class="o">=</span><span class="nv">auto</span><span class="w"> </span><span class="o">/</span><span class="nv">dev</span><span class="o">/</span><span class="nv">zvol</span><span class="o">/</span><span class="nv">rpool</span><span class="o">/</span><span class="nv">keystore</span>
+🔐<span class="w"> </span><span class="nv">Please</span><span class="w"> </span><span class="nv">enter</span><span class="w"> </span><span class="nv">current</span><span class="w"> </span><span class="nv">passphrase</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nv">disk</span><span class="w"> </span><span class="o">/</span><span class="nv">dev</span><span class="o">/</span><span class="nv">zvol</span><span class="o">/</span><span class="nv">rpool</span><span class="o">/</span><span class="nv">keystore</span>:<span class="w"> </span>•••••••••••••••
+<span class="nv">Initializing</span><span class="w"> </span><span class="nv">FIDO2</span><span class="w"> </span><span class="nv">credential</span><span class="w"> </span><span class="nv">on</span><span class="w"> </span><span class="nv">security</span><span class="w"> </span><span class="nv">token</span>.
+👆<span class="w"> </span><span class="ss">(</span><span class="nv">Hint</span>:<span class="w"> </span><span class="nv">This</span><span class="w"> </span><span class="nv">might</span><span class="w"> </span><span class="nv">require</span><span class="w"> </span><span class="nv">confirmation</span><span class="w"> </span><span class="nv">of</span><span class="w"> </span><span class="nv">user</span><span class="w"> </span><span class="nv">presence</span><span class="w"> </span><span class="nv">on</span><span class="w"> </span><span class="nv">security</span><span class="w"> </span><span class="nv">token</span>.<span class="ss">)</span>
+🔐<span class="w"> </span><span class="nv">Please</span><span class="w"> </span><span class="nv">enter</span><span class="w"> </span><span class="nv">security</span><span class="w"> </span><span class="nv">token</span><span class="w"> </span><span class="nv">PIN</span>:<span class="w"> </span>••••••••<span class="w">                </span>
+<span class="nv">Generating</span><span class="w"> </span><span class="nv">secret</span><span class="w"> </span><span class="nv">key</span><span class="w"> </span><span class="nv">on</span><span class="w"> </span><span class="nv">FIDO2</span><span class="w"> </span><span class="nv">security</span><span class="w"> </span><span class="nv">token</span>.
+👆<span class="w"> </span><span class="nv">In</span><span class="w"> </span><span class="nv">order</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">allow</span><span class="w"> </span><span class="nv">secret</span><span class="w"> </span><span class="nv">key</span><span class="w"> </span><span class="nv">generation</span>,<span class="w"> </span><span class="nv">please</span><span class="w"> </span><span class="nv">confirm</span><span class="w"> </span><span class="nv">presence</span><span class="w"> </span><span class="nv">on</span><span class="w"> </span><span class="nv">security</span><span class="w"> </span><span class="nv">token</span>.
+<span class="nv">New</span><span class="w"> </span><span class="nv">FIDO2</span><span class="w"> </span><span class="nv">token</span><span class="w"> </span><span class="nv">enrolled</span><span class="w"> </span><span class="nv">as</span><span class="w"> </span><span class="nv">key</span><span class="w"> </span><span class="nv">slot</span><span class="w"> </span><span class="mi">2</span>.
+</pre></div>
+
+<p>This follows however your token is setup. Mine requires both a PIN and user presence for FIDO2, so I get prompted for
+those.</p>
+<p>We can test this out by deliberalyte running <code>dracut -f</code> which will break our TPM config and then rebooting.</p>
 <h3>Remaining Problems</h3>
 <p>This gets you <em>most</em> of the way there, but not all the way - the problem with this approach is still a sequencing one,
 the ZFS mount scripts only wait around for you because they're expected <code>udev</code> to bring up a block device which will be
