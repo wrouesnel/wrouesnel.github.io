@@ -15,7 +15,7 @@ og: http://ogp.me/ns# article: http://ogp.me/ns/article#
 <link rel="canonical" href="https://blog.wrouesnel.com/">
 <link rel="next" href="index-3.html" type="text/html">
 <!--[if lt IE 9]><script src="assets/js/html5.js"></script><![endif]--><link rel="stylesheet" href="assets/css/wrouesnel_blog-theme.css">
-<link rel="prefetch" href="posts/ubuntu-2404-dracut-and-native-zfs-encryption/" type="text/html">
+<link rel="prefetch" href="posts/framebuffer-console-and-nvidia-gpus/" type="text/html">
 </head>
 <body>
 <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
@@ -58,7 +58,25 @@ bg-dark
     
     
 <div class="postindex">
-    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/ubuntu-2404-dracut-and-native-zfs-encryption/" class="u-url">Ubuntu 24.04, Dracut and Native ZFS Encryption</a></h1>
+    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/framebuffer-console-and-nvidia-gpus/" class="u-url">Framebuffer/GRUB Console performance and Nvidia GPUs (50xx)</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/wrouesnel/">wrouesnel</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/framebuffer-console-and-nvidia-gpus/" rel="bookmark">
+            <time class="published dt-published" datetime="2025-11-23T11:21:30+11:00" itemprop="datePublished" title="2025-11-23 11:21">2025-11-23 11:21</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <p>I upgraded to an NVIDIA GTX Ti 5060 recently as a mid-range choice to ensure my desktop had CUDA compatibility.
+It's been smooth sailing on my Windows and Linux dual boot system with one problem - performance in the grub console
+menu was absolutely abysmmal (as in, one motion every few seconds - for both menus and typing).</p>
+<p>Lowering the resolution helped but did not solve the problem.</p>
+<p>Reading around the advice I saw was to <strong>enable "CSM" or "Legacy CSM" mode in the UEFI BIOS.</strong></p>
+<p>This completely fixed the problem - the console is now fast as is the console when booted into Linux.</p>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/ubuntu-2404-dracut-and-native-zfs-encryption/" class="u-url">Ubuntu 24.04, Dracut and Native ZFS Encryption</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
                 <a href="authors/will-rouesnel/">Will Rouesnel</a>
@@ -1897,82 +1915,6 @@ due to the recent furor surrounding Google's <a href="https://blog.google/techno
 <p>So: to ensure this stays up I'm also including the cached copy as a part of this blog. It goes without saying that
 all rights to this story belong to the original author.</p>
 <p><a href="posts/jipi-and-the-paranoid-chip/files/Neal%20Stephenson%20Jipi%20and%20the%20Paranoid%20Chip.html">Click here to read Jipi and the Paranoid Chip (or any of the links above)</a>.</p>
-    </div>
-    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/firefox-from-deb-on-2204/" class="u-url">Install Firefox as a deb on Ubuntu 22.04</a></h1>
-        <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                <a href="authors/will-rouesnel/">Will Rouesnel</a>
-            </span></p>
-            <p class="dateline">
-            <a href="posts/firefox-from-deb-on-2204/" rel="bookmark">
-            <time class="published dt-published" datetime="2022-05-04T11:38:43+10:00" itemprop="datePublished" title="2022-05-04 11:38">2022-05-04 11:38</time></a>
-            </p>
-        </div>
-    </header><div class="e-content entry-content">
-    <div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Introduction">Introduction<a class="anchor-link" href="posts/firefox-from-deb-on-2204/#Introduction">¶</a>
-</h2>
-<p>Ubuntu 22.04 removes a native Firefox package in favor of a snap package. I'm sure this has advantages.</p>
-<p>But the reality for me was several fold: startup times were noticeably slower, and the selenium geckodriver just plain didn't work for me (<a href="https://github.com/mozilla/geckodriver/issues/2010">issue here</a>), with some debate online but no canonical solution. I also couldn't get Jupyterlab to autolaunch (minor, but annoying).</p>
-<p>Solution below reproduced from <a href="https://balintreczey.hu/blog/firefox-on-ubuntu-22-04-from-deb-not-from-snap/">https://balintreczey.hu/blog/firefox-on-ubuntu-22-04-from-deb-not-from-snap/</a> with adaptations which worked for me.</p>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Solution">Solution<a class="anchor-link" href="posts/firefox-from-deb-on-2204/#Solution">¶</a>
-</h2>
-<p>You can still install Firefox as a native <code>deb</code> from the Mozilla team PPA. The process which worked for me was:</p>
-<h3 id="Step-1">Step 1<a class="anchor-link" href="posts/firefox-from-deb-on-2204/#Step-1">¶</a>
-</h3>
-<p>Add the (Ubuntu) Mozilla team PPA to your list of software sources by running the following command in the same Terminal window:</p>
-<div class="highlight"><pre><span></span>sudo<span class="w"> </span>add-apt-repository<span class="w"> </span>ppa:mozillateam/ppa
-</pre></div>
-<h3 id="Step-2">Step 2<a class="anchor-link" href="posts/firefox-from-deb-on-2204/#Step-2">¶</a>
-</h3>
-<p>Pin the Firefox package</p>
-<div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s1">'</span>
-<span class="s1">Package: *</span>
-<span class="s1">Pin: release o=LP-PPA-mozillateam</span>
-<span class="s1">Pin-Priority: 1001</span>
-<span class="s1">'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/preferences.d/mozilla-firefox
-</pre></div>
-<h3 id="Step-3">Step 3<a class="anchor-link" href="posts/firefox-from-deb-on-2204/#Step-3">¶</a>
-</h3>
-<p>Ensure upgrades will work automatically</p>
-<div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="s1">'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:${distro_codename}";'</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/apt.conf.d/51unattended-upgrades-firefox
-</pre></div>
-<h3 id="Step-4">Step 4<a class="anchor-link" href="posts/firefox-from-deb-on-2204/#Step-4">¶</a>
-</h3>
-<p>Install firefox (this will warn of a downgade - ignore it)</p>
-<div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>firefox
-</pre></div>
-<h3 id="Step-5">Step 5<a class="anchor-link" href="posts/firefox-from-deb-on-2204/#Step-5">¶</a>
-</h3>
-<p>Remove the Firefox snap</p>
-<div class="highlight"><pre><span></span>sudo<span class="w"> </span>snap<span class="w"> </span>remove<span class="w"> </span>firefox
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Conclusion">Conclusion<a class="anchor-link" href="posts/firefox-from-deb-on-2204/#Conclusion">¶</a>
-</h2>
-<p>This worked for me - Firefox starts, my existing Selenium scripts work.</p>
-</div>
-</div>
-</div>
     </div>
     </article>
 </div>
